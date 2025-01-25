@@ -3,8 +3,8 @@ package com.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
+import com.util.enums.JobEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -34,15 +34,18 @@ public class UserEntity {
     @Column(name = "refresh_token")
     String refreshToken;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "account_type")
-    AccountTypeEnum accountType;
-
     String avatar;
 
     String fullname;
 
     String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
+    AccountTypeEnum accountType;
+
+    @Enumerated(EnumType.STRING)
+    JobEnum job;
 
     @Enumerated(EnumType.STRING)
     GenderEnum gender;
@@ -61,26 +64,27 @@ public class UserEntity {
     @JsonIgnore
     OTPEntity otp;
 
+    @OneToOne(mappedBy = "user")
+    ExpertEntity expert;
+
     @ManyToMany
     @JoinTable(name = "course_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     @JsonIgnore
     List<CourseEntity> purchasedCourses;
 
+    @OneToMany(mappedBy = "user")
+    Set<LikeEntity> likes;
+
+    @OneToMany(mappedBy = "user")
+    Set<BlogEntity> blogs;
+
+    @OneToMany(mappedBy = "user")
+    Set<CommentEntity> comments;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     @JsonIgnore
     RoleEntity role;
-
-    @OneToOne
-    @JoinColumn(name = "expert_id", referencedColumnName = "expert_id")
-    ExpertEntity expert;
-
-    @OneToOne
-    @JoinColumn(name = "marketing_id", referencedColumnName = "marketing_id")
-    MarketingEntity marketing;
-
-    @OneToMany(mappedBy = "creator")
-    Set<BlogEntity> createdBlogs;
 
     @PrePersist
     public void handlePrePersist() {

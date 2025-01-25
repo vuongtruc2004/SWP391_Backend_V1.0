@@ -2,8 +2,10 @@ package com.dto.response;
 
 import com.entity.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
-import com.util.enums.JobTypeEnum;
+import com.util.enums.JobEnum;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,16 +18,34 @@ import java.time.Instant;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
+
     Long userId;
+
     String username;
-    String phone;
+
     String password;
+
+    String avatar;
+
     String fullname;
+
     String email;
+
+    @Enumerated(EnumType.STRING)
+    AccountTypeEnum accountType;
+
+    @Enumerated(EnumType.STRING)
+    JobEnum job;
+
+    @Enumerated(EnumType.STRING)
     GenderEnum gender;
-    JobTypeEnum jobType;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant dob;
-    Boolean active;
-    RoleEntity role;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    Instant createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    Instant updatedAt;
 }

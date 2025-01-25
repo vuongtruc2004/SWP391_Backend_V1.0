@@ -1,6 +1,6 @@
 package com.exception;
 
-import com.dto.response.RestResponseException;
+import com.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,46 +11,49 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = NotFoundException.class)
-    public ResponseEntity<RestResponseException<Object>> notFoundException(NotFoundException e) {
-        RestResponseException<Object> restResponseException = new RestResponseException<>();
-        restResponseException.setMessage("Exception !");
-        restResponseException.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        restResponseException.setErrorMessage(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponseException);
+    public ResponseEntity<ApiResponse<Object>> notFoundException(NotFoundException e) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Exception !");
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setErrorMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<RestResponseException<Object>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
-        RestResponseException<Object> restResponseException = new RestResponseException<>();
-        restResponseException.setMessage("Exception !");
-        restResponseException.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        restResponseException.setErrorMessage(e.getFieldError().getDefaultMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponseException);
+    public ResponseEntity<ApiResponse<Object>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Exception !");
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setErrorMessage(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
+
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    public ResponseEntity<RestResponseException<Object>> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        RestResponseException<Object> restResponseException = new RestResponseException<>();
-        restResponseException.setMessage("Exception !");
-        restResponseException.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        restResponseException.setErrorMessage(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponseException);
+    public ResponseEntity<ApiResponse<Object>> httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Exception !");
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setErrorMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
+
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<RestResponseException<Object>> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        RestResponseException<Object> restResponseException = new RestResponseException<>();
-        restResponseException.setMessage("Exception !");
-        restResponseException.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        restResponseException.setErrorMessage(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(restResponseException);
+    public ResponseEntity<ApiResponse<Object>> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Exception !");
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setErrorMessage(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
     @ExceptionHandler(value = {UserRequestException.class})
-    public ResponseEntity<RestResponseException<Map<String, String>>> handleUserRequestException(UserRequestException exception) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleUserRequestException(UserRequestException exception) {
         String message = exception.getMessage();
         String[] errors = message.split(";");
         Map<String, String> errorMap = new HashMap<>();
@@ -59,8 +62,8 @@ public class GlobalExceptionHandler {
             String value = error.split(":")[1];
             errorMap.put(key, value);
         }
-        RestResponseException<Map<String, String>> errorResponse = RestResponseException.<Map<String, String>>builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+        ApiResponse<Map<String, String>> errorResponse = ApiResponse.<Map<String, String>>builder()
+                .status(HttpStatus.BAD_REQUEST.value())
                 .data(errorMap)
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);

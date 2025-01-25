@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.DiplomaEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,26 +16,23 @@ import java.util.Set;
 @Table(name = "experts")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExpertEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expert_id")
     Long expertId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="diplome")
+    @Column(name = "diploma")
     DiplomaEnum diploma;
 
-    @Column(name="yearOfExperience")
+    @Column(name = "year_of_experience")
     Integer yearOfExperience;
 
-    @OneToOne(mappedBy = "expert")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     UserEntity user;
 
     @OneToMany(mappedBy = "expert")
-    @JsonIgnore
     Set<CourseEntity> createdCourses;
-
-    @OneToMany(mappedBy = "expert")
-    Set<SocialLinkEntity> socialLinks;
-
 }

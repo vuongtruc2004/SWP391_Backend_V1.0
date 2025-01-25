@@ -1,5 +1,5 @@
 package com.util.enums;
 
-public enum JobTypeEnum {
+public enum JobEnum {
     LECTURE, STUDENT, 
 }
