@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.DiplomaEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,7 +32,6 @@ public class ExpertEntity {
     UserEntity user;
 
     @OneToMany(mappedBy = "expert")
-    @JsonIgnore
     Set<CourseEntity> createdCourses;
 
     @OneToMany(mappedBy = "expert")

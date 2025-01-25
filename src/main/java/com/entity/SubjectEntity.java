@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +25,7 @@ public class SubjectEntity {
     String name;
 
     @ManyToMany
+    @JsonIgnoreProperties(value = {"subjects"})
     @JoinTable(name = "course_subject", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     List<CourseEntity> courses;
 

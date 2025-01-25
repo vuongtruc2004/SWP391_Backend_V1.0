@@ -1,19 +1,16 @@
 package com.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.Getter;
+import lombok.Setter;
 
-@Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
 public class RestResponseException<T> {
-    int statusCode;
-    String errorMessage;
-    Object message;
-    T data;
+    private int stausCode;
+
+    private String errorMessage;
+
+    private Object message;
+
+    private T data;
 }

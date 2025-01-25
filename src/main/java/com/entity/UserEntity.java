@@ -1,10 +1,9 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -31,7 +30,7 @@ public class UserEntity {
 
     String password;
 
-    @Column(name = "refresh_token")
+    @Column(name = "refresh_token",columnDefinition = "MEDIUMTEXT")
     String refreshToken;
 
     @Enumerated(EnumType.STRING)
@@ -57,18 +56,13 @@ public class UserEntity {
 
     Boolean active;
 
-    @OneToOne(mappedBy = "user")
-    @JsonIgnore
-    OTPEntity otp;
-
     @ManyToMany
+    @JsonIgnoreProperties(value = {"purchasers"})
     @JoinTable(name = "course_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @JsonIgnore
     List<CourseEntity> purchasedCourses;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    @JsonIgnore
     RoleEntity role;
 
     @OneToOne
@@ -85,7 +79,7 @@ public class UserEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
-        this.active = false;
+        this.active = true;
     }
 
     @PreUpdate

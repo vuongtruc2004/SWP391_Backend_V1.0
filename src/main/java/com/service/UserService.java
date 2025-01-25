@@ -1,70 +1,75 @@
 package com.service;
 
-import com.dto.request.UserRequest;
-import com.dto.response.UserResponse;
-import com.entity.RoleEntity;
+import com.dto.CredentialsLoginDTO;
+import com.dto.LoginDTO;
 import com.entity.UserEntity;
-import com.exception.UserRequestException;
-import com.repository.RoleRepository;
-import com.repository.UserRepository;
-import com.util.enums.RoleNameEnum;
-import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.repository.custom.UserRepository;
+import com.util.security.SecurityUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
-    UserRepository userRepository;
-    RoleRepository roleRepository;
-    ModelMapper modelMapper;
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+    private final UserRepository userRepository;
+    private final SecurityUtil securityUtil;
+    @Value("${jwt.access.token.validity.in.seconds}")
+    private Long accessTokenExpiration;
 
-    @Transactional
-    public UserResponse registerUser(UserRequest request, BindingResult bindingResult) throws UserRequestException {
-        StringBuilder errorMessage = new StringBuilder();
-        if(!bindingResult.getAllErrors().isEmpty()) {
-            Map<String, String> errors = bindingResult.getFieldErrors()
-                    .stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-            for(Map.Entry<String, String> error : errors.entrySet()) {
-                errorMessage.append(error.getKey()).append(":").append(error.getValue()).append(";");
-            }
-        }
-        if(userRepository.existsByUsername(request.getUsername())) {
-            errorMessage.append("username:").append("Username already exists!").append(";");
-        }
-        if(userRepository.existsByEmail(request.getEmail())) {
-            errorMessage.append("email:").append("Email already exists!").append(";");
-        }
-        if(!errorMessage.toString().isBlank()) {
-            throw new UserRequestException(errorMessage.toString());
-        }
-        RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER).orElse(null);
-        UserEntity user = modelMapper.map(request, UserEntity.class);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(roleEntity);
-        UserEntity savedUser = userRepository.save(user);
-        UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-
-        return userResponse;
+    @Value("${jwt.refresh.token.validity.in.seconds}")
+    private Long refreshTokenExpiration;
+    public UserService(UserRepository userRepository, SecurityUtil securityUtil) {
+        this.userRepository = userRepository;
+        this.securityUtil = securityUtil;
     }
-
-    public Optional<UserEntity> getUserByUserId(Long id) throws UserRequestException {
-        return userRepository.findById(id);
+    public UserEntity createUser(UserEntity user) {
+        return this.userRepository.save(user);
     }
+    public UserEntity getUserByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+    public UserEntity getUserByUserName(String userName) {
+        return this.userRepository.findByUsername(userName);
+    }
+    public void updateUserToken(String token,String username) {
+        UserEntity user = this.userRepository.findByUsername(username);
+        if(user!=null) {
+            user.setRefreshToken(token);
+            this.userRepository.save(user);
+        }
+    }
+    public CredentialsLoginDTO responseCredentialsLogin(Authentication authentication, LoginDTO loginDTO) {
+        Instant now = Instant.now();
+        Instant validityAccess = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
+        Instant validityRefresh = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+        CredentialsLoginDTO credentialsLoginDTO = new CredentialsLoginDTO();
+        CredentialsLoginDTO.UserLogin userLogin=new CredentialsLoginDTO.UserLogin();
+        CredentialsLoginDTO.LoginAccessToken loginAccessToken=new CredentialsLoginDTO.LoginAccessToken();
+        CredentialsLoginDTO.LoginRefreshToken loginRefreshToken=new CredentialsLoginDTO.LoginRefreshToken();
 
+        UserEntity currentUser=this.getUserByUserName(loginDTO.getUsername());
+        userLogin.setId(currentUser.getUserId());
+        userLogin.setUsername(currentUser.getUsername());
+        userLogin.setEmail(currentUser.getEmail());
+        userLogin.setAvatar(currentUser.getAvatar());
+        credentialsLoginDTO.setUserLogin(userLogin);
+
+        String accessToken=this.securityUtil.createAccessToken(authentication);
+        String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), credentialsLoginDTO);
+
+        loginAccessToken.setAccessToken(accessToken);
+        loginAccessToken.setExpiresAt(validityAccess);
+
+        credentialsLoginDTO.setAccessToken(loginAccessToken);
+
+        loginRefreshToken.setRefreshToken(refreshToken);
+        loginRefreshToken.setExpiresAt(validityRefresh);
+        credentialsLoginDTO.setRefreshToken(loginRefreshToken);
+        this.updateUserToken(refreshToken, loginDTO.getUsername());
+        return credentialsLoginDTO;
+
+    }
 }
