@@ -1,11 +1,11 @@
 package com.dto.response;
 
-import com.entity.RoleEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import com.util.enums.JobEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,8 +22,6 @@ public class UserResponse {
     Long userId;
 
     String username;
-
-    String password;
 
     String avatar;
 

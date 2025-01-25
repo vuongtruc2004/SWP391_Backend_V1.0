@@ -4,7 +4,7 @@ import com.dto.request.UserRequest;
 import com.dto.response.UserResponse;
 import com.entity.RoleEntity;
 import com.entity.UserEntity;
-import com.exception.UserRequestException;
+import com.exception.custom.UserRequestException;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import com.util.enums.RoleNameEnum;
@@ -37,20 +37,20 @@ public class UserService {
     @Transactional
     public UserResponse registerUser(UserRequest request, BindingResult bindingResult) throws UserRequestException {
         StringBuilder errorMessage = new StringBuilder();
-        if(!bindingResult.getAllErrors().isEmpty()) {
+        if (!bindingResult.getAllErrors().isEmpty()) {
             Map<String, String> errors = bindingResult.getFieldErrors()
                     .stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-            for(Map.Entry<String, String> error : errors.entrySet()) {
+            for (Map.Entry<String, String> error : errors.entrySet()) {
                 errorMessage.append(error.getKey()).append(":").append(error.getValue()).append(";");
             }
         }
-        if(userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             errorMessage.append("username:").append("Username already exists!").append(";");
         }
-        if(userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             errorMessage.append("email:").append("Email already exists!").append(";");
         }
-        if(!errorMessage.toString().isBlank()) {
+        if (!errorMessage.toString().isBlank()) {
             throw new UserRequestException(errorMessage.toString());
         }
         RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER).orElse(null);

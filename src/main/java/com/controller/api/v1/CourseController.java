@@ -3,7 +3,7 @@ package com.controller.api.v1;
 import com.dto.response.ApiResponse;
 import com.entity.CourseEntity;
 import com.entity.UserEntity;
-import com.exception.UserRequestException;
+import com.exception.custom.UserRequestException;
 import com.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

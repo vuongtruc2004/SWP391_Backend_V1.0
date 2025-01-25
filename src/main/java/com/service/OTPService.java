@@ -4,7 +4,7 @@ import com.dto.request.ActiveOTPRequest;
 import com.dto.request.OTPRequest;
 import com.entity.OTPEntity;
 import com.entity.UserEntity;
-import com.exception.AppException;
+import com.exception.custom.AppException;
 import com.repository.OTPRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

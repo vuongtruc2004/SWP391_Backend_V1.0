@@ -33,6 +33,10 @@ public class BlogEntity {
     @Column(columnDefinition = "LONGTEXT")
     String content;
 
+    String thumbnail;
+
+    Boolean pinned;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
@@ -46,6 +50,7 @@ public class BlogEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.pinned = false;
     }
 
     @PreUpdate

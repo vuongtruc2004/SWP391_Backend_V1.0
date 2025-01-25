@@ -1,6 +1,8 @@
 package com.exception;
 
 import com.dto.response.ApiResponse;
+import com.exception.custom.NotFoundException;
+import com.exception.custom.UserRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -68,4 +70,4 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
-    }
+}
