@@ -31,4 +31,9 @@ public class PermissionEntity {
 
     @ManyToMany(mappedBy = "permissions")
     List<RoleEntity> roles;
+
+    public PermissionEntity(String apiPath, ApiMethodEnum apiMethod) {
+        this.apiPath = apiPath;
+        this.apiMethod = apiMethod;
+    }
 }

@@ -4,7 +4,7 @@ import com.dto.request.EmailRequest;
 import com.dto.request.OTPRequest;
 import com.dto.response.ApiResponse;
 import com.entity.UserEntity;
-import com.exception.NotFoundException;
+import com.exception.custom.NotFoundException;
 import com.repository.UserRepository;
 import com.service.EmailSenderService;
 import com.service.OTPService;
@@ -23,7 +23,7 @@ public class ChangePasswordController {
     private final OTPService otpService;
 
     @PostMapping("/send_otp")
-    public ApiResponse<Void> sendOtp(@RequestBody @Valid  EmailRequest request) throws NotFoundException {
+    public ApiResponse<Void> sendOtp(@RequestBody @Valid EmailRequest request) throws NotFoundException {
         UserEntity user = userRepository.findByEmail(request.getEmail());
         if (user == null) {
             throw new NotFoundException("Email không tồn tại.");

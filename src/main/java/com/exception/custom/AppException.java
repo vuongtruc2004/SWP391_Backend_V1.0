@@ -1,4 +1,4 @@
-package com.exception;
+package com.exception.custom;
 
 import lombok.*;
 

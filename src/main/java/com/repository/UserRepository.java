@@ -1,12 +1,20 @@
 package com.repository;
 
 import com.entity.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaSpecificationRepository<UserEntity, Long> {
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
     UserEntity findByEmail(String email);
+
+    Optional<UserEntity> findByUsername(String username);
+    
+    boolean existsBy();
 }

@@ -1,6 +1,5 @@
 package com.dto.response;
 
-import com.entity.UserEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,11 +17,13 @@ public class BlogResponse {
 
     String title;
 
+    String content;
+
+    String thumbnail;
+
     Instant createdAt;
 
     Instant updatedAt;
 
-    String content;
-
-    UserResponse creator;
+    UserResponse user;
 }
