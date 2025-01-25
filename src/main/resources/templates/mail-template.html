@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email Template</title>
+    <style>
+        /* Thêm CSS tại đây để tạo giao diện email đẹp hơn */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: green;
+            font-family: 'Roboto', sans-serif;
+            color: #222;
+            width: 100vw;
+        }
+
+        p {
+            line-height: 28px;
+        }
+
+        .container {
+            width: 50%;
+            margin: 20px auto auto;
+            background-color: #fff;
+            /*padding: 20px;*/
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng để tạo hiệu ứng nổi */
+            border-radius: 8px; /* Bo góc hộp */
+        }
+
+        header h1 {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        section span {
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin: auto;
+        }
+
+        .business h1 {
+            font-weight: 800;
+            color: #0037ff;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="business">
+        <h1>ELearning</h1>
+    </div>
+    <hr/>
+    <header>
+        <h1 th:utext="${title}"></h1>
+    </header>
+    <section>
+        <p>Mã xác thực của bạn là:</p>
+        <h2 th:utext="${otp}"></h2>
+        <p>Lưu ý không chia sẻ mã với bất kì ai. Nếu bạn không thực hiện yêu cầu này vui lòng bỏ qua email này.</p>
+        <p>Trân trọng,</p>
+        <p>Đội ngũ của chúng tôi</p>
+    </section>
+</div>
+</body>
+</html>
