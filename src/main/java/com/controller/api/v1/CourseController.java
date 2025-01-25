@@ -1,6 +1,6 @@
-package com.controller;
+package com.controller.api.v1;
 
-import com.dto.response.RestResponse;
+import com.dto.response.ApiResponse;
 import com.entity.CourseEntity;
 import com.entity.UserEntity;
 import com.exception.UserRequestException;
@@ -21,12 +21,12 @@ public class CourseController {
     private final UserService userService;
 
     @GetMapping("/my-course/{id}")
-    public ResponseEntity<RestResponse<List<CourseEntity>>> getAllCoursesOfUser(@PathVariable Long id) throws UserRequestException {
+    public ResponseEntity<ApiResponse<List<CourseEntity>>> getAllCoursesOfUser(@PathVariable Long id) throws UserRequestException {
         Optional<UserEntity> user = userService.getUserByUserId(id);
         List<CourseEntity> list = user.get().getPurchasedCourses();
-        RestResponse<List<CourseEntity>> response = RestResponse.<List<CourseEntity>>builder()
+        ApiResponse<List<CourseEntity>> response = ApiResponse.<List<CourseEntity>>builder()
+                .status(HttpStatus.CREATED.value())
                 .data(list)
-                .statusCode(HttpStatus.CREATED.value())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

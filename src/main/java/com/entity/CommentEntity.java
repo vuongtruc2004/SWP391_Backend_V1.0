@@ -13,16 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "blogs")
+@Table(name = "comments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BlogEntity {
+public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_id")
-    Long blogId;
+    @Column(name = "comment_id")
+    Long commentId;
 
-    String title;
+    String content;
 
     @Column(name = "created_at")
     Instant createdAt;
@@ -30,18 +30,27 @@ public class BlogEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @Column(columnDefinition = "LONGTEXT")
-    String content;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
 
-    @OneToMany(mappedBy = "blog")
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id")
+    CommentEntity parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    Set<CommentEntity> replies;
+
+    @OneToMany(mappedBy = "comment")
     Set<LikeEntity> likes;
 
-    @OneToMany(mappedBy = "blog")
-    Set<CommentEntity> comments;
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    BlogEntity blog;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    CourseEntity course;
 
     @PrePersist
     public void handlePrePersist() {
