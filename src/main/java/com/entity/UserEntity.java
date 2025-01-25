@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -42,7 +43,6 @@ public class UserEntity {
     String fullname;
 
     String email;
-    String phone;
 
     @Enumerated(EnumType.STRING)
     GenderEnum gender;
