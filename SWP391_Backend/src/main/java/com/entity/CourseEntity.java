@@ -1,6 +1,6 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -51,10 +51,11 @@ public class CourseEntity implements Serializable {
     UserEntity creator;
 
     @ManyToMany(mappedBy = "courses")
+    @JsonIgnoreProperties(value = {"courses"})
     List<SubjectEntity> subjects;
 
     @ManyToMany(mappedBy = "purchasedCourses")
-    @JsonIgnore
+    @JsonIgnoreProperties(value = {"purchasedCourses"})
     List<UserEntity> purchasers;
 
     @OneToMany(mappedBy = "course")
@@ -62,7 +63,6 @@ public class CourseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "expert_id")
-    @JsonIgnore
     ExpertEntity expert;
 
     @PrePersist
