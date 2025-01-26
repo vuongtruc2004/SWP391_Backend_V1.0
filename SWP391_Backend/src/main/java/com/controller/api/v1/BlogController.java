@@ -1,11 +1,11 @@
 package com.controller.api.v1;
 
-import com.dto.response.ApiResponse;
 import com.dto.response.BlogResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.BlogEntity;
 import com.service.BlogService;
 import com.turkraft.springfilter.boot.Filter;
+import com.util.annotation.ApiMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,8 +27,9 @@ public class BlogController {
         this.blogService = blogService;
     }
 
+    @ApiMessage("Lấy các bài viết thành công!")
     @GetMapping
-    public ResponseEntity<ApiResponse<PageDetailsResponse<List<BlogResponse>>>> getAllBlogsWithFilter(
+    public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getAllBlogsWithFilter(
             @Filter Specification<BlogEntity> specification,
             Pageable pageable
     ) {

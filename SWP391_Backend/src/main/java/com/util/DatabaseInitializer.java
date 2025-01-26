@@ -60,6 +60,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
                 // blog controller
                 new PermissionEntity("/blogs", ApiMethodEnum.GET)
+
+                // tiep tuc di em
         );
         permissionRepository.saveAll(permissions);
     }
