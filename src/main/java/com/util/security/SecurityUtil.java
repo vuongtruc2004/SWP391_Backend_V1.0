@@ -1,6 +1,7 @@
 package com.util.security;
 
-import com.dto.CredentialsLoginDTO;
+import com.dto.ResponseCredentialsLoginDTO;
+import com.dto.ResponseSocialsLoginDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -46,17 +47,32 @@ public class SecurityUtil {
     }
 
 
-    public String createRefreshToken(String email, CredentialsLoginDTO credentialsLoginDTO) {
+    public String createRefreshTokenWithCredential(String email, ResponseCredentialsLoginDTO responseCredentialsLoginDTO) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(email)
-                .claim("user", credentialsLoginDTO.getUserLogin())
+                .claim("user", responseCredentialsLoginDTO.getUserLogin())
                 .build();
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,
                 claims)).getTokenValue();
     }
+
+    public String createRefreshTokenWithSocials(String email, ResponseSocialsLoginDTO responseSocialsLoginDTO) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuedAt(now)
+                .expiresAt(validity)
+                .subject(email)
+                .claim("user", responseSocialsLoginDTO.getUserLogin())
+                .build();
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,
+                claims)).getTokenValue();
+    }
+
 }

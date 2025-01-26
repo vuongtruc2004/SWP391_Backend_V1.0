@@ -1,7 +1,6 @@
 package com.service;
 
-import com.dto.CredentialsLoginDTO;
-import com.dto.LoginDTO;
+import com.dto.*;
 import com.entity.UserEntity;
 import com.repository.custom.UserRepository;
 import com.util.security.SecurityUtil;
@@ -34,6 +33,9 @@ public class UserService {
     public UserEntity getUserByUserName(String userName) {
         return this.userRepository.findByUsername(userName);
     }
+    public boolean checkExistsByEmailOrUsername(String email,String username) {
+        return  this.userRepository.existsByEmailOrUsername(email,username);
+    }
     public void updateUserToken(String token,String username) {
         UserEntity user = this.userRepository.findByUsername(username);
         if(user!=null) {
@@ -41,35 +43,74 @@ public class UserService {
             this.userRepository.save(user);
         }
     }
-    public CredentialsLoginDTO responseCredentialsLogin(Authentication authentication, LoginDTO loginDTO) {
+    public ResponseCredentialsLoginDTO responseCredentialsLogin(Authentication authentication, CredentialsLoginDTO credentialsLoginDTO) {
         Instant now = Instant.now();
         Instant validityAccess = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
         Instant validityRefresh = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
-        CredentialsLoginDTO credentialsLoginDTO = new CredentialsLoginDTO();
-        CredentialsLoginDTO.UserLogin userLogin=new CredentialsLoginDTO.UserLogin();
-        CredentialsLoginDTO.LoginAccessToken loginAccessToken=new CredentialsLoginDTO.LoginAccessToken();
-        CredentialsLoginDTO.LoginRefreshToken loginRefreshToken=new CredentialsLoginDTO.LoginRefreshToken();
+        ResponseCredentialsLoginDTO responseCredentialsLoginDTO = new ResponseCredentialsLoginDTO();
+        ResponseCredentialsLoginDTO.UserLogin userLogin=new ResponseCredentialsLoginDTO.UserLogin();
+        ResponseCredentialsLoginDTO.LoginAccessToken loginAccessToken=new ResponseCredentialsLoginDTO.LoginAccessToken();
+        ResponseCredentialsLoginDTO.LoginRefreshToken loginRefreshToken=new ResponseCredentialsLoginDTO.LoginRefreshToken();
 
-        UserEntity currentUser=this.getUserByUserName(loginDTO.getUsername());
+        UserEntity currentUser=this.getUserByUserName(credentialsLoginDTO.getUsername());
         userLogin.setId(currentUser.getUserId());
         userLogin.setUsername(currentUser.getUsername());
         userLogin.setEmail(currentUser.getEmail());
         userLogin.setAvatar(currentUser.getAvatar());
-        credentialsLoginDTO.setUserLogin(userLogin);
+        responseCredentialsLoginDTO.setUserLogin(userLogin);
 
         String accessToken=this.securityUtil.createAccessToken(authentication);
-        String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), credentialsLoginDTO);
+        String refreshToken = this.securityUtil.createRefreshTokenWithCredential(credentialsLoginDTO.getUsername(), responseCredentialsLoginDTO);
 
         loginAccessToken.setAccessToken(accessToken);
         loginAccessToken.setExpiresAt(validityAccess);
 
-        credentialsLoginDTO.setAccessToken(loginAccessToken);
+        responseCredentialsLoginDTO.setAccessToken(loginAccessToken);
 
         loginRefreshToken.setRefreshToken(refreshToken);
         loginRefreshToken.setExpiresAt(validityRefresh);
-        credentialsLoginDTO.setRefreshToken(loginRefreshToken);
-        this.updateUserToken(refreshToken, loginDTO.getUsername());
-        return credentialsLoginDTO;
+        responseCredentialsLoginDTO.setRefreshToken(loginRefreshToken);
+        this.updateUserToken(refreshToken, credentialsLoginDTO.getUsername());
+        return responseCredentialsLoginDTO;
+    }
+    public ResponseUserDTO responseUserDTO(UserEntity user) {
+        ResponseUserDTO responseUserDTO = new ResponseUserDTO();
+        responseUserDTO.setUsername(user.getUsername());
+        responseUserDTO.setEmail(user.getEmail());
+        responseUserDTO.setId(user.getUserId());
+        responseUserDTO.setFullname(user.getFullname());
+        responseUserDTO.setAvatar(user.getAvatar());
+        return responseUserDTO;
+    }
+    public ResponseSocialsLoginDTO responseSocialsLogin(Authentication authentication, SocialsLoginDTO socialsLoginDTO) {
+        Instant now = Instant.now();
+        Instant validityAccess = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
+        Instant validityRefresh = now.plus(this.refreshTokenExpiration, ChronoUnit.SECONDS);
+        ResponseSocialsLoginDTO responseSocialsLoginDTO = new ResponseSocialsLoginDTO();
+        ResponseSocialsLoginDTO.UserLogin userLogin=new ResponseSocialsLoginDTO.UserLogin();
+        ResponseSocialsLoginDTO.LoginAccessToken loginAccessToken=new ResponseSocialsLoginDTO.LoginAccessToken();
+        ResponseSocialsLoginDTO.LoginRefreshToken loginRefreshToken=new ResponseSocialsLoginDTO.LoginRefreshToken();
 
+        UserEntity currentUser=this.getUserByEmail(socialsLoginDTO.getEmail());
+        userLogin.setId(currentUser.getUserId());
+        userLogin.setUsername(currentUser.getUsername());
+        userLogin.setEmail(currentUser.getEmail());
+        userLogin.setAvatar(currentUser.getAvatar());
+        userLogin.setAccountType(currentUser.getAccountType().name());
+        responseSocialsLoginDTO.setUserLogin(userLogin);
+
+        String accessToken=this.securityUtil.createAccessToken(authentication);
+        String refreshToken = this.securityUtil.createRefreshTokenWithSocials(socialsLoginDTO.getEmail(), responseSocialsLoginDTO);
+
+        loginAccessToken.setAccessToken(accessToken);
+        loginAccessToken.setExpiresAt(validityAccess);
+
+        responseSocialsLoginDTO.setAccessToken(loginAccessToken);
+
+        loginRefreshToken.setRefreshToken(refreshToken);
+        loginRefreshToken.setExpiresAt(validityRefresh);
+        responseSocialsLoginDTO.setRefreshToken(loginRefreshToken);
+        this.updateUserToken(refreshToken, socialsLoginDTO.getEmail());
+        return responseSocialsLoginDTO;
     }
 }

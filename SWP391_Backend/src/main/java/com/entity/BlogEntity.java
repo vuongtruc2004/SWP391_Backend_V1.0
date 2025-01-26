@@ -47,6 +47,14 @@ public class BlogEntity {
     @OneToMany(mappedBy = "blog")
     Set<CommentEntity> comments;
 
+    Boolean pinned;
+
+    @OneToMany(mappedBy = "blog")
+    Set<LikeEntity> likes;
+
+    @OneToMany(mappedBy = "blog")
+    Set<CommentEntity> comments;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

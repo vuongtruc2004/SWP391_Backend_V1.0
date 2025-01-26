@@ -21,8 +21,11 @@ public class UserDetailsCustom implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity=this.userRepository.findByUsername(username);
         if(userEntity==null){
-            throw new UsernameNotFoundException("User not found");
+            userEntity=this.userRepository.findByEmail(username);
+            if(userEntity==null){
+                throw new UsernameNotFoundException("User not found");
+            }
         }
-        return new User(userEntity.getUsername(),userEntity.getPassword(), Collections.singletonList((new SimpleGrantedAuthority("USER"))));
+        return new User(userEntity.getUsername() !=null ? userEntity.getUsername() : userEntity.getEmail(),userEntity.getPassword()  , Collections.singletonList((new SimpleGrantedAuthority("USER"))));
     }
 }
