@@ -61,4 +61,8 @@ public class CommentEntity {
     public void handlePreUpdate() {
         this.updatedAt = Instant.now();
     }
+<<<<<<< HEAD:SWP391_Backend/src/main/java/com/entity/CommentEntity.java
 }
+=======
+}
+>>>>>>> origin/login:src/main/java/com/entity/CommentEntity.java

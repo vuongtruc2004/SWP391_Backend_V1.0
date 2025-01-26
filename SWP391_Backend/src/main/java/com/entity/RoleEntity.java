@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,7 +31,6 @@ public class RoleEntity {
     List<PermissionEntity> permissions;
 
     @OneToMany(mappedBy = "role")
-    @JsonIgnore
     List<UserEntity> users;
 
     public RoleEntity(RoleNameEnum roleName, List<PermissionEntity> permissions) {
