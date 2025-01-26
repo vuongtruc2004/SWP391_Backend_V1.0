@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/subjects")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SubjectController {
@@ -25,7 +25,7 @@ public class SubjectController {
     SubjectService subjectService;
 
     // Post
-    @PostMapping
+    @PostMapping("/subjects")
     public ResponseEntity<ApiResponse<List<SubjectResponse>>> getAllSubject() throws NotFoundException {
         List<SubjectResponse> subjectResponse = subjectService.getAllSubject();
         ApiResponse<List<SubjectResponse>> responseRestResponse = ApiResponse.<List<SubjectResponse>>builder()
