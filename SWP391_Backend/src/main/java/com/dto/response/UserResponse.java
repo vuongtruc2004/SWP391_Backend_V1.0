@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import com.util.enums.JobEnum;
+import com.util.enums.RoleNameEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -40,6 +41,9 @@ public class UserResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant dob;
+
+    @Enumerated(EnumType.STRING)
+    RoleNameEnum roleName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;

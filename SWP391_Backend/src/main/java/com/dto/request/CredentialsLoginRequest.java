@@ -1,12 +1,11 @@
-package com.dto;
+package com.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginDTO {
+public class CredentialsLoginRequest {
     private String username;
     private String password;
-
 }

@@ -1,7 +1,11 @@
 package com.util;
 
 import com.dto.response.ApiResponse;
+import com.dto.response.LoginResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
+
+import java.time.Instant;
 
 public class BuildResponse {
 
@@ -10,6 +14,15 @@ public class BuildResponse {
                 .status(status)
                 .message(message)
                 .data(data)
+                .build();
+    }
+
+    public static LoginResponse buildLoginResponse(UserResponse userResponse, String accessToken, Instant expireAt, String refreshToken) {
+        return LoginResponse.builder()
+                .user(userResponse)
+                .accessToken(accessToken)
+                .expireAt(expireAt)
+                .refreshToken(refreshToken)
                 .build();
     }
 

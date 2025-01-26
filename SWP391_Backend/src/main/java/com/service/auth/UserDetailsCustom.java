@@ -1,31 +1,42 @@
-package com.service;
+package com.service.auth;
 
 import com.entity.UserEntity;
-import com.repository.custom.UserRepository;
+import com.exception.custom.UserException;
+import com.repository.UserRepository;
+import com.util.enums.AccountTypeEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import java.util.Collections;
 
+import java.util.List;
 
 @Component("userDetailsService")
 public class UserDetailsCustom implements UserDetailsService {
+
     private final UserRepository userRepository;
+
+    @Autowired
     public UserDetailsCustom(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity=this.userRepository.findByUsername(username);
-        if(userEntity==null){
-            userEntity=this.userRepository.findByEmail(username);
-            if(userEntity==null){
-                throw new UsernameNotFoundException("User not found");
-            }
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException("Bad credentials!"));
+
+        if (!userEntity.getAccountType().equals(AccountTypeEnum.CREDENTIALS)) {
+            throw new UserException("Account Type is invalid!");
         }
-        return new User(userEntity.getUsername() !=null ? userEntity.getUsername() : userEntity.getEmail(),userEntity.getPassword()  , Collections.singletonList((new SimpleGrantedAuthority("USER"))));
+
+        return new User(
+                userEntity.getUsername(),
+                userEntity.getPassword(),
+                List.of(new SimpleGrantedAuthority(userEntity.getRole().getRoleName().name()))
+        );
     }
 }

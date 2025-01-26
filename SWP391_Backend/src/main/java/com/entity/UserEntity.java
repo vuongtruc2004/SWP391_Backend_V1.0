@@ -32,7 +32,7 @@ public class UserEntity {
 
     String password;
 
-    @Column(name = "refresh_token",columnDefinition = "MEDIUMTEXT")
+    @Column(name = "refresh_token", columnDefinition = "MEDIUMTEXT")
     String refreshToken;
 
     String avatar;
@@ -52,12 +52,6 @@ public class UserEntity {
     GenderEnum gender;
 
     Instant dob;
-
-    @OneToMany(mappedBy = "user")
-    Set<LikeEntity> likes;
-
-    @OneToMany(mappedBy = "user")
-    Set<CommentEntity> comments;
 
     @Column(name = "created_at")
     Instant createdAt;

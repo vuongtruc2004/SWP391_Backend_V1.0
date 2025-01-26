@@ -44,8 +44,4 @@ public class LikeEntity {
     public void handlePrePersist() {
         this.createdAt = Instant.now();
     }
-<<<<<<< HEAD:SWP391_Backend/src/main/java/com/entity/LikeEntity.java
 }
-=======
-}
->>>>>>> origin/login:src/main/java/com/entity/LikeEntity.java
