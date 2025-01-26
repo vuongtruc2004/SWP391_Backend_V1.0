@@ -27,11 +27,11 @@ public class BlogController {
         this.blogService = blogService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<ApiResponse<PageDetailsResponse<List<BlogResponse>>>> getAllBlogsWithFilter(
             @Filter Specification<BlogEntity> specification,
             Pageable pageable
-            ) {
+    ) {
         return ResponseEntity.ok(blogService.getBlogsWithFilter(specification, pageable));
     }
 }

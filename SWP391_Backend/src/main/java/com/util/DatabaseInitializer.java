@@ -52,30 +52,14 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     public void createPermission() {
         List<PermissionEntity> permissions = Arrays.asList(
-                // vocabularies
-                new PermissionEntity("/vocabularies/all", ApiMethodEnum.GET),
-                new PermissionEntity("/vocabularies", ApiMethodEnum.GET),
-                new PermissionEntity("/vocabularies/{id}", ApiMethodEnum.GET),
-                new PermissionEntity("/vocabularies/saved", ApiMethodEnum.GET),
-                new PermissionEntity("/vocabularies", ApiMethodEnum.POST),
-                new PermissionEntity("/vocabularies/flash", ApiMethodEnum.POST),
-                new PermissionEntity("/vocabularies", ApiMethodEnum.PATCH),
-                new PermissionEntity("/vocabularies/{id}", ApiMethodEnum.DELETE),
+                // auth controller
+                new PermissionEntity("/auth/login/credentials", ApiMethodEnum.POST),
+                new PermissionEntity("/auth/login/socials", ApiMethodEnum.POST),
+                new PermissionEntity("/auth/refresh", ApiMethodEnum.GET),
+                new PermissionEntity("/auth/logout", ApiMethodEnum.GET),
 
-                // locations
-                new PermissionEntity("/locations", ApiMethodEnum.GET),
-                new PermissionEntity("/locations/{id}", ApiMethodEnum.GET),
-
-                // books
-                new PermissionEntity("/books/all", ApiMethodEnum.GET),
-
-                // auth
-                new PermissionEntity("/auth/login/credential", ApiMethodEnum.POST),
-                new PermissionEntity("/auth/login/social", ApiMethodEnum.POST),
-
-                // alphabets
-                new PermissionEntity("/alphabets/hiragana", ApiMethodEnum.GET),
-                new PermissionEntity("/alphabets/katakana", ApiMethodEnum.GET)
+                // blog controller
+                new PermissionEntity("/blogs", ApiMethodEnum.GET)
         );
         permissionRepository.saveAll(permissions);
     }
