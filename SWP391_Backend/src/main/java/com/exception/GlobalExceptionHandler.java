@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> notFoundException(NotFoundException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception !");
+        apiResponse.setMessage("Exception!");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setErrorMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Object>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception !");
+        apiResponse.setMessage("Exception!");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setErrorMessage(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Object>> httpMessageNotReadableException(HttpMessageNotReadableException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception !");
+        apiResponse.setMessage("Exception!");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setErrorMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiResponse<Object>> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception !");
+        apiResponse.setMessage("Exception!");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setErrorMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);

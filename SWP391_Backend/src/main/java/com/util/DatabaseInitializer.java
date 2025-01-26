@@ -59,7 +59,8 @@ public class DatabaseInitializer implements CommandLineRunner {
                 new PermissionEntity("/auth/logout", ApiMethodEnum.GET),
 
                 // blog controller
-                new PermissionEntity("/blogs", ApiMethodEnum.GET)
+                new PermissionEntity("/blogs", ApiMethodEnum.GET),
+                new PermissionEntity("/blogs/pinned", ApiMethodEnum.GET)
 
                 // tiep tuc di em
         );
