@@ -23,6 +23,8 @@ public class SubjectEntity {
 
     String name;
 
+    String  description;
+
     @ManyToMany
     @JoinTable(name = "course_subject", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     List<CourseEntity> courses;
