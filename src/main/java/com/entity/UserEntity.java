@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
@@ -48,6 +49,12 @@ public class UserEntity {
 
     Instant dob;
 
+    @OneToMany(mappedBy = "user")
+    Set<LikeEntity> likes;
+
+    @OneToMany(mappedBy = "user")
+    Set<CommentEntity> comments;
+
     @Column(name = "created_at")
     Instant createdAt;
 
@@ -55,6 +62,10 @@ public class UserEntity {
     Instant updatedAt;
 
     Boolean active;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    OTPEntity otp;
 
     @ManyToMany
     @JsonIgnoreProperties(value = {"purchasers"})

@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authz ->
                                 authz.
-                                        requestMatchers("/","/login").permitAll().
+                                        requestMatchers("/","/credentials-login","/socials-login").permitAll().
                                         anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2)->oauth2.jwt(Customizer.withDefaults()).authenticationEntryPoint(customAuthenticationEntryPoint))
