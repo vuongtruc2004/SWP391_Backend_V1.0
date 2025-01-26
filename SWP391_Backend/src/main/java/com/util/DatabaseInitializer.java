@@ -103,6 +103,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .gender(GenderEnum.MALE)
                             .job(JobEnum.STUDENT)
                             .role(admin)
+                            .active(true)
                             .build()
             );
             userRepository.saveAll(users);

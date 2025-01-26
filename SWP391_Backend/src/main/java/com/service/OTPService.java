@@ -5,6 +5,7 @@ import com.dto.request.OTPRequest;
 import com.entity.OTPEntity;
 import com.entity.UserEntity;
 import com.exception.custom.AppException;
+import com.exception.custom.NotFoundException;
 import com.repository.OTPRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -57,10 +58,10 @@ public class OTPService {
     }
 
     @Transactional
-    public String checkToken(ActiveOTPRequest request) {
+    public String checkToken(ActiveOTPRequest request) throws NotFoundException {
         OTPEntity otp = otpRepository.findByToken(request.getToken());
         if (otp == null) {
-            throw new AppException("Mã OTP không hợp lệ.");
+            throw new NotFoundException("Mã OTP không hợp lệ.");
         }
         UserEntity user = otp.getUser();
         user.setActive(true);

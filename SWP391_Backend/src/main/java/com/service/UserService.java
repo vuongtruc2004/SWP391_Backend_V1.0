@@ -7,6 +7,7 @@ import com.entity.UserEntity;
 import com.exception.custom.UserRequestException;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
+import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -56,6 +57,7 @@ public class UserService {
         RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER).orElse(null);
         UserEntity user = modelMapper.map(request, UserEntity.class);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setAccountType(AccountTypeEnum.CREDENTIALS);
         user.setRole(roleEntity);
         UserEntity savedUser = userRepository.save(user);
         UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);

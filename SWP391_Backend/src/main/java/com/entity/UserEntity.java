@@ -38,6 +38,8 @@ public class UserEntity {
 
     String fullname;
 
+    String phone;
+
     String email;
 
     @Enumerated(EnumType.STRING)

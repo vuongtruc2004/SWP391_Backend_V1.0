@@ -3,6 +3,7 @@ package com.dto.request;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.util.deserializer.StringToInstantDeserializer;
 import com.util.enums.GenderEnum;
+import com.util.enums.JobEnum;
 import com.util.validation.constraint.DobConstraint;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,6 +39,10 @@ public class UserRequest {
 
     String avatar;
 
+    @Pattern(
+            regexp = "^(0)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$",
+            message = "Số điện phải chuẩn đầu số của Việt Nam!"
+    )
     String phone;
 
     @Pattern(
@@ -57,6 +62,9 @@ public class UserRequest {
 
     @Enumerated(EnumType.STRING)
     GenderEnum gender;
+
+    @Enumerated(EnumType.STRING)
+    JobEnum job;
 
     @JsonDeserialize(using = StringToInstantDeserializer.class)
     @DobConstraint(min = 6)
