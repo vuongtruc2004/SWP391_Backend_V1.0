@@ -1,6 +1,5 @@
 package com.service;
 
-import com.dto.response.ApiResponse;
 import com.dto.response.BlogResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.BlogEntity;
@@ -27,7 +26,7 @@ public class BlogService {
         this.modelMapper = modelMapper;
     }
 
-    public ApiResponse<PageDetailsResponse<List<BlogResponse>>> getBlogsWithFilter(
+    public PageDetailsResponse<List<BlogResponse>> getBlogsWithFilter(
             Specification<BlogEntity> specification,
             Pageable pageable
     ) {
@@ -36,13 +35,12 @@ public class BlogService {
                 .map(blogEntity -> modelMapper.map(blogEntity, BlogResponse.class))
                 .toList();
 
-        PageDetailsResponse<List<BlogResponse>> pageDetailsResponse = BuildResponse.buildPageDetailsResponse(
+        return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
                 blogResponseList
         );
-        return BuildResponse.buildApiResponse(200, "Lấy các bài viết thành công!", pageDetailsResponse);
     }
 }
