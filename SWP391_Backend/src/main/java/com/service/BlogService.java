@@ -50,18 +50,19 @@ public class BlogService {
             if (category.equals("like")) {
                 ids = blogRepository.findAllLikeBlogs(userEntity.getUserId());
             } else {
-                ids = new HashSet<>();
+                ids = blogRepository.findAllCommentBlogs(userEntity.getUserId());
             }
         } else {
             ids = new HashSet<>();
         }
 
         if (!ids.isEmpty()) {
-            specification = Specification
-                    .where(specification)
-                    .and(((root, query, criteriaBuilder) ->
-                            root.get("blogId").in(ids)));
+            specification = Specification.where(specification)
+                    .and((root, query, criteriaBuilder) -> root.get("blogId").in(ids));
+        } else if (category != null && !category.equals("all")) {
+            specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.disjunction());
         }
+
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogResponse> blogResponseList = page.getContent().stream()
                 .map(blogEntity -> modelMapper.map(blogEntity, BlogResponse.class))

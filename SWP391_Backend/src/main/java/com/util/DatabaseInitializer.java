@@ -70,7 +70,8 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void createRole() {
         if (!roleRepository.existsBy()) {
             List<RoleEntity> roles = List.of(
-                    new RoleEntity(RoleNameEnum.ADMIN, permissionRepository.findAll())
+                    new RoleEntity(RoleNameEnum.ADMIN, permissionRepository.findAll()),
+                    new RoleEntity(RoleNameEnum.USER, null)
             );
             roleRepository.saveAll(roles);
         }

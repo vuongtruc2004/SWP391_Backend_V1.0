@@ -1,8 +1,9 @@
 package com.exception;
 
 import com.dto.response.ApiResponse;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.UserRequestException;
+import com.exception.custom.*;
+import com.util.BuildResponse;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,39 +19,31 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = NotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> notFoundException(NotFoundException e) {
-        ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception!");
-        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        apiResponse.setErrorMessage(e.getMessage());
+    @ExceptionHandler(value = {
+            NotFoundException.class,
+            HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class,
+            RoleException.class,
+            UserException.class,
+            InvalidTokenException.class,
+            NonUniqueResultException.class
+    })
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
+        ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                "Exception!",
+                null
+        );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Object>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("Exception!");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         apiResponse.setErrorMessage(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
-    }
-
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiResponse<Object>> httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception!");
-        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        apiResponse.setErrorMessage(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
-    }
-
-    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiResponse<Object>> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception!");
-        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        apiResponse.setErrorMessage(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
 

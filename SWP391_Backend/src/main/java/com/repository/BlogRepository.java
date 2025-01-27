@@ -19,4 +19,10 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
             "WHERE u.userId = :userId")
     Set<Long> findAllLikeBlogs(@Param("userId") Long userId);
 
+    @Query("SELECT b.blogId FROM BlogEntity b " +
+            "JOIN CommentEntity c ON b = c.blog " +
+            "JOIN c.user u " +
+            "WHERE u.userId = :userId")
+    Set<Long> findAllCommentBlogs(@Param("userId") Long userId);
+
 }

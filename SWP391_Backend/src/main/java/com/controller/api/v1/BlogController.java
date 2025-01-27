@@ -34,7 +34,7 @@ public class BlogController {
     public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getAllBlogsWithFilter(
             @Filter Specification<BlogEntity> specification,
             Pageable pageable,
-            @RequestParam(required = false, name = "category") String category
+            @RequestParam(required = false, name = "category", defaultValue = "all") String category
     ) {
         return ResponseEntity.ok(blogService.getBlogsWithFilter(specification, pageable, category));
     }

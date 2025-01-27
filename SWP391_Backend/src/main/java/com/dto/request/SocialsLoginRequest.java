@@ -1,15 +1,19 @@
 package com.dto.request;
 
 import com.util.enums.AccountTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SocialsLoginRequest {
-    private String email;
-    private AccountTypeEnum accountType;
-    private String fullName;
-    private String avatar;
-    private String username;
+    String username;
+    String email;
+    String fullname;
+    String avatar;
+    AccountTypeEnum accountType;
 }

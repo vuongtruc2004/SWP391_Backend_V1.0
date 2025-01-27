@@ -25,7 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = false)
 public class SecurityConfig {
 
-    public static String[] PUBLIC_ENDPOINTS = {
+    private final String[] PUBLIC_ENDPOINTS = {
             "/storage/**",
             "/api/v1/auth/**",
             "api/v1/blogs/**"

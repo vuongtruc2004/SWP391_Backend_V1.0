@@ -35,10 +35,11 @@ public class AuthenticationEntryPointCustom implements AuthenticationEntryPoint 
                 .map(Throwable::getMessage)
                 .orElse(authException.getMessage());
 
-        ApiResponse<Object> apiResponse = BuildResponse.buildApiResponse(
+        ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
                 HttpStatus.UNAUTHORIZED.value(),
+                "JWT Token không hợp lệ!",
                 errorMessage,
-                "Token invalid "
+                null
         );
         mapper.writeValue(response.getWriter(), apiResponse);
     }

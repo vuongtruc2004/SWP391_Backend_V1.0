@@ -9,10 +9,11 @@ import java.time.Instant;
 
 public class BuildResponse {
 
-    public static <T> ApiResponse<T> buildApiResponse(Integer status, String message, T data) {
+    public static <T> ApiResponse<T> buildApiResponse(Integer status, Object message, String errorMessage, T data) {
         return ApiResponse.<T>builder()
                 .status(status)
                 .message(message)
+                .errorMessage(errorMessage)
                 .data(data)
                 .build();
     }
