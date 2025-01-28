@@ -1,7 +1,6 @@
 package com.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import com.util.enums.JobEnum;
@@ -69,8 +68,9 @@ public class UserEntity {
     ExpertEntity expert;
 
     @ManyToMany
-    @JsonIgnoreProperties(value = {"purchasers"})
-    @JoinTable(name = "course_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @JoinTable(name = "purchased_course",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
     List<CourseEntity> purchasedCourses;
 
     @OneToMany(mappedBy = "user")

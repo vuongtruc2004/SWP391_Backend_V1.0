@@ -56,6 +56,7 @@ public class BlogService {
             ids = new HashSet<>();
         }
 
+        specification = Specification.where(specification).and(((root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("published"))));
         if (!ids.isEmpty()) {
             specification = Specification.where(specification)
                     .and((root, query, criteriaBuilder) -> root.get("blogId").in(ids));
@@ -64,8 +65,43 @@ public class BlogService {
         }
 
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
+        return getListPageDetailsResponse(page);
+    }
+
+    public PageDetailsResponse<List<BlogResponse>> getBlogsOfSameAuthor(Long blogId, Pageable pageable) {
+        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(blogId)
+                .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
+        UserEntity userEntity = blogEntity.getUser();
+        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(userEntity.getUserId(), blogId, pageable);
+        return getListPageDetailsResponse(page);
+    }
+
+    public BlogResponse getBlogById(Long id) {
+        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(id)
+                .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + id));
+        BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
+        blogResponse.setTotalLikes(blogEntity.getLikes().size());
+        blogResponse.setTotalComments(blogEntity.getComments().size());
+        return blogResponse;
+    }
+
+    public BlogResponse getPinnedBlog() {
+        BlogEntity blogEntity = blogRepository.findByPinnedTrueAndPublishedTrue()
+                .orElseThrow(() -> new NotFoundException("Không có bài viết nào được ghim!"));
+        BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
+        blogResponse.setTotalLikes(blogEntity.getLikes().size());
+        blogResponse.setTotalComments(blogEntity.getComments().size());
+        return blogResponse;
+    }
+
+    private PageDetailsResponse<List<BlogResponse>> getListPageDetailsResponse(Page<BlogEntity> page) {
         List<BlogResponse> blogResponseList = page.getContent().stream()
-                .map(blogEntity -> modelMapper.map(blogEntity, BlogResponse.class))
+                .map(blogEntity -> {
+                    BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
+                    blogResponse.setTotalLikes(blogEntity.getLikes().size());
+                    blogResponse.setTotalComments(blogEntity.getComments().size());
+                    return blogResponse;
+                })
                 .toList();
 
         return BuildResponse.buildPageDetailsResponse(
@@ -75,11 +111,5 @@ public class BlogService {
                 page.getTotalElements(),
                 blogResponseList
         );
-    }
-
-    public BlogResponse getPinnedBlog() throws NotFoundException {
-        BlogEntity blogEntity = blogRepository.findByPinned(true)
-                .orElseThrow(() -> new NotFoundException("Không có bài viết nào được ghim!"));
-        return modelMapper.map(blogEntity, BlogResponse.class);
     }
 }

@@ -2,6 +2,8 @@ package com.repository;
 
 import com.entity.BlogEntity;
 import com.repository.custom.JpaSpecificationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,7 +13,7 @@ import java.util.Set;
 public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, Long> {
     boolean existsBy();
 
-    Optional<BlogEntity> findByPinned(boolean pinned);
+    Optional<BlogEntity> findByPinnedTrueAndPublishedTrue();
 
     @Query("SELECT b.blogId FROM BlogEntity b " +
             "JOIN LikeEntity l ON b = l.blog " +
@@ -25,4 +27,7 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
             "WHERE u.userId = :userId")
     Set<Long> findAllCommentBlogs(@Param("userId") Long userId);
 
+    Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(Long userId, Long blogId, Pageable pageable);
+
+    Optional<BlogEntity> findByBlogIdAndPublishedTrue(Long id);
 }

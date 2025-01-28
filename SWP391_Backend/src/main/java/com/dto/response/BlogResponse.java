@@ -1,5 +1,6 @@
 package com.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,9 +22,15 @@ public class BlogResponse {
 
     String thumbnail;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
+
+    Integer totalLikes;
+
+    Integer totalComments;
 
     UserResponse user;
 }

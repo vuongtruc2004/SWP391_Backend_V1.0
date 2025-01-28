@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.util.enums.RoleNameEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,6 +38,8 @@ public class BlogEntity {
 
     Boolean pinned;
 
+    Boolean published;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
@@ -51,6 +54,7 @@ public class BlogEntity {
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.pinned = false;
+        this.published = user.getRole().getRoleName() != RoleNameEnum.USER;
     }
 
     @PreUpdate

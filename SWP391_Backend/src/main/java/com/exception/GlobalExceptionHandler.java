@@ -26,7 +26,8 @@ public class GlobalExceptionHandler {
             RoleException.class,
             UserException.class,
             InvalidTokenException.class,
-            NonUniqueResultException.class
+            NonUniqueResultException.class,
+            IllegalArgumentException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
