@@ -30,12 +30,13 @@ public class BlogController {
     public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getBlogsWithFilter(
             @Filter Specification<BlogEntity> specification,
             Pageable pageable,
-            @RequestParam(required = false, name = "category", defaultValue = "all") String category
+            @RequestParam(name = "category", required = false, defaultValue = "all") String category,
+            @RequestParam(name = "tag_name", required = false) List<String> tagNameList
     ) {
-        return ResponseEntity.ok(blogService.getBlogsWithFilter(specification, pageable, category));
+        return ResponseEntity.ok(blogService.getBlogsWithFilter(specification, pageable, category, tagNameList));
     }
 
-    @ApiMessage("Lấy các bài viết của tác giả thành công!")
+    @ApiMessage("Lấy các bài viết cùng tác giả thành công!")
     @GetMapping("/author")
     public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getBlogsOfSameAuthor(
             @RequestParam("blogId") Long blogId,
@@ -44,8 +45,17 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogsOfSameAuthor(blogId, pageable));
     }
 
+    @ApiMessage("Lấy các bài viết với hashtags thành công!")
+    @GetMapping("/hashtag")
+    public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getBlogsWithTagName(
+            @RequestParam(name = "tag_name", required = false) List<String> tagNameList,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(blogService.getBlogsWithTagName(tagNameList, pageable));
+    }
+
     @ApiMessage("Lấy bài viết thành công!")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BlogResponse> getBlogById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(blogService.getBlogById(id));
     }

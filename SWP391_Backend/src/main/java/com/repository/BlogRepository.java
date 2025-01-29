@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,6 +27,11 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
             "JOIN c.user u " +
             "WHERE u.userId = :userId")
     Set<Long> findAllCommentBlogs(@Param("userId") Long userId);
+
+    @Query("SELECT DISTINCT b FROM BlogEntity b " +
+            "JOIN b.hashtags h " +
+            "WHERE h.tagName IN :tagNameList")
+    Page<BlogEntity> findAllBlogsByHashtags(@Param("tagNameList") List<String> tagNameList, Pageable pageable);
 
     Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(Long userId, Long blogId, Pageable pageable);
 

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +39,8 @@ public class BlogService {
     public PageDetailsResponse<List<BlogResponse>> getBlogsWithFilter(
             Specification<BlogEntity> specification,
             Pageable pageable,
-            String category
+            String category,
+            List<String> tagNameList
     ) {
         Set<Long> ids;
         if (category != null && !category.equals("all")) {
@@ -64,8 +66,18 @@ public class BlogService {
             specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.disjunction());
         }
 
+        if (tagNameList != null && !tagNameList.isEmpty()) {
+            specification = Specification.where(specification)
+                    .and(((root, query, criteriaBuilder) -> root.join("hashtags").get("tagName").in(tagNameList)));
+        }
+
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
-        return getListPageDetailsResponse(page);
+        return getListPageDetailsResponse(page, null);
+    }
+
+    public PageDetailsResponse<List<BlogResponse>> getBlogsWithTagName(List<String> tagNameList, Pageable pageable) {
+        Page<BlogEntity> page = blogRepository.findAllBlogsByHashtags(tagNameList, pageable);
+        return this.getListPageDetailsResponse(page, null);
     }
 
     public PageDetailsResponse<List<BlogResponse>> getBlogsOfSameAuthor(Long blogId, Pageable pageable) {
@@ -73,7 +85,7 @@ public class BlogService {
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
         UserEntity userEntity = blogEntity.getUser();
         Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(userEntity.getUserId(), blogId, pageable);
-        return getListPageDetailsResponse(page);
+        return getListPageDetailsResponse(page, blogEntity);
     }
 
     public BlogResponse getBlogById(Long id) {
@@ -94,15 +106,19 @@ public class BlogService {
         return blogResponse;
     }
 
-    private PageDetailsResponse<List<BlogResponse>> getListPageDetailsResponse(Page<BlogEntity> page) {
-        List<BlogResponse> blogResponseList = page.getContent().stream()
+    private PageDetailsResponse<List<BlogResponse>> getListPageDetailsResponse(Page<BlogEntity> page, BlogEntity currentBlogEntity) {
+        List<BlogResponse> blogResponseList = new ArrayList<>(page.getContent().stream()
                 .map(blogEntity -> {
                     BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
                     blogResponse.setTotalLikes(blogEntity.getLikes().size());
                     blogResponse.setTotalComments(blogEntity.getComments().size());
                     return blogResponse;
                 })
-                .toList();
+                .toList());
+
+        if (currentBlogEntity != null) {
+            blogResponseList.add(modelMapper.map(currentBlogEntity, BlogResponse.class));
+        }
 
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -33,4 +34,6 @@ public class BlogResponse {
     Integer totalComments;
 
     UserResponse user;
+
+    Set<HashtagResponse> hashtags;
 }

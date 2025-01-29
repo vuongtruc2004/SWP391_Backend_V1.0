@@ -34,6 +34,9 @@ public class BlogEntity {
     @Column(columnDefinition = "LONGTEXT")
     String content;
 
+    @Column(name = "plain_content", columnDefinition = "LONGTEXT")
+    String plainContent;
+
     String thumbnail;
 
     Boolean pinned;
@@ -49,6 +52,12 @@ public class BlogEntity {
 
     @OneToMany(mappedBy = "blog")
     Set<CommentEntity> comments;
+
+    @ManyToMany
+    @JoinTable(name = "blog_tag",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    Set<HashtagEntity> hashtags;
 
     @PrePersist
     public void handlePrePersist() {
