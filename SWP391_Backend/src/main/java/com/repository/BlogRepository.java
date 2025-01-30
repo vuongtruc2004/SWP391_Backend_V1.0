@@ -28,6 +28,8 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
             "WHERE u.userId = :userId")
     Set<Long> findAllCommentBlogs(@Param("userId") Long userId);
 
+    Set<BlogEntity> findAllByUser_UserId(Long userId);
+
     @Query("SELECT DISTINCT b FROM BlogEntity b " +
             "JOIN b.hashtags h " +
             "WHERE h.tagName IN :tagNameList")

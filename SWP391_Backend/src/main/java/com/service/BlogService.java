@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogService {
@@ -51,8 +52,11 @@ public class BlogService {
 
             if (category.equals("like")) {
                 ids = blogRepository.findAllLikeBlogs(userEntity.getUserId());
-            } else {
+            } else if (category.equals("comment")) {
                 ids = blogRepository.findAllCommentBlogs(userEntity.getUserId());
+            } else {
+                ids = blogRepository.findAllByUser_UserId(userEntity.getUserId()).stream()
+                        .map(BlogEntity::getBlogId).collect(Collectors.toSet());
             }
         } else {
             ids = new HashSet<>();
