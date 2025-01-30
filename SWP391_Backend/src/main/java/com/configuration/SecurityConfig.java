@@ -7,7 +7,6 @@ import com.util.SecurityUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,13 +21,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = false)
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
             "/storage/**",
             "/api/v1/auth/**",
-            "api/v1/blogs/**"
+            "api/v1/blogs/**",
+            "api/v1/courses/**",
+            "api/v1/subjects/**",
     };
 
     private final SecurityUtil securityUtil;
