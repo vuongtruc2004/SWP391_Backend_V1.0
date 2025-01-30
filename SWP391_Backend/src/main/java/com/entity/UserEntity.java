@@ -9,7 +9,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -67,11 +66,8 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     ExpertEntity expert;
 
-    @ManyToMany
-    @JoinTable(name = "purchased_course",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
-    List<CourseEntity> purchasedCourses;
+    @ManyToMany(mappedBy = "users")
+    Set<CourseEntity> courses;
 
     @OneToMany(mappedBy = "user")
     Set<LikeEntity> likes;

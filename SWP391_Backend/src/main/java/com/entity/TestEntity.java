@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,8 +31,8 @@ public class TestEntity {
     @Column(name = "udpated_at")
     Instant updatedAt;
 
-    @OneToOne(mappedBy = "test")
-    LessonEntity lesson;
+    @ManyToMany(mappedBy = "tests")
+    Set<LessonEntity> lessons;
 
     @ManyToMany
     @JoinTable(
@@ -39,7 +40,7 @@ public class TestEntity {
             joinColumns = @JoinColumn(name = "test_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
-    private List<QuestionEntity> questions;
+    List<QuestionEntity> questions;
 
     @PrePersist
     public void handlePrePersist() {

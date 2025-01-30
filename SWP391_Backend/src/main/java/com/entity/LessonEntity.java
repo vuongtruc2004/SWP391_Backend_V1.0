@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,13 +30,21 @@ public class LessonEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "lesson")
-    List<VideoEntity> videos;
+    @ManyToMany
+    @JoinTable(name = "lesson_video",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "video_id"))
+    Set<VideoEntity> videos;
 
-    @OneToMany(mappedBy = "lesson")
-    List<DocumentEntity> documents;
+    @ManyToMany
+    @JoinTable(name = "lesson_document",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "document_id"))
+    Set<DocumentEntity> documents;
 
-    @OneToOne
-    @JoinColumn(name = "test_id")
-    TestEntity test;
+    @ManyToMany
+    @JoinTable(name = "lesson_test",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "test_id"))
+    Set<TestEntity> tests;
 }

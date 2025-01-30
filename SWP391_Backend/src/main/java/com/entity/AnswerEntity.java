@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,8 +24,8 @@ public class AnswerEntity {
     String content;
 
     @ManyToMany(mappedBy = "answers")
-    List<QuestionEntity> questions;
+    Set<QuestionEntity> questions;
 
     @ManyToMany(mappedBy = "correctAnswers")
-    List<QuestionEntity> questionsByAnswer;
+    Set<QuestionEntity> questionsByAnswer;
 }

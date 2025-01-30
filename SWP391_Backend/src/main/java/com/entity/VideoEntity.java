@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -19,11 +22,30 @@ public class VideoEntity {
     @Column(name = "video_id")
     Long videoId;
 
+    String title;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String description;
+
     @Column(name = "video_url")
     String videoUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "lession_id")
-    LessonEntity lesson;
+    @Column(name = "created_at")
+    Instant createdAt;
 
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
+    @ManyToMany(mappedBy = "videos")
+    Set<LessonEntity> lessons;
+
+    @PrePersist
+    public void handlePrePersist() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }

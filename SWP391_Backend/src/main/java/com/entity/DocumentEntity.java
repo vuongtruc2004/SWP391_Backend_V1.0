@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -21,7 +24,28 @@ public class DocumentEntity {
 
     String title;
 
-    @ManyToOne
-    @JoinColumn(name = "lession_id")
-    LessonEntity lesson;
+    @Column(columnDefinition = "LONGTEXT")
+    String content;
+
+    @Column(name = "plain_content", columnDefinition = "LONGTEXT")
+    String plainContent;
+
+    @Column(name = "created_at")
+    Instant createdAt;
+
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
+    @ManyToMany(mappedBy = "documents")
+    Set<LessonEntity> lessons;
+
+    @PrePersist
+    public void handlePrePersist() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }
