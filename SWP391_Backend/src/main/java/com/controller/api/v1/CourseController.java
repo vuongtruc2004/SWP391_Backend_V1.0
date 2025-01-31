@@ -7,6 +7,7 @@ import com.util.annotation.ApiMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,4 +27,12 @@ public class CourseController {
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(Pageable pageable) {
         return ResponseEntity.ok(courseService.getCoursesAndSortByPurchased(pageable));
     }
+
+    @ApiMessage("Lấy các khoá học thành công!")
+    @GetMapping("/search/{name}")
+    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesByName(@PathVariable String name, Pageable pageable) {
+        return ResponseEntity.ok(courseService.getCoursesByNameAndSortByPurchased(pageable,name));
+    }
+
+
 }
