@@ -16,4 +16,8 @@ public class SubjectResponse {
     String subjectName;
 
     String description;
+
+    String thumbnail;
+
+    Integer totalCourses;
 }

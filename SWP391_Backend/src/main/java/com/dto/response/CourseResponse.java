@@ -47,5 +47,4 @@ public class CourseResponse {
     Integer totalLikes;
 
     Integer totalComments;
-
 }

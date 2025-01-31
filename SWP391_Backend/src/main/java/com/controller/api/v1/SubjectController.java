@@ -27,4 +27,10 @@ public class SubjectController {
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjects(Pageable pageable) {
         return ResponseEntity.ok(subjectService.getSubjects(pageable));
     }
+
+    @ApiMessage("Lấy các môn học thành công!")
+    @GetMapping("/courses")
+    public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
+        return ResponseEntity.ok(subjectService.getSubjectsSortByNumberOfCourses(pageable));
+    }
 }

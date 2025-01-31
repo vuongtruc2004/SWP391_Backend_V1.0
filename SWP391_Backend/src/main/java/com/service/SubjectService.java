@@ -38,4 +38,24 @@ public class SubjectService {
                 subjectResponseList
         );
     }
+
+    public PageDetailsResponse<List<SubjectResponse>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
+        Page<SubjectEntity> page = subjectRepository.findAllOrderByNumberOfCourses(pageable);
+        List<SubjectResponse> subjectResponseList = page.getContent()
+                .stream()
+                .map(subjectEntity -> {
+                    SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
+                    subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
+                    return subjectResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                subjectResponseList
+        );
+    }
 }

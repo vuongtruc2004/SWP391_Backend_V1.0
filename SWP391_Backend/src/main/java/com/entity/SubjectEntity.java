@@ -27,6 +27,8 @@ public class SubjectEntity {
     @Column(columnDefinition = "MEDIUMTEXT")
     String description;
 
+    String thumbnail;
+
     @ManyToMany(mappedBy = "subjects")
     Set<CourseEntity> courses;
 }
