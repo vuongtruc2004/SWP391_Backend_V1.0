@@ -49,7 +49,11 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         String username = authentication.getName();
-        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UserException("Username not found!"));
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserException("Username not found!"));
+        if (Boolean.FALSE.equals(userEntity.getActive())) {
+            throw new UserException("User is not active!");
+        }
 
         UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
         userResponse.setRoleName(userEntity.getRole().getRoleName());

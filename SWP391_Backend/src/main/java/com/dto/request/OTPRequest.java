@@ -12,12 +12,13 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OTPRequest {
-    String otp;
+
+    String code;
+
     @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*\\d).{8,}$",
             message = "Mật khẩu phải chứa ít nhất 8 kí tự, ít nhất một chữ cái in hoa và chữ số!"
     )
-
     @NotBlank(message = "Mật khẩu không được để trống!")
     String newPassword;
 }

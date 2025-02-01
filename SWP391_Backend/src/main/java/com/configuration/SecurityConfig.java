@@ -29,6 +29,7 @@ public class SecurityConfig {
             "api/v1/blogs/**",
             "api/v1/courses/**",
             "api/v1/subjects/**",
+            "/api/v1/users/**"
     };
 
     private final SecurityUtil securityUtil;

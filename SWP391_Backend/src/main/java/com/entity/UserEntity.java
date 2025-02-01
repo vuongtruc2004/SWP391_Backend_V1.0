@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import com.util.enums.JobEnum;
@@ -60,7 +59,6 @@ public class UserEntity {
     Boolean active;
 
     @OneToOne(mappedBy = "user")
-    @JsonIgnore
     OTPEntity otp;
 
     @OneToOne(mappedBy = "user")
@@ -103,7 +101,9 @@ public class UserEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
-        this.active = true;
+        if (active == null) {
+            active = true;
+        }
     }
 
     @PreUpdate

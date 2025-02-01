@@ -25,11 +25,11 @@ public class UserRequest {
 
     @NotBlank(message = "Tên người dùng không được để trống!")
     String username;
-    @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*\\d).{8,}$",
-            message = "Mật khẩu phải chứa ít nhất 8 kí tự, ít nhất một chữ cái in hoa và chữ số!"
-    )
 
+    @Pattern(
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+            message = "Mật khẩu phải chứa ít nhất 8 kí tự, bao gồm chữ cái và số!"
+    )
     @NotBlank(message = "Mật khẩu không được để trống!")
     String password;
 
@@ -38,21 +38,24 @@ public class UserRequest {
 
     String avatar;
 
+    @Pattern(
+            regexp = "^(0)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$",
+            message = "Số điện phải chuẩn đầu số của Việt Nam!"
+    )
     String phone;
 
     @Pattern(
             regexp = "^[a-zA-ZÀ-ỹ\\s]+$",
             message = "Họ và tên chỉ được chứa chữ cái!"
     )
-            @NotBlank(message = "Họ và tên không được bỏ trống!")
+    @NotBlank(message = "Họ và tên không được bỏ trống!")
     String fullname;
-
 
     @Pattern(
             regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "Email không đúng định dạng!"
     )
-            @NotBlank(message = "Email không được bỏ trống!")
+    @NotBlank(message = "Email không được bỏ trống!")
     String email;
 
     @Enumerated(EnumType.STRING)
@@ -61,5 +64,4 @@ public class UserRequest {
     @JsonDeserialize(using = StringToInstantDeserializer.class)
     @DobConstraint(min = 6)
     Instant dob;
-
 }
