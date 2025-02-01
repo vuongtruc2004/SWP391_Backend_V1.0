@@ -48,7 +48,7 @@ public class BlogService {
             String username = JwtService.extractUsernameFromToken()
                     .orElseThrow(() -> new UserException("Vui lòng đăng nhập để xem các bài viết đã thích/bình luận!"));
             UserEntity userEntity = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UserException("Tên tài khoản không tồn tại!"));
+                    .orElseThrow(() -> new NotFoundException("Tên tài khoản không tồn tại!"));
 
             if (category.equals("like")) {
                 ids = blogRepository.findAllLikeBlogs(userEntity.getUserId());
@@ -62,52 +62,70 @@ public class BlogService {
             ids = new HashSet<>();
         }
 
-        specification = Specification.where(specification).and(((root, query, criteriaBuilder) -> criteriaBuilder.isTrue(root.get("published"))));
+        if (!category.equals("owner")) {
+            specification = Specification.where(specification)
+                    .and((root, query, criteriaBuilder) ->
+                            criteriaBuilder.and(
+                                    criteriaBuilder.isTrue(root.get("accepted")),
+                                    criteriaBuilder.isTrue(root.get("published"))
+                            )
+                    );
+        }
+
         if (!ids.isEmpty()) {
             specification = Specification.where(specification)
-                    .and((root, query, criteriaBuilder) -> root.get("blogId").in(ids));
+                    .and((root, query, criteriaBuilder) ->
+                            root.get("blogId").in(ids)
+                    );
         } else if (category != null && !category.equals("all")) {
-            specification = Specification.where((root, query, criteriaBuilder) -> criteriaBuilder.disjunction());
+            specification = Specification.where((root, query, criteriaBuilder) ->
+                    criteriaBuilder.disjunction()
+            );
         }
 
         if (tagNameList != null && !tagNameList.isEmpty()) {
             specification = Specification.where(specification)
-                    .and(((root, query, criteriaBuilder) -> root.join("hashtags").get("tagName").in(tagNameList)));
+                    .and(((root, query, criteriaBuilder) ->
+                            root.join("hashtags").get("tagName").in(tagNameList)
+                    ));
         }
 
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         return getListPageDetailsResponse(page, null);
     }
 
-    public PageDetailsResponse<List<BlogResponse>> getBlogsWithTagName(List<String> tagNameList, Pageable pageable) {
-        Page<BlogEntity> page = blogRepository.findAllBlogsByHashtags(tagNameList, pageable);
-        return this.getListPageDetailsResponse(page, null);
-    }
-
     public PageDetailsResponse<List<BlogResponse>> getBlogsOfSameAuthor(Long blogId, Pageable pageable) {
-        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(blogId)
+        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrueAndAcceptedTrue(blogId)
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
         UserEntity userEntity = blogEntity.getUser();
-        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(userEntity.getUserId(), blogId, pageable);
+        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrueAndAcceptedTrue(userEntity.getUserId(), blogId, pageable);
         return getListPageDetailsResponse(page, blogEntity);
     }
 
-    public BlogResponse getBlogById(Long id) {
-        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(id)
-                .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + id));
-        BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
-        blogResponse.setTotalLikes(blogEntity.getLikes().size());
-        blogResponse.setTotalComments(blogEntity.getComments().size());
-        return blogResponse;
+    public BlogResponse getBlogById(Long blogId) {
+        String username = JwtService.extractUsernameFromToken().orElse(null);
+        BlogEntity blogEntity = blogRepository.findById(blogId)
+                .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
+
+        if (username == null) {
+            if (!blogEntity.getPublished() || !blogEntity.getAccepted()) {
+                throw new NotFoundException("Không có bài viết nào với ID = " + blogId);
+            }
+        } else {
+            UserEntity user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new NotFoundException("Tên tài khoản không tồn tại!"));
+            if ((!blogEntity.getPublished() || !blogEntity.getAccepted())
+                    && !blogEntity.getUser().equals(user)) {
+                throw new NotFoundException("Không có bài viết nào với ID = " + blogId);
+            }
+        }
+        return this.convertToBlogResponse(blogEntity);
     }
 
     public BlogResponse getPinnedBlog() {
-        BlogEntity blogEntity = blogRepository.findByPinnedTrueAndPublishedTrue()
+        BlogEntity blogEntity = blogRepository.findByPinnedTrueAndPublishedTrueAndAcceptedTrue()
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào được ghim!"));
-        BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
-        blogResponse.setTotalLikes(blogEntity.getLikes().size());
-        blogResponse.setTotalComments(blogEntity.getComments().size());
-        return blogResponse;
+        return this.convertToBlogResponse(blogEntity);
     }
 
     private PageDetailsResponse<List<BlogResponse>> getListPageDetailsResponse(Page<BlogEntity> page, BlogEntity currentBlogEntity) {
@@ -131,5 +149,12 @@ public class BlogService {
                 page.getTotalElements(),
                 blogResponseList
         );
+    }
+
+    private BlogResponse convertToBlogResponse(BlogEntity blogEntity) {
+        BlogResponse blogResponse = modelMapper.map(blogEntity, BlogResponse.class);
+        blogResponse.setTotalLikes(blogEntity.getLikes().size());
+        blogResponse.setTotalComments(blogEntity.getComments().size());
+        return blogResponse;
     }
 }

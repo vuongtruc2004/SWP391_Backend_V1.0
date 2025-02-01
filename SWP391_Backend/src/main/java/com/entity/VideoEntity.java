@@ -39,6 +39,9 @@ public class VideoEntity {
     @ManyToMany(mappedBy = "videos")
     Set<LessonEntity> lessons;
 
+    @ManyToMany(mappedBy = "completedVideos")
+    Set<UserEntity> users;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

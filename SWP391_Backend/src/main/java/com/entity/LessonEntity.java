@@ -42,9 +42,6 @@ public class LessonEntity {
             inverseJoinColumns = @JoinColumn(name = "document_id"))
     Set<DocumentEntity> documents;
 
-    @ManyToMany
-    @JoinTable(name = "lesson_test",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "test_id"))
-    Set<TestEntity> tests;
+    @OneToMany(mappedBy = "lesson")
+    Set<QuizEntity> quizzes;
 }

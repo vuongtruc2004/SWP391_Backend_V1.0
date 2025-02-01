@@ -78,6 +78,24 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<CommentEntity> comments;
 
+    @OneToMany(mappedBy = "user")
+    Set<QuizAttemptEntity> quizAttempts;
+
+    @ManyToMany
+    @JoinTable(name = "user_document",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "document_id"))
+    Set<DocumentEntity> completedDocuments;
+
+    @ManyToMany
+    @JoinTable(name = "user_video",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "video_id"))
+    Set<VideoEntity> completedVideos;
+
+    @OneToMany(mappedBy = "user")
+    Set<UserNotificationEntity> userNotifications;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     RoleEntity role;

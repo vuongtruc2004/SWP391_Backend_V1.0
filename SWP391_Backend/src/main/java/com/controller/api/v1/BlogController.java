@@ -45,15 +45,6 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogsOfSameAuthor(blogId, pageable));
     }
 
-    @ApiMessage("Lấy các bài viết với hashtags thành công!")
-    @GetMapping("/hashtag")
-    public ResponseEntity<PageDetailsResponse<List<BlogResponse>>> getBlogsWithTagName(
-            @RequestParam(name = "tag_name", required = false) List<String> tagNameList,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(blogService.getBlogsWithTagName(tagNameList, pageable));
-    }
-
     @ApiMessage("Lấy bài viết thành công!")
     @GetMapping("/{id}")
     public ResponseEntity<BlogResponse> getBlogById(@PathVariable("id") Long id) {

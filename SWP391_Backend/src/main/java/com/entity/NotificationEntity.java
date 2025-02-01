@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -14,16 +13,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tests")
+@Table(name = "notifications")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TestEntity {
+public class NotificationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "test_id")
-    Long testId;
+    @Column(name = "notification_id")
+    Long notificationId;
 
     String title;
+
+    String content;
 
     @Column(name = "created_at")
     Instant createdAt;
@@ -31,16 +32,10 @@ public class TestEntity {
     @Column(name = "udpated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "tests")
-    Set<LessonEntity> lessons;
+    Boolean global;
 
-    @ManyToMany
-    @JoinTable(
-            name = "question_test",
-            joinColumns = @JoinColumn(name = "test_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id")
-    )
-    List<QuestionEntity> questions;
+    @OneToMany(mappedBy = "notification")
+    Set<UserNotificationEntity> userNotifications;
 
     @PrePersist
     public void handlePrePersist() {

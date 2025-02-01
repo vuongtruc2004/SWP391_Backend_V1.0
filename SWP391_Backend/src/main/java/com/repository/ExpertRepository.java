@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface ExpertRepository extends JpaSpecificationRepository<ExpertEntity, Long> {
     Optional<ExpertEntity> findByUser_Username(String username);
-
-    boolean existsBy();
 }

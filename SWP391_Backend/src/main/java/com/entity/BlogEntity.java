@@ -43,6 +43,8 @@ public class BlogEntity {
 
     Boolean published;
 
+    Boolean accepted;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
@@ -62,8 +64,13 @@ public class BlogEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
-        this.pinned = false;
-        this.published = user.getRole().getRoleName() != RoleNameEnum.USER;
+        if (pinned == null) pinned = false;
+        if (accepted == null) {
+            this.accepted = user.getRole().getRoleName() != RoleNameEnum.USER;
+        }
+        if (published == null) {
+            this.published = true;
+        }
     }
 
     @PreUpdate

@@ -18,9 +18,7 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
     UserEntity findByEmail(String email);
 
     Optional<UserEntity> findByUsername(String username);
-
-    boolean existsBy();
-
+    
     boolean existsByEmailOrUsername(String email, String username);
 
     Optional<UserEntity> findByUsernameAndAccountType(String username, AccountTypeEnum accountType);

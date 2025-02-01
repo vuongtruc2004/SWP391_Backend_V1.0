@@ -10,26 +10,24 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "answers")
+@Table(name = "user_answers")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AnswerEntity {
+public class UserAnswerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "answer_id")
-    Long answerId;
+    @Column(name = "user_answer_id")
+    Long userAnswerId;
 
-    String content;
-
-    Boolean correct;
+    @ManyToOne
+    @JoinColumn(name = "quiz_attempt_id")
+    QuizAttemptEntity quizAttempt;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
     QuestionEntity question;
 
-    public AnswerEntity(String content, Boolean correct, QuestionEntity question) {
-        this.content = content;
-        this.correct = correct;
-        this.question = question;
-    }
+    @ManyToOne
+    @JoinColumn(name = "answer_id")
+    AnswerEntity answer;
 }

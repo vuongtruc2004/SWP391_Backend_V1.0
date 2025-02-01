@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface JpaSpecificationRepository<T, ID>  extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+public interface JpaSpecificationRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
+    boolean existsBy();
 }

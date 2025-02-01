@@ -34,5 +34,8 @@ public class ExpertEntity {
     UserEntity user;
 
     @OneToMany(mappedBy = "expert")
-    Set<CourseEntity> createdCourses;
+    Set<CourseEntity> courses;
+
+    @OneToMany(mappedBy = "expert")
+    Set<QuizEntity> quizzes;
 }

@@ -39,6 +39,9 @@ public class DocumentEntity {
     @ManyToMany(mappedBy = "documents")
     Set<LessonEntity> lessons;
 
+    @ManyToMany(mappedBy = "completedDocuments")
+    Set<UserEntity> users;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

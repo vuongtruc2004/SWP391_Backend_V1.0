@@ -1,6 +1,7 @@
 package com.util;
 
 import com.entity.*;
+import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.UserException;
 import com.repository.*;
@@ -11,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.*;
 
 @Component
@@ -28,9 +30,11 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final CourseRepository courseRepository;
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
+    private final QuestionRepository questionRepository;
+    private final QuizRepository quizRepository;
 
     @Autowired
-    public DatabaseInitializer(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, BlogRepository blogRepository, HashtagRepository hashtagRepository, VideoRepository videoRepository, SubjectRepository subjectRepository, DocumentRepository documentRepository, CourseRepository courseRepository, LessonRepository lessonRepository, ExpertRepository expertRepository) {
+    public DatabaseInitializer(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, BlogRepository blogRepository, HashtagRepository hashtagRepository, VideoRepository videoRepository, SubjectRepository subjectRepository, DocumentRepository documentRepository, CourseRepository courseRepository, LessonRepository lessonRepository, ExpertRepository expertRepository, QuestionRepository questionRepository, QuizRepository quizRepository) {
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
         this.userRepository = userRepository;
@@ -43,6 +47,8 @@ public class DatabaseInitializer implements CommandLineRunner {
         this.courseRepository = courseRepository;
         this.lessonRepository = lessonRepository;
         this.expertRepository = expertRepository;
+        this.questionRepository = questionRepository;
+        this.quizRepository = quizRepository;
     }
 
     @Override
@@ -59,12 +65,14 @@ public class DatabaseInitializer implements CommandLineRunner {
         createSubject();
         createDocument();
         createLesson();
+        createQuestion();
+        createQuiz();
         createCourse();
 
         System.out.println("Database initialization completed!");
     }
 
-    public void createPermission() {
+    private void createPermission() {
         List<PermissionEntity> permissions = Arrays.asList(
                 // auth controller
                 new PermissionEntity("/auth/login/credentials", ApiMethodEnum.POST),
@@ -84,7 +92,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         permissionRepository.saveAll(permissions);
     }
 
-    public void createRole() {
+    private void createRole() {
         if (!roleRepository.existsBy()) {
             List<RoleEntity> roles = List.of(
                     new RoleEntity(RoleNameEnum.ADMIN, permissionRepository.findAll()),
@@ -96,7 +104,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createUser() {
+    private void createUser() {
         if (!userRepository.existsBy()) {
             RoleEntity admin = roleRepository.findByRoleName(RoleNameEnum.ADMIN).orElseThrow(() -> new RoleException("Role name not existed!"));
             RoleEntity expert = roleRepository.findByRoleName(RoleNameEnum.EXPERT).orElseThrow(() -> new RoleException("Role name not existed!"));
@@ -157,7 +165,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createExpert() {
+    private void createExpert() {
         if (!expertRepository.existsBy()) {
             UserEntity user = userRepository.findByUsername("expert")
                     .orElseThrow(() -> new UserException("Username not existed!"));
@@ -170,7 +178,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createHashtag() {
+    private void createHashtag() {
         if (!hashtagRepository.existsBy()) {
             List<HashtagEntity> hashtags = List.of(
                     HashtagEntity.builder().tagName("java").build(),
@@ -208,9 +216,9 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createBlog() {
+    private void createBlog() {
         if (!blogRepository.existsBy()) {
-            UserEntity user = userRepository.findByUsername("marketing").orElseThrow(() -> new UserException("User not existed!"));
+            UserEntity user = userRepository.findByUsername("admin").orElseThrow(() -> new UserException("User not existed!"));
             List<BlogEntity> blogs = List.of(
                     BlogEntity.builder()
                             .title("Lập Trình Web Từ A Đến Z: Hướng Dẫn Chi Tiết")
@@ -219,6 +227,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .user(user)
                             .thumbnail("1.jpg")
                             .hashtags(this.getRandomHashtags(3))
+                            .pinned(true)
                             .build(),
                     BlogEntity.builder()
                             .title("Những Sai Lầm Cần Tránh Khi Học Lập Trình")
@@ -227,6 +236,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .user(user)
                             .thumbnail("2.jpg")
                             .hashtags(this.getRandomHashtags(5))
+                            .published(false)
                             .build(),
                     BlogEntity.builder()
                             .title("Top 10 Công Cụ Hữu Ích Cho Lập Trình Viên")
@@ -251,6 +261,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .user(user)
                             .thumbnail("5.jpg")
                             .hashtags(this.getRandomHashtags(7))
+                            .published(false)
                             .build(),
                     BlogEntity.builder()
                             .title("Cách Viết Code Sạch Và Dễ Bảo Trì")
@@ -315,6 +326,8 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .user(user)
                             .thumbnail("13.jpg")
                             .hashtags(this.getRandomHashtags(6))
+                            .published(false)
+                            .accepted(false)
                             .build(),
                     BlogEntity.builder()
                             .title("Điều Quan Trọng Cần Biết Khi Làm Việc Với API")
@@ -337,7 +350,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createVideo() {
+    private void createVideo() {
         if (!videoRepository.existsBy()) {
             List<VideoEntity> videos = List.of(
                     VideoEntity.builder()
@@ -395,7 +408,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createSubject() {
+    private void createSubject() {
         if (!subjectRepository.existsBy()) {
             List<SubjectEntity> subjects = List.of(
                     SubjectEntity.builder()
@@ -528,7 +541,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createDocument() {
+    private void createDocument() {
         if (!documentRepository.existsBy()) {
             List<DocumentEntity> documents = List.of(
                     DocumentEntity.builder()
@@ -586,7 +599,48 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createLesson() {
+    private void createQuestion() {
+        if (!questionRepository.existsBy()) {
+            List<QuestionEntity> questions = List.of(
+                    new QuestionEntity("Ngôn ngữ lập trình nào được sử dụng để phát triển ứng dụng Android?"),
+                    new QuestionEntity("HTML là viết tắt của cụm từ nào?"),
+                    new QuestionEntity("Trong Python, hàm nào được sử dụng để in ra màn hình?"),
+                    new QuestionEntity("CSS được sử dụng để làm gì trong phát triển web?"),
+                    new QuestionEntity("JavaScript là ngôn ngữ lập trình loại gì?"),
+                    new QuestionEntity("Git là gì trong phát triển phần mềm?"),
+                    new QuestionEntity("Trong Java, từ khóa 'final' có ý nghĩa gì?"),
+                    new QuestionEntity("API là viết tắt của cụm từ nào?"),
+                    new QuestionEntity("Trong cơ sở dữ liệu, SQL là viết tắt của cụm từ nào?"),
+                    new QuestionEntity("Framework nào được sử dụng để phát triển ứng dụng web bằng Python?"),
+                    new QuestionEntity("Trong lập trình hướng đối tượng, tính đa hình (polymorphism) là gì?"),
+                    new QuestionEntity("Trong JavaScript, 'NaN' có nghĩa là gì?"),
+                    new QuestionEntity("Trong C++, từ khóa 'virtual' được sử dụng để làm gì?"),
+                    new QuestionEntity("Trong phát triển web, REST là gì?"),
+                    new QuestionEntity("Trong Python, thư viện nào được sử dụng để phân tích dữ liệu?"),
+                    new QuestionEntity("Trong Java, 'JVM' là viết tắt của cụm từ nào?"),
+                    new QuestionEntity("Trong lập trình, 'debugging' là gì?"),
+                    new QuestionEntity("Trong CSS, 'flexbox' được sử dụng để làm gì?"),
+                    new QuestionEntity("Trong JavaScript, 'closure' là gì?"),
+                    new QuestionEntity("Trong phát triển ứng dụng di động, 'Flutter' là gì?")
+            );
+            for (QuestionEntity question : questions) {
+                Random random = new Random();
+                boolean isCorrect = random.nextBoolean();
+                Set<AnswerEntity> set = new HashSet<>(List.of(
+                        new AnswerEntity("Câu trả lời A", isCorrect, question),
+                        new AnswerEntity("Câu trả lời B", isCorrect, question),
+                        new AnswerEntity("Câu trả lời C", isCorrect, question),
+                        new AnswerEntity("Câu trả lời D", isCorrect, question),
+                        new AnswerEntity("Câu trả lời E", isCorrect, question),
+                        new AnswerEntity("Câu trả lời F", isCorrect, question)
+                ));
+                question.setAnswers(set);
+            }
+            questionRepository.saveAll(questions);
+        }
+    }
+
+    private void createLesson() {
         if (!lessonRepository.existsBy()) {
             List<LessonEntity> lessons = List.of(
                     LessonEntity.builder().title("Giới thiệu về Java").description("Tìm hiểu tổng quan về Java và ứng dụng thực tế.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
@@ -624,7 +678,290 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
-    public void createCourse() {
+    private void createQuiz() {
+        if (!quizRepository.existsBy()) {
+            ExpertEntity expert = expertRepository.findByUser_Username("expert")
+                    .orElseThrow(() -> new NotFoundException("Expert not found"));
+            List<QuestionEntity> questions = questionRepository.findAll();
+            List<LessonEntity> lessons = lessonRepository.findAll();
+            Random random = new Random();
+            List<QuizEntity> quizzes = List.of(
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 1")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(0))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 2")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(1))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 3")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(2))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 4")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(3))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 5")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(4))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 6")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(5))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 7")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(6))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 8")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(7))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 9")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(8))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 10")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(9))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 11")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(10))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 12")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(11))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 13")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(12))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 14")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(13))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 15")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(14))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 16")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(15))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 17")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(16))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 18")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(17))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 19")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(18))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 20")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(19))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 21")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(20))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 22")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(21))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 23")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(22))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 24")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(23))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 25")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(24))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 26")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(25))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 27")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(26))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 28")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(27))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 29")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(28))
+                            .build(),
+                    QuizEntity.builder()
+                            .title("Bài kiểm tra số 30")
+                            .maxAttempts(random.nextInt(3) + 1)
+                            .published(false)
+                            .createdAt(Instant.now())
+                            .expert(expert)
+                            .questions(new HashSet<>(questions))
+                            .lesson(lessons.get(29))
+                            .build()
+            );
+            quizRepository.saveAll(quizzes);
+        }
+    }
+
+    private void createCourse() {
         if (!courseRepository.existsBy()) {
             ExpertEntity expert = expertRepository.findByUser_Username("expert")
                     .orElseThrow(() -> new UserException("Username not found!"));
@@ -666,7 +1003,18 @@ public class DatabaseInitializer implements CommandLineRunner {
                 courseEntities.get(i).setLessons(lessons);
                 courseRepository.saveAndFlush(courseEntities.get(i));
             }
+            this.completeSomeDocumentAndVideo();
         }
+    }
+
+    private void completeSomeDocumentAndVideo() {
+        UserEntity user = userRepository.findByUsername("admin")
+                .orElseThrow(() -> new UserException("Username not found!"));
+        List<DocumentEntity> documents = documentRepository.findAll();
+        List<VideoEntity> videos = videoRepository.findAll();
+        user.setCompletedDocuments(new HashSet<>(documents.subList(0, 5)));
+        user.setCompletedVideos(new HashSet<>(videos.subList(1, 6)));
+        userRepository.save(user);
     }
 
     private Set<HashtagEntity> getRandomHashtags(Integer numberOfHashtags) {

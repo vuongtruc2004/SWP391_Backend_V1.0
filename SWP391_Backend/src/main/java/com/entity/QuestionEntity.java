@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,23 +24,13 @@ public class QuestionEntity {
 
     String title;
 
-    @ManyToMany
-    @JoinTable(
-            name = "question_answer",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "answer_id")
-    )
-    private List<AnswerEntity> answers;
-
-    @ManyToMany
-    @JoinTable(
-            name = "question_by_answer",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "answer_id")
-    )
-    private List<AnswerEntity> correctAnswers;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    Set<AnswerEntity> answers;
 
     @ManyToMany(mappedBy = "questions")
-    private List<TestEntity> tests;
+    List<QuizEntity> quizzes;
 
+    public QuestionEntity(String title) {
+        this.title = title;
+    }
 }

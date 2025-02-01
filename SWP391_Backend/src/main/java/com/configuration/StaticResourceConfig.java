@@ -13,6 +13,7 @@ public class StaticResourceConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // check: 1/2/2025 5h chiều
         registry.addResourceHandler("/storage/**")
                 .addResourceLocations(assetURI);
     }

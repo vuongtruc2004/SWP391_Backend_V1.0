@@ -9,6 +9,7 @@ import com.repository.UserRepository;
 import com.util.BuildResponse;
 import com.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -80,7 +81,7 @@ public class JwtService {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
 
-        if (authentication == null) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return Optional.empty();
         } else if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             return Optional.ofNullable(userDetails.getUsername());

@@ -29,6 +29,10 @@ public class BlogResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
 
+    Boolean published;
+
+    Boolean accepted;
+    
     Integer totalLikes;
 
     Integer totalComments;
