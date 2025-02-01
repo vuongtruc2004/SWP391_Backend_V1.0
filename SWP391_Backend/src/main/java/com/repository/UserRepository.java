@@ -13,12 +13,12 @@ import java.util.Optional;
 public interface UserRepository extends JpaSpecificationRepository<UserEntity, Long> {
     boolean existsByUsername(String username);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailAndAccountType(String email, AccountTypeEnum accountType);
 
-    UserEntity findByEmail(String email);
+    Optional<UserEntity> findByEmailAndAccountType(String email, AccountTypeEnum accountType);
 
     Optional<UserEntity> findByUsername(String username);
-    
+
     boolean existsByEmailOrUsername(String email, String username);
 
     Optional<UserEntity> findByUsernameAndAccountType(String username, AccountTypeEnum accountType);

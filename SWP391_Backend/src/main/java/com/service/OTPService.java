@@ -1,11 +1,15 @@
 package com.service;
 
-import com.dto.request.OTPRequest;
+import com.dto.request.ChangePasswordRequest;
+import com.dto.response.ApiResponse;
 import com.entity.OTPEntity;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
+import com.exception.custom.UserException;
 import com.repository.OTPRepository;
 import com.repository.UserRepository;
+import com.util.BuildResponse;
+import com.util.enums.AccountTypeEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +33,7 @@ public class OTPService {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     private final UserRepository userRepository;
 
-    public String generateOTP(UserEntity user, String title) {
+    public ApiResponse<Void> generateOTP(UserEntity user, String title) {
         StringBuilder otp = new StringBuilder();
         for (int i = 0; i < OTP_LENGTH; i++) {
             int index = secureRandom.nextInt(CHARACTERS.length());
@@ -44,39 +48,51 @@ public class OTPService {
         otpRepository.save(otpEntity);
 
         emailSenderService.sendEmail(user.getEmail(), title, "mail-template", otpMap);
-        return "Vui lòng kiểm tra email của bạn!";
+
+        return BuildResponse.buildApiResponse(200, "Vui lòng kiểm tra email của bạn!", null, null);
+    }
+
+    public ApiResponse<Void> sendChangePasswordRequest(String email) {
+        UserEntity user = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
+                .orElseThrow(() -> new NotFoundException("Email này chưa được đăng kí!"));
+        return this.generateOTP(user, "Yêu cầu đổi mật khẩu!");
     }
 
     @Transactional
-    public String changePassword(OTPRequest otpRequest) {
+    public ApiResponse<Void> changePassword(ChangePasswordRequest otpRequest) {
         OTPEntity otp = otpRepository.findByCode(otpRequest.getCode())
-                .orElseThrow(() -> new NotFoundException("OTP code not found!"));
+                .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
 
         Instant now = Instant.now();
         if (now.isAfter(otp.getExpiredAt())) {
-            throw new NotFoundException("OTP code expired!");
+            throw new NotFoundException("Mã OTP của bạn đã hết hạn!");
+        }
+
+        if (!otpRequest.getPassword().equals(otpRequest.getRePassword())) {
+            throw new UserException("Mật khẩu không khớp!");
         }
 
         UserEntity user = otp.getUser();
-        user.setPassword(passwordEncoder.encode(otpRequest.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(otpRequest.getPassword()));
         user.setOtp(null);
         userRepository.save(user);
 
         otp.setUser(null);
         otpRepository.delete(otp);
-        return "Đổi mật khẩu thành công!";
+
+        return BuildResponse.buildApiResponse(200, "Đổi mật khẩu thành công!", null, null);
     }
 
     @Transactional
-    public String activeAccount(String code) {
+    public ApiResponse<Void> activeAccount(String code) {
         OTPEntity otp = otpRepository.findByCode(code)
-                .orElseThrow(() -> new NotFoundException("OTP code not found!"));
+                .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
 
         Instant now = Instant.now();
         if (now.isAfter(otp.getExpiredAt())) {
-            throw new NotFoundException("OTP code expired!");
+            throw new NotFoundException("Mã OTP của bạn đã hết hạn!");
         }
-        
+
         UserEntity user = otp.getUser();
         user.setActive(true);
         user.setOtp(null);
@@ -84,6 +100,6 @@ public class OTPService {
 
         otp.setUser(null);
         otpRepository.delete(otp);
-        return "Bạn đã kích hoạt tài khoản thành công!";
+        return BuildResponse.buildApiResponse(200, "Kích hoạt tài khoản thành công!", null, null);
     }
 }

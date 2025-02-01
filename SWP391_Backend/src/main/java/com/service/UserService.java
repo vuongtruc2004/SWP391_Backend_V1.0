@@ -50,7 +50,7 @@ public class UserService {
         if (userRepository.existsByUsername(userRequest.getUsername())) {
             errorMessage.append("username:").append("Username already exists!").append(";");
         }
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
+        if (userRepository.existsByEmailAndAccountType(userRequest.getEmail(), AccountTypeEnum.CREDENTIALS)) {
             errorMessage.append("email:").append("Email already exists!").append(";");
         }
         if (!errorMessage.toString().isBlank()) {

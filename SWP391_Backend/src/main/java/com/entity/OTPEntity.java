@@ -35,6 +35,6 @@ public class OTPEntity {
     @PrePersist
     public void handlePrePersist() {
         createdAt = Instant.now();
-        expiredAt = createdAt.plus(65, ChronoUnit.SECONDS);
+        expiredAt = createdAt.plus(3, ChronoUnit.MINUTES);
     }
 }
