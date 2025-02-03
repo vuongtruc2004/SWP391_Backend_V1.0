@@ -34,6 +34,12 @@ public class OTPService {
     private final UserRepository userRepository;
 
     public ApiResponse<Void> generateOTP(UserEntity user, String title) {
+        if (user.getOtp() != null) {
+            OTPEntity otpEntity = user.getOtp();
+            user.setOtp(null);
+            userRepository.save(user);
+            otpRepository.delete(otpEntity);
+        }
         StringBuilder otp = new StringBuilder();
         for (int i = 0; i < OTP_LENGTH; i++) {
             int index = secureRandom.nextInt(CHARACTERS.length());
@@ -54,7 +60,7 @@ public class OTPService {
 
     public ApiResponse<Void> checkOTP(String code) {
         OTPEntity otpEntity = otpRepository.findByCode(code)
-                .orElseThrow(() -> new NotFoundException("Mã OTP không tồn tại!"));
+                .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
         if (otpEntity.getExpiredAt().isBefore(Instant.now())) {
             throw new NotFoundException("Mã OTP đã hết hạn!");
         }

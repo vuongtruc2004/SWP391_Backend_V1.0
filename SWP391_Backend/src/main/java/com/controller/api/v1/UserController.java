@@ -37,18 +37,18 @@ public class UserController {
     @ApiMessage("Kích hoạt tài khoản thành công!")
     @GetMapping("/active")
     public ResponseEntity<ApiResponse<Void>> activeAccount(@RequestParam(name = "code") String code) throws NotFoundException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(otpService.activeAccount(code));
+        return ResponseEntity.ok(otpService.activeAccount(code));
     }
 
     @ApiMessage("Đổi mật khẩu thành công!")
     @PostMapping("/change_password")
     public ResponseEntity<ApiResponse<Void>> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(otpService.changePassword(changePasswordRequest));
+        return ResponseEntity.ok(otpService.changePassword(changePasswordRequest));
     }
 
     @ApiMessage("Vui lòng kiểm tra email của bạn!")
     @PostMapping("/request_change_password")
     public ResponseEntity<ApiResponse<Void>> sendChangePasswordRequest(@RequestBody @Valid EmailRequest emailRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(otpService.sendChangePasswordRequest(emailRequest.getEmail()));
+        return ResponseEntity.ok(otpService.sendChangePasswordRequest(emailRequest.getEmail()));
     }
 }
