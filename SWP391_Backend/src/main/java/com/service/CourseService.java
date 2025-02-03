@@ -4,7 +4,10 @@ package com.service;
 import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.CourseEntity;
+import com.entity.UserEntity;
+import com.exception.custom.NotFoundException;
 import com.repository.CourseRepository;
+import com.repository.UserRepository;
 import com.util.BuildResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -20,10 +23,12 @@ import java.util.regex.Pattern;
 public class CourseService {
     private final CourseRepository courseRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
-    public CourseService(CourseRepository courseRepository, ModelMapper modelMapper) {
+    public CourseService(CourseRepository courseRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
@@ -39,13 +44,29 @@ public class CourseService {
                 })
                 .sorted((c1, c2) -> Integer.compare(c2.getTotalPurchased(), c1.getTotalPurchased()))
                 .toList();
-        
+
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
                 courseResponses
+        );
+    }
+
+    public PageDetailsResponse<List<CourseResponse>> getAllCoursesByUser(Long id, Pageable pageable) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Mã người dùng không tồn tại!"));
+        Page<CourseEntity> page = courseRepository.findAllByUsers(user, pageable);
+        List<CourseResponse> courseResponseListlist = page.getContent().stream()
+                .map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class))
+                .toList();
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                courseResponseListlist
         );
     }
 
@@ -78,9 +99,6 @@ public class CourseService {
                 courseResponses
         );
     }
-
-
-
 
 
 }

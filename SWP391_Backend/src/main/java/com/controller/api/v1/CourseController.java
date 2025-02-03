@@ -6,10 +6,7 @@ import com.service.CourseService;
 import com.util.annotation.ApiMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,8 +28,14 @@ public class CourseController {
     @ApiMessage("Lấy các khoá học thành công!")
     @GetMapping("/search/{name}")
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesByName(@PathVariable String name, Pageable pageable) {
-        return ResponseEntity.ok(courseService.getCoursesByNameAndSortByPurchased(pageable,name));
+        return ResponseEntity.ok(courseService.getCoursesByNameAndSortByPurchased(pageable, name));
     }
 
-
+    @GetMapping("/users")
+    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getAllCoursesOfUser(
+            @RequestParam(name = "user_id") Long userId,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(courseService.getAllCoursesByUser(userId, pageable));
+    }
 }

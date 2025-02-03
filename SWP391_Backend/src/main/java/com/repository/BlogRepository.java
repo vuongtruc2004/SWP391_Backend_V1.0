@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, Long> {
-    Optional<BlogEntity> findByPinnedTrueAndPublishedTrueAndAcceptedTrue();
+    Optional<BlogEntity> findByPinnedTrueAndPublishedTrue();
 
     @Query("SELECT b.blogId FROM BlogEntity b " +
             "JOIN LikeEntity l ON b = l.blog " +
@@ -27,7 +27,7 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
 
     Set<BlogEntity> findAllByUser_UserId(Long userId);
 
-    Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrueAndAcceptedTrue(Long userId, Long blogId, Pageable pageable);
+    Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(Long userId, Long blogId, Pageable pageable);
 
-    Optional<BlogEntity> findByBlogIdAndPublishedTrueAndAcceptedTrue(Long blogId);
+    Optional<BlogEntity> findByBlogIdAndPublishedTrue(Long blogId);
 }

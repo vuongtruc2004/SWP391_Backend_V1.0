@@ -52,6 +52,15 @@ public class OTPService {
         return BuildResponse.buildApiResponse(200, "Vui lòng kiểm tra email của bạn!", null, null);
     }
 
+    public ApiResponse<Void> checkOTP(String code) {
+        OTPEntity otpEntity = otpRepository.findByCode(code)
+                .orElseThrow(() -> new NotFoundException("Mã OTP không tồn tại!"));
+        if (otpEntity.getExpiredAt().isBefore(Instant.now())) {
+            throw new NotFoundException("Mã OTP đã hết hạn!");
+        }
+        return BuildResponse.buildApiResponse(200, "Mã OTP hợp lệ!", null, null);
+    }
+
     public ApiResponse<Void> sendChangePasswordRequest(String email) {
         UserEntity user = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
                 .orElseThrow(() -> new NotFoundException("Email này chưa được đăng kí!"));

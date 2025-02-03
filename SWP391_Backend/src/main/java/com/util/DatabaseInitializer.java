@@ -7,6 +7,8 @@ import com.exception.custom.UserException;
 import com.repository.*;
 import com.util.enums.*;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +34,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final ExpertRepository expertRepository;
     private final QuestionRepository questionRepository;
     private final QuizRepository quizRepository;
+    private final Random random = new Random();
+    private static final String ADMIN_USERNAME = "admin";
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
 
     @Autowired
     public DatabaseInitializer(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, BlogRepository blogRepository, HashtagRepository hashtagRepository, VideoRepository videoRepository, SubjectRepository subjectRepository, DocumentRepository documentRepository, CourseRepository courseRepository, LessonRepository lessonRepository, ExpertRepository expertRepository, QuestionRepository questionRepository, QuizRepository quizRepository) {
@@ -53,7 +58,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Database initialization started!");
+        logger.info("Database initialization started!");
 
 //        createPermission();
         createRole();
@@ -69,7 +74,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         createQuiz();
         createCourse();
 
-        System.out.println("Database initialization completed!");
+        logger.info("Database initialization completed!");
     }
 
     private void createPermission() {
@@ -114,7 +119,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             List<UserEntity> users = new ArrayList<>(List.of(
                     // manager account
                     UserEntity.builder()
-                            .username("admin")
+                            .username(ADMIN_USERNAME)
                             .password(passwordEncoder.encode("123"))
                             .avatar("admin.jpg")
                             .fullname("Nguyen Vuong Truc Admin")
@@ -218,7 +223,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void createBlog() {
         if (!blogRepository.existsBy()) {
-            UserEntity user = userRepository.findByUsername("admin").orElseThrow(() -> new UserException("User not existed!"));
+            UserEntity user = userRepository.findByUsername(ADMIN_USERNAME).orElseThrow(() -> new UserException("User not existed!"));
             List<BlogEntity> blogs = List.of(
                     BlogEntity.builder()
                             .title("Lập Trình Web Từ A Đến Z: Hướng Dẫn Chi Tiết")
@@ -327,7 +332,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .thumbnail("13.jpg")
                             .hashtags(this.getRandomHashtags(6))
                             .published(false)
-                            .accepted(false)
                             .build(),
                     BlogEntity.builder()
                             .title("Điều Quan Trọng Cần Biết Khi Làm Việc Với API")
@@ -624,7 +628,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                     new QuestionEntity("Trong phát triển ứng dụng di động, 'Flutter' là gì?")
             );
             for (QuestionEntity question : questions) {
-                Random random = new Random();
                 boolean isCorrect = random.nextBoolean();
                 Set<AnswerEntity> set = new HashSet<>(List.of(
                         new AnswerEntity("Câu trả lời A", isCorrect, question),
@@ -684,7 +687,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                     .orElseThrow(() -> new NotFoundException("Expert not found"));
             List<QuestionEntity> questions = questionRepository.findAll();
             List<LessonEntity> lessons = lessonRepository.findAll();
-            Random random = new Random();
             List<QuizEntity> quizzes = List.of(
                     QuizEntity.builder()
                             .title("Bài kiểm tra số 1")
@@ -1008,7 +1010,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private void completeSomeDocumentAndVideo() {
-        UserEntity user = userRepository.findByUsername("admin")
+        UserEntity user = userRepository.findByUsername(ADMIN_USERNAME)
                 .orElseThrow(() -> new UserException("Username not found!"));
         List<DocumentEntity> documents = documentRepository.findAll();
         List<VideoEntity> videos = videoRepository.findAll();
@@ -1024,7 +1026,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
 
         Set<HashtagEntity> result = new HashSet<>();
-        Random random = new Random();
 
         while (result.size() < numberOfHashtags) {
             result.add(hashtags.get(random.nextInt(hashtags.size())));
@@ -1036,7 +1037,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         List<UserEntity> users = userRepository.findAllByRole_RoleName(RoleNameEnum.USER);
 
         Set<UserEntity> result = new HashSet<>();
-        Random random = new Random();
 
         int numberOfPurchasers = random.nextInt(users.size());
         while (result.size() < numberOfPurchasers) {
@@ -1047,7 +1047,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private Set<SubjectEntity> getRandomSubjects() {
         List<SubjectEntity> subjects = subjectRepository.findAll();
-        Random random = new Random();
 
         int numberOfSubjects = random.nextInt(subjects.size());
 
@@ -1065,7 +1064,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
 
         Set<DocumentEntity> result = new HashSet<>();
-        Random random = new Random();
 
         while (result.size() < numberOfDocuments) {
             result.add(documents.get(random.nextInt(documents.size())));
@@ -1080,7 +1078,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
 
         Set<VideoEntity> result = new HashSet<>();
-        Random random = new Random();
 
         while (result.size() < numberOfVideos) {
             result.add(videos.get(random.nextInt(videos.size())));

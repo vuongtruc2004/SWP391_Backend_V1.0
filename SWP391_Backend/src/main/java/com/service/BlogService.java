@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class BlogService {
@@ -52,26 +51,17 @@ public class BlogService {
 
             if (category.equals("like")) {
                 ids = blogRepository.findAllLikeBlogs(userEntity.getUserId());
-            } else if (category.equals("comment")) {
-                ids = blogRepository.findAllCommentBlogs(userEntity.getUserId());
             } else {
-                ids = blogRepository.findAllByUser_UserId(userEntity.getUserId()).stream()
-                        .map(BlogEntity::getBlogId).collect(Collectors.toSet());
+                ids = blogRepository.findAllCommentBlogs(userEntity.getUserId());
             }
         } else {
             ids = new HashSet<>();
         }
 
-        if (!category.equals("owner")) {
-            specification = Specification.where(specification)
-                    .and((root, query, criteriaBuilder) ->
-                            criteriaBuilder.and(
-                                    criteriaBuilder.isTrue(root.get("accepted")),
-                                    criteriaBuilder.isTrue(root.get("published"))
-                            )
-                    );
-        }
-
+        specification = Specification.where(specification)
+                .and(((root, query, criteriaBuilder) ->
+                        criteriaBuilder.isTrue(root.get("published"))
+                ));
         if (!ids.isEmpty()) {
             specification = Specification.where(specification)
                     .and((root, query, criteriaBuilder) ->
@@ -95,35 +85,21 @@ public class BlogService {
     }
 
     public PageDetailsResponse<List<BlogResponse>> getBlogsOfSameAuthor(Long blogId, Pageable pageable) {
-        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrueAndAcceptedTrue(blogId)
+        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(blogId)
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
         UserEntity userEntity = blogEntity.getUser();
-        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrueAndAcceptedTrue(userEntity.getUserId(), blogId, pageable);
+        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(userEntity.getUserId(), blogId, pageable);
         return getListPageDetailsResponse(page, blogEntity);
     }
 
     public BlogResponse getBlogById(Long blogId) {
-        String username = JwtService.extractUsernameFromToken().orElse(null);
-        BlogEntity blogEntity = blogRepository.findById(blogId)
+        BlogEntity blogEntity = blogRepository.findByBlogIdAndPublishedTrue(blogId)
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
-
-        if (username == null) {
-            if (!blogEntity.getPublished() || !blogEntity.getAccepted()) {
-                throw new NotFoundException("Không có bài viết nào với ID = " + blogId);
-            }
-        } else {
-            UserEntity user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NotFoundException("Tên tài khoản không tồn tại!"));
-            if ((!blogEntity.getPublished() || !blogEntity.getAccepted())
-                    && !blogEntity.getUser().equals(user)) {
-                throw new NotFoundException("Không có bài viết nào với ID = " + blogId);
-            }
-        }
         return this.convertToBlogResponse(blogEntity);
     }
 
     public BlogResponse getPinnedBlog() {
-        BlogEntity blogEntity = blogRepository.findByPinnedTrueAndPublishedTrueAndAcceptedTrue()
+        BlogEntity blogEntity = blogRepository.findByPinnedTrueAndPublishedTrue()
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào được ghim!"));
         return this.convertToBlogResponse(blogEntity);
     }
