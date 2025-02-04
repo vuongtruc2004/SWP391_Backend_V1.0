@@ -10,6 +10,7 @@ import com.repository.BlogRepository;
 import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
+import com.util.enums.AccountTypeEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,10 +45,13 @@ public class BlogService {
     ) {
         Set<Long> ids;
         if (category != null && !category.equals("all")) {
-            String username = JwtService.extractUsernameFromToken()
+            String email = JwtService.extractUsernameFromToken()
                     .orElseThrow(() -> new UserException("Vui lòng đăng nhập để xem các bài viết đã thích/bình luận!"));
-            UserEntity userEntity = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NotFoundException("Tên tài khoản không tồn tại!"));
+            String accountType = JwtService.extractAccountTypeFromToken()
+                    .orElseThrow(() -> new UserException("Vui lòng đăng nhập để xem các bài viết đã thích/bình luận!"));
+
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
 
             if (category.equals("like")) {
                 ids = blogRepository.findAllLikeBlogs(userEntity.getUserId());

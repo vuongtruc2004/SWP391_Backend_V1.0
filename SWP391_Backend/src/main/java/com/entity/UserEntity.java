@@ -25,8 +25,8 @@ public class UserEntity {
     @Column(name = "user_id")
     Long userId;
 
-    String username;
-
+    String email;
+    
     String password;
 
     @Column(name = "refresh_token", columnDefinition = "MEDIUMTEXT")
@@ -36,7 +36,7 @@ public class UserEntity {
 
     String fullname;
 
-    String email;
+    String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")

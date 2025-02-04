@@ -22,13 +22,13 @@ public class UserResponse {
 
     Long userId;
 
-    String username;
-
+    String email;
+    
     String avatar;
 
     String fullname;
 
-    String email;
+    String phone;
 
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;

@@ -8,6 +8,7 @@ import com.exception.custom.UserException;
 import com.repository.UserRepository;
 import com.util.BuildResponse;
 import com.util.SecurityUtil;
+import com.util.enums.AccountTypeEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,14 +36,15 @@ public class JwtService {
         this.modelMapper = modelMapper;
     }
 
-    public String createJWTToken(String username, Long expireTime) {
+    public String createJWTToken(String email, String accountType, Long expireTime) {
         Instant now = Instant.now();
         Instant expireAt = now.plusSeconds(expireTime);
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(expireAt)
-                .subject(username)
+                .subject(email)
+                .claim("accountType", accountType)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(securityUtil.JWT_ALGORITHMS).build();
@@ -57,13 +59,15 @@ public class JwtService {
 
         try {
             Jwt jwt = jwtDecoder.decode(refreshToken);
-            String username = jwt.getSubject();
+            String email = jwt.getSubject();
+            String accountType = jwt.getClaim("accountType").toString();
 
-            UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UserException("User not found!"));
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new UserException("User not found!"));
             UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
 
-            String accessToken = createJWTToken(username, securityUtil.accessTokenExpiration);
-            String newRefreshToken = createJWTToken(username, securityUtil.refreshTokenExpiration);
+            String accessToken = createJWTToken(email, accountType, securityUtil.accessTokenExpiration);
+            String newRefreshToken = createJWTToken(email, accountType, securityUtil.refreshTokenExpiration);
             Instant now = Instant.now();
             Instant expireAt = now.plusSeconds(securityUtil.accessTokenExpiration);
 
@@ -89,6 +93,19 @@ public class JwtService {
             return Optional.ofNullable(jwt.getSubject());
         } else if (authentication.getPrincipal() instanceof String username) {
             return Optional.of(username);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<String> extractAccountTypeFromToken() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            return Optional.empty();
+        } else if (authentication.getPrincipal() instanceof Jwt jwt) {
+            return Optional.ofNullable(jwt.getClaimAsString("accountType"));
         } else {
             return Optional.empty();
         }

@@ -19,7 +19,7 @@ public class OTPConfig {
     private final OTPRepository otpRepository;
     private final UserRepository userRepository;
 
-    @Scheduled(fixedRate = 60000) // Chạy mỗi 60 giây
+    @Scheduled(fixedRate = 90000) // Chạy mỗi 90 giây
     @Transactional
     public void removeAllExpiredOTP() {
         Set<OTPEntity> expiredOTP = otpRepository.findAllExpiredOTP(Instant.now());

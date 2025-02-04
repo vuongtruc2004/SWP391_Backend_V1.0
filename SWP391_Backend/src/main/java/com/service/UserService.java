@@ -47,9 +47,6 @@ public class UserService {
                 errorMessage.append(error.getKey()).append(":").append(error.getValue()).append(";");
             }
         }
-        if (userRepository.existsByUsername(userRequest.getUsername())) {
-            errorMessage.append("username:").append("Username already exists!").append(";");
-        }
         if (userRepository.existsByEmailAndAccountType(userRequest.getEmail(), AccountTypeEnum.CREDENTIALS)) {
             errorMessage.append("email:").append("Email already exists!").append(";");
         }

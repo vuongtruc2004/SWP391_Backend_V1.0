@@ -13,6 +13,7 @@ import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import com.util.BuildResponse;
 import com.util.SecurityUtil;
+import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,21 +46,21 @@ public class AuthService {
     }
 
     public LoginResponse credentialsLogin(CredentialsLoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String username = authentication.getName();
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException("Username not found!"));
+        String email = authentication.getName();
+        UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
+                .orElseThrow(() -> new UserException("Tài khoản không tồn tại!"));
         if (Boolean.FALSE.equals(userEntity.getActive())) {
-            throw new UserException("User is not active!");
+            throw new UserException("Tài khoản không tồn tại!");
         }
 
         UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
         userResponse.setRoleName(userEntity.getRole().getRoleName());
 
-        String accessToken = jwtService.createJWTToken(username, securityUtil.accessTokenExpiration);
-        String refreshToken = jwtService.createJWTToken(username, securityUtil.refreshTokenExpiration);
+        String accessToken = jwtService.createJWTToken(email, AccountTypeEnum.CREDENTIALS.name(), securityUtil.accessTokenExpiration);
+        String refreshToken = jwtService.createJWTToken(email, AccountTypeEnum.CREDENTIALS.name(), securityUtil.refreshTokenExpiration);
 
         userEntity.setRefreshToken(refreshToken);
         UserEntity newUser = userRepository.save(userEntity);
@@ -70,27 +71,34 @@ public class AuthService {
     }
 
     public LoginResponse socialsLogin(SocialsLoginRequest socialsLoginRequest) {
-        Optional<UserEntity> currentUser = userRepository.findByUsernameAndAccountType(socialsLoginRequest.getUsername(), socialsLoginRequest.getAccountType());
+        Optional<UserEntity> currentUser = userRepository.findByEmailAndAccountType(socialsLoginRequest.getEmail(), socialsLoginRequest.getAccountType());
         Instant now = Instant.now();
         Instant expireAt = now.plusSeconds(securityUtil.accessTokenExpiration);
 
         if (currentUser.isPresent()) {
-            UserResponse userResponse = modelMapper.map(currentUser.get(), UserResponse.class);
-            String accessToken = jwtService.createJWTToken(userResponse.getUsername(), securityUtil.accessTokenExpiration);
-            String refreshToken = currentUser.get().getRefreshToken();
-            return BuildResponse.buildLoginResponse(userResponse, accessToken, expireAt, refreshToken);
+            UserEntity currentUserEntity = currentUser.get();
+            String accessToken = jwtService.createJWTToken(currentUserEntity.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.accessTokenExpiration);
+            String newRefreshToken = jwtService.createJWTToken(currentUserEntity.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.refreshTokenExpiration);
+            currentUserEntity.setRefreshToken(newRefreshToken);
+            userRepository.save(currentUserEntity);
+            return BuildResponse.buildLoginResponse(
+                    modelMapper.map(currentUserEntity, UserResponse.class),
+                    accessToken,
+                    expireAt,
+                    newRefreshToken
+            );
         }
 
         UserEntity userEntity = modelMapper.map(socialsLoginRequest, UserEntity.class);
 
-        String refreshToken = jwtService.createJWTToken(userEntity.getUsername(), securityUtil.refreshTokenExpiration);
+        String refreshToken = jwtService.createJWTToken(userEntity.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.refreshTokenExpiration);
         RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER).orElseThrow(() -> new RoleException("Role not found!"));
         userEntity.setRefreshToken(refreshToken);
         userEntity.setRole(roleEntity);
 
         UserEntity newUser = userRepository.save(userEntity);
         UserResponse userResponse = modelMapper.map(newUser, UserResponse.class);
-        String accessToken = jwtService.createJWTToken(userResponse.getUsername(), securityUtil.accessTokenExpiration);
+        String accessToken = jwtService.createJWTToken(userResponse.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.accessTokenExpiration);
         return BuildResponse.buildLoginResponse(userResponse, accessToken, expireAt, refreshToken);
     }
 
@@ -102,8 +110,10 @@ public class AuthService {
 
         try {
             Jwt jwt = jwtDecoder.decode(refreshToken);
-            String username = jwt.getSubject();
-            UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UserException("User not found!"));
+            String email = jwt.getSubject();
+            String accountType = jwt.getClaim("accountType").toString();
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new UserException("User not found!"));
             userEntity.setRefreshToken(null);
             userRepository.save(userEntity);
         } catch (Exception e) {

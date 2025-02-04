@@ -25,16 +25,12 @@ public class UserDetailsCustom implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserException("Bad credentials!"));
-
-        if (!userEntity.getAccountType().equals(AccountTypeEnum.CREDENTIALS)) {
-            throw new UserException("Account Type is invalid!");
-        }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
+                .orElseThrow(() -> new UserException("Sai tên tài khoản hoặc mật khẩu!"));
 
         return new User(
-                userEntity.getUsername(),
+                userEntity.getEmail(),
                 userEntity.getPassword(),
                 List.of(new SimpleGrantedAuthority(userEntity.getRole().getRoleName().name()))
         );

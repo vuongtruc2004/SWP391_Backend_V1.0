@@ -11,17 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaSpecificationRepository<UserEntity, Long> {
-    boolean existsByUsername(String username);
-
     boolean existsByEmailAndAccountType(String email, AccountTypeEnum accountType);
 
     Optional<UserEntity> findByEmailAndAccountType(String email, AccountTypeEnum accountType);
-
-    Optional<UserEntity> findByUsername(String username);
-
-    boolean existsByEmailOrUsername(String email, String username);
-
-    Optional<UserEntity> findByUsernameAndAccountType(String username, AccountTypeEnum accountType);
-
+    
     List<UserEntity> findAllByRole_RoleName(RoleNameEnum roleNameEnum);
 }

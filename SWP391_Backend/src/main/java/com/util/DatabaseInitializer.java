@@ -35,7 +35,6 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final QuestionRepository questionRepository;
     private final QuizRepository quizRepository;
     private final Random random = new Random();
-    private static final String ADMIN_USERNAME = "admin";
     private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
 
     @Autowired
@@ -119,7 +118,6 @@ public class DatabaseInitializer implements CommandLineRunner {
             List<UserEntity> users = new ArrayList<>(List.of(
                     // manager account
                     UserEntity.builder()
-                            .username(ADMIN_USERNAME)
                             .password(passwordEncoder.encode("123"))
                             .avatar("admin.jpg")
                             .fullname("Nguyen Vuong Truc Admin")
@@ -130,7 +128,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .role(admin)
                             .build(),
                     UserEntity.builder()
-                            .username("expert")
                             .password(passwordEncoder.encode("123"))
                             .avatar("admin.jpg")
                             .fullname("Nguyen Vuong Truc Expert")
@@ -141,7 +138,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .role(expert)
                             .build(),
                     UserEntity.builder()
-                            .username("marketing")
                             .password(passwordEncoder.encode("123"))
                             .avatar("admin.jpg")
                             .fullname("Nguyen Vuong Truc Marketing")
@@ -152,10 +148,9 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .role(marketing)
                             .build()
             ));
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 12; i++) {
                 users.add(
                         UserEntity.builder()
-                                .username("user" + i)
                                 .password(passwordEncoder.encode("123"))
                                 .fullname("Nguyen Vuong Truc " + i)
                                 .accountType(AccountTypeEnum.CREDENTIALS)
@@ -172,7 +167,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void createExpert() {
         if (!expertRepository.existsBy()) {
-            UserEntity user = userRepository.findByUsername("expert")
+            UserEntity user = userRepository.findByEmailAndAccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert = ExpertEntity.builder()
                     .diploma(DiplomaEnum.MASTER)
@@ -223,7 +218,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void createBlog() {
         if (!blogRepository.existsBy()) {
-            UserEntity user = userRepository.findByUsername(ADMIN_USERNAME).orElseThrow(() -> new UserException("User not existed!"));
+            UserEntity user = userRepository.findByEmailAndAccountType("trucnvhe180248@fpt.edu.vn", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new UserException("Username not existed!"));
+
             List<BlogEntity> blogs = List.of(
                     BlogEntity.builder()
                             .title("Lập Trình Web Từ A Đến Z: Hướng Dẫn Chi Tiết")
@@ -683,7 +680,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void createQuiz() {
         if (!quizRepository.existsBy()) {
-            ExpertEntity expert = expertRepository.findByUser_Username("expert")
+            ExpertEntity expert = expertRepository.findByUser_EmailAndUser_AccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new NotFoundException("Expert not found"));
             List<QuestionEntity> questions = questionRepository.findAll();
             List<LessonEntity> lessons = lessonRepository.findAll();
@@ -965,8 +962,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void createCourse() {
         if (!courseRepository.existsBy()) {
-            ExpertEntity expert = expertRepository.findByUser_Username("expert")
-                    .orElseThrow(() -> new UserException("Username not found!"));
+            ExpertEntity expert = expertRepository.findByUser_EmailAndUser_AccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new NotFoundException("Expert not found"));
+
             List<CourseEntity> courses = new ArrayList<>(List.of(
                     CourseEntity.builder().expert(expert).courseName("Java Cơ Bản").description("Học Java từ cơ bản đến nâng cao.").thumbnail("1.jpg").price(300000.0).build(),
                     CourseEntity.builder().expert(expert).courseName("Lập trình Python").description("Khóa học giúp bạn làm chủ Python.").thumbnail("2.jpg").price(250000.0).build(),
@@ -1010,8 +1008,8 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private void completeSomeDocumentAndVideo() {
-        UserEntity user = userRepository.findByUsername(ADMIN_USERNAME)
-                .orElseThrow(() -> new UserException("Username not found!"));
+        UserEntity user = userRepository.findByEmailAndAccountType("trucnvhe180248@fpt.edu.vn", AccountTypeEnum.CREDENTIALS)
+                .orElseThrow(() -> new UserException("Username not existed!"));
         List<DocumentEntity> documents = documentRepository.findAll();
         List<VideoEntity> videos = videoRepository.findAll();
         user.setCompletedDocuments(new HashSet<>(documents.subList(0, 5)));
