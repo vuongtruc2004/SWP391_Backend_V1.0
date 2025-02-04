@@ -3,7 +3,6 @@ package com.dto.request;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.util.deserializer.StringToInstantDeserializer;
 import com.util.enums.GenderEnum;
-import com.util.enums.JobEnum;
 import com.util.validation.constraint.DobConstraint;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,7 +29,7 @@ public class UserRequest {
     )
     @NotBlank(message = "Email không được bỏ trống!")
     String email;
-    
+
     @Pattern(
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
             message = "Mật khẩu phải chứa ít nhất 8 kí tự, bao gồm chữ cái và số!"
@@ -58,9 +57,6 @@ public class UserRequest {
 
     @Enumerated(EnumType.STRING)
     GenderEnum gender;
-
-    @Enumerated(EnumType.STRING)
-    JobEnum job;
 
     @JsonDeserialize(using = StringToInstantDeserializer.class)
     @DobConstraint(min = 6)

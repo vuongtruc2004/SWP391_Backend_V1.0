@@ -3,7 +3,6 @@ package com.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
-import com.util.enums.JobEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,7 +22,7 @@ public class UserResponse {
     Long userId;
 
     String email;
-    
+
     String avatar;
 
     String fullname;
@@ -32,9 +31,6 @@ public class UserResponse {
 
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;
-
-    @Enumerated(EnumType.STRING)
-    JobEnum job;
 
     @Enumerated(EnumType.STRING)
     GenderEnum gender;

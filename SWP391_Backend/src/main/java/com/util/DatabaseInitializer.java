@@ -124,7 +124,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("trucnvhe180248@fpt.edu.vn")
                             .gender(GenderEnum.MALE)
-                            .job(JobEnum.STUDENT)
                             .role(admin)
                             .build(),
                     UserEntity.builder()
@@ -134,7 +133,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2004@gmail.com")
                             .gender(GenderEnum.MALE)
-                            .job(JobEnum.STUDENT)
                             .role(expert)
                             .build(),
                     UserEntity.builder()
@@ -144,7 +142,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2008@gmail.com")
                             .gender(GenderEnum.MALE)
-                            .job(JobEnum.STUDENT)
                             .role(marketing)
                             .build()
             ));
@@ -156,7 +153,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                                 .accountType(AccountTypeEnum.CREDENTIALS)
                                 .email(i + "@gmail.com")
                                 .gender(i % 2 == 0 ? GenderEnum.MALE : GenderEnum.FEMALE)
-                                .job(JobEnum.STUDENT)
                                 .role(user)
                                 .build()
                 );

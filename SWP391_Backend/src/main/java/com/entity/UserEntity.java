@@ -2,7 +2,6 @@ package com.entity;
 
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
-import com.util.enums.JobEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +25,7 @@ public class UserEntity {
     Long userId;
 
     String email;
-    
+
     String password;
 
     @Column(name = "refresh_token", columnDefinition = "MEDIUMTEXT")
@@ -43,9 +42,6 @@ public class UserEntity {
     AccountTypeEnum accountType;
 
     @Enumerated(EnumType.STRING)
-    JobEnum job;
-
-    @Enumerated(EnumType.STRING)
     GenderEnum gender;
 
     Instant dob;
@@ -57,6 +53,8 @@ public class UserEntity {
     Instant updatedAt;
 
     Boolean active;
+
+    Boolean locked;
 
     @OneToOne(mappedBy = "user")
     OTPEntity otp;

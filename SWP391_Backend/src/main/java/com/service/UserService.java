@@ -1,24 +1,23 @@
 package com.service;
 
-import com.dto.request.UserRequest;
-import com.dto.response.UserResponse;
+import com.dto.request.RegisterRequest;
+import com.dto.response.ApiResponse;
+import com.entity.OTPEntity;
 import com.entity.RoleEntity;
 import com.entity.UserEntity;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.UserRequestException;
+import com.exception.custom.RoleException;
+import com.exception.custom.UserException;
+import com.repository.OTPRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
+import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -28,43 +27,48 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final OTPService otpService;
+    private final OTPRepository otpRepository;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpService = otpService;
+        this.otpRepository = otpRepository;
     }
 
-    @Transactional
-    public UserResponse register(UserRequest userRequest, BindingResult bindingResult) throws UserRequestException {
-        StringBuilder errorMessage = new StringBuilder();
-        if (!bindingResult.getAllErrors().isEmpty()) {
-            Map<String, String> errors = bindingResult.getFieldErrors()
-                    .stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-            for (Map.Entry<String, String> error : errors.entrySet()) {
-                errorMessage.append(error.getKey()).append(":").append(error.getValue()).append(";");
+    public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmailAndAccountType(registerRequest.getEmail(), AccountTypeEnum.CREDENTIALS);
+        if (optionalUserEntity.isPresent()) {
+            UserEntity existedUserEntity = optionalUserEntity.get();
+            if (Boolean.TRUE.equals(existedUserEntity.getActive())) {
+                throw new UserException("Email này đã được sử dụng!");
+            } else {
+                OTPEntity otpEntity = existedUserEntity.getOtp();
+                existedUserEntity.setOtp(null);
+                UserEntity savedUserEntity = userRepository.save(existedUserEntity);
+                otpRepository.delete(otpEntity);
+                userRepository.delete(savedUserEntity);
             }
-        }
-        if (userRepository.existsByEmailAndAccountType(userRequest.getEmail(), AccountTypeEnum.CREDENTIALS)) {
-            errorMessage.append("email:").append("Email already exists!").append(";");
-        }
-        if (!errorMessage.toString().isBlank()) {
-            throw new UserRequestException(errorMessage.toString());
         }
 
         RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy role: USER!"));
+                .orElseThrow(() -> new RoleException("Role not found!"));
+        UserEntity userEntity = modelMapper.map(registerRequest, UserEntity.class);
 
-        UserEntity user = modelMapper.map(userRequest, UserEntity.class);
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setAccountType(AccountTypeEnum.CREDENTIALS);
-        user.setRole(roleEntity);
-        user.setActive(false);
+        userEntity.setAccountType(AccountTypeEnum.CREDENTIALS);
+        userEntity.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        userEntity.setRole(roleEntity);
+        userEntity.setActive(false);
 
-        UserEntity savedUser = userRepository.save(user);
+        UserEntity savedUser = userRepository.save(userEntity);
         otpService.generateOTP(savedUser, "Yêu cầu xác thực email!");
-        return modelMapper.map(savedUser, UserResponse.class);
+        return BuildResponse.buildApiResponse(
+                200,
+                "Vui lòng kiểm tra email của ban!",
+                null,
+                null
+        );
     }
 }

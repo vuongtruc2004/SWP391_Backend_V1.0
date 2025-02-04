@@ -2,18 +2,14 @@ package com.controller.api.v1;
 
 import com.dto.request.ChangePasswordRequest;
 import com.dto.request.EmailRequest;
-import com.dto.request.UserRequest;
+import com.dto.request.RegisterRequest;
 import com.dto.response.ApiResponse;
-import com.dto.response.UserResponse;
 import com.exception.custom.NotFoundException;
-import com.exception.custom.UserRequestException;
 import com.service.OTPService;
 import com.service.UserService;
 import com.util.annotation.ApiMessage;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,11 +23,9 @@ public class UserController {
         this.otpService = otpService;
     }
 
-    @ApiMessage("Vui lòng kiểm tra email của bạn!")
-    @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest request, BindingResult bindingResult) throws UserRequestException {
-        UserResponse userResponse = userService.register(request, bindingResult);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+    @PostMapping("/request_register")
+    public ResponseEntity<ApiResponse<Void>> sendRegisterRequest(@RequestBody @Valid RegisterRequest registerRequest) {
+        return ResponseEntity.ok(userService.sendRegisterRequest(registerRequest));
     }
 
     @ApiMessage("Kích hoạt tài khoản thành công!")
