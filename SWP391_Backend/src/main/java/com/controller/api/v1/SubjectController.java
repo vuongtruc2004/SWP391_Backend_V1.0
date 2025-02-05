@@ -36,7 +36,7 @@ public class SubjectController {
     }
 
     @ApiMessage("Lấy các môn học thành công!")
-    @GetMapping("/all-courses")
+    @GetMapping("/all")
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getAllSubjects(
             Pageable pageable
     ) {
