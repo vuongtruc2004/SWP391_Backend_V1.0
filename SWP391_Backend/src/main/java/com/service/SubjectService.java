@@ -1,7 +1,9 @@
 package com.service;
 
+import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
+import com.entity.CourseEntity;
 import com.entity.SubjectEntity;
 import com.repository.SubjectRepository;
 import com.util.BuildResponse;
@@ -56,6 +58,29 @@ public class SubjectService {
                 page.getTotalPages(),
                 page.getTotalElements(),
                 subjectResponseList
+        );
+    }
+
+    public PageDetailsResponse<List<SubjectResponse>> getAllSubject(Pageable pageable) {
+        Page<SubjectEntity> page = subjectRepository.findAll(pageable);
+        List<SubjectResponse> subjectResponses = page.getContent()
+                .stream().map(subjectEntity -> {
+                    SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
+                    subjectResponse.setSubjectId(subjectEntity.getSubjectId());
+                    subjectResponse.setSubjectName(subjectEntity.getSubjectName());
+                    subjectResponse.setDescription(subjectEntity.getDescription());
+                    subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
+                    subjectResponse.setThumbnail(subjectEntity.getThumbnail());
+                    return subjectResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                subjectResponses
         );
     }
 }

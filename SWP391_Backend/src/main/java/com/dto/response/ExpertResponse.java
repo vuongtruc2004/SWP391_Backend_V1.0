@@ -22,4 +22,5 @@ public class ExpertResponse {
     Integer yearOfExperience;
 
     UserResponse user;
+
 }

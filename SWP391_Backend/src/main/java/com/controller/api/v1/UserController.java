@@ -4,23 +4,32 @@ import com.dto.request.ChangePasswordRequest;
 import com.dto.request.EmailRequest;
 import com.dto.request.RegisterRequest;
 import com.dto.response.ApiResponse;
+import com.dto.response.ExpertResponse;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.SubjectResponse;
 import com.exception.custom.NotFoundException;
+import com.service.ExpertService;
 import com.service.OTPService;
 import com.service.UserService;
 import com.util.annotation.ApiMessage;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
     private final OTPService otpService;
-
-    public UserController(UserService userService, OTPService otpService) {
+    private final ExpertService expertService;
+    public UserController(UserService userService, OTPService otpService,
+                          ExpertService expertService) {
         this.userService = userService;
         this.otpService = otpService;
+        this.expertService = expertService;
     }
 
     @PostMapping("/request_register")
@@ -44,5 +53,13 @@ public class UserController {
     @PostMapping("/request_change_password")
     public ResponseEntity<ApiResponse<Void>> sendChangePasswordRequest(@RequestBody @Valid EmailRequest emailRequest) {
         return ResponseEntity.ok(otpService.sendChangePasswordRequest(emailRequest.getEmail()));
+    }
+
+    @ApiMessage("Lấy tất cả chuyên gia thành công !")
+    @GetMapping("/experts")
+    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getAllExperts(
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(expertService.getAllSubject(pageable));
     }
 }
