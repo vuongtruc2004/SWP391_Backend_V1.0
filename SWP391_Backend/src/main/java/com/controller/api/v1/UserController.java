@@ -60,6 +60,6 @@ public class UserController {
     public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getAllExperts(
             Pageable pageable
     ) {
-        return ResponseEntity.ok(expertService.getAllSubject(pageable));
+        return ResponseEntity.ok(expertService.getAllExpert(pageable));
     }
 }
