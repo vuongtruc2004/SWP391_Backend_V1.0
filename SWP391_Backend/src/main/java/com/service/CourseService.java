@@ -32,7 +32,7 @@ public class CourseService {
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
-        Page<CourseEntity> page = courseRepository.findAll(pageable);
+        Page<CourseEntity> page = courseRepository.findCoursesAndOrderByPurchasersDesc(pageable);
         List<CourseResponse> courseResponses = page.getContent()
                 .stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
@@ -42,7 +42,6 @@ public class CourseService {
                     courseResponse.setTotalComments(courseEntity.getComments().size());
                     return courseResponse;
                 })
-                .sorted((c1, c2) -> Integer.compare(c2.getTotalPurchased(), c1.getTotalPurchased()))
                 .toList();
 
         return BuildResponse.buildPageDetailsResponse(

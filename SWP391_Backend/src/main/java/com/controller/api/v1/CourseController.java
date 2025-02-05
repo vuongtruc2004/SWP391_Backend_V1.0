@@ -21,7 +21,9 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/purchased")
-    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(Pageable pageable) {
+    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(
+            Pageable pageable
+    ) {
         return ResponseEntity.ok(courseService.getCoursesAndSortByPurchased(pageable));
     }
 
