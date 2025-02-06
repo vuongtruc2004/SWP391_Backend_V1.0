@@ -35,7 +35,7 @@ public class UserResponse {
     @Enumerated(EnumType.STRING)
     GenderEnum gender;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
     Instant dob;
 
     @Enumerated(EnumType.STRING)

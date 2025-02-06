@@ -57,7 +57,8 @@ public class CourseService {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Mã người dùng không tồn tại!"));
         Page<CourseEntity> page = courseRepository.findAllByUsers(user, pageable);
-        List<CourseResponse> courseResponseListlist = page.getContent().stream()
+        List<CourseResponse> courseResponseListlist = page.getContent()
+                .stream()
                 .map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class))
                 .toList();
         return BuildResponse.buildPageDetailsResponse(

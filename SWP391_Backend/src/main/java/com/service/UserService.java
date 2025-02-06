@@ -1,22 +1,31 @@
 package com.service;
 
 import com.dto.request.RegisterRequest;
+import com.dto.request.UserRequest;
 import com.dto.response.ApiResponse;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
 import com.entity.OTPEntity;
 import com.entity.RoleEntity;
 import com.entity.UserEntity;
+import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.UserException;
 import com.repository.OTPRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,4 +80,89 @@ public class UserService {
                 null
         );
     }
+
+    public UserResponse getUserById(Long id) {
+        String email = JwtService.extractUsernameFromToken()
+                .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
+
+        String accountType = JwtService.extractAccountTypeFromToken()
+                .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
+
+        UserEntity loginUser = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                .orElseThrow(() -> new NotFoundException("Vui lòng đăng nhập"));
+
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
+
+        if (!loginUser.getRole().getRoleName().equals(RoleNameEnum.ADMIN) && Boolean.TRUE.equals(user.getLocked())) {
+            throw new NotFoundException("Không tìm thấy người dùng");
+        }
+
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        userResponse.setRoleName(user.getRole().getRoleName());
+        return userResponse;
+
+    }
+
+    public PageDetailsResponse<List<UserResponse>> getUserWithFilter(
+            Pageable pageable, Specification<UserEntity> specification) {
+
+        Page<UserEntity> page = userRepository.findAll(specification, pageable);
+        List<UserResponse> userResponses = page.getContent()
+                .stream().map(userEntity -> {
+                    UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
+                    userResponse.setRoleName(userEntity.getRole().getRoleName());
+                    return userResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                userResponses
+        );
+    }
+
+    public void lockUser(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found!"));
+        user.setLocked(true);
+        userRepository.save(user);
+    }
+
+    public UserResponse createUser(UserRequest request) {
+        if (request.getUserId() != null) {
+            throw new UserException("Tạo người dùng không được để id");
+        }
+        RoleEntity roleEntity = roleRepository.findByRoleName(request.getRoleName())
+                .orElseThrow(() -> new RoleException("Role không tìm thấy"));
+        if (userRepository.existsByEmailAndAccountType(request.getEmail(), AccountTypeEnum.CREDENTIALS)) {
+            throw new UserException("Email đã được sử dụng");
+        }
+        UserEntity user = modelMapper.map(request, UserEntity.class);
+        user.setRole(roleEntity);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        UserEntity savedUser = userRepository.save(user);
+        return modelMapper.map(savedUser, UserResponse.class);
+    }
+
+    public UserResponse updateUser(UserRequest request) {
+        if (request.getUserId() == null) {
+            throw new UserException("Cập nhật người dùng phải có id");
+        }
+        RoleEntity roleEntity = roleRepository.findByRoleName(request.getRoleName())
+                .orElseThrow(() -> new RoleException("Role không tìm thấy"));
+        if (userRepository.existsByEmailAndAccountTypeAndUserIdNot(request.getEmail(), AccountTypeEnum.CREDENTIALS, request.getUserId())) {
+            throw new UserException("Email đã được sử dụng");
+        }
+        UserEntity user = modelMapper.map(request, UserEntity.class);
+        user.setRole(roleEntity);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        UserEntity savedUser = userRepository.save(user);
+        return modelMapper.map(savedUser, UserResponse.class);
+    }
+
+
 }
