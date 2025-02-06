@@ -2,11 +2,17 @@ package com.controller.api.v1;
 
 import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
+import com.entity.CourseEntity;
 import com.service.CourseService;
+import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,10 +33,13 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCoursesAndSortByPurchased(pageable));
     }
 
-    @ApiMessage("Lấy các khoá học thành công!")
-    @GetMapping("/search/{name}")
-    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesByName(@PathVariable String name, Pageable pageable) {
-        return ResponseEntity.ok(courseService.getCoursesByNameAndSortByPurchased(pageable, name));
+    @ApiMessage("Lấy các khóa học thành công!")
+    @GetMapping
+    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesWithFilter(
+            @Filter Specification<CourseEntity> specification,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable));
     }
 
     @GetMapping("/users")

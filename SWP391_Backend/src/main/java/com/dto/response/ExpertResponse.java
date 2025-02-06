@@ -21,6 +21,7 @@ public class ExpertResponse {
 
     Integer yearOfExperience;
 
+    Integer totalCourses;
+    
     UserResponse user;
-
 }

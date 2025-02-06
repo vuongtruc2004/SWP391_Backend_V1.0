@@ -1,9 +1,7 @@
 package com.service;
 
-import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
-import com.entity.CourseEntity;
 import com.entity.SubjectEntity;
 import com.repository.SubjectRepository;
 import com.util.BuildResponse;
@@ -23,22 +21,6 @@ public class SubjectService {
     public SubjectService(SubjectRepository subjectRepository, ModelMapper modelMapper) {
         this.subjectRepository = subjectRepository;
         this.modelMapper = modelMapper;
-    }
-
-    public PageDetailsResponse<List<SubjectResponse>> getSubjects(Pageable pageable) {
-        Page<SubjectEntity> page = subjectRepository.findAll(pageable);
-        List<SubjectResponse> subjectResponseList = page.getContent()
-                .stream()
-                .map(subjectEntity -> modelMapper.map(subjectEntity, SubjectResponse.class))
-                .toList();
-
-        return BuildResponse.buildPageDetailsResponse(
-                page.getNumber() + 1,
-                page.getSize(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                subjectResponseList
-        );
     }
 
     public PageDetailsResponse<List<SubjectResponse>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
@@ -61,7 +43,7 @@ public class SubjectService {
         );
     }
 
-    public PageDetailsResponse<List<SubjectResponse>> getAllSubject(Pageable pageable) {
+    public PageDetailsResponse<List<SubjectResponse>> getSubjects(Pageable pageable) {
         Page<SubjectEntity> page = subjectRepository.findAll(pageable);
         List<SubjectResponse> subjectResponses = page.getContent()
                 .stream().map(subjectEntity -> {

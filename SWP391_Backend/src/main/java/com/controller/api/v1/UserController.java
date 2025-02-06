@@ -6,7 +6,6 @@ import com.dto.request.RegisterRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
-import com.dto.response.SubjectResponse;
 import com.exception.custom.NotFoundException;
 import com.service.ExpertService;
 import com.service.OTPService;
@@ -25,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final OTPService otpService;
     private final ExpertService expertService;
+
     public UserController(UserService userService, OTPService otpService,
                           ExpertService expertService) {
         this.userService = userService;
@@ -57,9 +57,9 @@ public class UserController {
 
     @ApiMessage("Lấy tất cả chuyên gia thành công !")
     @GetMapping("/experts")
-    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getAllExperts(
+    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExperts(
             Pageable pageable
     ) {
-        return ResponseEntity.ok(expertService.getAllExpert(pageable));
+        return ResponseEntity.ok(expertService.getExperts(pageable));
     }
 }
