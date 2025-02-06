@@ -43,8 +43,17 @@ public class CourseService {
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
-            Pageable pageable
+            Pageable pageable,
+            String specialSort
     ) {
+        try {
+            String[] parts = specialSort.split(",");
+            String sortOption = parts[0];
+            String direction = parts[1];
+        }catch (Exception e){
+            throw new ArithmeticException("Chuỗi không hợp lệ!");
+        }
+
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseResponse> courseResponses = this.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(

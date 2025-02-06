@@ -37,9 +37,10 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesWithFilter(
             @Filter Specification<CourseEntity> specification,
-            Pageable pageable
+            Pageable pageable,
+            @RequestParam(name = "specialSort", required = false) String specialSort
     ) {
-        return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable));
+        return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable, specialSort));
     }
 
     @GetMapping("/users")
