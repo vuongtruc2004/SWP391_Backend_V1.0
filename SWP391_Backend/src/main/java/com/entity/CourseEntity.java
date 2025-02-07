@@ -75,7 +75,9 @@ public class CourseEntity implements Serializable {
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
-        this.accepted = false;
+        if(accepted == null) {
+            accepted = false;
+        }
     }
 
     @PreUpdate

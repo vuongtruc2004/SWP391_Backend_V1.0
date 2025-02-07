@@ -4,6 +4,8 @@ import com.entity.UserEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +18,6 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
     Optional<UserEntity> findByEmailAndAccountType(String email, AccountTypeEnum accountType);
     
     List<UserEntity> findAllByRole_RoleName(RoleNameEnum roleNameEnum);
+
+    boolean existsByEmailAndAccountTypeAndUserIdNot(String email, AccountTypeEnum accountTypeEnum, Long userId);
 }

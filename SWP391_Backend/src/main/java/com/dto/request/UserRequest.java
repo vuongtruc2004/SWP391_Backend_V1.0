@@ -2,7 +2,9 @@ package com.dto.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.util.deserializer.StringToInstantDeserializer;
+import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
+import com.util.enums.RoleNameEnum;
 import com.util.validation.constraint.DobConstraint;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,8 +39,7 @@ public class UserRequest {
     @NotBlank(message = "Mật khẩu không được để trống!")
     String password;
 
-    @NotBlank(message = "Mật khẩu không được để trống!")
-    String rePassword;
+
 
     String avatar;
 
@@ -47,6 +48,12 @@ public class UserRequest {
             message = "Số điện phải chuẩn đầu số của Việt Nam!"
     )
     String phone;
+
+    @Enumerated(EnumType.STRING)
+    RoleNameEnum roleName;
+
+    @Enumerated(EnumType.STRING)
+    AccountTypeEnum accountType;
 
     @Pattern(
             regexp = "^[a-zA-ZÀ-ỹ\\s]+$",

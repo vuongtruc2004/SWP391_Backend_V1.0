@@ -444,131 +444,31 @@ public class DatabaseInitializer implements CommandLineRunner {
     private void createSubject() {
         if (!subjectRepository.existsBy()) {
             List<SubjectEntity> subjects = List.of(
-                    SubjectEntity.builder()
-                            .subjectName("Java")
-                            .description("Ngôn ngữ lập trình phổ biến, chạy trên JVM.")
-                            .thumbnail("java.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Python")
-                            .description("Ngôn ngữ lập trình dễ học, mạnh mẽ cho AI, Data Science.")
-                            .thumbnail("python.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("JavaScript")
-                            .description("Ngôn ngữ lập trình chính cho web frontend.")
-                            .thumbnail("javascript.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C++")
-                            .description("Ngôn ngữ lập trình mạnh mẽ cho hệ thống và game.")
-                            .thumbnail("cplus.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C#")
-                            .description("Ngôn ngữ phát triển ứng dụng trên nền tảng Microsoft.")
-                            .thumbnail("csharp.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("React JS")
-                            .description("Thư viện JavaScript phát triển UI động.")
-                            .thumbnail("reactjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Next JS")
-                            .description("Framework React hỗ trợ SSR và SEO tốt.")
-                            .thumbnail("nextjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Spring Boot")
-                            .description("Framework Java để phát triển ứng dụng web nhanh chóng.")
-                            .thumbnail("springboot.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("PHP")
-                            .description("Ngôn ngữ lập trình phổ biến cho backend web.")
-                            .thumbnail("php.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Ruby")
-                            .description("Ngôn ngữ lập trình linh hoạt, thường dùng với Rails.")
-                            .thumbnail("ruby.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("HTML")
-                            .description("Ngôn ngữ đánh dấu để xây dựng trang web.")
-                            .thumbnail("html.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("TypeScript")
-                            .description("Phiên bản nâng cao của JavaScript với kiểu tĩnh.")
-                            .thumbnail("typescript.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("CSS")
-                            .description("Ngôn ngữ tạo kiểu cho trang web.")
-                            .thumbnail("css.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("SASS")
-                            .description("Tiền xử lý CSS giúp viết CSS dễ dàng hơn.")
-                            .thumbnail("sass.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Kotlin")
-                            .description("Ngôn ngữ lập trình chính thức cho Android.")
-                            .thumbnail("kotlin.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Swift")
-                            .description("Ngôn ngữ lập trình chính thức cho iOS.")
-                            .thumbnail("swift.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Nest JS")
-                            .description("Framework Node.js để xây dựng backend hiệu quả.")
-                            .thumbnail("nestjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("My SQL")
-                            .description("Hệ quản trị cơ sở dữ liệu quan hệ phổ biến.")
-                            .thumbnail("mysql.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("MongoDB")
-                            .description("Cơ sở dữ liệu NoSQL dạng document.")
-                            .thumbnail("mongodb.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Vue JS")
-                            .description("Framework JavaScript để xây dựng UI nhanh chóng.")
-                            .thumbnail("vuejs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Tailwind CSS")
-                            .description("Framework CSS tiện lợi, hỗ trợ thiết kế nhanh chóng.")
-                            .thumbnail("tailwindcss.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("MUI")
-                            .description("Thư viện UI cho React, dựa trên Material Design.")
-                            .thumbnail("mui.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Ant Design")
-                            .description("Thư viện UI mạnh mẽ dành cho React.")
-                            .thumbnail("antd.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Bootstrap")
-                            .description("Framework CSS phổ biến giúp phát triển web nhanh.")
-                            .thumbnail("bootstrap.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C")
-                            .description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.")
-                            .thumbnail("c.png")
-                            .build()
+                    SubjectEntity.builder().subjectName("Java").description("Ngôn ngữ lập trình phổ biến, chạy trên JVM.").thumbnail("java.png").build(),
+                    SubjectEntity.builder().subjectName("Python").description("Ngôn ngữ lập trình dễ học, mạnh mẽ cho AI, Data Science.").thumbnail("python.png").build(),
+                    SubjectEntity.builder().subjectName("JavaScript").description("Ngôn ngữ lập trình chính cho web frontend.").thumbnail("javascript.png").build(),
+                    SubjectEntity.builder().subjectName("C++").description("Ngôn ngữ lập trình mạnh mẽ cho hệ thống và game.").thumbnail("cplus.png").build(),
+                    SubjectEntity.builder().subjectName("C#").description("Ngôn ngữ phát triển ứng dụng trên nền tảng Microsoft.").thumbnail("csharp.png").build(),
+                    SubjectEntity.builder().subjectName("React JS").description("Thư viện JavaScript phát triển UI động.").thumbnail("reactjs.png").build(),
+                    SubjectEntity.builder().subjectName("Next JS").description("Framework React hỗ trợ SSR và SEO tốt.").thumbnail("nextjs.png").build(),
+                    SubjectEntity.builder().subjectName("Spring Boot").description("Framework Java để phát triển ứng dụng web nhanh chóng.").thumbnail("springboot.png").build(),
+                    SubjectEntity.builder().subjectName("PHP").description("Ngôn ngữ lập trình phổ biến cho backend web.").thumbnail("php.png").build(),
+                    SubjectEntity.builder().subjectName("Ruby").description("Ngôn ngữ lập trình linh hoạt, thường dùng với Rails.").thumbnail("ruby.png").build(),
+                    SubjectEntity.builder().subjectName("HTML").description("Ngôn ngữ đánh dấu để xây dựng trang web.").thumbnail("html.png").build(),
+                    SubjectEntity.builder().subjectName("TypeScript").description("Phiên bản nâng cao của JavaScript với kiểu tĩnh.").thumbnail("typescript.png").build(),
+                    SubjectEntity.builder().subjectName("CSS").description("Ngôn ngữ tạo kiểu cho trang web.").thumbnail("css.png").build(),
+                    SubjectEntity.builder().subjectName("SASS").description("Tiền xử lý CSS giúp viết CSS dễ dàng hơn.").thumbnail("sass.png").build(),
+                    SubjectEntity.builder().subjectName("Kotlin").description("Ngôn ngữ lập trình chính thức cho Android.").thumbnail("kotlin.png").build(),
+                    SubjectEntity.builder().subjectName("Swift").description("Ngôn ngữ lập trình chính thức cho iOS.").thumbnail("swift.png").build(),
+                    SubjectEntity.builder().subjectName("Nest JS").description("Framework Node.js để xây dựng backend hiệu quả.").thumbnail("nestjs.png").build(),
+                    SubjectEntity.builder().subjectName("My SQL").description("Hệ quản trị cơ sở dữ liệu quan hệ phổ biến.").thumbnail("mysql.png").build(),
+                    SubjectEntity.builder().subjectName("MongoDB").description("Cơ sở dữ liệu NoSQL dạng document.").thumbnail("mongodb.png").build(),
+                    SubjectEntity.builder().subjectName("Vue JS").description("Framework JavaScript để xây dựng UI nhanh chóng.").thumbnail("vuejs.png").build(),
+                    SubjectEntity.builder().subjectName("Tailwind CSS").description("Framework CSS tiện lợi, hỗ trợ thiết kế nhanh chóng.").thumbnail("tailwindcss.png").build(),
+                    SubjectEntity.builder().subjectName("MUI").description("Thư viện UI cho React, dựa trên Material Design.").thumbnail("mui.png").build(),
+                    SubjectEntity.builder().subjectName("Ant Design").description("Thư viện UI mạnh mẽ dành cho React.").thumbnail("antd.png").build(),
+                    SubjectEntity.builder().subjectName("Bootstrap").description("Framework CSS phổ biến giúp phát triển web nhanh.").thumbnail("bootstrap.png").build(),
+                    SubjectEntity.builder().subjectName("C").description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.").thumbnail("c.png").build()
             );
             subjectRepository.saveAll(subjects);
         }
@@ -1055,6 +955,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             ));
 
             for (CourseEntity course : courses) {
+                course.setAccepted(true);
                 course.setObjectiveList(List.of(
                         "Hiểu cơ bản về " + course.getCourseName(),
                         "Nắm vững kỹ thuật lập trình liên quan",
@@ -1062,7 +963,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                         "Tự tin ứng dụng vào công việc"
                 ));
                 course.setUsers(this.getRandomPurchasers());
-                course.setSubjects(this.getRandomSubjects());
             }
             courseRepository.saveAll(courses);
 
@@ -1115,18 +1015,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         int numberOfPurchasers = random.nextInt(users.size());
         while (result.size() < numberOfPurchasers) {
             result.add(users.get(random.nextInt(users.size())));
-        }
-        return result;
-    }
-
-    private Set<SubjectEntity> getRandomSubjects() {
-        List<SubjectEntity> subjects = subjectRepository.findAll();
-
-        int numberOfSubjects = random.nextInt(subjects.size());
-
-        Set<SubjectEntity> result = new HashSet<>();
-        while (result.size() < numberOfSubjects) {
-            result.add(subjects.get(random.nextInt(subjects.size())));
         }
         return result;
     }

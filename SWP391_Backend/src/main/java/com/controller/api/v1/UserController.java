@@ -3,16 +3,22 @@ package com.controller.api.v1;
 import com.dto.request.ChangePasswordRequest;
 import com.dto.request.EmailRequest;
 import com.dto.request.RegisterRequest;
+import com.dto.request.UserRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
+import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.service.ExpertService;
 import com.service.OTPService;
 import com.service.UserService;
+import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,4 +68,38 @@ public class UserController {
     ) {
         return ResponseEntity.ok(expertService.getExperts(pageable));
     }
+
+    @ApiMessage("Lấy người dùng thành công")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @ApiMessage("Lấy tất cả người dùng thành công")
+    @GetMapping
+    public ResponseEntity<PageDetailsResponse<List<UserResponse>>> getUserWithFilter(
+            Pageable pageable, @Filter Specification<UserEntity> specification) {
+        return ResponseEntity.ok(userService.getUserWithFilter(pageable, specification));
+    }
+
+    @ApiMessage("Khóa người dùng thành công")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> lockUser(@PathVariable Long id) {
+        userService.lockUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiMessage("Tạo người dùng thành công")
+    @PostMapping
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequest));
+    }
+
+    @ApiMessage("Cập nhật người dùng thành công")
+    @PutMapping
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(userRequest));
+    }
+
+
 }

@@ -102,6 +102,9 @@ public class UserEntity {
         if (active == null) {
             active = true;
         }
+        if(locked == null) {
+            locked = false;
+        }
     }
 
     @PreUpdate

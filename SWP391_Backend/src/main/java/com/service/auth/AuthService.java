@@ -77,6 +77,9 @@ public class AuthService {
 
         if (currentUser.isPresent()) {
             UserEntity currentUserEntity = currentUser.get();
+            if(Boolean.TRUE.equals(currentUserEntity.getLocked())){
+                throw new UserException("Sai tên tài khoản hoặc mật khẩu!");
+            }
             String accessToken = jwtService.createJWTToken(currentUserEntity.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.accessTokenExpiration);
             String newRefreshToken = jwtService.createJWTToken(currentUserEntity.getEmail(), socialsLoginRequest.getAccountType().name(), securityUtil.refreshTokenExpiration);
             currentUserEntity.setRefreshToken(newRefreshToken);
