@@ -18,6 +18,7 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileService {
+    
     @Value("${assets.uri}")
     private String assetURI;
 
@@ -37,11 +38,11 @@ public class FileService {
         }
     }
 
-    public ApiResponse<String> upload(MultipartFile file, String folder) throws URISyntaxException,
+    public ApiResponse<String> uploadImage(MultipartFile file, String folder) throws URISyntaxException,
             IOException {
         // create unique filename
         String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-        URI uri = new URI(assetURI +"/" +folder + "/" + finalName);
+        URI uri = new URI(assetURI + "/" + folder + "/" + finalName);
         Path path = Paths.get(uri);
         try (InputStream inputStream = file.getInputStream()) {
             Files.copy(inputStream, path,
@@ -49,7 +50,7 @@ public class FileService {
         }
         return BuildResponse.buildApiResponse(
                 200,
-                "Upload file thành công",
+                "Upload ảnh thành công",
                 null,
                 finalName
         );
