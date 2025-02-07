@@ -39,15 +39,7 @@ public class UserRequest {
     @NotBlank(message = "Mật khẩu không được để trống!")
     String password;
 
-
-
     String avatar;
-
-    @Pattern(
-            regexp = "^(0)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$",
-            message = "Số điện phải chuẩn đầu số của Việt Nam!"
-    )
-    String phone;
 
     @Enumerated(EnumType.STRING)
     RoleNameEnum roleName;

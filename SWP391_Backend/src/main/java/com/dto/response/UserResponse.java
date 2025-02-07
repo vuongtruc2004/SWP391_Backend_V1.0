@@ -26,9 +26,7 @@ public class UserResponse {
     String avatar;
 
     String fullname;
-
-    String phone;
-
+    
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;
 

@@ -34,9 +34,7 @@ public class UserEntity {
     String avatar;
 
     String fullname;
-
-    String phone;
-
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     AccountTypeEnum accountType;
@@ -102,7 +100,7 @@ public class UserEntity {
         if (active == null) {
             active = true;
         }
-        if(locked == null) {
+        if (locked == null) {
             locked = false;
         }
     }

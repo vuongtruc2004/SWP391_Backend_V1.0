@@ -24,5 +24,4 @@ public class SubjectResponse {
     Integer totalCourses;
 
     Set<String> listCourses;
-
 }
