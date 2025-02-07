@@ -10,6 +10,7 @@ import com.entity.RoleEntity;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
+import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
 import com.repository.OTPRepository;
 import com.repository.RoleRepository;
@@ -24,7 +25,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +41,16 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final OTPService otpService;
     private final OTPRepository otpRepository;
+    private final FileService fileService;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpService = otpService;
         this.otpRepository = otpRepository;
+        this.fileService = fileService;
     }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
@@ -178,6 +184,28 @@ public class UserService {
         UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
         userResponse.setRoleName(userEntity.getRole().getRoleName());
         return userResponse;
+
+    }
+    public UserResponse updateAvatar(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        ApiResponse<String> fileResponse = fileService.uploadImage(file,folder);
+        if(fileResponse.getStatus() == 200){
+            String email = JwtService.extractUsernameFromToken()
+                    .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
+
+            String accountType = JwtService.extractAccountTypeFromToken()
+                    .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
+
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
+            if(Boolean.TRUE.equals(userEntity.getLocked())){
+                throw new UserException("Không tìm thấy");
+            }
+            userEntity.setAvatar(fileResponse.getData());
+            UserEntity userEntity1 = userRepository.save(userEntity);
+            return modelMapper.map(userEntity1, UserResponse.class);
+        }else{
+            throw new StorageException("Không tìm thấy ảnh");
+        }
 
     }
 }
