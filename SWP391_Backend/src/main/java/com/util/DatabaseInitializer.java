@@ -138,6 +138,24 @@ public class DatabaseInitializer implements CommandLineRunner {
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
                             .avatar("admin.jpg")
+                            .fullname("Vuong Truc Expert")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("vuongtruc20042@gmail.com")
+                            .gender(GenderEnum.MALE)
+                            .role(expert)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("admin.jpg")
+                            .fullname("Anh Truc Expert")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("vuongtruc20043@gmail.com")
+                            .gender(GenderEnum.MALE)
+                            .role(expert)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("admin.jpg")
                             .fullname("Nguyen Vuong Truc Marketing")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2008@gmail.com")
@@ -145,7 +163,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .role(marketing)
                             .build()
             ));
-            for (int i = 1; i <= 12; i++) {
+            for (int i = 1; i <= 10; i++) {
                 users.add(
                         UserEntity.builder()
                                 .password(passwordEncoder.encode("123"))
@@ -171,6 +189,24 @@ public class DatabaseInitializer implements CommandLineRunner {
                     .user(user)
                     .build();
             expertRepository.save(expert);
+
+            UserEntity user1 = userRepository.findByEmailAndAccountType("vuongtruc20042@gmail.com", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new UserException("Username not existed!"));
+            ExpertEntity expert1 = ExpertEntity.builder()
+                    .diploma(DiplomaEnum.MASTER)
+                    .yearOfExperience(10)
+                    .user(user1)
+                    .build();
+            expertRepository.save(expert1);
+
+            UserEntity user2 = userRepository.findByEmailAndAccountType("vuongtruc20043@gmail.com", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new UserException("Username not existed!"));
+            ExpertEntity expert2 = ExpertEntity.builder()
+                    .diploma(DiplomaEnum.MASTER)
+                    .yearOfExperience(10)
+                    .user(user2)
+                    .build();
+            expertRepository.save(expert2);
         }
     }
 
@@ -408,131 +444,31 @@ public class DatabaseInitializer implements CommandLineRunner {
     private void createSubject() {
         if (!subjectRepository.existsBy()) {
             List<SubjectEntity> subjects = List.of(
-                    SubjectEntity.builder()
-                            .subjectName("Java")
-                            .description("Ngôn ngữ lập trình phổ biến, chạy trên JVM.")
-                            .thumbnail("java.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Python")
-                            .description("Ngôn ngữ lập trình dễ học, mạnh mẽ cho AI, Data Science.")
-                            .thumbnail("python.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("JavaScript")
-                            .description("Ngôn ngữ lập trình chính cho web frontend.")
-                            .thumbnail("javascript.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C++")
-                            .description("Ngôn ngữ lập trình mạnh mẽ cho hệ thống và game.")
-                            .thumbnail("cplus.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C#")
-                            .description("Ngôn ngữ phát triển ứng dụng trên nền tảng Microsoft.")
-                            .thumbnail("csharp.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("React JS")
-                            .description("Thư viện JavaScript phát triển UI động.")
-                            .thumbnail("reactjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Next JS")
-                            .description("Framework React hỗ trợ SSR và SEO tốt.")
-                            .thumbnail("nextjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Spring Boot")
-                            .description("Framework Java để phát triển ứng dụng web nhanh chóng.")
-                            .thumbnail("springboot.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("PHP")
-                            .description("Ngôn ngữ lập trình phổ biến cho backend web.")
-                            .thumbnail("php.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Ruby")
-                            .description("Ngôn ngữ lập trình linh hoạt, thường dùng với Rails.")
-                            .thumbnail("ruby.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("HTML")
-                            .description("Ngôn ngữ đánh dấu để xây dựng trang web.")
-                            .thumbnail("html.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("TypeScript")
-                            .description("Phiên bản nâng cao của JavaScript với kiểu tĩnh.")
-                            .thumbnail("typescript.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("CSS")
-                            .description("Ngôn ngữ tạo kiểu cho trang web.")
-                            .thumbnail("css.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("SASS")
-                            .description("Tiền xử lý CSS giúp viết CSS dễ dàng hơn.")
-                            .thumbnail("sass.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Kotlin")
-                            .description("Ngôn ngữ lập trình chính thức cho Android.")
-                            .thumbnail("kotlin.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Swift")
-                            .description("Ngôn ngữ lập trình chính thức cho iOS.")
-                            .thumbnail("swift.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Nest JS")
-                            .description("Framework Node.js để xây dựng backend hiệu quả.")
-                            .thumbnail("nestjs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("My SQL")
-                            .description("Hệ quản trị cơ sở dữ liệu quan hệ phổ biến.")
-                            .thumbnail("mysql.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("MongoDB")
-                            .description("Cơ sở dữ liệu NoSQL dạng document.")
-                            .thumbnail("mongodb.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Vue JS")
-                            .description("Framework JavaScript để xây dựng UI nhanh chóng.")
-                            .thumbnail("vuejs.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Tailwind CSS")
-                            .description("Framework CSS tiện lợi, hỗ trợ thiết kế nhanh chóng.")
-                            .thumbnail("tailwindcss.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("MUI")
-                            .description("Thư viện UI cho React, dựa trên Material Design.")
-                            .thumbnail("mui.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Ant Design")
-                            .description("Thư viện UI mạnh mẽ dành cho React.")
-                            .thumbnail("antd.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("Bootstrap")
-                            .description("Framework CSS phổ biến giúp phát triển web nhanh.")
-                            .thumbnail("bootstrap.png")
-                            .build(),
-                    SubjectEntity.builder()
-                            .subjectName("C")
-                            .description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.")
-                            .thumbnail("c.png")
-                            .build()
+                    SubjectEntity.builder().subjectName("Java").description("Ngôn ngữ lập trình phổ biến, chạy trên JVM.").thumbnail("java.png").build(),
+                    SubjectEntity.builder().subjectName("Python").description("Ngôn ngữ lập trình dễ học, mạnh mẽ cho AI, Data Science.").thumbnail("python.png").build(),
+                    SubjectEntity.builder().subjectName("JavaScript").description("Ngôn ngữ lập trình chính cho web frontend.").thumbnail("javascript.png").build(),
+                    SubjectEntity.builder().subjectName("C++").description("Ngôn ngữ lập trình mạnh mẽ cho hệ thống và game.").thumbnail("cplus.png").build(),
+                    SubjectEntity.builder().subjectName("C#").description("Ngôn ngữ phát triển ứng dụng trên nền tảng Microsoft.").thumbnail("csharp.png").build(),
+                    SubjectEntity.builder().subjectName("React JS").description("Thư viện JavaScript phát triển UI động.").thumbnail("reactjs.png").build(),
+                    SubjectEntity.builder().subjectName("Next JS").description("Framework React hỗ trợ SSR và SEO tốt.").thumbnail("nextjs.png").build(),
+                    SubjectEntity.builder().subjectName("Spring Boot").description("Framework Java để phát triển ứng dụng web nhanh chóng.").thumbnail("springboot.png").build(),
+                    SubjectEntity.builder().subjectName("PHP").description("Ngôn ngữ lập trình phổ biến cho backend web.").thumbnail("php.png").build(),
+                    SubjectEntity.builder().subjectName("Ruby").description("Ngôn ngữ lập trình linh hoạt, thường dùng với Rails.").thumbnail("ruby.png").build(),
+                    SubjectEntity.builder().subjectName("HTML").description("Ngôn ngữ đánh dấu để xây dựng trang web.").thumbnail("html.png").build(),
+                    SubjectEntity.builder().subjectName("TypeScript").description("Phiên bản nâng cao của JavaScript với kiểu tĩnh.").thumbnail("typescript.png").build(),
+                    SubjectEntity.builder().subjectName("CSS").description("Ngôn ngữ tạo kiểu cho trang web.").thumbnail("css.png").build(),
+                    SubjectEntity.builder().subjectName("SASS").description("Tiền xử lý CSS giúp viết CSS dễ dàng hơn.").thumbnail("sass.png").build(),
+                    SubjectEntity.builder().subjectName("Kotlin").description("Ngôn ngữ lập trình chính thức cho Android.").thumbnail("kotlin.png").build(),
+                    SubjectEntity.builder().subjectName("Swift").description("Ngôn ngữ lập trình chính thức cho iOS.").thumbnail("swift.png").build(),
+                    SubjectEntity.builder().subjectName("Nest JS").description("Framework Node.js để xây dựng backend hiệu quả.").thumbnail("nestjs.png").build(),
+                    SubjectEntity.builder().subjectName("My SQL").description("Hệ quản trị cơ sở dữ liệu quan hệ phổ biến.").thumbnail("mysql.png").build(),
+                    SubjectEntity.builder().subjectName("MongoDB").description("Cơ sở dữ liệu NoSQL dạng document.").thumbnail("mongodb.png").build(),
+                    SubjectEntity.builder().subjectName("Vue JS").description("Framework JavaScript để xây dựng UI nhanh chóng.").thumbnail("vuejs.png").build(),
+                    SubjectEntity.builder().subjectName("Tailwind CSS").description("Framework CSS tiện lợi, hỗ trợ thiết kế nhanh chóng.").thumbnail("tailwindcss.png").build(),
+                    SubjectEntity.builder().subjectName("MUI").description("Thư viện UI cho React, dựa trên Material Design.").thumbnail("mui.png").build(),
+                    SubjectEntity.builder().subjectName("Ant Design").description("Thư viện UI mạnh mẽ dành cho React.").thumbnail("antd.png").build(),
+                    SubjectEntity.builder().subjectName("Bootstrap").description("Framework CSS phổ biến giúp phát triển web nhanh.").thumbnail("bootstrap.png").build(),
+                    SubjectEntity.builder().subjectName("C").description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.").thumbnail("c.png").build()
             );
             subjectRepository.saveAll(subjects);
         }
@@ -668,7 +604,37 @@ public class DatabaseInitializer implements CommandLineRunner {
                     LessonEntity.builder().title("Golang cho Backend Developers").description("Học cách sử dụng Golang để xây dựng API mạnh mẽ.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
                     LessonEntity.builder().title("TensorFlow với Java").description("Xây dựng mô hình Machine Learning với TensorFlow và Java.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
                     LessonEntity.builder().title("Xây dựng hệ thống CI/CD nâng cao").description("CI/CD chuyên sâu với Kubernetes và ArgoCD.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
-                    LessonEntity.builder().title("Xây dựng ứng dụng Serverless").description("Sử dụng AWS Lambda để phát triển ứng dụng không máy chủ.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build()
+                    LessonEntity.builder().title("Xây dựng ứng dụng Serverless").description("Sử dụng AWS Lambda để phát triển ứng dụng không máy chủ.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Java").description("Tìm hiểu về biến, kiểu dữ liệu cơ bản và cách sử dụng chúng.").videos(this.getRandomVideos(2)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Hướng dẫn sử dụng if-else, switch-case và vòng lặp trong Java.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Lập trình hướng đối tượng với Java").description("Giới thiệu về lập trình OOP, các khái niệm class, object, inheritance, polymorphism.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Làm việc với Array và Collection").description("Học cách sử dụng mảng, ArrayList, HashMap trong Java.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Xử lý ngoại lệ trong Java").description("Hướng dẫn cách sử dụng try-catch-finally để xử lý lỗi chương trình.").videos(this.getRandomVideos(2)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Làm việc với File trong Java").description("Đọc ghi file bằng FileReader, FileWriter, BufferedReader và BufferedWriter.").videos(this.getRandomVideos(2)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Giới thiệu về JDBC").description("Kết nối Java với MySQL sử dụng JDBC API.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Lập trình đa luồng trong Java").description("Học cách tạo và quản lý thread trong Java.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Xây dựng ứng dụng Java Swing").description("Hướng dẫn tạo giao diện đồ họa với Java Swing.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Làm việc với API trong Java").description("Gọi API RESTful và xử lý dữ liệu JSON bằng Java.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Spring Boot: Giới thiệu và Cấu hình").description("Cài đặt và cấu hình dự án Spring Boot đầu tiên.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Spring Boot: Xây dựng API RESTful").description("Học cách xây dựng API RESTful với Spring Boot.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Spring Boot: Làm việc với JPA và MySQL").description("Hướng dẫn tích hợp JPA với MySQL trong Spring Boot.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Spring Security: Xác thực và phân quyền").description("Hướng dẫn triển khai xác thực và phân quyền trong Spring Security.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với Spring Boot").description("Ứng dụng kiến thức đã học vào dự án thực tế.").videos(this.getRandomVideos(5)).documents(this.getRandomDocuments(3)).build(),
+                    LessonEntity.builder().title("Giới thiệu về Python").description("Tổng quan về Python, cài đặt và thiết lập môi trường.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Python").description("Học về biến, kiểu dữ liệu và cách sử dụng trong Python.").videos(this.getRandomVideos(2)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Sử dụng if-else, for, while trong Python.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Lập trình hướng đối tượng trong Python").description("Class, object, inheritance, polymorphism trong Python.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Làm việc với List, Tuple, Dictionary").description("Học cách thao tác với các cấu trúc dữ liệu trong Python.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Xử lý file trong Python").description("Đọc, ghi file với Python sử dụng open, read, write.").videos(this.getRandomVideos(2)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Lập trình bất đồng bộ trong Python").description("Async, await trong Python để tối ưu hiệu suất.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Dự án Python: Xây dựng ứng dụng quản lý công việc").description("Ứng dụng thực tế giúp bạn hiểu sâu hơn về lập trình Python.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Giới thiệu về React.js").description("Học React từ cơ bản, hiểu về JSX và component.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("React Hooks và State Management").description("Sử dụng useState, useEffect, Context API trong React.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(1)).build(),
+                    LessonEntity.builder().title("Next.js: Xây dựng ứng dụng SSR và SSG").description("Học cách tối ưu SEO với Next.js.").videos(this.getRandomVideos(4)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Xây dựng API với Node.js").description("Dùng Express.js để xây dựng API RESTful.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Tìm hiểu về TypeScript").description("Học cách sử dụng TypeScript để viết code dễ bảo trì hơn.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build(),
+                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với React").description("Ứng dụng các kiến thức về React, Redux vào một dự án thực tế.").videos(this.getRandomVideos(5)).documents(this.getRandomDocuments(3)).build(),
+                    LessonEntity.builder().title("Tối ưu hiệu suất với React và Next.js").description("Học cách tối ưu và cải thiện hiệu suất cho ứng dụng React.").videos(this.getRandomVideos(3)).documents(this.getRandomDocuments(2)).build()
             );
             lessonRepository.saveAll(lessons);
         }
@@ -960,21 +926,36 @@ public class DatabaseInitializer implements CommandLineRunner {
         if (!courseRepository.existsBy()) {
             ExpertEntity expert = expertRepository.findByUser_EmailAndUser_AccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new NotFoundException("Expert not found"));
+            ExpertEntity expert1 = expertRepository.findByUser_EmailAndUser_AccountType("vuongtruc20042@gmail.com", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new NotFoundException("Expert not found"));
+            ExpertEntity expert2 = expertRepository.findByUser_EmailAndUser_AccountType("vuongtruc20043@gmail.com", AccountTypeEnum.CREDENTIALS)
+                    .orElseThrow(() -> new NotFoundException("Expert not found"));
 
             List<CourseEntity> courses = new ArrayList<>(List.of(
                     CourseEntity.builder().expert(expert).courseName("Java Cơ Bản").description("Học Java từ cơ bản đến nâng cao.").thumbnail("1.jpg").price(300000.0).build(),
-                    CourseEntity.builder().expert(expert).courseName("Lập trình Python").description("Khóa học giúp bạn làm chủ Python.").thumbnail("2.jpg").price(250000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("Lập trình Python").description("Khóa học giúp bạn làm chủ Python.").thumbnail("2.jpg").price(250000.0).build(),
                     CourseEntity.builder().expert(expert).courseName("Spring Boot Web").description("Xây dựng ứng dụng web với Spring Boot.").thumbnail("3.jpg").price(400000.0).build(),
                     CourseEntity.builder().expert(expert).courseName("JavaScript và React").description("Lập trình front-end với React.").thumbnail("4.jpg").price(350000.0).build(),
                     CourseEntity.builder().expert(expert).courseName("Lập trình Android").description("Học Kotlin và xây dựng ứng dụng Android.").thumbnail("5.jpg").price(320000.0).build(),
-                    CourseEntity.builder().expert(expert).courseName("C++ từ cơ bản đến nâng cao").description("Lập trình C++ cho người mới bắt đầu.").thumbnail("6.jpg").price(280000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("C++ từ cơ bản đến nâng cao").description("Lập trình C++ cho người mới bắt đầu.").thumbnail("6.jpg").price(280000.0).build(),
                     CourseEntity.builder().expert(expert).courseName("Lập trình Node.js").description("Phát triển backend với Node.js và Express.").thumbnail("7.jpg").price(360000.0).build(),
-                    CourseEntity.builder().expert(expert).courseName("Fullstack với Next.js").description("Tạo website fullstack với Next.js.").thumbnail("8.jpg").price(400000.0).build(),
-                    CourseEntity.builder().expert(expert).courseName("Data Science với Python").description("Phân tích dữ liệu với Python, Pandas.").thumbnail("9.jpg").price(420000.0).build(),
-                    CourseEntity.builder().expert(expert).courseName("Machine Learning").description("Giới thiệu về AI và Machine Learning.").thumbnail("10.jpg").price(450000.0).build()
+                    CourseEntity.builder().expert(expert1).courseName("Fullstack với Next.js").description("Tạo website fullstack với Next.js.").thumbnail("8.jpg").price(400000.0).build(),
+                    CourseEntity.builder().expert(expert2).courseName("Data Science với Python").description("Phân tích dữ liệu với Python, Pandas.").thumbnail("9.jpg").price(420000.0).build(),
+                    CourseEntity.builder().expert(expert).courseName("Machine Learning").description("Giới thiệu về AI và Machine Learning.").thumbnail("10.jpg").price(450000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("HTML & CSS Cơ Bản").description("Học cách xây dựng giao diện web với HTML và CSS.").thumbnail("11.jpg").price(180000.0).build(),
+                    CourseEntity.builder().expert(expert2).courseName("SQL cho người mới bắt đầu").description("Học cách truy vấn và quản lý cơ sở dữ liệu với SQL.").thumbnail("12.jpg").price(150000.0).build(),
+                    CourseEntity.builder().expert(expert).courseName("Kiến trúc Microservices").description("Triển khai hệ thống Microservices với Spring Cloud.").thumbnail("13.jpg").price(850000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("Lập trình Golang").description("Học cách lập trình với ngôn ngữ Golang.").thumbnail("14.jpg").price(900000.0).build(),
+                    CourseEntity.builder().expert(expert).courseName("Kubernetes & Docker").description("Triển khai ứng dụng với Docker và Kubernetes.").thumbnail("15.jpg").price(950000.0).build(),
+                    CourseEntity.builder().expert(expert2).courseName("Thiết kế UI/UX").description("Học cách thiết kế giao diện đẹp và trải nghiệm tốt.").thumbnail("16.jpg").price(180000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("Cấu trúc dữ liệu & Giải thuật").description("Học thuật toán và cấu trúc dữ liệu để tối ưu code.").thumbnail("17.jpg").price(190000.0).build(),
+                    CourseEntity.builder().expert(expert).courseName("Lập trình AI với Python").description("Khóa học AI từ cơ bản đến nâng cao với Python.").thumbnail("18.jpg").price(850000.0).build(),
+                    CourseEntity.builder().expert(expert1).courseName("Blockchain và Smart Contracts").description("Xây dựng ứng dụng phi tập trung với Blockchain.").thumbnail("19.jpg").price(900000.0).build(),
+                    CourseEntity.builder().expert(expert).courseName("DevOps với AWS và Docker").description("Học DevOps từ cơ bản, triển khai CI/CD với AWS.").thumbnail("20.jpg").price(920000.0).build()
             ));
 
             for (CourseEntity course : courses) {
+                course.setAccepted(true);
                 course.setObjectiveList(List.of(
                         "Hiểu cơ bản về " + course.getCourseName(),
                         "Nắm vững kỹ thuật lập trình liên quan",
@@ -982,7 +963,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                         "Tự tin ứng dụng vào công việc"
                 ));
                 course.setUsers(this.getRandomPurchasers());
-                course.setSubjects(this.getRandomSubjects());
             }
             courseRepository.saveAll(courses);
 
@@ -1035,18 +1015,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         int numberOfPurchasers = random.nextInt(users.size());
         while (result.size() < numberOfPurchasers) {
             result.add(users.get(random.nextInt(users.size())));
-        }
-        return result;
-    }
-
-    private Set<SubjectEntity> getRandomSubjects() {
-        List<SubjectEntity> subjects = subjectRepository.findAll();
-
-        int numberOfSubjects = random.nextInt(subjects.size());
-
-        Set<SubjectEntity> result = new HashSet<>();
-        while (result.size() < numberOfSubjects) {
-            result.add(subjects.get(random.nextInt(subjects.size())));
         }
         return result;
     }

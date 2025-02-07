@@ -80,7 +80,6 @@ public class UserService {
                 null
         );
     }
-
     public UserResponse getUserById(Long id) {
         String email = JwtService.extractUsernameFromToken()
                 .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
@@ -127,14 +126,14 @@ public class UserService {
 
     public void lockUser(Long id) {
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found!"));
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
         user.setLocked(true);
         userRepository.save(user);
     }
 
     public UserResponse createUser(UserRequest request) {
         if (request.getUserId() != null) {
-            throw new UserException("Tạo người dùng không được để id");
+            throw new UserException("Không được để id");
         }
         RoleEntity roleEntity = roleRepository.findByRoleName(request.getRoleName())
                 .orElseThrow(() -> new RoleException("Role không tìm thấy"));
@@ -163,6 +162,5 @@ public class UserService {
         UserEntity savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserResponse.class);
     }
-
 
 }

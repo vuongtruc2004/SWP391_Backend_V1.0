@@ -63,10 +63,10 @@ public class UserController {
 
     @ApiMessage("Lấy tất cả chuyên gia thành công !")
     @GetMapping("/experts")
-    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getAllExperts(
+    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExperts(
             Pageable pageable
     ) {
-        return ResponseEntity.ok(expertService.getAllExpert(pageable));
+        return ResponseEntity.ok(expertService.getExperts(pageable));
     }
 
     @ApiMessage("Lấy người dùng thành công")

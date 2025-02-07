@@ -29,7 +29,9 @@ public class GlobalExceptionHandler {
             InvalidTokenException.class,
             NonUniqueResultException.class,
             IllegalArgumentException.class,
-            IOException.class
+            IOException.class,
+            ArrayIndexOutOfBoundsException.class,
+            InvalidRequestInput.class
     })
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(

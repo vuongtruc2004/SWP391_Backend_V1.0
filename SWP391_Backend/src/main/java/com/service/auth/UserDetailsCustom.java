@@ -28,7 +28,9 @@ public class UserDetailsCustom implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
                 .orElseThrow(() -> new UserException("Sai tên tài khoản hoặc mật khẩu!"));
-
+        if(Boolean.TRUE.equals(userEntity.getLocked())){
+            throw new UserException("Sai tên tài khoản hoặc mật khẩu!");
+        }
         return new User(
                 userEntity.getEmail(),
                 userEntity.getPassword(),

@@ -1,6 +1,5 @@
 package com.controller.api.v1;
 
-import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
 import com.service.SubjectService;
@@ -15,8 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/subjects")
-//
-//
 public class SubjectController {
 
     private final SubjectService subjectService;
@@ -35,13 +32,5 @@ public class SubjectController {
     @GetMapping("/courses")
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
         return ResponseEntity.ok(subjectService.getSubjectsSortByNumberOfCourses(pageable));
-    }
-
-    @ApiMessage("Lấy các môn học thành công!")
-    @GetMapping("/all")
-    public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getAllSubjects(
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(subjectService.getAllSubject(pageable));
     }
 }

@@ -5,45 +5,68 @@ import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.UserEntity;
+import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
+import com.helper.CourseServiceHelper;
 import com.repository.CourseRepository;
 import com.repository.UserRepository;
 import com.util.BuildResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final CourseServiceHelper courseServiceHelper;
 
-    public CourseService(CourseRepository courseRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public CourseService(CourseRepository courseRepository, ModelMapper modelMapper, UserRepository userRepository, CourseServiceHelper courseServiceHelper) {
         this.courseRepository = courseRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.courseServiceHelper = courseServiceHelper;
+    }
+
+    public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
+            Specification<CourseEntity> specification,
+            Pageable pageable,
+            String specialSort,
+            String expertIds,
+            String subjectIds
+    ) {
+        try {
+            if (specialSort != null && !specialSort.isBlank()) {
+                String[] parts = specialSort.split(",");
+                String sortOption = parts[0];
+                String direction = parts[1];
+                specification = specification.and(courseServiceHelper.sortBySpecialFields(sortOption, direction));
+            }
+        } catch (Exception e) {
+            throw new InvalidRequestInput("Chuỗi không hợp lệ!");
+        }
+        specification = specification.and(courseServiceHelper.filterByAttribute(expertIds, "expert", "expertId"));
+        specification = specification.and(courseServiceHelper.filterByAttribute(subjectIds, "subjects", "subjectId"));
+
+        Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                courseResponses
+        );
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
         Page<CourseEntity> page = courseRepository.findCoursesAndOrderByPurchasersDesc(pageable);
-        List<CourseResponse> courseResponses = page.getContent()
-                .stream().map(courseEntity -> {
-                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setObjectives(courseEntity.getObjectiveList());
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-                    courseResponse.setTotalLikes(courseEntity.getLikes().size());
-                    courseResponse.setTotalComments(courseEntity.getComments().size());
-                    return courseResponse;
-                })
-                .toList();
-
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -57,40 +80,7 @@ public class CourseService {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Mã người dùng không tồn tại!"));
         Page<CourseEntity> page = courseRepository.findAllByUsers(user, pageable);
-        List<CourseResponse> courseResponseListlist = page.getContent()
-                .stream()
-                .map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class))
-                .toList();
-        return BuildResponse.buildPageDetailsResponse(
-                page.getNumber() + 1,
-                page.getSize(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                courseResponseListlist
-        );
-    }
-
-    public PageDetailsResponse<List<CourseResponse>> getCoursesByNameAndSortByPurchased(Pageable pageable, String name) {
-        Page<CourseEntity> page = courseRepository.findAll(pageable);
-        String normalizedName = StringUtils.stripAccents(name.toLowerCase());
-        Pattern pattern = Pattern.compile("\\b" + Pattern.quote(normalizedName) + "\\b", Pattern.CASE_INSENSITIVE);
-        List<CourseResponse> courseResponses = page.getContent()
-                .stream()
-                .filter(courseEntity -> {
-                    String courseName = StringUtils.stripAccents(courseEntity.getCourseName().toLowerCase());
-                    Matcher matcher = pattern.matcher(courseName);
-                    return matcher.find();
-                })
-                .map(courseEntity -> {
-                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setObjectives(courseEntity.getObjectiveList());
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-                    courseResponse.setTotalLikes(courseEntity.getLikes().size());
-                    courseResponse.setTotalComments(courseEntity.getComments().size());
-                    return courseResponse;
-                })
-                .sorted((c1, c2) -> Integer.compare(c2.getTotalPurchased(), c1.getTotalPurchased()))
-                .toList();
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -99,6 +89,4 @@ public class CourseService {
                 courseResponses
         );
     }
-
-
 }

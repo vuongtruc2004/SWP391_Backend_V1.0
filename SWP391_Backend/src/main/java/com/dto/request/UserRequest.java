@@ -40,6 +40,7 @@ public class UserRequest {
     String password;
 
 
+
     String avatar;
 
     @Pattern(
@@ -53,7 +54,6 @@ public class UserRequest {
 
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;
-
 
     @Pattern(
             regexp = "^[a-zA-ZÀ-ỹ\\s]+$",
