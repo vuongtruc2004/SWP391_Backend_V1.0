@@ -45,4 +45,10 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubjectsWithFilter(pageable, specification));
     }
 
+    @ApiMessage("Xóa môn học thành công!")
+    @DeleteMapping("/delete/{subjectId}")
+    public ResponseEntity<ApiResponse<String>> deleteSubject(@PathVariable Long subjectId) {
+        return ResponseEntity.ok(subjectService.deleteSubject(subjectId));
+    }
+
 }

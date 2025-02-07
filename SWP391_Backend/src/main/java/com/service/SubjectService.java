@@ -1,15 +1,18 @@
 package com.service;
 
+import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
 import com.entity.CourseEntity;
 import com.entity.SubjectEntity;
+import com.exception.custom.NotFoundException;
 import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -95,5 +98,27 @@ public class SubjectService {
         );
     }
 
-
+    public ApiResponse<String> deleteSubject(Long subjectId) {
+        if(subjectRepository.existsById(subjectId)) {
+            SubjectEntity subjectEntity = subjectRepository.findById(subjectId).get();
+            if(subjectEntity.getCourses().size() == 0) {
+                subjectRepository.deleteById(subjectId);
+            } else {
+                return BuildResponse.buildApiResponse(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Thất bại",
+                        "Không thể xóa môn học này do đang có khóa học!",
+                        null
+                );
+            }
+        } else {
+            throw new NotFoundException("Không tìm thấy Id môn học!");
+        }
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành công!",
+                "Bạn đã xóa môn học có Id là " + subjectId + " thành công!",
+                null
+        );
+    }
 }
