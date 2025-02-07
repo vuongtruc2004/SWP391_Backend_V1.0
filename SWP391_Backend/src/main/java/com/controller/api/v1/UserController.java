@@ -101,5 +101,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(userRequest));
     }
 
+    @ApiMessage("Lấy user profile thành công")
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> getUserProfile() {
+        return ResponseEntity.ok(userService.getUserProFile());
+    }
+
 
 }

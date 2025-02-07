@@ -163,4 +163,21 @@ public class UserService {
         return modelMapper.map(savedUser, UserResponse.class);
     }
 
+    public UserResponse getUserProFile(){
+        String email = JwtService.extractUsernameFromToken()
+                .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
+
+        String accountType = JwtService.extractAccountTypeFromToken()
+                .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
+
+        UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
+        if(Boolean.TRUE.equals(userEntity.getLocked())){
+            throw new UserException("Không tìm thấy");
+        }
+        UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
+        userResponse.setRoleName(userEntity.getRole().getRoleName());
+        return userResponse;
+
+    }
 }

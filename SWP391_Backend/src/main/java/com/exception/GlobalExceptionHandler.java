@@ -68,4 +68,13 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
+
+    @ExceptionHandler(value = StorageException.class)
+    public ResponseEntity<ApiResponse<Object>> handleStorageException(StorageException e) {
+        ApiResponse<Object> apiResponse = new ApiResponse<>();
+        apiResponse.setMessage("Exception upload file");
+        apiResponse.setErrorMessage(e.getMessage());
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
 }
