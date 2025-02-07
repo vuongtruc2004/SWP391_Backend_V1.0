@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.request.SubjectRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
@@ -119,6 +120,23 @@ public class SubjectService {
                 "Thành công!",
                 "Bạn đã xóa môn học có Id là " + subjectId + " thành công!",
                 null
+        );
+    }
+
+    public ApiResponse<SubjectResponse> updateSubject(Long subjectId, SubjectRequest subjectRequest) {
+        SubjectEntity subjectEntity = null;
+        if(subjectRepository.existsById(subjectId)) {
+            subjectEntity = subjectRepository.findById(subjectId).get();
+            modelMapper.map(subjectRequest, subjectEntity);
+            subjectRepository.save(subjectEntity);
+        } else {
+            throw new NotFoundException("Không tìm thấy Id môn học!");
+        }
+        return BuildResponse.buildApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Thay đổi thông tin môn học",
+                null,
+                modelMapper.map(subjectEntity, SubjectResponse.class)
         );
     }
 }

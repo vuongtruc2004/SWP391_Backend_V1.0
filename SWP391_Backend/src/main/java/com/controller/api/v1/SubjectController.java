@@ -1,5 +1,6 @@
 package com.controller.api.v1;
 
+import com.dto.request.SubjectRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
@@ -49,6 +50,12 @@ public class SubjectController {
     @DeleteMapping("/delete/{subjectId}")
     public ResponseEntity<ApiResponse<String>> deleteSubject(@PathVariable Long subjectId) {
         return ResponseEntity.ok(subjectService.deleteSubject(subjectId));
+    }
+
+    @ApiMessage("Thay đổi thông tin môn học thành công!")
+    @PatchMapping("/update/{subjectId}")
+    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId, SubjectRequest subjectRequest) {
+        return ResponseEntity.ok(subjectService.updateSubject(subjectId, subjectRequest));
     }
 
 }
