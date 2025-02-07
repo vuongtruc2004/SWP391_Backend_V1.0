@@ -3,6 +3,8 @@ package com.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,4 +22,7 @@ public class SubjectResponse {
     String thumbnail;
 
     Integer totalCourses;
+
+    Set<String> listCourses;
+
 }

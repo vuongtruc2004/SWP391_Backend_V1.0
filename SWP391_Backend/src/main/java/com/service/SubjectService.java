@@ -85,6 +85,10 @@ public class SubjectService {
                     subjectResponse.setSubjectName(subjectEntity.getSubjectName());
                     subjectResponse.setDescription(subjectEntity.getDescription());
                     subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
+                    subjectResponse.setListCourses(subjectEntity.getCourses()
+                            .stream()
+                            .map(CourseEntity::getCourseName)
+                            .collect(Collectors.toSet()));
                     subjectResponse.setThumbnail(subjectEntity.getThumbnail());
                     return subjectResponse;
                 })
