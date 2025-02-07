@@ -2,15 +2,18 @@ package com.service;
 
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.SubjectResponse;
+import com.entity.CourseEntity;
 import com.entity.SubjectEntity;
 import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService {
@@ -65,4 +68,32 @@ public class SubjectService {
                 subjectResponses
         );
     }
+
+    public PageDetailsResponse<List<SubjectResponse>> getSubjectsWithFilter(
+            Pageable pageable,
+            Specification<SubjectEntity> specification
+    ) {
+        Page<SubjectEntity> page = subjectRepository.findAll(specification, pageable);
+        List<SubjectResponse> subjectResponses = page.getContent()
+                .stream().map(subjectEntity -> {
+                    SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
+                    subjectResponse.setSubjectId(subjectEntity.getSubjectId());
+                    subjectResponse.setSubjectName(subjectEntity.getSubjectName());
+                    subjectResponse.setDescription(subjectEntity.getDescription());
+                    subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
+                    subjectResponse.setThumbnail(subjectEntity.getThumbnail());
+                    return subjectResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                subjectResponses
+        );
+    }
+
+
 }
