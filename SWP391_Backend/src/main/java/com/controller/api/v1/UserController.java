@@ -1,9 +1,6 @@
 package com.controller.api.v1;
 
-import com.dto.request.ChangePasswordRequest;
-import com.dto.request.EmailRequest;
-import com.dto.request.RegisterRequest;
-import com.dto.request.UserRequest;
+import com.dto.request.*;
 import com.dto.response.ApiResponse;
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
@@ -99,9 +96,9 @@ public class UserController {
     }
 
     @ApiMessage("Cập nhật người dùng thành công")
-    @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(userRequest));
+    @PutMapping("/profile")
+    public ResponseEntity<UserResponse> updateUserProfile(@RequestBody UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUserProfile(updateUserRequest));
     }
 
     @ApiMessage("Lấy user profile thành công")
@@ -115,7 +112,7 @@ public class UserController {
     public ResponseEntity<UserResponse> uploadAvatar(
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException {
-        return ResponseEntity.ok(userService.updateAvatar(file,folder));
+        return ResponseEntity.ok(userService.updateAvatar(file, folder));
     }
 
 }

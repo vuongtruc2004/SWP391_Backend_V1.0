@@ -46,13 +46,8 @@ public class FileController {
         if (!isValid) {
             throw new StorageException("File không hợp lệ, chọn một trong các loại:  " + allowedExtensions.toString());
         }
-        // create directory if not exist
         fileService.createDirectory(assetURI + folder);
-
-        // storage file
-
         return ResponseEntity.ok().body(fileService.uploadImage(file, folder));
     }
-
-
+    
 }

@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.request.RegisterRequest;
+import com.dto.request.UpdateUserRequest;
 import com.dto.request.UserRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
@@ -12,6 +13,7 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
+import com.helper.UserServiceHelper;
 import com.repository.OTPRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
@@ -42,8 +44,9 @@ public class UserService {
     private final OTPService otpService;
     private final OTPRepository otpRepository;
     private final FileService fileService;
+    private final UserServiceHelper userServiceHelper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
@@ -51,6 +54,7 @@ public class UserService {
         this.otpService = otpService;
         this.otpRepository = otpRepository;
         this.fileService = fileService;
+        this.userServiceHelper = userServiceHelper;
     }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
@@ -86,6 +90,7 @@ public class UserService {
                 null
         );
     }
+
     public UserResponse getUserById(Long id) {
         String email = JwtService.extractUsernameFromToken()
                 .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
@@ -169,43 +174,30 @@ public class UserService {
         return modelMapper.map(savedUser, UserResponse.class);
     }
 
-    public UserResponse getUserProFile(){
-        String email = JwtService.extractUsernameFromToken()
-                .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
+    public UserResponse updateUserProfile(UpdateUserRequest updateUserRequest) {
+        UserEntity userEntity = userRepository.findById(updateUserRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("ID không tồn tại!"));
+        userEntity.setFullname(updateUserRequest.getFullname());
+        userEntity.setDob(updateUserRequest.getDob());
+        userEntity.setGender(updateUserRequest.getGender());
+        return modelMapper.map(userRepository.save(userEntity), UserResponse.class);
+    }
 
-        String accountType = JwtService.extractAccountTypeFromToken()
-                .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
-
-        UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
-        if(Boolean.TRUE.equals(userEntity.getLocked())){
-            throw new UserException("Không tìm thấy");
-        }
+    public UserResponse getUserProFile() {
+        UserEntity userEntity = userServiceHelper.extractFromToken();
         UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
         userResponse.setRoleName(userEntity.getRole().getRoleName());
         return userResponse;
-
     }
+
     public UserResponse updateAvatar(MultipartFile file, String folder) throws URISyntaxException, IOException {
-        ApiResponse<String> fileResponse = fileService.uploadImage(file,folder);
-        if(fileResponse.getStatus() == 200){
-            String email = JwtService.extractUsernameFromToken()
-                    .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
-
-            String accountType = JwtService.extractAccountTypeFromToken()
-                    .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
-
-            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                    .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
-            if(Boolean.TRUE.equals(userEntity.getLocked())){
-                throw new UserException("Không tìm thấy");
-            }
+        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        if (fileResponse.getStatus() == 200) {
+            UserEntity userEntity = userServiceHelper.extractFromToken();
             userEntity.setAvatar(fileResponse.getData());
-            UserEntity userEntity1 = userRepository.save(userEntity);
-            return modelMapper.map(userEntity1, UserResponse.class);
-        }else{
+            return modelMapper.map(userRepository.save(userEntity), UserResponse.class);
+        } else {
             throw new StorageException("Không tìm thấy ảnh");
         }
-
     }
 }
