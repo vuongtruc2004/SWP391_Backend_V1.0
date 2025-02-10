@@ -6,6 +6,7 @@ import com.exception.custom.RoleException;
 import com.exception.custom.UserException;
 import com.repository.*;
 import com.util.enums.*;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.time.Instant;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
@@ -36,24 +38,6 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final QuizRepository quizRepository;
     private final Random random = new Random();
     private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
-
-    @Autowired
-    public DatabaseInitializer(RoleRepository roleRepository, PermissionRepository permissionRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, BlogRepository blogRepository, HashtagRepository hashtagRepository, VideoRepository videoRepository, SubjectRepository subjectRepository, DocumentRepository documentRepository, CourseRepository courseRepository, LessonRepository lessonRepository, ExpertRepository expertRepository, QuestionRepository questionRepository, QuizRepository quizRepository) {
-        this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.blogRepository = blogRepository;
-        this.hashtagRepository = hashtagRepository;
-        this.videoRepository = videoRepository;
-        this.subjectRepository = subjectRepository;
-        this.documentRepository = documentRepository;
-        this.courseRepository = courseRepository;
-        this.lessonRepository = lessonRepository;
-        this.expertRepository = expertRepository;
-        this.questionRepository = questionRepository;
-        this.quizRepository = quizRepository;
-    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -116,13 +100,48 @@ public class DatabaseInitializer implements CommandLineRunner {
             RoleEntity user = roleRepository.findByRoleName(RoleNameEnum.USER).orElseThrow(() -> new RoleException("Role name not existed!"));
 
             List<UserEntity> users = new ArrayList<>(List.of(
-                    // manager account
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Nguyen Vuong Truc Admin")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("trucnvhe180248@fpt.edu.vn")
+                            .gender(GenderEnum.MALE)
+                            .role(admin)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("cuong.jpg")
+                            .fullname("Do Xuan Cuong Admin")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("cuongdo13042004@gmail.com")
+                            .gender(GenderEnum.MALE)
+                            .role(admin)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("dung.jpg")
+                            .fullname("Tran Nam Dung Admin")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("dung06032004@gmail.com")
+                            .gender(GenderEnum.MALE)
+                            .role(admin)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("duc.jpg")
+                            .fullname("Nong Hoang Duc Admin")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("ducnhhe186325@fpt.edu.vn")
+                            .gender(GenderEnum.MALE)
+                            .role(admin)
+                            .build(),
+                    UserEntity.builder()
+                            .password(passwordEncoder.encode("123"))
+                            .avatar("truong.jpg")
+                            .fullname("Luong Hoang Truong Admin")
+                            .accountType(AccountTypeEnum.CREDENTIALS)
+                            .email("luongtruong15122004@gmail.com")
                             .gender(GenderEnum.MALE)
                             .role(admin)
                             .build(),
@@ -468,7 +487,8 @@ public class DatabaseInitializer implements CommandLineRunner {
                     SubjectEntity.builder().subjectName("MUI").description("Thư viện UI cho React, dựa trên Material Design.").thumbnail("mui.png").build(),
                     SubjectEntity.builder().subjectName("Ant Design").description("Thư viện UI mạnh mẽ dành cho React.").thumbnail("antd.png").build(),
                     SubjectEntity.builder().subjectName("Bootstrap").description("Framework CSS phổ biến giúp phát triển web nhanh.").thumbnail("bootstrap.png").build(),
-                    SubjectEntity.builder().subjectName("C").description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.").thumbnail("c.png").build()
+                    SubjectEntity.builder().subjectName("C").description("Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.").thumbnail("c.png").build(),
+                    SubjectEntity.builder().subjectName("Docker").description("Nền tảng container hóa giúp triển khai và quản lý ứng dụng dễ dàng hơn.").thumbnail("docker.png").build()
             );
             subjectRepository.saveAll(subjects);
         }
@@ -955,6 +975,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             ));
 
             for (CourseEntity course : courses) {
+                course.setSubjects(getRandomSubjects());
                 course.setAccepted(true);
                 course.setObjectiveList(List.of(
                         "Hiểu cơ bản về " + course.getCourseName(),
@@ -991,6 +1012,16 @@ public class DatabaseInitializer implements CommandLineRunner {
         user.setCompletedDocuments(new HashSet<>(documents.subList(0, 5)));
         user.setCompletedVideos(new HashSet<>(videos.subList(1, 6)));
         userRepository.save(user);
+    }
+
+    private Set<SubjectEntity> getRandomSubjects() {
+        Set<SubjectEntity> subjects = new HashSet<>();
+        List<SubjectEntity> subjectEntityList = subjectRepository.findAll();
+        int length = random.nextInt(subjectEntityList.size());
+        for (int i = 0; i < Math.max(length, 1); i++) {
+            subjects.add(subjectEntityList.get(random.nextInt(subjectEntityList.size())));
+        }
+        return subjects;
     }
 
     private Set<HashtagEntity> getRandomHashtags(Integer numberOfHashtags) {

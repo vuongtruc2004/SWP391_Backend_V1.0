@@ -57,7 +57,8 @@ public class CourseService {
         }
         specification = specification.and(courseServiceHelper.filterByAttribute(expertIds, "expert", "expertId"));
         specification = specification.and(courseServiceHelper.filterByAttribute(subjectIds, "subjects", "subjectId"));
-
+        specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("accepted"), true)));
+        
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(
@@ -128,22 +129,22 @@ public class CourseService {
 
     }
 
-    public MinMaxPriceResponse getMaxMinPrice(){
+    public MinMaxPriceResponse getMaxMinPrice() {
         Double minPrice = courseRepository.findMinPrice();
         Double maxPrice = courseRepository.findMaxPrice();
         return new MinMaxPriceResponse(minPrice, maxPrice);
     }
 
     @Transactional
-    public ApiResponse<String> deleteById(Long courseId){
+    public ApiResponse<String> deleteById(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
         if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity); // gỡ bỏ quan hệ (remove là xóa trong list)
                 expertRepository.save(expert); // Save changes
-                if(courseEntity.getLessons() !=null){
-                    for(LessonEntity lessonEntity : courseEntity.getLessons()){
+                if (courseEntity.getLessons() != null) {
+                    for (LessonEntity lessonEntity : courseEntity.getLessons()) {
                         lessonRepository.delete(lessonEntity);
                     }
                 }
@@ -161,7 +162,7 @@ public class CourseService {
 
     }
 
-    public ApiResponse<String> changeAccept(Long courseId){
+    public ApiResponse<String> changeAccept(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         if (courseEntity != null) {
             courseEntity.setAccepted(true);
@@ -172,7 +173,7 @@ public class CourseService {
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
                 "Thành công!",
-                "Khóa học "+courseEntity.getCourseName()+" đã được chấp nhận",
+                "Khóa học " + courseEntity.getCourseName() + " đã được chấp nhận",
                 null
         );
     }
