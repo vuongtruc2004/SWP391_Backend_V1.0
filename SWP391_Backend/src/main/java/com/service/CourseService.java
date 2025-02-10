@@ -38,13 +38,6 @@ public class CourseService {
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
 
-//    public CourseService(CourseRepository courseRepository, ModelMapper modelMapper, UserRepository userRepository, CourseServiceHelper courseServiceHelper) {
-//        this.courseRepository = courseRepository;
-//        this.modelMapper = modelMapper;
-//        this.userRepository = userRepository;
-//        this.courseServiceHelper = courseServiceHelper;
-//    }
-
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
             Pageable pageable,
