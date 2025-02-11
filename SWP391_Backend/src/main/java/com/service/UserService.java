@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -200,6 +201,18 @@ public class UserService {
     }
 
     public UserResponse updateAvatar(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        if (file == null || file.isEmpty()) {
+            throw new StorageException("File bị rỗng");
+        }
+        String fileName = file.getOriginalFilename();
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png");
+        boolean isValid = allowedExtensions.stream().anyMatch(item -> {
+            assert fileName != null;
+            return fileName.toLowerCase().endsWith(item);
+        });
+        if (!isValid) {
+            throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
+        }
         ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
         if (fileResponse.getStatus() == 200) {
             UserEntity userEntity = userServiceHelper.extractFromToken();

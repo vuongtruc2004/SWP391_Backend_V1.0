@@ -72,8 +72,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = StorageException.class)
     public ResponseEntity<ApiResponse<Object>> handleStorageException(StorageException e) {
         ApiResponse<Object> apiResponse = new ApiResponse<>();
-        apiResponse.setMessage("Exception upload file");
-        apiResponse.setErrorMessage(e.getMessage());
+        apiResponse.setMessage(e.getMessage());
+        apiResponse.setErrorMessage("Exception upload file");
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
