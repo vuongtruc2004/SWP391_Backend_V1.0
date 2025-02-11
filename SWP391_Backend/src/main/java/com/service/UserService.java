@@ -159,6 +159,7 @@ public class UserService {
         }
         UserEntity user = modelMapper.map(request, UserEntity.class);
         user.setRole(roleEntity);
+        user.setAccountType(AccountTypeEnum.CREDENTIALS);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         UserEntity savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserResponse.class);
