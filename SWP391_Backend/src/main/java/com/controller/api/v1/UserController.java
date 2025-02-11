@@ -38,14 +38,15 @@ public class UserController {
         this.expertService = expertService;
     }
 
+    @ApiMessage("Gửi yêu cầu đăng kí tài khoản thành công!")
     @PostMapping("/request_register")
     public ResponseEntity<ApiResponse<Void>> sendRegisterRequest(@RequestBody @Valid RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.sendRegisterRequest(registerRequest));
     }
 
     @ApiMessage("Kích hoạt tài khoản thành công!")
-    @GetMapping("/active")
-    public ResponseEntity<ApiResponse<Void>> activeAccount(@RequestParam(name = "code") String code) throws NotFoundException {
+    @GetMapping("/active/{code}")
+    public ResponseEntity<ApiResponse<Void>> activeAccount(@PathVariable String code) throws NotFoundException {
         return ResponseEntity.ok(otpService.activeAccount(code));
     }
 

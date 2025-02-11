@@ -102,19 +102,19 @@ public class OTPService {
     public ApiResponse<Void> activeAccount(String code) {
         OTPEntity otp = otpRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
-
         Instant now = Instant.now();
-        if (now.isAfter(otp.getExpiredAt())) {
+        if (otp.getExpiredAt().isBefore(now)) {
             throw new NotFoundException("Mã OTP của bạn đã hết hạn!");
         }
-
         UserEntity user = otp.getUser();
         user.setActive(true);
         user.setOtp(null);
         userRepository.save(user);
-
         otp.setUser(null);
         otpRepository.delete(otp);
-        return BuildResponse.buildApiResponse(200, "Kích hoạt tài khoản thành công!", null, null);
+        return BuildResponse.buildApiResponse(200,
+                "Kích hoạt tài khoản thành công!",
+                null,
+                null);
     }
 }

@@ -75,12 +75,10 @@ public class UserService {
         RoleEntity roleEntity = roleRepository.findByRoleName(RoleNameEnum.USER)
                 .orElseThrow(() -> new RoleException("Role not found!"));
         UserEntity userEntity = modelMapper.map(registerRequest, UserEntity.class);
-
         userEntity.setAccountType(AccountTypeEnum.CREDENTIALS);
+        userEntity.setActive(false);
         userEntity.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         userEntity.setRole(roleEntity);
-        userEntity.setActive(false);
-
         UserEntity savedUser = userRepository.save(userEntity);
         otpService.generateOTP(savedUser, "Yêu cầu xác thực email!");
         return BuildResponse.buildApiResponse(
