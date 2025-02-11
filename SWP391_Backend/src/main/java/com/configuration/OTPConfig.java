@@ -22,14 +22,14 @@ public class OTPConfig {
     @Scheduled(fixedRate = 90000) // Chạy mỗi 90 giây
     @Transactional
     public void removeAllExpiredOTP() {
-        Set<OTPEntity> expiredOTP = otpRepository.findAllExpiredOTP(Instant.now());
-        if (expiredOTP.isEmpty()) {
+        Set<OTPEntity> expiredOTPCode = otpRepository.findAllExpiredOTP(Instant.now());
+        if (expiredOTPCode.isEmpty()) {
             System.out.println("Không có OTP hết hạn!");
             return;
         }
 
         Set<UserEntity> remainUsers = new HashSet<>();
-        for (OTPEntity otpEntity : expiredOTP) {
+        for (OTPEntity otpEntity : expiredOTPCode) {
             UserEntity user = otpEntity.getUser();
             if (user != null) {
                 user.setOtp(null);
@@ -41,8 +41,8 @@ public class OTPConfig {
             }
         }
         userRepository.saveAll(remainUsers);
-        otpRepository.deleteAll(expiredOTP);
+        otpRepository.deleteAll(expiredOTPCode);
 
-        System.out.println("Deleted expired OTP successfully! (" + expiredOTP.size() + ")");
+        System.out.println("Deleted expired OTP successfully! (" + expiredOTPCode.size() + ")");
     }
 }

@@ -35,10 +35,10 @@ public class OTPService {
 
     public ApiResponse<Void> generateOTP(UserEntity user, String title) {
         if (user.getOtp() != null) {
-            OTPEntity otpEntity = user.getOtp();
+            OTPEntity otpCode = user.getOtp();
             user.setOtp(null);
             userRepository.save(user);
-            otpRepository.delete(otpEntity);
+            otpRepository.delete(otpCode);
         }
         StringBuilder otp = new StringBuilder();
         for (int i = 0; i < OTP_LENGTH; i++) {
@@ -48,10 +48,10 @@ public class OTPService {
         Map<String, Object> otpMap = new HashMap<>();
         otpMap.put("otp", otp.toString());
 
-        OTPEntity otpEntity = new OTPEntity();
-        otpEntity.setCode(otp.toString());
-        otpEntity.setUser(user);
-        otpRepository.save(otpEntity);
+        OTPEntity otpCode = new OTPEntity();
+        otpCode.setCode(otp.toString());
+        otpCode.setUser(user);
+        otpRepository.save(otpCode);
 
         emailSenderService.sendEmail(user.getEmail(), title, "mail-template", otpMap);
 
@@ -59,27 +59,27 @@ public class OTPService {
     }
 
     public ApiResponse<Void> checkOTP(String code) {
-        OTPEntity otpEntity = otpRepository.findByCode(code)
+        OTPEntity otpCode = otpRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
-        if (otpEntity.getExpiredAt().isBefore(Instant.now())) {
+        if (otpCode.getExpiredAt().isBefore(Instant.now())) {
             throw new NotFoundException("Mã OTP đã hết hạn!");
         }
         return BuildResponse.buildApiResponse(200, "Mã OTP hợp lệ!", null, null);
     }
 
-    public ApiResponse<Void> sendChangePasswordRequest(String email) {
-        UserEntity user = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.CREDENTIALS)
+    public ApiResponse<Void> sendChangePasswordRequest(String emailRequest) {
+        UserEntity user = userRepository.findByEmailAndAccountType(emailRequest, AccountTypeEnum.CREDENTIALS)
                 .orElseThrow(() -> new NotFoundException("Email này chưa được đăng kí!"));
         return this.generateOTP(user, "Yêu cầu đổi mật khẩu!");
     }
 
     @Transactional
     public ApiResponse<Void> changePassword(ChangePasswordRequest otpRequest) {
-        OTPEntity otp = otpRepository.findByCode(otpRequest.getCode())
+        OTPEntity otpCode = otpRepository.findByCode(otpRequest.getCode())
                 .orElseThrow(() -> new NotFoundException("Mã OTP sai!"));
 
         Instant now = Instant.now();
-        if (now.isAfter(otp.getExpiredAt())) {
+        if (now.isAfter(otpCode.getExpiredAt())) {
             throw new NotFoundException("Mã OTP của bạn đã hết hạn!");
         }
 
@@ -87,13 +87,13 @@ public class OTPService {
             throw new UserException("Mật khẩu không khớp!");
         }
 
-        UserEntity user = otp.getUser();
+        UserEntity user = otpCode.getUser();
         user.setPassword(passwordEncoder.encode(otpRequest.getPassword()));
         user.setOtp(null);
         userRepository.save(user);
 
-        otp.setUser(null);
-        otpRepository.delete(otp);
+        otpCode.setUser(null);
+        otpRepository.delete(otpCode);
 
         return BuildResponse.buildApiResponse(200, "Đổi mật khẩu thành công!", null, null);
     }

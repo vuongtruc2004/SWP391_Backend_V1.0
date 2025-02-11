@@ -59,24 +59,24 @@ public class CourseController {
             @Filter Specification<CourseEntity> specification,
             @RequestParam(name = "accepted", required = false) Boolean accepted
     ) {
-        return ResponseEntity.ok(courseService.getCoursesWithFilterRoleAdmin(pageable, specification, accepted));
+        return ResponseEntity.ok(courseService.getCoursesWithFilterByAdmin(pageable, specification, accepted));
     }
 
     @GetMapping("/price-range")
     public ResponseEntity<MinMaxPriceResponse> getRangePrice(){
-        return ResponseEntity.ok(courseService.getMaxMinPrice());
+        return ResponseEntity.ok(courseService.getMaxMinPriceOfCourses());
     }
 
     @ApiMessage("Xóa khóa học thành công!")
     @DeleteMapping("/delete/{courseId}")
     public ResponseEntity<ApiResponse<String>> deleteCourse(@PathVariable Long courseId){
-        return ResponseEntity.ok(courseService.deleteById(courseId));
+        return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 
     @ApiMessage("Xóa khóa học thành công!")
     @PutMapping("/accept/{courseId}")
     public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId){
-        return ResponseEntity.ok(courseService.changeAccept(courseId));
+        return ResponseEntity.ok(courseService.changeAcceptACourse(courseId));
     }
 
 }

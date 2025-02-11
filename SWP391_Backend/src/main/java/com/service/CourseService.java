@@ -96,7 +96,7 @@ public class CourseService {
         );
     }
 
-    public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilterRoleAdmin(
+    public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilterByAdmin(
             Pageable pageable,
             Specification<CourseEntity> specification,
             Boolean accepted
@@ -107,7 +107,7 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> courseResponses = page.getContent()
+        List<CourseResponse> listCourseResponses = page.getContent()
                 .stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
                     courseResponse.setTotalPurchased(courseEntity.getUsers().size());
@@ -123,20 +123,20 @@ public class CourseService {
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
-                courseResponses
+                listCourseResponses
         );
 
 
     }
 
-    public MinMaxPriceResponse getMaxMinPrice() {
+    public MinMaxPriceResponse getMaxMinPriceOfCourses() {
         Double minPrice = courseRepository.findMinPrice();
         Double maxPrice = courseRepository.findMaxPrice();
         return new MinMaxPriceResponse(minPrice, maxPrice);
     }
 
     @Transactional
-    public ApiResponse<String> deleteById(Long courseId) {
+    public ApiResponse<String> deleteByCourseId(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
         if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
@@ -162,7 +162,7 @@ public class CourseService {
 
     }
 
-    public ApiResponse<String> changeAccept(Long courseId) {
+    public ApiResponse<String> changeAcceptACourse(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         if (courseEntity != null) {
             courseEntity.setAccepted(true);

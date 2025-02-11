@@ -21,7 +21,7 @@ public class OtpController {
 
     @ApiMessage("Mã OTP hợp lệ!")
     @GetMapping
-    public ResponseEntity<ApiResponse<Void>> checkOtp(@RequestParam(name = "code") String code) {
+    public ResponseEntity<ApiResponse<Void>> checkOtpCode(@RequestParam(name = "code") String code) {
         return ResponseEntity.ok(otpService.checkOTP(code));
     }
 }
