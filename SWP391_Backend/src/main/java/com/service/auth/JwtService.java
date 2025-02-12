@@ -46,9 +46,9 @@ public class JwtService {
                 .subject(email)
                 .claim("accountType", accountType)
                 .build();
-
         JwsHeader jwsHeader = JwsHeader.with(securityUtil.JWT_ALGORITHMS).build();
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, jwtClaimsSet)).getTokenValue();
+
     }
 
     public LoginResponse letRefreshToken(String refreshToken) {
@@ -61,7 +61,6 @@ public class JwtService {
             Jwt jwt = jwtDecoder.decode(refreshToken);
             String email = jwt.getSubject();
             String accountType = jwt.getClaim("accountType").toString();
-
             UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
                     .orElseThrow(() -> new UserException("User not found!"));
             UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
@@ -73,7 +72,6 @@ public class JwtService {
 
             userEntity.setRefreshToken(newRefreshToken);
             userRepository.save(userEntity);
-
             return BuildResponse.buildLoginResponse(userResponse, accessToken, expireAt, refreshToken);
 
         } catch (Exception e) {

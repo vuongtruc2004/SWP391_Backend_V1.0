@@ -18,12 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
-    private final CourseService courseService;
 
+    private final CourseService courseService;
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
     }
-
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/purchased")
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(

@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +27,7 @@ public class AnswerEntity {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
+    @JsonBackReference
     QuestionEntity question;
 
     public AnswerEntity(String content, Boolean correct, QuestionEntity question) {

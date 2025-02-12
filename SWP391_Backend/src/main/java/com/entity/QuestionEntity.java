@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,10 +26,12 @@ public class QuestionEntity {
 
     String title;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     Set<AnswerEntity> answers;
 
-    @ManyToMany(mappedBy = "questions",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "questions", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("questions")
     List<QuizEntity> quizzes;
 
     public QuestionEntity(String title) {
