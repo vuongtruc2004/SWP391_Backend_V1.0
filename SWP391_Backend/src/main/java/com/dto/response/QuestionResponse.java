@@ -18,16 +18,8 @@ import java.util.List;
 public class QuestionResponse {
     Long questionId;
     String title;
-    List<AnswerAndQuiz> answerAndQuiz;
+    List<String> correctAnswer;
 
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class AnswerAndQuiz {
-         String correctAnswer;
-         String quizTitle;
-    }
+
 }

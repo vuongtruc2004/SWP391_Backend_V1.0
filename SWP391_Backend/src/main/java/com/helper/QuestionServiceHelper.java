@@ -2,6 +2,7 @@ package com.helper;
 
 import com.dto.response.CourseResponse;
 import com.dto.response.QuestionResponse;
+import com.entity.AnswerEntity;
 import com.entity.CourseEntity;
 import com.entity.QuestionEntity;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,16 @@ public class QuestionServiceHelper {
     public List<QuestionResponse> convertToListResponse(Page<QuestionEntity> page) {
         return page.getContent()
                 .stream().map(questionEntity -> {
+                    List<AnswerEntity> correctAnswers = questionEntity.getAnswers().stream()
+                            .filter(answer -> answer.getCorrect())
+                            .collect(Collectors.toList());
+                    List<String> correctAnswerTitles = correctAnswers.stream()
+                            .map(AnswerEntity::getContent)
+                            .collect(Collectors.toList());
                     QuestionResponse questionResponse = new QuestionResponse();
                     questionResponse.setQuestionId(questionEntity.getQuestionId());
                     questionResponse.setTitle(questionEntity.getTitle());
+                    questionResponse.setCorrectAnswer(correctAnswerTitles);
                     return questionResponse;
                 })
                 .toList();
