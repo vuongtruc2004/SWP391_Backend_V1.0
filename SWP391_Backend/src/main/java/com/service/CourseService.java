@@ -181,4 +181,20 @@ public class CourseService {
                 null
         );
     }
+
+    public ApiResponse<String> changeUnacceptACourse(Long courseId){
+        CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
+        if (courseEntity != null) {
+            courseEntity.setAccepted(false);
+            courseRepository.save(courseEntity);
+        } else {
+            throw new InvalidRequestInput("Không tìm thấy khóa học!");
+        }
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành công!",
+                "Khóa học " + courseEntity.getCourseName() + " đã được ẩn!",
+                null
+        );
+    }
 }

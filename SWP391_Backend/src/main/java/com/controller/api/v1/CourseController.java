@@ -79,10 +79,14 @@ public class CourseController {
         return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 
-    @ApiMessage("Xóa khóa học thành công!")
     @PutMapping("/accept/{courseId}")
     public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.changeAcceptACourse(courseId));
+    }
+
+    @PutMapping("/unaccept/{courseId}")
+    public ResponseEntity<ApiResponse<String>> unacceptCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(courseService.changeUnacceptACourse(courseId));
     }
 
 }
