@@ -31,7 +31,8 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class,
             IOException.class,
             ArrayIndexOutOfBoundsException.class,
-            InvalidRequestInput.class
+            InvalidRequestInput.class,
+            CourseException.class,
     })
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(

@@ -44,6 +44,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable, specialSort, expertIds, subjectIds));
     }
 
+    @ApiMessage("Lấy khóa học thành công!")
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CourseResponse> getCourseById(@PathVariable(name = "courseId") Long courseId) {
+        return ResponseEntity.ok(courseService.getCourseById(courseId));
+    }
+
     @GetMapping("/users")
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getAllCoursesOfUser(
             @RequestParam(name = "user_id") Long userId,
@@ -63,19 +69,19 @@ public class CourseController {
     }
 
     @GetMapping("/price-range")
-    public ResponseEntity<MinMaxPriceResponse> getRangePrice(){
+    public ResponseEntity<MinMaxPriceResponse> getRangePrice() {
         return ResponseEntity.ok(courseService.getMaxMinPriceOfCourses());
     }
 
     @ApiMessage("Xóa khóa học thành công!")
     @DeleteMapping("/delete/{courseId}")
-    public ResponseEntity<ApiResponse<String>> deleteCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<String>> deleteCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 
     @ApiMessage("Xóa khóa học thành công!")
     @PutMapping("/accept/{courseId}")
-    public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.changeAcceptACourse(courseId));
     }
 

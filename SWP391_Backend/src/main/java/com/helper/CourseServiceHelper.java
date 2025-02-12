@@ -29,15 +29,17 @@ public class CourseServiceHelper {
 
     public List<CourseResponse> convertToListResponse(Page<CourseEntity> page) {
         return page.getContent()
-                .stream().map(courseEntity -> {
-                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setObjectives(courseEntity.getObjectiveList());
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-                    courseResponse.setTotalLikes(courseEntity.getLikes().size());
-                    courseResponse.setTotalComments(courseEntity.getComments().size());
-                    return courseResponse;
-                })
+                .stream().map(this::convertToCourseResponse)
                 .toList();
+    }
+
+    public CourseResponse convertToCourseResponse(CourseEntity courseEntity) {
+        CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
+        courseResponse.setObjectives(courseEntity.getObjectiveList());
+        courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseResponse.setTotalLikes(courseEntity.getLikes().size());
+        courseResponse.setTotalComments(courseEntity.getComments().size());
+        return courseResponse;
     }
 
     public Specification<CourseEntity> sortBySpecialFields(

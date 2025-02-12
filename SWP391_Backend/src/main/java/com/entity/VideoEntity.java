@@ -30,16 +30,18 @@ public class VideoEntity {
     @Column(name = "video_url")
     String videoUrl;
 
+    Integer duration;
+
     @Column(name = "created_at")
     Instant createdAt;
 
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "videos",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "videos", cascade = CascadeType.ALL)
     Set<LessonEntity> lessons;
 
-    @ManyToMany(mappedBy = "completedVideos",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "completedVideos", cascade = CascadeType.ALL)
     Set<UserEntity> users;
 
     @PrePersist

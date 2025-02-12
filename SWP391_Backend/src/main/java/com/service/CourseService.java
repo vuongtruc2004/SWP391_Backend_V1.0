@@ -9,6 +9,7 @@ import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
 import com.entity.LessonEntity;
 import com.entity.UserEntity;
+import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
@@ -58,7 +59,7 @@ public class CourseService {
         specification = specification.and(courseServiceHelper.filterByAttribute(expertIds, "expert", "expertId"));
         specification = specification.and(courseServiceHelper.filterByAttribute(subjectIds, "subjects", "subjectId"));
         specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("accepted"), true)));
-        
+
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(
@@ -68,6 +69,12 @@ public class CourseService {
                 page.getTotalElements(),
                 courseResponses
         );
+    }
+
+    public CourseResponse getCourseById(Long id) {
+        CourseEntity courseEntity = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
+        return courseServiceHelper.convertToCourseResponse(courseEntity);
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
@@ -125,8 +132,6 @@ public class CourseService {
                 page.getTotalElements(),
                 listCourseResponses
         );
-
-
     }
 
     public MinMaxPriceResponse getMaxMinPriceOfCourses() {
@@ -159,7 +164,6 @@ public class CourseService {
                 "Bạn đã xóa môn học có Id là " + courseId + " thành công!",
                 null
         );
-
     }
 
     public ApiResponse<String> changeAcceptACourse(Long courseId) {
