@@ -1,8 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -31,21 +28,12 @@ public class LessonEntity {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    @JsonIgnore
     CourseEntity course;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "lesson_video",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "video_id"))
-    @JsonIgnoreProperties("lessons")
+    @OneToMany(mappedBy = "lesson")
     Set<VideoEntity> videos;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "lesson_document",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "document_id"))
-    @JsonIgnoreProperties("lessons")
+    @OneToMany(mappedBy = "lesson")
     Set<DocumentEntity> documents;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)

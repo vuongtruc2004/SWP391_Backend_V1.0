@@ -21,16 +21,12 @@ import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -205,6 +201,7 @@ public class CourseService {
         for (LessonEntity lessonEntity : courseEntity.getLessons()) {
             lessonEntity.setCourse(newCourse);
             this.lessonService.save(lessonEntity);
+
         }
         this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();

@@ -2,7 +2,9 @@ package com.service;
 
 
 
+import com.entity.DocumentEntity;
 import com.entity.LessonEntity;
+import com.entity.VideoEntity;
 import com.repository.CourseRepository;
 import com.repository.DocumentRepository;
 import com.repository.LessonRepository;
@@ -20,9 +22,18 @@ public class LessonService {
     private final CourseRepository courseRepository;
 
     public void save(LessonEntity lesson) throws Exception {
-        lesson.setTitle(lesson.getTitle());
-        lesson.setDescription(lesson.getDescription());
-        lessonRepository.save(lesson);
+        LessonEntity newLesson = this.lessonRepository.save(lesson);
+        newLesson.setTitle(lesson.getTitle());
+        newLesson.setDescription(lesson.getDescription());
+        for (DocumentEntity documentEntity : lesson.getDocuments()) {
+            documentEntity.setLesson(newLesson);
+            this.documentRepository.save(documentEntity);
+        }
+        for (VideoEntity videoEntity : lesson.getVideos()) {
+            videoEntity.setLesson(newLesson);
+            this.videoRepository.save(videoEntity);
+        }
     }
+
 
 }

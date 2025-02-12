@@ -5,6 +5,8 @@ import com.dto.response.ApiResponse;
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
+import com.entity.CourseEntity;
+import com.entity.DocumentEntity;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.service.ExpertService;
@@ -22,7 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -40,6 +44,7 @@ public class UserController {
 
     @PostMapping("/request_register")
     public ResponseEntity<ApiResponse<Void>> sendRegisterRequest(@RequestBody @Valid RegisterRequest registerRequest) {
+        UserEntity userEntity=new UserEntity();
         return ResponseEntity.ok(userService.sendRegisterRequest(registerRequest));
     }
 
