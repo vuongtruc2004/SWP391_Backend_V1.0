@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +37,8 @@ public class DocumentEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "documents", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "documents")
+    @JsonIgnoreProperties("documents")
     Set<LessonEntity> lessons;
 
     @ManyToMany(mappedBy = "completedDocuments", cascade = CascadeType.ALL)

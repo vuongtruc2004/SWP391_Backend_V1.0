@@ -8,6 +8,7 @@ import com.dto.response.UserResponse;
 import java.time.Instant;
 
 public class BuildResponse {
+    private BuildResponse  (){}
 
     public static <T> ApiResponse<T> buildApiResponse(Integer status, Object message, String errorMessage, T data) {
         return ApiResponse.<T>builder()

@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,8 +106,8 @@ public class SubjectService {
 
     public ApiResponse<String> deleteSubject(Long subjectId) {
         if(subjectRepository.existsById(subjectId)) {
-            SubjectEntity subjectEntity = subjectRepository.findById(subjectId).get();
-            if(subjectEntity.getCourses().size() == 0) {
+            Optional<SubjectEntity> subjectEntity=this.subjectRepository.findById(subjectId);
+            if(!subjectEntity.isEmpty()) {
                 subjectRepository.deleteById(subjectId);
             } else {
                 return BuildResponse.buildApiResponse(
@@ -128,11 +129,11 @@ public class SubjectService {
     }
 
     public ApiResponse<SubjectResponse> updateSubject(Long subjectId, SubjectRequest subjectRequest) {
-        SubjectEntity subjectEntity = null;
-        if(subjectRepository.existsById(subjectId)) {
-            subjectEntity = subjectRepository.findById(subjectId).get();
+        Optional<SubjectEntity> subjectEntity=this.subjectRepository.findById(subjectId);
+        if(subjectEntity.isPresent()) {
+            subjectEntity = subjectRepository.findById(subjectId);
             modelMapper.map(subjectRequest, subjectEntity);
-            subjectRepository.save(subjectEntity);
+
         } else {
             throw new NotFoundException("Không tìm thấy Id môn học!");
         }

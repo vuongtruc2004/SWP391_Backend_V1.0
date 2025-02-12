@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -34,7 +36,7 @@ public class UserEntity {
     String avatar;
 
     String fullname;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     AccountTypeEnum accountType;
@@ -58,10 +60,16 @@ public class UserEntity {
     OTPEntity otp;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     ExpertEntity expert;
 
-    @ManyToMany(mappedBy = "users")
-    Set<CourseEntity> courses;
+
+    @ManyToMany
+    @JoinTable(name = "course_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<CourseEntity> courses = new HashSet<>();
+
 
     @OneToMany(mappedBy = "user")
     Set<LikeEntity> likes;

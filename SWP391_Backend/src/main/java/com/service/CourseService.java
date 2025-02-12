@@ -16,17 +16,25 @@ import com.repository.CourseRepository;
 import com.repository.ExpertRepository;
 import com.repository.LessonRepository;
 import com.repository.UserRepository;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+
+import static com.service.auth.JwtService.extractUsernameFromToken;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +45,8 @@ public class CourseService {
     private final CourseServiceHelper courseServiceHelper;
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
+    private final JwtService jwtService;
+    private final LessonService lessonService;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -128,22 +138,22 @@ public class CourseService {
 
     }
 
-    public MinMaxPriceResponse getMaxMinPrice(){
+    public MinMaxPriceResponse getMaxMinPrice() {
         Double minPrice = courseRepository.findMinPrice();
         Double maxPrice = courseRepository.findMaxPrice();
         return new MinMaxPriceResponse(minPrice, maxPrice);
     }
 
     @Transactional
-    public ApiResponse<String> deleteById(Long courseId){
+    public ApiResponse<String> deleteById(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
         if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity); // gỡ bỏ quan hệ (remove là xóa trong list)
                 expertRepository.save(expert); // Save changes
-                if(courseEntity.getLessons() !=null){
-                    for(LessonEntity lessonEntity : courseEntity.getLessons()){
+                if (courseEntity.getLessons() != null) {
+                    for (LessonEntity lessonEntity : courseEntity.getLessons()) {
                         lessonRepository.delete(lessonEntity);
                     }
                 }
@@ -161,7 +171,7 @@ public class CourseService {
 
     }
 
-    public ApiResponse<String> changeAccept(Long courseId){
+    public ApiResponse<String> changeAccept(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         if (courseEntity != null) {
             courseEntity.setAccepted(true);
@@ -172,8 +182,34 @@ public class CourseService {
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
                 "Thành công!",
-                "Khóa học "+courseEntity.getCourseName()+" đã được chấp nhận",
+                "Khóa học " + courseEntity.getCourseName() + " đã được chấp nhận",
                 null
         );
     }
+
+    public CourseResponse createCourse(CourseEntity courseEntity) {
+        Optional<String> email = extractUsernameFromToken();
+        UserEntity userEntity = this.userRepository.findByEmail(email.get());
+        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseEntity.getCourseName(), userEntity.getExpert());
+        if (currentCourse != null) {
+            throw new InvalidRequestInput("Khoá học đã tồn tại !");
+        }
+        CourseEntity newCourse = this.courseRepository.save(courseEntity);
+        newCourse.setExpert(userEntity.getExpert());
+        newCourse.setCourseName(courseEntity.getCourseName());
+        newCourse.setDescription(courseEntity.getDescription());
+        newCourse.setObjectives(courseEntity.getObjectives());
+        newCourse.setPrice(courseEntity.getPrice());
+        newCourse.setThumbnail(courseEntity.getThumbnail());
+        for (LessonEntity lessonEntity : courseEntity.getLessons()) {
+            lessonEntity.setCourse(newCourse);
+            this.lessonService.save(lessonEntity);
+        }
+        this.courseRepository.save(newCourse);
+        CourseResponse courseResponse=new CourseResponse();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(newCourse, courseResponse);
+        return courseResponse;
+    }
+
 }

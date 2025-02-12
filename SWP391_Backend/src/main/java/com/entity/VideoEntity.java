@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -36,10 +37,11 @@ public class VideoEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "videos",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "videos")
+    @JsonIgnoreProperties("videos")
     Set<LessonEntity> lessons;
 
-    @ManyToMany(mappedBy = "completedVideos",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "completedVideos", cascade = CascadeType.ALL)
     Set<UserEntity> users;
 
     @PrePersist

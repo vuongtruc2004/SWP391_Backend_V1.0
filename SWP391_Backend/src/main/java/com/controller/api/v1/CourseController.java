@@ -11,6 +11,8 @@ import com.util.annotation.ApiMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,5 +79,12 @@ public class CourseController {
     public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId){
         return ResponseEntity.ok(courseService.changeAccept(courseId));
     }
+
+    @ApiMessage("Tạo mới một khoá học")
+    @PostMapping
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseEntity courseEntity){
+        return ResponseEntity.ok().body(this.courseService.createCourse(courseEntity));
+    }
+
 
 }

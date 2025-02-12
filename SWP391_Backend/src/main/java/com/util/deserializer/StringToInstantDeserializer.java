@@ -1,6 +1,5 @@
 package com.util.deserializer;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -13,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class StringToInstantDeserializer extends JsonDeserializer<Instant> {
     @Override
-    public Instant deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JacksonException {
+    public Instant deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException  {
         String s = jsonParser.getText();
         if (s != null && !s.isEmpty()) {
             LocalDate localDate = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"));

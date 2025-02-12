@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -9,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -52,13 +55,10 @@ public class CourseEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     Set<SubjectEntity> subjects;
 
-    @ManyToMany
-    @JoinTable(name = "course_user",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<UserEntity> users;
+    @ManyToMany(mappedBy = "courses")
+    private Set<UserEntity> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
     Set<LessonEntity> lessons;
 
     @ManyToOne
@@ -66,16 +66,17 @@ public class CourseEntity implements Serializable {
     ExpertEntity expert;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonIgnore
     Set<LikeEntity> likes;
 
-    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     Set<CommentEntity> comments;
 
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
-        if(accepted == null) {
+        if (accepted == null) {
             accepted = false;
         }
     }

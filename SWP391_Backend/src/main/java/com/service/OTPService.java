@@ -32,7 +32,7 @@ public class OTPService {
     private final EmailSenderService emailSenderService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
     private final UserRepository userRepository;
-
+    private static final String MA_OTP_SAI="Ma otp sai";
     public ApiResponse<Void> generateOTP(UserEntity user, String title) {
         if (user.getOtp() != null) {
             OTPEntity otpEntity = user.getOtp();

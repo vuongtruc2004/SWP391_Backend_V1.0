@@ -1,7 +1,10 @@
 package com.helper;
 
 import com.dto.response.CourseResponse;
+import com.dto.response.ExpertResponse;
+import com.dto.response.UserResponse;
 import com.entity.CourseEntity;
+import com.entity.ExpertEntity;
 import com.exception.custom.InvalidRequestInput;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
@@ -103,6 +106,17 @@ public class CourseServiceHelper {
             Join<CourseEntity, Object> join = root.join(attributeName, JoinType.INNER);
             return join.get(joinIdField).in(idSet);
         };
+    }
+
+    public ExpertResponse convertToExpertResponse(ExpertEntity expertEntity) {
+        ExpertResponse expertResponse=new ExpertResponse();
+        expertResponse.setExpertId(expertEntity.getExpertId());
+        expertResponse.setDiploma(expertEntity.getDiploma());
+        expertResponse.setYearOfExperience(expertEntity.getYearOfExperience());
+        UserResponse userResponse=new UserResponse();
+        userResponse.setFullname(expertEntity.getUser().getFullname());
+        expertResponse.setUser(userResponse);
+        return expertResponse;
     }
 
 }

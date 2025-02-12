@@ -20,7 +20,7 @@ public class SecurityUtil {
     @Value("${jwt.refresh.token.validity.in.seconds}")
     public Long refreshTokenExpiration;
 
-    public final MacAlgorithm JWT_ALGORITHMS = MacAlgorithm.HS512;
+    public static final MacAlgorithm JWT_ALGORITHMS = MacAlgorithm.HS512;
 
     public SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();

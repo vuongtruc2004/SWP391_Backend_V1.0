@@ -11,4 +11,5 @@ public interface ExpertRepository extends JpaSpecificationRepository<ExpertEntit
     Optional<ExpertEntity> findByUser_EmailAndUser_AccountType(String userEmail, AccountTypeEnum userAccountType);
     ExpertEntity findByCourses(CourseEntity course);
 
+    ExpertEntity findByUser_Email(String email);
 }

@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.entity.CourseEntity;
+import com.entity.ExpertEntity;
 import com.entity.UserEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
@@ -34,5 +35,7 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
     @Query("SELECT MAX(c.price) FROM CourseEntity c")
     Double findMaxPrice(); // Giá lớn nhất
 
-    CourseEntity findByCourseId(Long courseId);
+    CourseEntity findByCourseNameAndExpert(String courseName, ExpertEntity expert);
+    CourseEntity findByCourseName(String courseName);
+
 }
