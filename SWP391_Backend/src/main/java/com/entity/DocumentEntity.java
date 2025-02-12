@@ -41,7 +41,7 @@ public class DocumentEntity {
     @JsonIgnoreProperties("documents")
     Set<LessonEntity> lessons;
 
-    @ManyToMany(mappedBy = "completedDocuments", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "completedDocuments")
     Set<UserEntity> users;
 
     @PrePersist

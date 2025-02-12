@@ -82,7 +82,7 @@ public class CourseController {
 
     @ApiMessage("Tạo mới một khoá học")
     @PostMapping
-    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseEntity courseEntity){
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseEntity courseEntity) throws Exception{
         return ResponseEntity.ok().body(this.courseService.createCourse(courseEntity));
     }
 

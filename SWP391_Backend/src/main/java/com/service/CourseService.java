@@ -187,20 +187,21 @@ public class CourseService {
         );
     }
 
-    public CourseResponse createCourse(CourseEntity courseEntity) {
+    public CourseResponse createCourse(CourseEntity courseEntity) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
         CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseEntity.getCourseName(), userEntity.getExpert());
         if (currentCourse != null) {
             throw new InvalidRequestInput("Khoá học đã tồn tại !");
         }
-        CourseEntity newCourse = this.courseRepository.save(courseEntity);
+        CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
         newCourse.setCourseName(courseEntity.getCourseName());
         newCourse.setDescription(courseEntity.getDescription());
         newCourse.setObjectives(courseEntity.getObjectives());
         newCourse.setPrice(courseEntity.getPrice());
         newCourse.setThumbnail(courseEntity.getThumbnail());
+        newCourse=this.courseRepository.save(newCourse);
         for (LessonEntity lessonEntity : courseEntity.getLessons()) {
             lessonEntity.setCourse(newCourse);
             this.lessonService.save(lessonEntity);

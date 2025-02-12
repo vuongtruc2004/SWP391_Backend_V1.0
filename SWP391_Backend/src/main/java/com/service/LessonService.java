@@ -1,8 +1,7 @@
 package com.service;
 
 
-import com.entity.CourseEntity;
-import com.entity.DocumentEntity;
+
 import com.entity.LessonEntity;
 import com.repository.CourseRepository;
 import com.repository.DocumentRepository;
@@ -19,7 +18,8 @@ public class LessonService {
     private final DocumentRepository documentRepository;
     private final VideoRepository videoRepository;
     private final CourseRepository courseRepository;
-    public void save(LessonEntity lesson) {
+
+    public void save(LessonEntity lesson) throws Exception {
         lesson.setTitle(lesson.getTitle());
         lesson.setDescription(lesson.getDescription());
         lessonRepository.save(lesson);
