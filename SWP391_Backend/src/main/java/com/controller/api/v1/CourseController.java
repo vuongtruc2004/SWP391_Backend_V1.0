@@ -1,9 +1,6 @@
 package com.controller.api.v1;
 
-import com.dto.response.ApiResponse;
-import com.dto.response.CourseResponse;
-import com.dto.response.MinMaxPriceResponse;
-import com.dto.response.PageDetailsResponse;
+import com.dto.response.*;
 import com.entity.CourseEntity;
 import com.service.CourseService;
 import com.turkraft.springfilter.boot.Filter;
@@ -46,7 +43,7 @@ public class CourseController {
 
     @ApiMessage("Lấy khóa học thành công!")
     @GetMapping("/{courseId}")
-    public ResponseEntity<CourseResponse> getCourseById(@PathVariable(name = "courseId") Long courseId) {
+    public ResponseEntity<CourseDetailsResponse> getCourseById(@PathVariable(name = "courseId") Long courseId) {
         return ResponseEntity.ok(courseService.getCourseById(courseId));
     }
 

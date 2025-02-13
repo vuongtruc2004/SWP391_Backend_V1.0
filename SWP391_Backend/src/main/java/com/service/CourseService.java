@@ -1,10 +1,7 @@
 package com.service;
 
 
-import com.dto.response.ApiResponse;
-import com.dto.response.CourseResponse;
-import com.dto.response.MinMaxPriceResponse;
-import com.dto.response.PageDetailsResponse;
+import com.dto.response.*;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
 import com.entity.LessonEntity;
@@ -71,10 +68,10 @@ public class CourseService {
         );
     }
 
-    public CourseResponse getCourseById(Long id) {
+    public CourseDetailsResponse getCourseById(Long id) {
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
-        return courseServiceHelper.convertToCourseResponse(courseEntity);
+        return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
@@ -114,17 +111,7 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> listCourseResponses = page.getContent()
-                .stream().map(courseEntity -> {
-                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-                    courseResponse.setTotalLikes(courseEntity.getLikes().size());
-                    courseResponse.setTotalComments(courseEntity.getComments().size());
-                    return courseResponse;
-                })
-                .toList();
-
-
+        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToListResponse(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -182,7 +169,7 @@ public class CourseService {
         );
     }
 
-    public ApiResponse<String> changeUnacceptACourse(Long courseId){
+    public ApiResponse<String> changeUnacceptACourse(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         if (courseEntity != null) {
             courseEntity.setAccepted(false);

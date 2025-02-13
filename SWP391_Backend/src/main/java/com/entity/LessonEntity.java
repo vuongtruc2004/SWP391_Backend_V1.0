@@ -30,16 +30,10 @@ public class LessonEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @ManyToMany
-    @JoinTable(name = "lesson_video",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "video_id"))
+    @OneToMany(mappedBy = "lesson")
     Set<VideoEntity> videos;
 
-    @ManyToMany
-    @JoinTable(name = "lesson_document",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "document_id"))
+    @OneToMany(mappedBy = "lesson")
     Set<DocumentEntity> documents;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)

@@ -36,8 +36,9 @@ public class DocumentEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "documents", cascade = CascadeType.ALL)
-    Set<LessonEntity> lessons;
+    @ManyToOne
+    @JoinColumn(name = "lesson_id")
+    LessonEntity lesson;
 
     @ManyToMany(mappedBy = "completedDocuments", cascade = CascadeType.ALL)
     Set<UserEntity> users;

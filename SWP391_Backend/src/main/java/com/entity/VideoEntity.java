@@ -38,8 +38,9 @@ public class VideoEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany(mappedBy = "videos", cascade = CascadeType.ALL)
-    Set<LessonEntity> lessons;
+    @ManyToOne
+    @JoinColumn(name = "lesson_id")
+    LessonEntity lesson;
 
     @ManyToMany(mappedBy = "completedVideos", cascade = CascadeType.ALL)
     Set<UserEntity> users;

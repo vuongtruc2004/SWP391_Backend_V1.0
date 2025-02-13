@@ -36,7 +36,13 @@ public class CourseEntity implements Serializable {
 
     String thumbnail;
 
-    Double price;
+    String introduction;
+
+    @Column(name = "original_price")
+    Double originalPrice;
+
+    @Column(name = "sale_price")
+    Double salePrice;
 
     Boolean accepted;
 
@@ -68,14 +74,17 @@ public class CourseEntity implements Serializable {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     Set<LikeEntity> likes;
 
-    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     Set<CommentEntity> comments;
 
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
-        if(accepted == null) {
+        if (this.introduction == null) {
+            introduction = "https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv";
+        }
+        if (accepted == null) {
             accepted = false;
         }
     }

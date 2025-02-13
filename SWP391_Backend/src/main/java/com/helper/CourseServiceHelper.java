@@ -1,5 +1,6 @@
 package com.helper;
 
+import com.dto.response.CourseDetailsResponse;
 import com.dto.response.CourseResponse;
 import com.entity.CourseEntity;
 import com.exception.custom.InvalidRequestInput;
@@ -29,17 +30,21 @@ public class CourseServiceHelper {
 
     public List<CourseResponse> convertToListResponse(Page<CourseEntity> page) {
         return page.getContent()
-                .stream().map(this::convertToCourseResponse)
+                .stream().map(courseEntity -> {
+                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
+                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+                    return courseResponse;
+                })
                 .toList();
     }
 
-    public CourseResponse convertToCourseResponse(CourseEntity courseEntity) {
-        CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-        courseResponse.setObjectives(courseEntity.getObjectiveList());
-        courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-        courseResponse.setTotalLikes(courseEntity.getLikes().size());
-        courseResponse.setTotalComments(courseEntity.getComments().size());
-        return courseResponse;
+    public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
+        CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
+        courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
+        courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseDetailsResponse.setTotalLikes(courseEntity.getLikes().size());
+        courseDetailsResponse.setTotalComments(courseEntity.getComments().size());
+        return courseDetailsResponse;
     }
 
     public Specification<CourseEntity> sortBySpecialFields(
@@ -95,10 +100,7 @@ public class CourseServiceHelper {
                     log.error("Error parsing ID: {}", part, e);
                 }
             }
-            if (idSet.isEmpty()) {
-                return criteriaBuilder.conjunction();
-            }
-            if (query == null) {
+            if (idSet.isEmpty() || query == null) {
                 return criteriaBuilder.conjunction();
             }
             query.distinct(true);
