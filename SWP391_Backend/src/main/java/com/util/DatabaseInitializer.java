@@ -11,6 +11,7 @@ import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 public class DatabaseInitializer implements CommandLineRunner {
-
+    private final JdbcTemplate  jdbcTemplate;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final UserRepository userRepository;
@@ -42,7 +43,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("Database initialization started!");
 
-//        createPermission();
+        createPermission();
         createRole();
         createUser();
         createExpert();
@@ -55,28 +56,20 @@ public class DatabaseInitializer implements CommandLineRunner {
         createQuestion();
         createQuiz();
         createCourse();
-
         logger.info("Database initialization completed!");
     }
 
     private void createPermission() {
-        List<PermissionEntity> permissions = Arrays.asList(
-                // auth controller
-                new PermissionEntity("/auth/login/credentials", ApiMethodEnum.POST),
-                new PermissionEntity("/auth/login/socials", ApiMethodEnum.POST),
-                new PermissionEntity("/auth/refresh", ApiMethodEnum.GET),
-                new PermissionEntity("/auth/logout", ApiMethodEnum.GET),
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/login/credentials', 'POST')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/login/socials', 'POST')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/refresh', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/logout', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/pinned', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/author', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/{id}', 'GET')");
+        jdbcTemplate.update("INSERT INTO permissions  (api_path, api_method) VALUES ('/blogs/hashtag', 'GET')");
 
-                // blog controller
-                new PermissionEntity("/blogs", ApiMethodEnum.GET),
-                new PermissionEntity("/blogs/pinned", ApiMethodEnum.GET),
-                new PermissionEntity("/blogs/author", ApiMethodEnum.GET),
-                new PermissionEntity("/blogs/{id}", ApiMethodEnum.GET),
-                new PermissionEntity("/blogs/hashtag", ApiMethodEnum.GET)
-
-                // tiep tuc di em
-        );
-        permissionRepository.saveAll(permissions);
     }
 
     private void createRole() {
