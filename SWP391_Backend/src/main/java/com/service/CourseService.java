@@ -5,17 +5,11 @@ import com.dto.response.ApiResponse;
 import com.dto.response.CourseResponse;
 import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.PageDetailsResponse;
-import com.entity.CourseEntity;
-import com.entity.ExpertEntity;
-import com.entity.LessonEntity;
-import com.entity.UserEntity;
+import com.entity.*;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
-import com.repository.CourseRepository;
-import com.repository.ExpertRepository;
-import com.repository.LessonRepository;
-import com.repository.UserRepository;
+import com.repository.*;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
@@ -27,8 +21,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.service.auth.JwtService.extractUsernameFromToken;
 
@@ -41,8 +37,9 @@ public class CourseService {
     private final CourseServiceHelper courseServiceHelper;
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
-    private final JwtService jwtService;
     private final LessonService lessonService;
+    private final SubjectRepository subjectRepository;
+
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -195,9 +192,22 @@ public class CourseService {
         newCourse.setCourseName(courseEntity.getCourseName());
         newCourse.setDescription(courseEntity.getDescription());
         newCourse.setObjectives(courseEntity.getObjectives());
-        newCourse.setPrice(courseEntity.getPrice());
+        newCourse.setIntroduction(courseEntity.getIntroduction());
+        newCourse.setOriginalPrice(courseEntity.getOriginalPrice());
+        newCourse.setSalePrice(courseEntity.getSalePrice());
         newCourse.setThumbnail(courseEntity.getThumbnail());
         newCourse=this.courseRepository.save(newCourse);
+        Set<SubjectEntity> subjectEntitySet=new HashSet<>();
+        for(SubjectEntity subjectEntity : courseEntity.getSubjects()) {
+            Boolean checkExists=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
+            if(checkExists) {
+                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
+                subjectEntitySet.add(currentSubject);
+            }else{
+                this.subjectRepository.save(subjectEntity);
+            }
+        }
+        newCourse.setSubjects(subjectEntitySet);
         for (LessonEntity lessonEntity : courseEntity.getLessons()) {
             lessonEntity.setCourse(newCourse);
             this.lessonService.save(lessonEntity);

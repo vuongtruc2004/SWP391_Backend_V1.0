@@ -26,7 +26,9 @@ public class CourseResponse {
 
     String thumbnail;
 
-    Double price;
+    Double originalPrice;
+
+    Double salePrice;
 
     Boolean accepted;
 
