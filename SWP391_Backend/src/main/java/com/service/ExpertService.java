@@ -29,10 +29,6 @@ public class ExpertService {
         List<ExpertResponse> expertResponses = page.getContent()
                 .stream().map(expertEntity -> {
                     ExpertResponse expertResponse = modelMapper.map(expertEntity, ExpertResponse.class);
-                    expertResponse.setExpertId(expertEntity.getExpertId());
-                    expertResponse.setYearOfExperience(expertEntity.getYearOfExperience());
-                    expertResponse.setDiploma(expertEntity.getDiploma());
-                    expertResponse.setTotalCourses(expertEntity.getCourses().size());
                     expertResponse.setUser(modelMapper.map(expertEntity.getUser(), UserResponse.class));
                     return expertResponse;
                 })

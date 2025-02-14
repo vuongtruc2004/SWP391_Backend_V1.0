@@ -1,6 +1,10 @@
 package com.controller.api.v1;
 
-import com.dto.response.*;
+import com.dto.response.ApiResponse;
+import com.dto.response.CourseResponse;
+import com.dto.response.MinMaxPriceResponse;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.service.CourseService;
 import com.turkraft.springfilter.boot.Filter;

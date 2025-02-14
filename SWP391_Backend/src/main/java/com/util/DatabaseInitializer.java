@@ -5,7 +5,10 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.UserException;
 import com.repository.*;
-import com.util.enums.*;
+import com.util.enums.AccountTypeEnum;
+import com.util.enums.ApiMethodEnum;
+import com.util.enums.GenderEnum;
+import com.util.enums.RoleNameEnum;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -146,7 +149,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Nguyen Vuong Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2004@gmail.com")
@@ -155,7 +158,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Vuong Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc20042@gmail.com")
@@ -164,7 +167,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Anh Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc20043@gmail.com")
@@ -173,7 +176,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Nguyen Vuong Truc Marketing")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2008@gmail.com")
@@ -202,8 +205,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user = userRepository.findByEmailAndAccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
-                    .yearOfExperience(10)
+                    .achievement("20 năm thiết kế giao diện cho website")
+                    .job("Web Designer")
+                    .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum")
+                    .yearOfExperience(20)
                     .user(user)
                     .build();
             expertRepository.save(expert);
@@ -211,7 +216,9 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user1 = userRepository.findByEmailAndAccountType("vuongtruc20042@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert1 = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
+                    .achievement("10 năm lập trình backend cho các tập đoàn lớn")
+                    .job("Backend Developer")
+                    .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum")
                     .yearOfExperience(10)
                     .user(user1)
                     .build();
@@ -220,8 +227,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user2 = userRepository.findByEmailAndAccountType("vuongtruc20043@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert2 = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
-                    .yearOfExperience(10)
+                    .achievement("15 năm viết tài liệu cho các dự án lớn nhỏ")
+                    .job("Business Analyst")
+                    .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum")
+                    .yearOfExperience(15)
                     .user(user2)
                     .build();
             expertRepository.save(expert2);

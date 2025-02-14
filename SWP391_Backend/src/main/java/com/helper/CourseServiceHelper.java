@@ -1,7 +1,7 @@
 package com.helper;
 
-import com.dto.response.CourseDetailsResponse;
 import com.dto.response.CourseResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.exception.custom.InvalidRequestInput;
 import jakarta.persistence.criteria.Expression;
@@ -23,12 +23,14 @@ public class CourseServiceHelper {
 
     private static final Logger log = LoggerFactory.getLogger(CourseServiceHelper.class);
     private final ModelMapper modelMapper;
+    private final ExpertServiceHelper expertServiceHelper;
 
-    public CourseServiceHelper(ModelMapper modelMapper) {
+    public CourseServiceHelper(ModelMapper modelMapper, ExpertServiceHelper expertServiceHelper) {
         this.modelMapper = modelMapper;
+        this.expertServiceHelper = expertServiceHelper;
     }
 
-    public List<CourseResponse> convertToListResponse(Page<CourseEntity> page) {
+    public List<CourseResponse> convertToCourseResponseList(Page<CourseEntity> page) {
         return page.getContent()
                 .stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
@@ -44,6 +46,7 @@ public class CourseServiceHelper {
         courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
         courseDetailsResponse.setTotalLikes(courseEntity.getLikes().size());
         courseDetailsResponse.setTotalComments(courseEntity.getComments().size());
+        courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
         return courseDetailsResponse;
     }
 

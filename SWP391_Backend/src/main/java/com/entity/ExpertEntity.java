@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.util.enums.DiplomaEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,9 +21,13 @@ public class ExpertEntity {
     @Column(name = "expert_id")
     Long expertId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "diploma")
-    DiplomaEnum diploma;
+    String job;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String achievement;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String description;
 
     @Column(name = "year_of_experience")
     Integer yearOfExperience;

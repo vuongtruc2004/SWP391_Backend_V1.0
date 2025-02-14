@@ -1,5 +1,8 @@
-package com.dto.response;
+package com.dto.response.details;
 
+import com.dto.response.CourseResponse;
+import com.dto.response.LessonResponse;
+import com.dto.response.SubjectResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +21,8 @@ public class CourseDetailsResponse extends CourseResponse {
     List<String> objectives;
 
     Boolean accepted;
+    
+    ExpertDetailsResponse expert;
 
     Set<SubjectResponse> subjects;
 

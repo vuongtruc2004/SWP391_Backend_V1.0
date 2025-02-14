@@ -1,7 +1,11 @@
 package com.service;
 
 
-import com.dto.response.*;
+import com.dto.response.ApiResponse;
+import com.dto.response.CourseResponse;
+import com.dto.response.MinMaxPriceResponse;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
 import com.entity.LessonEntity;
@@ -58,7 +62,7 @@ public class CourseService {
         specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("accepted"), true)));
 
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -71,12 +75,15 @@ public class CourseService {
     public CourseDetailsResponse getCourseById(Long id) {
         CourseEntity courseEntity = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
+        if (Boolean.FALSE.equals(courseEntity.getAccepted())) {
+            throw new CourseException("Khóa học không tồn tại!");
+        }
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
         Page<CourseEntity> page = courseRepository.findCoursesAndOrderByPurchasersDesc(pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -90,7 +97,7 @@ public class CourseService {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Mã người dùng không tồn tại!"));
         Page<CourseEntity> page = courseRepository.findAllByUsers(user, pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToListResponse(page);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -111,7 +118,7 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToListResponse(page);
+        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToCourseResponseList(page);
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
