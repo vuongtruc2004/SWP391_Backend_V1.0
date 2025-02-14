@@ -2,7 +2,6 @@ package com.controller.api.v1;
 
 import com.dto.request.*;
 import com.dto.response.ApiResponse;
-import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
 import com.entity.UserEntity;
@@ -62,14 +61,6 @@ public class UserController {
         return ResponseEntity.ok(otpService.sendChangePasswordRequest(emailRequest.getEmail()));
     }
 
-    @ApiMessage("Lấy tất cả chuyên gia thành công !")
-    @GetMapping("/experts")
-    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExperts(
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(expertService.getExperts(pageable));
-    }
-
     @ApiMessage("Lấy người dùng thành công")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable long id) {
@@ -102,9 +93,10 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUserProfile(@RequestBody UpdateUserRequest updateUserRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUserProfile(updateUserRequest));
     }
+
     @ApiMessage("Cập nhật người dùng thành công")
     @PutMapping
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest ) {
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(userRequest));
     }
 

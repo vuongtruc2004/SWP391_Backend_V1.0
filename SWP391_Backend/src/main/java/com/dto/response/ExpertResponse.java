@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 public class ExpertResponse {
 
     Long expertId;
+    
+    Integer totalCourses;
 
     UserResponse user;
 }

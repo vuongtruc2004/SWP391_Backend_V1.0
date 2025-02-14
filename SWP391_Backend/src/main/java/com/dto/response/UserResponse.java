@@ -1,7 +1,6 @@
 package com.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import com.util.enums.RoleNameEnum;
@@ -27,7 +26,7 @@ public class UserResponse {
     String avatar;
 
     String fullname;
-    
+
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;
 
@@ -36,7 +35,9 @@ public class UserResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
     Instant dob;
+    
     Boolean locked;
+
     @Enumerated(EnumType.STRING)
     RoleNameEnum roleName;
 

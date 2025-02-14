@@ -2,7 +2,6 @@ package com.service;
 
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
-import com.dto.response.UserResponse;
 import com.entity.ExpertEntity;
 import com.repository.ExpertRepository;
 import com.util.BuildResponse;
@@ -29,7 +28,7 @@ public class ExpertService {
         List<ExpertResponse> expertResponses = page.getContent()
                 .stream().map(expertEntity -> {
                     ExpertResponse expertResponse = modelMapper.map(expertEntity, ExpertResponse.class);
-                    expertResponse.setUser(modelMapper.map(expertEntity.getUser(), UserResponse.class));
+                    expertResponse.setTotalCourses(expertEntity.getCourses().size());
                     return expertResponse;
                 })
                 .toList();

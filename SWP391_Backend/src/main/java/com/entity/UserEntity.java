@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -34,7 +35,7 @@ public class UserEntity {
     String avatar;
 
     String fullname;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     AccountTypeEnum accountType;
@@ -71,6 +72,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     Set<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<RateEntity> rates = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     Set<QuizAttemptEntity> quizAttempts;

@@ -18,8 +18,6 @@ public class ExpertDetailsResponse extends ExpertResponse {
     String description;
 
     Integer yearOfExperience;
-
-    Integer totalCourses;
-
+    
     Integer totalStudents;
 }

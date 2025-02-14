@@ -21,14 +21,14 @@ public class CourseDetailsResponse extends CourseResponse {
     List<String> objectives;
 
     Boolean accepted;
-    
+
     ExpertDetailsResponse expert;
 
     Set<SubjectResponse> subjects;
 
     Set<LessonResponse> lessons;
 
-    Integer totalLikes;
+    Double averageRating;
 
-    Integer totalComments;
+    Integer totalRating;
 }

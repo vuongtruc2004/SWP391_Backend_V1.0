@@ -40,25 +40,25 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final QuizRepository quizRepository;
     private final Random random = new Random();
     private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
+    private final RateRepository rateRepository;
 
     @Override
     public void run(String... args) throws Exception {
         logger.info("Database initialization started!");
-
 //        createPermission();
-        createRole();
-        createUser();
-        createExpert();
-        createHashtag();
-        createBlog();
-        createVideo();
-        createSubject();
-        createDocument();
-        createLesson();
-        createQuestion();
-        createQuiz();
-        createCourse();
-
+//        createRole();
+//        createUser();
+//        createExpert();
+//        createHashtag();
+//        createBlog();
+//        createVideo();
+//        createSubject();
+//        createDocument();
+//        createLesson();
+//        createQuestion();
+//        createQuiz();
+//        createCourse();
+//        createRate();
         logger.info("Database initialization completed!");
     }
 
@@ -184,7 +184,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .role(marketing)
                             .build()
             ));
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 11; i++) {
                 users.add(
                         UserEntity.builder()
                                 .password(passwordEncoder.encode("123"))
@@ -948,8 +948,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                     documentRepository.save(documents.get(i));
                 }
             }
-
-
         }
     }
 
@@ -1297,6 +1295,22 @@ public class DatabaseInitializer implements CommandLineRunner {
         }
     }
 
+    private void createRate() {
+        if (!rateRepository.existsBy()) {
+            List<UserEntity> userEntities = userRepository.findAll();
+            List<CourseEntity> courseEntities = courseRepository.findAll();
+            for (int i = 0; i < userEntities.size(); i++) {
+                RateEntity rateEntity = RateEntity.builder()
+                        .stars(random.nextInt(5) + 1)
+                        .content(getRandomRateContent())
+                        .user(userEntities.get(i))
+                        .course(courseEntities.get(i))
+                        .build();
+                rateRepository.save(rateEntity);
+            }
+        }
+    }
+
     private void completeSomeDocumentAndVideo() {
         UserEntity user = userRepository.findByEmailAndAccountType("trucnvhe180248@fpt.edu.vn", AccountTypeEnum.CREDENTIALS)
                 .orElseThrow(() -> new UserException("Username not existed!"));
@@ -1305,6 +1319,20 @@ public class DatabaseInitializer implements CommandLineRunner {
         user.setCompletedDocuments(new HashSet<>(documents.subList(0, 5)));
         user.setCompletedVideos(new HashSet<>(videos.subList(1, 6)));
         userRepository.save(user);
+    }
+
+    private String getRandomRateContent() {
+        String[] contents = {"Khoa hoc nay hay lam",
+                "Khong hoc thi phi tien",
+                "Cam on tac gia vi khoa hoc",
+                "Re ma lai ngon",
+                "Duoc",
+                "Mua phi tien",
+                "Uoc gi biet duoc khoa hoc nay som hon",
+                "Day chan qua"
+        };
+        int index = random.nextInt(contents.length);
+        return contents[index];
     }
 
     private Set<SubjectEntity> getRandomSubjects() {

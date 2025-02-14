@@ -3,6 +3,7 @@ package com.helper;
 import com.dto.response.CourseResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
+import com.entity.RateEntity;
 import com.exception.custom.InvalidRequestInput;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
@@ -41,11 +42,14 @@ public class CourseServiceHelper {
     }
 
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
+        Set<RateEntity> rates = courseEntity.getRates();
+        double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);
+
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
         courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
-        courseDetailsResponse.setTotalLikes(courseEntity.getLikes().size());
-        courseDetailsResponse.setTotalComments(courseEntity.getComments().size());
+        courseDetailsResponse.setAverageRating(averageRating);
+        courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
         return courseDetailsResponse;
     }
@@ -55,18 +59,19 @@ public class CourseServiceHelper {
             String direction
     ) {
         return ((root, query, criteriaBuilder) -> {
+            if (query == null) {
+                return criteriaBuilder.conjunction();
+            }
             Expression<?> sortField;
             switch (sortOption) {
                 case "purchaser": {
                     sortField = criteriaBuilder.size(root.get("users"));
                     break;
                 }
-                case "like": {
-                    sortField = criteriaBuilder.size(root.get("likes"));
-                    break;
-                }
-                case "comment": {
-                    sortField = criteriaBuilder.size(root.get("comments"));
+                case "rate": {
+                    Join<CourseEntity, RateEntity> join = root.join("rates", JoinType.LEFT);
+                    sortField = criteriaBuilder.avg(join.get("stars"));
+                    query.groupBy(root.get("courseId"));
                     break;
                 }
                 default: {
@@ -74,9 +79,6 @@ public class CourseServiceHelper {
                 }
             }
 
-            if (query == null) {
-                return criteriaBuilder.conjunction();
-            }
             if (direction.equalsIgnoreCase("asc")) {
                 query.orderBy(criteriaBuilder.asc(sortField));
             } else if (direction.equalsIgnoreCase("desc")) {
