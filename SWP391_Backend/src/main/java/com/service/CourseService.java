@@ -238,23 +238,17 @@ public class CourseService {
                 SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
                 subjectEntitySet.add(currentSubject);
             }else{
+                SubjectEntity newSubject=new SubjectEntity();
+                newSubject.setSubjectName(subjectEntity.getSubjectName());
+                newSubject.setDescription(subjectEntity.getDescription());
+                newSubject.setThumbnail(subjectEntity.getThumbnail());
                 this.subjectRepository.save(subjectEntity);
             }
         }
         newCourse.setSubjects(subjectEntitySet);
         for (LessonEntity lessonEntity : courseEntity.getLessons()) {
-            if(lessonEntity.getLessonId()!=null){
-                LessonEntity currentLesson=this.lessonRepository.findById(lessonEntity.getLessonId()).orElse(null);
-                currentLesson.setTitle(lessonEntity.getTitle());
-                currentLesson.setDescription(lessonEntity.getDescription());
-                currentLesson.setVideos(lessonEntity.getVideos());
-                currentLesson.setDescription(lessonEntity.getDescription());
-                this.lessonService.save(currentLesson);
-            }else{
-                lessonEntity.setCourse(newCourse);
-                this.lessonService.save(lessonEntity);
-            }
-
+            lessonEntity.setCourse(newCourse);
+            this.lessonService.save(lessonEntity);
         }
         this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();

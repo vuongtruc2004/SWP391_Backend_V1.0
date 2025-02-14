@@ -5,13 +5,15 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.UserException;
 import com.repository.*;
-import com.util.enums.*;
+import com.util.enums.AccountTypeEnum;
+import com.util.enums.ApiMethodEnum;
+import com.util.enums.GenderEnum;
+import com.util.enums.RoleNameEnum;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,7 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 public class DatabaseInitializer implements CommandLineRunner {
-    private final JdbcTemplate  jdbcTemplate;
+
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final UserRepository userRepository;
@@ -56,19 +58,28 @@ public class DatabaseInitializer implements CommandLineRunner {
         createQuestion();
         createQuiz();
         createCourse();
+
         logger.info("Database initialization completed!");
     }
 
     private void createPermission() {
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/login/credentials', 'POST')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/login/socials', 'POST')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/refresh', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/auth/logout', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/pinned', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/author', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/{id}', 'GET')");
-        jdbcTemplate.update("INSERT INTO permissions  (api_path, api_method) VALUES ('/blogs/hashtag', 'GET')");
+        List<PermissionEntity> permissions = Arrays.asList(
+                // auth controller
+                new PermissionEntity("/auth/login/credentials", ApiMethodEnum.POST),
+                new PermissionEntity("/auth/login/socials", ApiMethodEnum.POST),
+                new PermissionEntity("/auth/refresh", ApiMethodEnum.GET),
+                new PermissionEntity("/auth/logout", ApiMethodEnum.GET),
+
+                // blog controller
+                new PermissionEntity("/blogs", ApiMethodEnum.GET),
+                new PermissionEntity("/blogs/pinned", ApiMethodEnum.GET),
+                new PermissionEntity("/blogs/author", ApiMethodEnum.GET),
+                new PermissionEntity("/blogs/{id}", ApiMethodEnum.GET),
+                new PermissionEntity("/blogs/hashtag", ApiMethodEnum.GET)
+
+                // tiep tuc di em
+        );
+        permissionRepository.saveAll(permissions);
     }
 
     private void createRole() {
@@ -138,7 +149,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Nguyen Vuong Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2004@gmail.com")
@@ -147,7 +158,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Vuong Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc20042@gmail.com")
@@ -156,7 +167,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Anh Truc Expert")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc20043@gmail.com")
@@ -165,7 +176,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                             .build(),
                     UserEntity.builder()
                             .password(passwordEncoder.encode("123"))
-                            .avatar("admin.jpg")
+                            .avatar("truc.jpg")
                             .fullname("Nguyen Vuong Truc Marketing")
                             .accountType(AccountTypeEnum.CREDENTIALS)
                             .email("vuongtruc2008@gmail.com")
@@ -194,8 +205,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user = userRepository.findByEmailAndAccountType("vuongtruc2004@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
-                    .yearOfExperience(10)
+
+
+
+                    .yearOfExperience(20)
                     .user(user)
                     .build();
             expertRepository.save(expert);
@@ -203,7 +216,8 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user1 = userRepository.findByEmailAndAccountType("vuongtruc20042@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert1 = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
+
+
                     .yearOfExperience(10)
                     .user(user1)
                     .build();
@@ -212,8 +226,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             UserEntity user2 = userRepository.findByEmailAndAccountType("vuongtruc20043@gmail.com", AccountTypeEnum.CREDENTIALS)
                     .orElseThrow(() -> new UserException("Username not existed!"));
             ExpertEntity expert2 = ExpertEntity.builder()
-                    .diploma(DiplomaEnum.MASTER)
-                    .yearOfExperience(10)
+
+
+
+                    .yearOfExperience(15)
                     .user(user2)
                     .build();
             expertRepository.save(expert2);

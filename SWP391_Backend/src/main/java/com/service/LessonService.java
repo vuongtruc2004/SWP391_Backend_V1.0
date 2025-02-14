@@ -19,18 +19,17 @@ public class LessonService {
     private final LessonRepository lessonRepository;
     private final DocumentRepository documentRepository;
     private final VideoRepository videoRepository;
-    private final CourseRepository courseRepository;
 
     public void save(LessonEntity lesson) throws Exception {
         LessonEntity newLesson = this.lessonRepository.save(lesson);
         newLesson.setTitle(lesson.getTitle());
         newLesson.setDescription(lesson.getDescription());
         for (DocumentEntity documentEntity : lesson.getDocuments()) {
-            documentEntity.setLesson(newLesson);
+            documentEntity.setLesson(lesson);
             this.documentRepository.save(documentEntity);
         }
         for (VideoEntity videoEntity : lesson.getVideos()) {
-            videoEntity.setLesson(newLesson);
+            videoEntity.setLesson(lesson);
             this.videoRepository.save(videoEntity);
         }
         this.lessonRepository.save(newLesson);
