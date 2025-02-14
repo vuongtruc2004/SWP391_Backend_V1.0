@@ -18,7 +18,8 @@ import java.util.List;
 public class QuestionResponse {
     Long questionId;
     String title;
-    List<String> correctAnswer;
+    List<AnswerEntity> answers;
+    List<String> quizzes;
 
 
 

@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaSpecificationRepository<QuestionEntity, Long> {
     List<QuestionEntity> findByTitleContaining(String quesTitle);
+
 }

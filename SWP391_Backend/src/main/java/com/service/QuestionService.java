@@ -4,6 +4,7 @@ package com.service;
 import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
+import com.entity.AnswerEntity;
 import com.entity.CourseEntity;
 import com.entity.QuestionEntity;
 import com.entity.QuizEntity;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,9 +50,9 @@ public class QuestionService {
                     page.getTotalElements(),
                     questionResponses
             );
-
-
-
     }
+
+
+
 
 }
