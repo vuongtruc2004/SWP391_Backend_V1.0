@@ -10,7 +10,6 @@ import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
 import com.repository.*;
-import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -185,7 +184,7 @@ public class CourseService {
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
         CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseEntity.getCourseName(), userEntity.getExpert());
         if (currentCourse != null) {
-            throw new InvalidRequestInput("Khoá học đã tồn tại !");
+            throw new NotFoundException("Khoá học đã tồn tại !");
         }
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
@@ -199,8 +198,8 @@ public class CourseService {
         newCourse=this.courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet=new HashSet<>();
         for(SubjectEntity subjectEntity : courseEntity.getSubjects()) {
-            Boolean checkExists=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
-            if(checkExists) {
+            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
+            if(checkExistsSubject) {
                 SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
                 subjectEntitySet.add(currentSubject);
             }else{
@@ -211,6 +210,50 @@ public class CourseService {
         for (LessonEntity lessonEntity : courseEntity.getLessons()) {
             lessonEntity.setCourse(newCourse);
             this.lessonService.save(lessonEntity);
+        }
+        this.courseRepository.save(newCourse);
+        CourseResponse courseResponse=new CourseResponse();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(newCourse, courseResponse);
+        return courseResponse;
+    }
+
+    public CourseResponse updateCourse(CourseEntity courseEntity) throws Exception {
+        Optional<String> email = extractUsernameFromToken();
+        UserEntity userEntity = this.userRepository.findByEmail(email.get());
+        CourseEntity newCourse = this.courseRepository.findById(courseEntity.getCourseId()).orElse(null);
+        newCourse.setExpert(userEntity.getExpert());
+        newCourse.setCourseName(courseEntity.getCourseName());
+        newCourse.setDescription(courseEntity.getDescription());
+        newCourse.setObjectives(courseEntity.getObjectives());
+        newCourse.setIntroduction(courseEntity.getIntroduction());
+        newCourse.setOriginalPrice(courseEntity.getOriginalPrice());
+        newCourse.setSalePrice(courseEntity.getSalePrice());
+        newCourse.setThumbnail(courseEntity.getThumbnail());
+        newCourse=this.courseRepository.save(newCourse);
+        Set<SubjectEntity> subjectEntitySet=new HashSet<>();
+        for(SubjectEntity subjectEntity : courseEntity.getSubjects()) {
+            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
+            if(checkExistsSubject) {
+                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
+                subjectEntitySet.add(currentSubject);
+            }else{
+                this.subjectRepository.save(subjectEntity);
+            }
+        }
+        newCourse.setSubjects(subjectEntitySet);
+        for (LessonEntity lessonEntity : courseEntity.getLessons()) {
+            if(lessonEntity.getLessonId()!=null){
+                LessonEntity currentLesson=this.lessonRepository.findById(lessonEntity.getLessonId()).orElse(null);
+                currentLesson.setTitle(lessonEntity.getTitle());
+                currentLesson.setDescription(lessonEntity.getDescription());
+                currentLesson.setVideos(lessonEntity.getVideos());
+                currentLesson.setDescription(lessonEntity.getDescription());
+                this.lessonService.save(currentLesson);
+            }else{
+                lessonEntity.setCourse(newCourse);
+                this.lessonService.save(lessonEntity);
+            }
 
         }
         this.courseRepository.save(newCourse);

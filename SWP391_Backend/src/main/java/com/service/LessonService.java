@@ -33,6 +33,7 @@ public class LessonService {
             videoEntity.setLesson(newLesson);
             this.videoRepository.save(videoEntity);
         }
+        this.lessonRepository.save(newLesson);
     }
 
 

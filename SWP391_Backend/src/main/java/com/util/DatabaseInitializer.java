@@ -43,7 +43,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("Database initialization started!");
 
-        createPermission();
+//        createPermission();
         createRole();
         createUser();
         createExpert();
@@ -69,7 +69,6 @@ public class DatabaseInitializer implements CommandLineRunner {
         jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/author', 'GET')");
         jdbcTemplate.update("INSERT INTO permissions (api_path, api_method) VALUES ('/blogs/{id}', 'GET')");
         jdbcTemplate.update("INSERT INTO permissions  (api_path, api_method) VALUES ('/blogs/hashtag', 'GET')");
-
     }
 
     private void createRole() {
