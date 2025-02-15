@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -53,6 +54,7 @@ public class QuizEntity {
     ExpertEntity expert;
 
     @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("quizzes")
     Set<QuizAttemptEntity> quizAttempts;
 
     @ManyToMany
