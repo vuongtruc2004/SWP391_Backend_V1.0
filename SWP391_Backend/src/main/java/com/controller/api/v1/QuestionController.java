@@ -38,5 +38,10 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.createQuestion(questionRequest));
     }
 
+    @ApiMessage("Thay đổi câu hỏi thành công!")
+    @PatchMapping("/update/{questionId}")
+    public ResponseEntity<ApiResponse<QuestionResponse>> updateQuestion(@PathVariable Long questionId, @RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.ok(questionService.updateQuestion(questionId, questionRequest));
+    }
 
 }

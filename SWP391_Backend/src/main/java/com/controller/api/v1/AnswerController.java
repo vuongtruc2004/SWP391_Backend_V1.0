@@ -21,4 +21,16 @@ public class AnswerController {
         return ResponseEntity.ok(answerService.createAnswers(answerRequest));
     }
 
+    @ApiMessage("Cập nhật câu trả lời thành công!")
+    @PatchMapping("/update/{answerId}")
+    public ResponseEntity<ApiResponse<AnswerResponse>> createSubject(@PathVariable Long answerId,@RequestBody AnswerRequest answerRequest) {
+        return ResponseEntity.ok(answerService.updateAnswers(answerId, answerRequest));
+    }
+
+    @ApiMessage("Xóa câu trả lời thành công!")
+    @DeleteMapping("/delete/{answerId}")
+    public ResponseEntity<ApiResponse<String>> deleteSubject(@PathVariable Long answerId) {
+        return ResponseEntity.ok(answerService.deleteAnswer(answerId));
+    }
+
 }

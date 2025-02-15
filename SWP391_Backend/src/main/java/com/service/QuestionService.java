@@ -14,6 +14,7 @@ import com.repository.QuestionRepository;
 import com.repository.QuizRepository;
 import com.util.BuildResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionServiceHelper questionServiceHelper;
     private final QuizRepository quizRepository;
+    private final ModelMapper modelMapper;
 
     public PageDetailsResponse<List<QuestionResponse>> getQuestionWithFilter(
             Specification<QuestionEntity> specification,
@@ -89,6 +92,24 @@ public class QuestionService {
                 "Tạo câu hỏi thành công",
                 null,
                 questionResponse
+        );
+    }
+
+    public ApiResponse<QuestionResponse> updateQuestion(Long questionId, QuestionRequest questionRequest) {
+        Optional<QuestionEntity> questionEntityOptional=this.questionRepository.findById(questionId);
+        QuestionEntity questionEntity = null;
+        if(questionEntityOptional.isPresent()) {
+            questionEntity = questionEntityOptional.get();
+            questionEntity.setTitle(questionRequest.getTitle());
+            questionRepository.save(questionEntity);
+        } else {
+            throw new NotFoundException("Không tìm thấy Id câu hỏi!");
+        }
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thay đổi thông tin môn học",
+                null,
+                modelMapper.map(questionEntity, QuestionResponse.class)
         );
     }
 

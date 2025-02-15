@@ -44,4 +44,34 @@ public class AnswerService {
         );
     }
 
+    public ApiResponse<AnswerResponse> updateAnswers(Long answerId, AnswerRequest answerRequest) {
+        AnswerEntity answerEntity= answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException("Không tìm thấy Id câu trả lời!"));
+        answerEntity.setContent(answerRequest.getContent());
+        answerEntity.setCorrect(answerRequest.getCorrect());
+        answerRepository.save(answerEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thay đổi thông tin câu trả lời!",
+                null,
+                modelMapper.map(answerEntity, AnswerResponse.class)
+        );
+    }
+
+    public ApiResponse<String> deleteAnswer(Long answerId) {
+        if(answerRepository.existsById(answerId)) {
+            Optional<AnswerEntity> answerEntity =this.answerRepository.findById(answerId);
+            AnswerEntity answer = answerEntity.get();
+            answer.setQuestion(null);
+            answerRepository.deleteById(answerId);
+        } else {
+            throw new NotFoundException("Không tìm thấy Id môn học!");
+        }
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành công!",
+                "Bạn đã xóa câu trả lời thành công!",
+                null
+        );
+    }
+
 }
