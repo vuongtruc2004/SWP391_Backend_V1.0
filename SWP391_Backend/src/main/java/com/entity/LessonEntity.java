@@ -30,10 +30,10 @@ public class LessonEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson",cascade = CascadeType.ALL)
     Set<VideoEntity> videos;
 
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson",cascade = CascadeType.ALL)
     Set<DocumentEntity> documents;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)

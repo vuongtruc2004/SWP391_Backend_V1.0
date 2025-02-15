@@ -9,6 +9,7 @@ import com.repository.CourseRepository;
 import com.repository.DocumentRepository;
 import com.repository.LessonRepository;
 import com.repository.VideoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,12 @@ public class LessonService {
             videoEntity.setLesson(lesson);
             this.videoRepository.save(videoEntity);
         }
-        this.lessonRepository.save(newLesson);
+        this.lessonRepository.save(lesson);
+    }
+
+    @Transactional
+    public void deleteLesson(Long lessonsId)  {
+        this.lessonRepository.deleteById(lessonsId);
     }
 
 

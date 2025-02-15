@@ -218,6 +218,7 @@ public class CourseService {
         return courseResponse;
     }
 
+    @Transactional
     public CourseResponse updateCourse(CourseEntity courseEntity) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
