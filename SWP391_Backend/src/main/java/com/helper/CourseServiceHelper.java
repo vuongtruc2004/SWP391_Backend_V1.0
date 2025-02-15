@@ -5,9 +5,7 @@ import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.RateEntity;
 import com.exception.custom.InvalidRequestInput;
-import jakarta.persistence.criteria.Expression;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,9 +67,11 @@ public class CourseServiceHelper {
                     break;
                 }
                 case "rate": {
-                    Join<CourseEntity, RateEntity> join = root.join("rates", JoinType.LEFT);
-                    sortField = criteriaBuilder.avg(join.get("stars"));
-                    query.groupBy(root.get("courseId"));
+                    Subquery<Double> subquery = query.subquery(Double.class);
+                    Root<RateEntity> rateRoot = subquery.from(RateEntity.class);
+                    subquery.select(criteriaBuilder.avg(rateRoot.get("stars")))
+                            .where(criteriaBuilder.equal(rateRoot.get("course"), root));
+                    sortField = subquery;
                     break;
                 }
                 default: {
