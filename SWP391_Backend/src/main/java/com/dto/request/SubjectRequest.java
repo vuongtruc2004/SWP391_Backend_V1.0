@@ -13,4 +13,5 @@ public class SubjectRequest {
     Long subjectId;
     String subjectName;
     String description;
+    String thumbnail;
 }

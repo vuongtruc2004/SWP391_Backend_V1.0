@@ -7,6 +7,8 @@ import com.dto.response.SubjectResponse;
 import com.entity.CourseEntity;
 import com.entity.SubjectEntity;
 import com.exception.custom.NotFoundException;
+import com.exception.custom.StorageException;
+import com.exception.custom.SubjectException;
 import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import org.modelmapper.ModelMapper;
@@ -15,7 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +30,13 @@ public class SubjectService {
 
     private final SubjectRepository subjectRepository;
     private final ModelMapper modelMapper;
+    private final FileService fileService;
 
-    public SubjectService(SubjectRepository subjectRepository, ModelMapper modelMapper) {
+
+    public SubjectService(SubjectRepository subjectRepository, ModelMapper modelMapper, FileService fileService) {
         this.subjectRepository = subjectRepository;
         this.modelMapper = modelMapper;
+        this.fileService = fileService;
     }
 
     public PageDetailsResponse<List<SubjectResponse>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
@@ -139,6 +148,40 @@ public class SubjectService {
         return BuildResponse.buildApiResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 "Thay đổi thông tin môn học",
+                null,
+                modelMapper.map(subjectEntity, SubjectResponse.class)
+        );
+    }
+
+    public ApiResponse<String> updateThumbnail(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        if (file == null || file.isEmpty()) {
+            throw new StorageException("File bị rỗng");
+        }
+        String fileName = file.getOriginalFilename();
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png");
+        boolean isValid = allowedExtensions.stream().anyMatch(item -> {
+            assert fileName != null;
+            return fileName.toLowerCase().endsWith(item);
+        });
+        if (!isValid) {
+            throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
+        }
+        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        return fileResponse;
+    }
+
+    public ApiResponse<SubjectResponse> createSubject(SubjectRequest request) {
+        if (request.getSubjectId() != null) {
+            throw new SubjectException("Không được để id");
+        }
+        if(subjectRepository.existsBySubjectName(request.getSubjectName())) {
+            throw new SubjectException("Tên công nghệ đã tồn tại!");
+        }
+        SubjectEntity subjectEntity = modelMapper.map(request, SubjectEntity.class);
+        subjectRepository.save(subjectEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.CREATED.value(),
+                "Tạo công nghệ thành công",
                 null,
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );

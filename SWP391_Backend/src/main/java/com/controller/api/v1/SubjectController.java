@@ -12,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -56,6 +59,20 @@ public class SubjectController {
     @PatchMapping("/update/{subjectId}")
     public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId, SubjectRequest subjectRequest) {
         return ResponseEntity.ok(subjectService.updateSubject(subjectId, subjectRequest));
+    }
+
+    @ApiMessage("Tạo công nghệ thành công!")
+    @PostMapping
+    public ResponseEntity<ApiResponse<SubjectResponse>> createSubject(@RequestBody SubjectRequest subjectRequest) {
+        return ResponseEntity.ok(subjectService.createSubject(subjectRequest));
+    }
+
+    @ApiMessage("Cập nhật ảnh bìa công nghệ thành công")
+    @PostMapping("/thumbnail")
+    public ResponseEntity<ApiResponse<String>> uploadAvatar(
+            @RequestParam(name = "file", required = false) MultipartFile file,
+            @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException {
+        return ResponseEntity.ok(subjectService.updateThumbnail(file, folder));
     }
 
 }

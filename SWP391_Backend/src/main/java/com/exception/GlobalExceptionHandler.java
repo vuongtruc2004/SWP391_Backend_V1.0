@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException.class,
             RoleException.class,
             UserException.class,
+            SubjectException.class,
             InvalidTokenException.class,
             NonUniqueResultException.class,
             IllegalArgumentException.class,
