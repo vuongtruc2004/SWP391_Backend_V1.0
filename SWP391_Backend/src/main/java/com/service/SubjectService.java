@@ -140,14 +140,16 @@ public class SubjectService {
         SubjectEntity subjectEntity = null;
         if(subjectRepository.existsById(subjectId)) {
             subjectEntity = subjectRepository.findById(subjectId).get();
-            modelMapper.map(subjectRequest, subjectEntity);
+            subjectEntity.setSubjectName(subjectRequest.getSubjectName());
+            subjectEntity.setDescription(subjectRequest.getDescription());
+            subjectEntity.setThumbnail(subjectRequest.getThumbnail());
             subjectRepository.save(subjectEntity);
         } else {
-            throw new NotFoundException("Không tìm thấy Id môn học!");
+            throw new NotFoundException("Không tìm thấy Id công nghệ!");
         }
         return BuildResponse.buildApiResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Thay đổi thông tin môn học",
+                HttpStatus.OK.value(),
+                "Thay đổi thông tin công nghệ",
                 null,
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );

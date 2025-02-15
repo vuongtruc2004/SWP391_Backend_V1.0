@@ -55,9 +55,9 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.deleteSubject(subjectId));
     }
 
-    @ApiMessage("Thay đổi thông tin môn học thành công!")
+    @ApiMessage("Thay đổi thông tin công nghệ thành công!")
     @PatchMapping("/update/{subjectId}")
-    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId, SubjectRequest subjectRequest) {
+    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectRequest subjectRequest) {
         return ResponseEntity.ok(subjectService.updateSubject(subjectId, subjectRequest));
     }
 
