@@ -1,5 +1,7 @@
 package com.controller.api.v1;
 
+import com.dto.request.QuestionRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
 import com.entity.QuestionEntity;
@@ -10,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +32,11 @@ public class QuestionController {
         return ResponseEntity.ok(this.questionService.getQuestionWithFilter(specification, pageable, title));
     }
 
-
+    @ApiMessage("Tạo câu hỏi thành công!")
+    @PostMapping
+    public ResponseEntity<ApiResponse<QuestionResponse>> createQuestion(@RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.ok(questionService.createQuestion(questionRequest));
+    }
 
 
 }

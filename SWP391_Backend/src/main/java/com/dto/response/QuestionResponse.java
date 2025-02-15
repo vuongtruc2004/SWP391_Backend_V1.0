@@ -18,7 +18,6 @@ public class QuestionResponse {
     String title;
     List<AnswerEntity> answers;
     List<String> quizzes;
-
-
+    List<String> correctAnswer;
 
 }
