@@ -1,6 +1,7 @@
 package com.service;
 
 
+import com.dto.request.CourseRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.CourseResponse;
 import com.dto.response.MinMaxPriceResponse;
@@ -179,38 +180,42 @@ public class CourseService {
         );
     }
 
-    public CourseResponse createCourse(CourseEntity courseEntity) throws Exception {
+    public CourseResponse createCourse(CourseRequest courseRequest) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
-        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseEntity.getCourseName(), userEntity.getExpert());
+        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseRequest.getCourseName(), userEntity.getExpert());
         if (currentCourse != null) {
             throw new NotFoundException("Khoá học đã tồn tại !");
         }
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
-        newCourse.setCourseName(courseEntity.getCourseName());
-        newCourse.setDescription(courseEntity.getDescription());
-        newCourse.setObjectives(courseEntity.getObjectives());
-        newCourse.setIntroduction(courseEntity.getIntroduction());
-        newCourse.setOriginalPrice(courseEntity.getOriginalPrice());
-        newCourse.setSalePrice(courseEntity.getSalePrice());
-        newCourse.setThumbnail(courseEntity.getThumbnail());
+        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setObjectiveList(courseRequest.getObjectives());
+        newCourse.setIntroduction(courseRequest.getIntroduction());
+        newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
+        newCourse.setSalePrice(courseRequest.getSalePrice());
+        newCourse.setThumbnail(courseRequest.getThumbnail());
         newCourse=this.courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet=new HashSet<>();
-        for(SubjectEntity subjectEntity : courseEntity.getSubjects()) {
-            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
+        for(String subjectName : courseRequest.getSubjects()) {
+            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectName.trim());
             if(checkExistsSubject) {
-                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
+                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectName.trim());
                 subjectEntitySet.add(currentSubject);
             }else{
+                SubjectEntity subjectEntity = SubjectEntity.builder()
+                        .subjectName(subjectName.trim()
+                        )
+                        .build();
                 this.subjectRepository.save(subjectEntity);
             }
         }
         newCourse.setSubjects(subjectEntitySet);
-        for (LessonEntity lessonEntity : courseEntity.getLessons()) {
-            lessonEntity.setCourse(newCourse);
-            this.lessonService.save(lessonEntity);
-        }
+//        for (LessonEntity lessonEntity : courseEntity.getLessons()) {
+//            lessonEntity.setCourse(newCourse);
+//            this.lessonService.save(lessonEntity);
+//        }
         this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);

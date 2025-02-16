@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -106,7 +107,11 @@ public class CourseEntity implements Serializable {
 
     public void setObjectiveList(List<String> objectiveList) {
         try {
-            this.objectives = new ObjectMapper().writeValueAsString(objectiveList);
+            List<String> trimObjectiveList=new ArrayList<>();
+            for(String objective:objectiveList){
+                trimObjectiveList.add(objective.trim());
+            }
+            this.objectives = new ObjectMapper().writeValueAsString(trimObjectiveList);
         } catch (IOException e) {
             this.objectives = "[]";
         }
