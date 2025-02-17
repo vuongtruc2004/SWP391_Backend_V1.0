@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.request.CourseRequest;
 import com.dto.request.SubjectRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
@@ -16,8 +17,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,4 +147,5 @@ public class SubjectService {
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );
     }
+
 }

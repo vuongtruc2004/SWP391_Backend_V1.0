@@ -189,6 +189,14 @@ public class CourseService {
         }
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
+        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setObjectiveList(courseRequest.getObjectives());
+        newCourse.setIntroduction(courseRequest.getIntroduction());
+        newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
+        newCourse.setSalePrice(courseRequest.getSalePrice());
+        newCourse.setThumbnail(courseRequest.getThumbnail());
+        newCourse=this.courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet=new HashSet<>();
         for(String subjectName : courseRequest.getSubjects()) {
             Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectName.trim());
@@ -204,8 +212,6 @@ public class CourseService {
             }
         }
         newCourse.setSubjects(subjectEntitySet);
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.map(courseRequest, newCourse);
         newCourse=this.courseRepository.save(newCourse);
         this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();

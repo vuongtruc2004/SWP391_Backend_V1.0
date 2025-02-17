@@ -39,7 +39,6 @@ public class LessonService {
     public List<LessonResponse> save(List<LessonRequest> lessonRequestList) throws Exception {
         List<LessonResponse> lessonResponseList =  new ArrayList<>();
         for(LessonRequest lessonRequest : lessonRequestList){
-            LessonResponse lessonResponse = new LessonResponse();
             LessonEntity newLesson = new LessonEntity();
             newLesson.setCourse(lessonRequest.getCourse());
             newLesson.setTitle(lessonRequest.getTitle());

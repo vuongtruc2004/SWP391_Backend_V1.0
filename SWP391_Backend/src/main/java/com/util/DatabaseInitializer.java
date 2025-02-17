@@ -54,7 +54,7 @@
 //        createVideo();
 //        createSubject();
 //        createDocument();
-//        createLesson();
+////        createLesson();
 //        createQuestion();
 //        createQuiz();
 //        createCourse();
@@ -859,98 +859,98 @@
 //        }
 //    }
 //
-//    private void createLesson() {
-//        if (!lessonRepository.existsBy()) {
-//            List<LessonEntity> lessons = List.of(
-//                    LessonEntity.builder().title("Giới thiệu về Java").description("Tìm hiểu tổng quan về Java và ứng dụng thực tế.").build(),
-//                    LessonEntity.builder().title("Lập trình hướng đối tượng").description("Các khái niệm OOP trong Java: class, object, inheritance.").build(),
-//                    LessonEntity.builder().title("Cấu trúc dữ liệu và giải thuật").description("Các thuật toán sắp xếp, tìm kiếm, danh sách liên kết.").build(),
-//                    LessonEntity.builder().title("Làm việc với MySQL").description("Cách sử dụng MySQL, thiết kế database.").build(),
-//                    LessonEntity.builder().title("Spring Boot cơ bản").description("Tìm hiểu về Spring Boot và cách tạo ứng dụng.").build(),
-//                    LessonEntity.builder().title("RESTful API với Spring Boot").description("Học cách tạo API trong Spring Boot.").build(),
-//                    LessonEntity.builder().title("Bảo mật Spring Boot").description("JWT, OAuth2 và bảo mật trong ứng dụng.").build(),
-//                    LessonEntity.builder().title("Làm việc với Hibernate").description("ORM trong Java với Hibernate.").build(),
-//                    LessonEntity.builder().title("Lập trình Web với React").description("Giới thiệu về React và cách xây dựng ứng dụng web.").build(),
-//                    LessonEntity.builder().title("Kết nối Frontend và Backend").description("Cách tích hợp React với API từ Spring Boot.").build(),
-//                    LessonEntity.builder().title("Redux trong React").description("Quản lý trạng thái ứng dụng với Redux.").build(),
-//                    LessonEntity.builder().title("Next.js và SSR").description("Tìm hiểu về Next.js và Server-side Rendering.").build(),
-//                    LessonEntity.builder().title("CI/CD với GitHub Actions").description("Tự động hóa quy trình triển khai ứng dụng.").build(),
-//                    LessonEntity.builder().title("Docker và Kubernetes").description("Triển khai ứng dụng với Docker và Kubernetes.").build(),
-//                    LessonEntity.builder().title("Microservices với Spring Cloud").description("Xây dựng hệ thống Microservices với Spring Cloud.").build(),
-//                    LessonEntity.builder().title("GraphQL trong Java").description("Tìm hiểu về GraphQL và cách sử dụng với Spring Boot.").build(),
-//                    LessonEntity.builder().title("Lập trình Android với Kotlin").description("Xây dựng ứng dụng Android hiện đại với Kotlin.").build(),
-//                    LessonEntity.builder().title("Machine Learning với Python").description("Cơ bản về Machine Learning, AI, Data Science.").build(),
-//                    LessonEntity.builder().title("Advanced Java Programming").description("Nâng cao kỹ năng Java với multithreading, stream API.").build(),
-//                    LessonEntity.builder().title("TDD với JUnit").description("Lập trình hướng kiểm thử với JUnit và Mockito.").build(),
-//                    LessonEntity.builder().title("Bộ nhớ đệm với Redis").description("Tăng tốc hiệu suất ứng dụng với Redis Cache.").build(),
-//                    LessonEntity.builder().title("Kafka và Event-Driven Architecture").description("Xây dựng hệ thống phân tán với Apache Kafka.").build(),
-//                    LessonEntity.builder().title("Xây dựng API GraphQL").description("Tạo GraphQL API với Spring Boot.").build(),
-//                    LessonEntity.builder().title("OAuth2 và OpenID Connect").description("Tích hợp OAuth2 và OpenID Connect trong Spring Security.").build(),
-//                    LessonEntity.builder().title("WebSockets với Spring Boot").description("Xây dựng ứng dụng real-time với WebSockets.").build(),
-//                    LessonEntity.builder().title("Elasticsearch cho Big Data").description("Tìm kiếm nhanh với Elasticsearch và Kibana.").build(),
-//                    LessonEntity.builder().title("Golang cho Backend Developers").description("Học cách sử dụng Golang để xây dựng API mạnh mẽ.").build(),
-//                    LessonEntity.builder().title("TensorFlow với Java").description("Xây dựng mô hình Machine Learning với TensorFlow và Java.").build(),
-//                    LessonEntity.builder().title("Xây dựng hệ thống CI/CD nâng cao").description("CI/CD chuyên sâu với Kubernetes và ArgoCD.").build(),
-//                    LessonEntity.builder().title("Xây dựng ứng dụng Serverless").description("Sử dụng AWS Lambda để phát triển ứng dụng không máy chủ.").build(),
-//                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Java").description("Tìm hiểu về biến, kiểu dữ liệu cơ bản và cách sử dụng chúng.").build(),
-//                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Hướng dẫn sử dụng if-else, switch-case và vòng lặp trong Java.").build(),
-//                    LessonEntity.builder().title("Lập trình hướng đối tượng với Java").description("Giới thiệu về lập trình OOP, các khái niệm class, object, inheritance, polymorphism.").build(),
-//                    LessonEntity.builder().title("Làm việc với Array và Collection").description("Học cách sử dụng mảng, ArrayList, HashMap trong Java.").build(),
-//                    LessonEntity.builder().title("Xử lý ngoại lệ trong Java").description("Hướng dẫn cách sử dụng try-catch-finally để xử lý lỗi chương trình.").build(),
-//                    LessonEntity.builder().title("Làm việc với File trong Java").description("Đọc ghi file bằng FileReader, FileWriter, BufferedReader và BufferedWriter.").build(),
-//                    LessonEntity.builder().title("Giới thiệu về JDBC").description("Kết nối Java với MySQL sử dụng JDBC API.").build(),
-//                    LessonEntity.builder().title("Lập trình đa luồng trong Java").description("Học cách tạo và quản lý thread trong Java.").build(),
-//                    LessonEntity.builder().title("Xây dựng ứng dụng Java Swing").description("Hướng dẫn tạo giao diện đồ họa với Java Swing.").build(),
-//                    LessonEntity.builder().title("Làm việc với API trong Java").description("Gọi API RESTful và xử lý dữ liệu JSON bằng Java.").build(),
-//                    LessonEntity.builder().title("Spring Boot: Giới thiệu và Cấu hình").description("Cài đặt và cấu hình dự án Spring Boot đầu tiên.").build(),
-//                    LessonEntity.builder().title("Spring Boot: Xây dựng API RESTful").description("Học cách xây dựng API RESTful với Spring Boot.").build(),
-//                    LessonEntity.builder().title("Spring Boot: Làm việc với JPA và MySQL").description("Hướng dẫn tích hợp JPA với MySQL trong Spring Boot.").build(),
-//                    LessonEntity.builder().title("Spring Security: Xác thực và phân quyền").description("Hướng dẫn triển khai xác thực và phân quyền trong Spring Security.").build(),
-//                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với Spring Boot").description("Ứng dụng kiến thức đã học vào dự án thực tế.").build(),
-//                    LessonEntity.builder().title("Giới thiệu về Python").description("Tổng quan về Python, cài đặt và thiết lập môi trường.").build(),
-//                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Python").description("Học về biến, kiểu dữ liệu và cách sử dụng trong Python.").build(),
-//                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Sử dụng if-else, for, while trong Python.").build(),
-//                    LessonEntity.builder().title("Lập trình hướng đối tượng trong Python").description("Class, object, inheritance, polymorphism trong Python.").build(),
-//                    LessonEntity.builder().title("Làm việc với List, Tuple, Dictionary").description("Học cách thao tác với các cấu trúc dữ liệu trong Python.").build(),
-//                    LessonEntity.builder().title("Xử lý file trong Python").description("Đọc, ghi file với Python sử dụng open, read, write.").build(),
-//                    LessonEntity.builder().title("Lập trình bất đồng bộ trong Python").description("Async, await trong Python để tối ưu hiệu suất.").build(),
-//                    LessonEntity.builder().title("Dự án Python: Xây dựng ứng dụng quản lý công việc").description("Ứng dụng thực tế giúp bạn hiểu sâu hơn về lập trình Python.").build(),
-//                    LessonEntity.builder().title("Giới thiệu về React.js").description("Học React từ cơ bản, hiểu về JSX và component.").build(),
-//                    LessonEntity.builder().title("React Hooks và State Management").description("Sử dụng useState, useEffect, Context API trong React.").build(),
-//                    LessonEntity.builder().title("Next.js: Xây dựng ứng dụng SSR và SSG").description("Học cách tối ưu SEO với Next.js.").build(),
-//                    LessonEntity.builder().title("Xây dựng API với Node.js").description("Dùng Express.js để xây dựng API RESTful.").build(),
-//                    LessonEntity.builder().title("Tìm hiểu về TypeScript").description("Học cách sử dụng TypeScript để viết code dễ bảo trì hơn.").build(),
-//                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với React").description("Ứng dụng các kiến thức về React, Redux vào một dự án thực tế.").build(),
-//                    LessonEntity.builder().title("Tối ưu hiệu suất với React và Next.js").description("Học cách tối ưu và cải thiện hiệu suất cho ứng dụng React.").build()
-//            );
-//            List<VideoEntity> videos = videoRepository.findAll();
-//            List<DocumentEntity> documents = documentRepository.findAll();
-//
-//            if (videos.size() != lessons.size() || documents.size() != lessons.size()) {
-//                throw new IllegalStateException("Dữ liệu không khớp: số lượng videos, documents và lessons không bằng nhau.");
-//            }
-//
-//            for (int i = 0; i < lessons.size(); i++) {
-//                LessonEntity lesson = lessons.get(i);
-//
-//                // 1. Lưu lesson trước
-//                lesson = lessonRepository.save(lesson);
-//
-//                // 2. Gán lesson vào video và document
-//                if (i < videos.size()) {
-//                    videos.get(i).setLesson(lesson);
-//                    videoRepository.save(videos.get(i));
-//                }
-//
-//                if (i < documents.size()) {
-//                    documents.get(i).setLesson(lesson);
-//                    documentRepository.save(documents.get(i));
-//                }
-//            }
-//
-//
-//        }
-//    }
+////    private void createLesson() {
+////        if (!lessonRepository.existsBy()) {
+////            List<LessonEntity> lessons = List.of(
+////                    LessonEntity.builder().title("Giới thiệu về Java").description("Tìm hiểu tổng quan về Java và ứng dụng thực tế.").build(),
+////                    LessonEntity.builder().title("Lập trình hướng đối tượng").description("Các khái niệm OOP trong Java: class, object, inheritance.").build(),
+////                    LessonEntity.builder().title("Cấu trúc dữ liệu và giải thuật").description("Các thuật toán sắp xếp, tìm kiếm, danh sách liên kết.").build(),
+////                    LessonEntity.builder().title("Làm việc với MySQL").description("Cách sử dụng MySQL, thiết kế database.").build(),
+////                    LessonEntity.builder().title("Spring Boot cơ bản").description("Tìm hiểu về Spring Boot và cách tạo ứng dụng.").build(),
+////                    LessonEntity.builder().title("RESTful API với Spring Boot").description("Học cách tạo API trong Spring Boot.").build(),
+////                    LessonEntity.builder().title("Bảo mật Spring Boot").description("JWT, OAuth2 và bảo mật trong ứng dụng.").build(),
+////                    LessonEntity.builder().title("Làm việc với Hibernate").description("ORM trong Java với Hibernate.").build(),
+////                    LessonEntity.builder().title("Lập trình Web với React").description("Giới thiệu về React và cách xây dựng ứng dụng web.").build(),
+////                    LessonEntity.builder().title("Kết nối Frontend và Backend").description("Cách tích hợp React với API từ Spring Boot.").build(),
+////                    LessonEntity.builder().title("Redux trong React").description("Quản lý trạng thái ứng dụng với Redux.").build(),
+////                    LessonEntity.builder().title("Next.js và SSR").description("Tìm hiểu về Next.js và Server-side Rendering.").build(),
+////                    LessonEntity.builder().title("CI/CD với GitHub Actions").description("Tự động hóa quy trình triển khai ứng dụng.").build(),
+////                    LessonEntity.builder().title("Docker và Kubernetes").description("Triển khai ứng dụng với Docker và Kubernetes.").build(),
+////                    LessonEntity.builder().title("Microservices với Spring Cloud").description("Xây dựng hệ thống Microservices với Spring Cloud.").build(),
+////                    LessonEntity.builder().title("GraphQL trong Java").description("Tìm hiểu về GraphQL và cách sử dụng với Spring Boot.").build(),
+////                    LessonEntity.builder().title("Lập trình Android với Kotlin").description("Xây dựng ứng dụng Android hiện đại với Kotlin.").build(),
+////                    LessonEntity.builder().title("Machine Learning với Python").description("Cơ bản về Machine Learning, AI, Data Science.").build(),
+////                    LessonEntity.builder().title("Advanced Java Programming").description("Nâng cao kỹ năng Java với multithreading, stream API.").build(),
+////                    LessonEntity.builder().title("TDD với JUnit").description("Lập trình hướng kiểm thử với JUnit và Mockito.").build(),
+////                    LessonEntity.builder().title("Bộ nhớ đệm với Redis").description("Tăng tốc hiệu suất ứng dụng với Redis Cache.").build(),
+////                    LessonEntity.builder().title("Kafka và Event-Driven Architecture").description("Xây dựng hệ thống phân tán với Apache Kafka.").build(),
+////                    LessonEntity.builder().title("Xây dựng API GraphQL").description("Tạo GraphQL API với Spring Boot.").build(),
+////                    LessonEntity.builder().title("OAuth2 và OpenID Connect").description("Tích hợp OAuth2 và OpenID Connect trong Spring Security.").build(),
+////                    LessonEntity.builder().title("WebSockets với Spring Boot").description("Xây dựng ứng dụng real-time với WebSockets.").build(),
+////                    LessonEntity.builder().title("Elasticsearch cho Big Data").description("Tìm kiếm nhanh với Elasticsearch và Kibana.").build(),
+////                    LessonEntity.builder().title("Golang cho Backend Developers").description("Học cách sử dụng Golang để xây dựng API mạnh mẽ.").build(),
+////                    LessonEntity.builder().title("TensorFlow với Java").description("Xây dựng mô hình Machine Learning với TensorFlow và Java.").build(),
+////                    LessonEntity.builder().title("Xây dựng hệ thống CI/CD nâng cao").description("CI/CD chuyên sâu với Kubernetes và ArgoCD.").build(),
+////                    LessonEntity.builder().title("Xây dựng ứng dụng Serverless").description("Sử dụng AWS Lambda để phát triển ứng dụng không máy chủ.").build(),
+////                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Java").description("Tìm hiểu về biến, kiểu dữ liệu cơ bản và cách sử dụng chúng.").build(),
+////                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Hướng dẫn sử dụng if-else, switch-case và vòng lặp trong Java.").build(),
+////                    LessonEntity.builder().title("Lập trình hướng đối tượng với Java").description("Giới thiệu về lập trình OOP, các khái niệm class, object, inheritance, polymorphism.").build(),
+////                    LessonEntity.builder().title("Làm việc với Array và Collection").description("Học cách sử dụng mảng, ArrayList, HashMap trong Java.").build(),
+////                    LessonEntity.builder().title("Xử lý ngoại lệ trong Java").description("Hướng dẫn cách sử dụng try-catch-finally để xử lý lỗi chương trình.").build(),
+////                    LessonEntity.builder().title("Làm việc với File trong Java").description("Đọc ghi file bằng FileReader, FileWriter, BufferedReader và BufferedWriter.").build(),
+////                    LessonEntity.builder().title("Giới thiệu về JDBC").description("Kết nối Java với MySQL sử dụng JDBC API.").build(),
+////                    LessonEntity.builder().title("Lập trình đa luồng trong Java").description("Học cách tạo và quản lý thread trong Java.").build(),
+////                    LessonEntity.builder().title("Xây dựng ứng dụng Java Swing").description("Hướng dẫn tạo giao diện đồ họa với Java Swing.").build(),
+////                    LessonEntity.builder().title("Làm việc với API trong Java").description("Gọi API RESTful và xử lý dữ liệu JSON bằng Java.").build(),
+////                    LessonEntity.builder().title("Spring Boot: Giới thiệu và Cấu hình").description("Cài đặt và cấu hình dự án Spring Boot đầu tiên.").build(),
+////                    LessonEntity.builder().title("Spring Boot: Xây dựng API RESTful").description("Học cách xây dựng API RESTful với Spring Boot.").build(),
+////                    LessonEntity.builder().title("Spring Boot: Làm việc với JPA và MySQL").description("Hướng dẫn tích hợp JPA với MySQL trong Spring Boot.").build(),
+////                    LessonEntity.builder().title("Spring Security: Xác thực và phân quyền").description("Hướng dẫn triển khai xác thực và phân quyền trong Spring Security.").build(),
+////                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với Spring Boot").description("Ứng dụng kiến thức đã học vào dự án thực tế.").build(),
+////                    LessonEntity.builder().title("Giới thiệu về Python").description("Tổng quan về Python, cài đặt và thiết lập môi trường.").build(),
+////                    LessonEntity.builder().title("Biến và kiểu dữ liệu trong Python").description("Học về biến, kiểu dữ liệu và cách sử dụng trong Python.").build(),
+////                    LessonEntity.builder().title("Cấu trúc điều kiện và vòng lặp").description("Sử dụng if-else, for, while trong Python.").build(),
+////                    LessonEntity.builder().title("Lập trình hướng đối tượng trong Python").description("Class, object, inheritance, polymorphism trong Python.").build(),
+////                    LessonEntity.builder().title("Làm việc với List, Tuple, Dictionary").description("Học cách thao tác với các cấu trúc dữ liệu trong Python.").build(),
+////                    LessonEntity.builder().title("Xử lý file trong Python").description("Đọc, ghi file với Python sử dụng open, read, write.").build(),
+////                    LessonEntity.builder().title("Lập trình bất đồng bộ trong Python").description("Async, await trong Python để tối ưu hiệu suất.").build(),
+////                    LessonEntity.builder().title("Dự án Python: Xây dựng ứng dụng quản lý công việc").description("Ứng dụng thực tế giúp bạn hiểu sâu hơn về lập trình Python.").build(),
+////                    LessonEntity.builder().title("Giới thiệu về React.js").description("Học React từ cơ bản, hiểu về JSX và component.").build(),
+////                    LessonEntity.builder().title("React Hooks và State Management").description("Sử dụng useState, useEffect, Context API trong React.").build(),
+////                    LessonEntity.builder().title("Next.js: Xây dựng ứng dụng SSR và SSG").description("Học cách tối ưu SEO với Next.js.").build(),
+////                    LessonEntity.builder().title("Xây dựng API với Node.js").description("Dùng Express.js để xây dựng API RESTful.").build(),
+////                    LessonEntity.builder().title("Tìm hiểu về TypeScript").description("Học cách sử dụng TypeScript để viết code dễ bảo trì hơn.").build(),
+////                    LessonEntity.builder().title("Dự án thực tế: Xây dựng website bán hàng với React").description("Ứng dụng các kiến thức về React, Redux vào một dự án thực tế.").build(),
+////                    LessonEntity.builder().title("Tối ưu hiệu suất với React và Next.js").description("Học cách tối ưu và cải thiện hiệu suất cho ứng dụng React.").build()
+////            );
+////            List<VideoEntity> videos = videoRepository.findAll();
+////            List<DocumentEntity> documents = documentRepository.findAll();
+////
+////            if (videos.size() != lessons.size() || documents.size() != lessons.size()) {
+////                throw new IllegalStateException("Dữ liệu không khớp: số lượng videos, documents và lessons không bằng nhau.");
+////            }
+////
+////            for (int i = 0; i < lessons.size(); i++) {
+////                LessonEntity lesson = lessons.get(i);
+////
+////                // 1. Lưu lesson trước
+////                lesson = lessonRepository.save(lesson);
+////
+////                // 2. Gán lesson vào video và document
+////                if (i < videos.size()) {
+////                    videos.get(i).setLesson(lesson);
+////                    videoRepository.save(videos.get(i));
+////                }
+////
+////                if (i < documents.size()) {
+////                    documents.get(i).setLesson(lesson);
+////                    documentRepository.save(documents.get(i));
+////                }
+////            }
+////
+////
+////        }
+////    }
 //
 //    private void createQuiz() {
 //        if (!quizRepository.existsBy()) {
