@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -56,25 +58,31 @@ public class CourseEntity implements Serializable {
     @JoinTable(name = "course_subject",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    @JsonManagedReference
     Set<SubjectEntity> subjects;
 
     @ManyToMany
     @JoinTable(name = "course_user",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonManagedReference
     Set<UserEntity> users;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<LessonEntity> lessons;
 
     @ManyToOne
     @JoinColumn(name = "expert_id")
+    @JsonManagedReference
     ExpertEntity expert;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<LikeEntity> likes;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<CommentEntity> comments;
 
     @PrePersist

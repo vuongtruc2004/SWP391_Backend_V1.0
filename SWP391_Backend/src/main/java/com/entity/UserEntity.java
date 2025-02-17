@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
 import jakarta.persistence.*;
@@ -55,24 +57,31 @@ public class UserEntity {
     Boolean locked;
 
     @OneToOne(mappedBy = "user")
+    @JsonManagedReference
     OTPEntity otp;
 
     @OneToOne(mappedBy = "user")
+    @JsonManagedReference
     ExpertEntity expert;
 
     @ManyToMany(mappedBy = "users")
+    @JsonManagedReference
     Set<CourseEntity> courses;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     Set<LikeEntity> likes;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     Set<BlogEntity> blogs;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     Set<CommentEntity> comments;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     Set<QuizAttemptEntity> quizAttempts;
 
     @ManyToMany

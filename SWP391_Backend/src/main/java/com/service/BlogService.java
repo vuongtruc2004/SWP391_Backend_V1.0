@@ -1,21 +1,29 @@
 package com.service;
 
+import com.dto.request.BlogRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.BlogResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
+import com.dto.response.details.BlogDetailsResponse;
 import com.entity.BlogEntity;
 import com.entity.UserEntity;
+import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
+import com.helper.UserServiceHelper;
 import com.repository.BlogRepository;
 import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,12 +37,14 @@ public class BlogService {
     private final BlogRepository blogRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final UserServiceHelper userServiceHelper;
 
     @Autowired
-    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository, UserServiceHelper userServiceHelper) {
         this.blogRepository = blogRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.userServiceHelper = userServiceHelper;
     }
 
     public PageDetailsResponse<List<BlogResponse>> getBlogsWithFilter(
@@ -137,4 +147,29 @@ public class BlogService {
         blogResponse.setTotalComments(blogEntity.getComments().size());
         return blogResponse;
     }
+
+    public PageDetailsResponse<List<BlogDetailsResponse>> getBlogWithFilterPageAdmin(
+            Specification<BlogEntity> specification,
+            Pageable pageable
+    ){
+        Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
+        List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
+            BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);
+            blogResponse.setTotalLikes(blogEntity.getLikes().size());
+            blogResponse.setTotalComments(blogEntity.getComments().size());
+            blogResponse.setUser(modelMapper.map(blogEntity.getUser(), UserResponse.class));
+            return blogResponse;
+        }).toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                listResponse
+
+        );
+    }
+
+
 }

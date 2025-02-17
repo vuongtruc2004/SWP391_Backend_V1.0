@@ -1,5 +1,8 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,24 +35,30 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "parent_comment_id")
+    @JsonManagedReference
     CommentEntity parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<CommentEntity> replies;
 
     @OneToMany(mappedBy = "comment")
+    @JsonManagedReference
     Set<LikeEntity> likes;
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
+    @JsonBackReference
     BlogEntity blog;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonManagedReference
     CourseEntity course;
 
     @PrePersist

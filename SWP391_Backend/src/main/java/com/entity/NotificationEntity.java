@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -35,6 +37,7 @@ public class NotificationEntity {
     Boolean global;
 
     @OneToMany(mappedBy = "notification")
+    @JsonManagedReference
     Set<UserNotificationEntity> userNotifications;
 
     @PrePersist

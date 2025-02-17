@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,14 +30,18 @@ public class LessonEntity {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonManagedReference
     CourseEntity course;
 
     @OneToMany(mappedBy = "lesson")
+    @JsonManagedReference
     Set<VideoEntity> videos;
 
     @OneToMany(mappedBy = "lesson")
+    @JsonManagedReference
     Set<DocumentEntity> documents;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<QuizEntity> quizzes;
 }

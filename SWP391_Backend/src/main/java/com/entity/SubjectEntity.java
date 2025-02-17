@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,5 +32,6 @@ public class SubjectEntity {
     String thumbnail;
 
     @ManyToMany(mappedBy = "subjects")
+    @JsonManagedReference
     Set<CourseEntity> courses;
 }

@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,10 +23,12 @@ public class UserNotificationEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "notification_id")
+    @JsonManagedReference
     NotificationEntity notification;
 
     Boolean isRead;

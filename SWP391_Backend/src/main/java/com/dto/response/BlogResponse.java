@@ -21,6 +21,8 @@ public class BlogResponse {
 
     String content;
 
+    String plainContent;
+
     String thumbnail;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")

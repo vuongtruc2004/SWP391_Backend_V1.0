@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -34,11 +36,14 @@ public class ExpertEntity {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     UserEntity user;
 
     @OneToMany(mappedBy = "expert")
+    @JsonManagedReference
     Set<CourseEntity> courses;
 
     @OneToMany(mappedBy = "expert")
+    @JsonManagedReference
     Set<QuizEntity> quizzes;
 }

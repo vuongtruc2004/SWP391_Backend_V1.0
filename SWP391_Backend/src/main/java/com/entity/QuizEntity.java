@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -46,13 +48,16 @@ public class QuizEntity {
 
     @ManyToOne
     @JoinColumn(name = "lesson_id")
+    @JsonManagedReference
     LessonEntity lesson;
 
     @ManyToOne
     @JoinColumn(name = "expert_id")
+    @JsonManagedReference
     ExpertEntity expert;
 
     @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<QuizAttemptEntity> quizAttempts;
 
     @ManyToMany
@@ -61,6 +66,7 @@ public class QuizEntity {
             joinColumns = @JoinColumn(name = "quiz_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
+    @JsonManagedReference
     Set<QuestionEntity> questions;
 
     @PrePersist

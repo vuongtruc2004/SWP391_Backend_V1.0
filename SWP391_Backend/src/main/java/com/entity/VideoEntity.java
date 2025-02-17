@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -40,9 +42,11 @@ public class VideoEntity {
 
     @ManyToOne
     @JoinColumn(name = "lesson_id")
+    @JsonManagedReference
     LessonEntity lesson;
 
     @ManyToMany(mappedBy = "completedVideos", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Set<UserEntity> users;
 
     @PrePersist

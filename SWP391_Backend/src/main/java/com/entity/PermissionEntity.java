@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.util.enums.ApiMethodEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +32,7 @@ public class PermissionEntity {
     ApiMethodEnum apiMethod;
 
     @ManyToMany(mappedBy = "permissions")
+    @JsonManagedReference
     List<RoleEntity> roles;
 
     public PermissionEntity(String apiPath, ApiMethodEnum apiMethod) {

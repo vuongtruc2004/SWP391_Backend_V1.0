@@ -107,7 +107,7 @@ public class CourseService {
         );
     }
 
-    public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilterByAdmin(
+    public PageDetailsResponse<List<CourseDetailsResponse>> getCoursesWithFilterByAdmin(
             Pageable pageable,
             Specification<CourseEntity> specification,
             Boolean accepted
@@ -118,7 +118,10 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToCourseResponseList(page);
+        List<CourseDetailsResponse> listCourseResponses = page.getContent().stream().map(courseEntity -> {
+            CourseDetailsResponse courseDetailsResponse = courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+            return courseDetailsResponse;
+        }).toList();
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -191,4 +194,8 @@ public class CourseService {
                 null
         );
     }
+
+//   public Boolean checkStatusCourses(Long courseId, Long userId){
+//
+//   }
 }

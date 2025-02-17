@@ -46,18 +46,18 @@ public class DatabaseInitializer implements CommandLineRunner {
         logger.info("Database initialization started!");
 
 //        createPermission();
-        createRole();
-        createUser();
-        createExpert();
-        createHashtag();
-        createBlog();
-        createVideo();
-        createSubject();
-        createDocument();
-        createLesson();
-        createQuestion();
-        createQuiz();
-        createCourse();
+//        createRole();
+//        createUser();
+//        createExpert();
+//        createHashtag();
+//        createBlog();
+//        createVideo();
+//        createSubject();
+//        createDocument();
+//        createLesson();
+//        createQuestion();
+//        createQuiz();
+//        createCourse();
 
         logger.info("Database initialization completed!");
     }

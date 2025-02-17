@@ -1,5 +1,7 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,9 +30,11 @@ public class RoleEntity {
 
     @ManyToMany
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JsonManagedReference
     List<PermissionEntity> permissions;
 
     @OneToMany(mappedBy = "role")
+    @JsonManagedReference
     List<UserEntity> users;
 
     public RoleEntity(RoleNameEnum roleName, List<PermissionEntity> permissions) {
