@@ -6,6 +6,7 @@ import com.dto.response.LessonResponse;
 import com.service.LessonService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class LessonController {
     @PostMapping
     @ApiMessage("Tạo mới bài giảng thành công")
     public ResponseEntity<List<LessonResponse>> createLesson(@RequestBody List<LessonRequest> lessonRequests) throws Exception {
-        return ResponseEntity.ok().body(this.lessonService.save(lessonRequests));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.lessonService.save(lessonRequests));
     }
 
 }

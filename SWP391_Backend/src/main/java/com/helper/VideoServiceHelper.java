@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class VideoServiceHelper {
 
-    public Set<VideoResponse> mapResponseToSet(Set<VideoEntity> videoEntities) {
+    public Set<VideoResponse> mapToResponseSet(Set<VideoEntity> videoEntities) {
         return videoEntities.stream()
                 .map(videoEntity -> VideoResponse.builder()
                         .videoId(videoEntity.getVideoId())

@@ -52,7 +52,7 @@ public class LessonService {
             lessonResponse.setLessonId(newLesson.getLessonId());
             lessonResponse.setTitle(lessonRequest.getTitle());
             lessonResponse.setDocuments(this.documentServiceHelper.mapToResponseSet(lessonRequest.getDocuments()));
-            lessonResponse.setVideos(this.videoServiceHelper.mapResponseToSet(lessonRequest.getVideos()));
+            lessonResponse.setVideos(this.videoServiceHelper.mapToResponseSet(lessonRequest.getVideos()));
             lessonResponseList.add(lessonResponse);
             this.lessonRepository.save(newLesson);
         }
