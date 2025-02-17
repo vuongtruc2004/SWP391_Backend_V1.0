@@ -15,8 +15,10 @@ import com.repository.CourseRepository;
 import com.repository.DocumentRepository;
 import com.repository.LessonRepository;
 import com.repository.VideoRepository;
+import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class LessonService {
     private final VideoRepository videoRepository;
     private final DocumentServiceHelper documentServiceHelper;
     private final VideoServiceHelper videoServiceHelper;
+    private final DocumentService documentService;
+    private final VideoService videoService;
 
     public List<LessonResponse> save(List<LessonRequest> lessonRequestList) throws Exception {
         List<LessonResponse> lessonResponseList =  new ArrayList<>();
@@ -40,21 +44,11 @@ public class LessonService {
             newLesson.setCourse(lessonRequest.getCourse());
             newLesson.setTitle(lessonRequest.getTitle());
             this.lessonRepository.save(newLesson);
-            for (DocumentEntity documentEntity : lessonRequest.getDocuments()) {
-                documentEntity.setLesson(newLesson);
-                this.documentRepository.save(documentEntity);
-
-            }
-            for (VideoEntity videoEntity : lessonRequest.getVideos()) {
-                videoEntity.setLesson(newLesson);
-                this.videoRepository.save(videoEntity);
-            }
-            lessonResponse.setLessonId(newLesson.getLessonId());
-            lessonResponse.setTitle(lessonRequest.getTitle());
-            lessonResponse.setDocuments(this.documentServiceHelper.mapToResponseSet(lessonRequest.getDocuments()));
-            lessonResponse.setVideos(this.videoServiceHelper.mapToResponseSet(lessonRequest.getVideos()));
-            lessonResponseList.add(lessonResponse);
+            this.documentService.saveDocumentsWithLesson(lessonRequest.getDocuments(), newLesson);
+            this.videoService.saveVideosWithLesson(lessonRequest.getVideos(), newLesson);
+            lessonResponseList.add(BuildResponse.buildLessonResponse(lessonRequest, newLesson));
             this.lessonRepository.save(newLesson);
+
         }
         return lessonResponseList;
     }
