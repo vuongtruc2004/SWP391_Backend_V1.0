@@ -39,6 +39,7 @@ public class CourseService {
     private final ExpertRepository expertRepository;
     private final LessonService lessonService;
     private final SubjectRepository subjectRepository;
+    private final SubjectService subjectService;
 
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
@@ -197,23 +198,9 @@ public class CourseService {
         newCourse.setSalePrice(courseRequest.getSalePrice());
         newCourse.setThumbnail(courseRequest.getThumbnail());
         newCourse=this.courseRepository.save(newCourse);
-        Set<SubjectEntity> subjectEntitySet=new HashSet<>();
-        for(String subjectName : courseRequest.getSubjects()) {
-            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectName.trim());
-            if(checkExistsSubject) {
-                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectName.trim());
-                subjectEntitySet.add(currentSubject);
-            }else{
-                SubjectEntity subjectEntity = SubjectEntity.builder()
-                        .subjectName(subjectName.trim()
-                        )
-                        .build();
-                this.subjectRepository.save(subjectEntity);
-            }
-        }
+        Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
         newCourse=this.courseRepository.save(newCourse);
-        this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.map(newCourse, courseResponse);
