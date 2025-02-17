@@ -17,8 +17,6 @@ public class LessonResponse {
 
     String title;
 
-    String description;
-
     Set<VideoResponse> videos;
 
     Set<DocumentResponse> documents;

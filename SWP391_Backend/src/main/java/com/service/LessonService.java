@@ -2,9 +2,15 @@ package com.service;
 
 
 
+import com.dto.request.LessonRequest;
+import com.dto.response.CourseResponse;
+import com.dto.response.LessonResponse;
+import com.entity.CourseEntity;
 import com.entity.DocumentEntity;
 import com.entity.LessonEntity;
 import com.entity.VideoEntity;
+import com.helper.DocumentServiceHelper;
+import com.helper.VideoServiceHelper;
 import com.repository.CourseRepository;
 import com.repository.DocumentRepository;
 import com.repository.LessonRepository;
@@ -13,6 +19,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,20 +29,34 @@ public class LessonService {
     private final LessonRepository lessonRepository;
     private final DocumentRepository documentRepository;
     private final VideoRepository videoRepository;
+    private final DocumentServiceHelper documentServiceHelper;
+    private final VideoServiceHelper videoServiceHelper;
 
-    public void save(LessonEntity lesson) throws Exception {
-        LessonEntity newLesson = this.lessonRepository.save(lesson);
-        newLesson.setTitle(lesson.getTitle());
-        newLesson.setDescription(lesson.getDescription());
-        for (DocumentEntity documentEntity : lesson.getDocuments()) {
-            documentEntity.setLesson(lesson);
-            this.documentRepository.save(documentEntity);
+    public List<LessonResponse> save(List<LessonRequest> lessonRequestList) throws Exception {
+        List<LessonResponse> lessonResponseList =  new ArrayList<>();
+        for(LessonRequest lessonRequest : lessonRequestList){
+            LessonResponse lessonResponse = new LessonResponse();
+            LessonEntity newLesson = new LessonEntity();
+            newLesson.setCourse(lessonRequest.getCourse());
+            newLesson.setTitle(lessonRequest.getTitle());
+            this.lessonRepository.save(newLesson);
+            for (DocumentEntity documentEntity : lessonRequest.getDocuments()) {
+                documentEntity.setLesson(newLesson);
+                this.documentRepository.save(documentEntity);
+
+            }
+            for (VideoEntity videoEntity : lessonRequest.getVideos()) {
+                videoEntity.setLesson(newLesson);
+                this.videoRepository.save(videoEntity);
+            }
+            lessonResponse.setLessonId(newLesson.getLessonId());
+            lessonResponse.setTitle(lessonRequest.getTitle());
+            lessonResponse.setDocuments(this.documentServiceHelper.mapToResponseSet(lessonRequest.getDocuments()));
+            lessonResponse.setVideos(this.videoServiceHelper.mapResponseToSet(lessonRequest.getVideos()));
+            lessonResponseList.add(lessonResponse);
+            this.lessonRepository.save(newLesson);
         }
-        for (VideoEntity videoEntity : lesson.getVideos()) {
-            videoEntity.setLesson(lesson);
-            this.videoRepository.save(videoEntity);
-        }
-        this.lessonRepository.save(lesson);
+        return lessonResponseList;
     }
 
     @Transactional

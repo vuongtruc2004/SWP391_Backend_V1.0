@@ -23,9 +23,6 @@ public class LessonEntity {
 
     String title;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    String description;
-
     @ManyToOne
     @JoinColumn(name = "course_id")
     CourseEntity course;
