@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -41,9 +40,6 @@ public class VideoEntity {
     @ManyToOne
     @JoinColumn(name = "lesson_id")
     LessonEntity lesson;
-
-    @ManyToMany(mappedBy = "completedVideos", cascade = CascadeType.ALL)
-    Set<UserEntity> users;
 
     @PrePersist
     public void handlePrePersist() {

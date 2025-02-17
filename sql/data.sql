@@ -595,6 +595,9 @@ CREATE TABLE `course_user` (
 
 LOCK TABLES `course_user` WRITE;
 /*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,1);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,1);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,1);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,10);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,10);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,10);
@@ -2329,34 +2332,42 @@ LOCK TABLES `user_answers` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_document`
+-- Table structure for table `user_progress`
 --
 
-DROP TABLE IF EXISTS `user_document`;
+DROP TABLE IF EXISTS `user_progress`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_document` (
-  `user_id` bigint NOT NULL,
-  `document_id` bigint NOT NULL,
-  PRIMARY KEY (`user_id`,`document_id`),
-  KEY `FKm3iuibaordqo93p4h94lvb6pn` (`document_id`),
-  CONSTRAINT `FKlx6x16jmssvsneosnyoast6na` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKm3iuibaordqo93p4h94lvb6pn` FOREIGN KEY (`document_id`) REFERENCES `documents` (`document_id`)
+CREATE TABLE `user_progress` (
+  `progress_id` bigint NOT NULL AUTO_INCREMENT,
+  `course_id` bigint DEFAULT NULL,
+  `document_id` bigint DEFAULT NULL,
+  `lesson_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
+  `video_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`progress_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_document`
+-- Dumping data for table `user_progress`
 --
 
-LOCK TABLES `user_document` WRITE;
-/*!40000 ALTER TABLE `user_document` DISABLE KEYS */;
-INSERT INTO `user_document` (`user_id`, `document_id`) VALUES (1,1);
-INSERT INTO `user_document` (`user_id`, `document_id`) VALUES (1,2);
-INSERT INTO `user_document` (`user_id`, `document_id`) VALUES (1,3);
-INSERT INTO `user_document` (`user_id`, `document_id`) VALUES (1,4);
-INSERT INTO `user_document` (`user_id`, `document_id`) VALUES (1,5);
-/*!40000 ALTER TABLE `user_document` ENABLE KEYS */;
+LOCK TABLES `user_progress` WRITE;
+/*!40000 ALTER TABLE `user_progress` DISABLE KEYS */;
+INSERT INTO `user_progress` (`course_id`, `document_id`, `lesson_id`, `user_id`, `video_id`) VALUES
+-- Hoàn thành video 1, 2 trong khóa học 1, lesson 1
+(1, NULL, 1, 1, 1),
+(1, NULL, 1, 1, 2),
+
+-- Hoàn thành document 1, 2 trong khóa học 1, lesson 1
+(1, 1, 1, 1, NULL),
+(1, 2, 1, 1, NULL),
+
+-- Hoàn thành video 1, 2 trong khóa học 2, lesson 2
+(2, NULL, 2, 1, 1),
+(2, NULL, 2, 1, 2);
+/*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2386,37 +2397,6 @@ CREATE TABLE `user_notifications` (
 LOCK TABLES `user_notifications` WRITE;
 /*!40000 ALTER TABLE `user_notifications` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_notifications` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_video`
---
-
-DROP TABLE IF EXISTS `user_video`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_video` (
-  `user_id` bigint NOT NULL,
-  `video_id` bigint NOT NULL,
-  PRIMARY KEY (`user_id`,`video_id`),
-  KEY `FKaw7ajit0c6is6x7prlgnde6kp` (`video_id`),
-  CONSTRAINT `FKaw7ajit0c6is6x7prlgnde6kp` FOREIGN KEY (`video_id`) REFERENCES `videos` (`video_id`),
-  CONSTRAINT `FKrflif1r9laoiwcwhh3imkhfn3` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_video`
---
-
-LOCK TABLES `user_video` WRITE;
-/*!40000 ALTER TABLE `user_video` DISABLE KEYS */;
-INSERT INTO `user_video` (`user_id`, `video_id`) VALUES (1,2);
-INSERT INTO `user_video` (`user_id`, `video_id`) VALUES (1,3);
-INSERT INTO `user_video` (`user_id`, `video_id`) VALUES (1,4);
-INSERT INTO `user_video` (`user_id`, `video_id`) VALUES (1,5);
-INSERT INTO `user_video` (`user_id`, `video_id`) VALUES (1,6);
-/*!40000 ALTER TABLE `user_video` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

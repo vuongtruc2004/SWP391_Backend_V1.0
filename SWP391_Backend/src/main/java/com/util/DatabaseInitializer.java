@@ -1291,7 +1291,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                 courseEntities.get(i).setLessons(lessons);
                 courseRepository.saveAndFlush(courseEntities.get(i));
             }
-            this.completeSomeDocumentAndVideo();
         }
     }
 
@@ -1309,16 +1308,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                 rateRepository.save(rateEntity);
             }
         }
-    }
-
-    private void completeSomeDocumentAndVideo() {
-        UserEntity user = userRepository.findByEmailAndAccountType("trucnvhe180248@fpt.edu.vn", AccountTypeEnum.CREDENTIALS)
-                .orElseThrow(() -> new UserException("Username not existed!"));
-        List<DocumentEntity> documents = documentRepository.findAll();
-        List<VideoEntity> videos = videoRepository.findAll();
-        user.setCompletedDocuments(new HashSet<>(documents.subList(0, 5)));
-        user.setCompletedVideos(new HashSet<>(videos.subList(1, 6)));
-        userRepository.save(user);
     }
 
     private String getRandomRateContent() {

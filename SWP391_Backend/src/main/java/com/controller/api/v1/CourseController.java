@@ -1,14 +1,12 @@
 package com.controller.api.v1;
 
-import com.dto.response.ApiResponse;
-import com.dto.response.CourseResponse;
-import com.dto.response.MinMaxPriceResponse;
-import com.dto.response.PageDetailsResponse;
+import com.dto.response.*;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.service.CourseService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +16,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/courses")
+@RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
-
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
 
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/purchased")
@@ -59,12 +54,10 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getSuggestedCourses(courseIds));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getAllCoursesOfUser(
-            @RequestParam(name = "user_id") Long userId,
-            Pageable pageable
-    ) {
-        return ResponseEntity.ok(courseService.getAllCoursesByUser(userId, pageable));
+    @ApiMessage("Lấy các khóa học đã mua thành công!")
+    @GetMapping("/user/purchased")
+    public ResponseEntity<List<CourseStatusResponse>> getPurchasedCourses() {
+        return ResponseEntity.ok(courseService.getPurchasedCourses());
     }
 
     @ApiMessage("Lấy các khóa học thành công!")

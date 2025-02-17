@@ -1,10 +1,7 @@
 package com.service;
 
 
-import com.dto.response.ApiResponse;
-import com.dto.response.CourseResponse;
-import com.dto.response.MinMaxPriceResponse;
-import com.dto.response.PageDetailsResponse;
+import com.dto.response.*;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
@@ -15,7 +12,9 @@ import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
 import com.repository.*;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
+import com.util.enums.AccountTypeEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +36,7 @@ public class CourseService {
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
     private final SubjectRepository subjectRepository;
+    private final UserProgressRepository userProgressRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -59,7 +60,7 @@ public class CourseService {
         specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("accepted"), true)));
 
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -91,7 +92,7 @@ public class CourseService {
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
         Page<CourseEntity> page = courseRepository.findCoursesAndOrderByPurchasersDesc(pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
+        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
@@ -101,18 +102,28 @@ public class CourseService {
         );
     }
 
-    public PageDetailsResponse<List<CourseResponse>> getAllCoursesByUser(Long id, Pageable pageable) {
-        UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Mã người dùng không tồn tại!"));
-        Page<CourseEntity> page = courseRepository.findAllByUsers(user, pageable);
-        List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page);
-        return BuildResponse.buildPageDetailsResponse(
-                page.getNumber() + 1,
-                page.getSize(),
-                page.getTotalPages(),
-                page.getTotalElements(),
-                courseResponses
-        );
+    public List<CourseStatusResponse> getPurchasedCourses() {
+        String email = JwtService.extractUsernameFromToken().orElse(null);
+        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
+        if (email != null && accountType != null) {
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
+            List<CourseStatusResponse> courseStatusResponseList = new ArrayList<>();
+
+            for (CourseEntity courseEntity : userEntity.getCourses()) {
+                long numberOfVideos = courseServiceHelper.getNumbersOfVideos(courseEntity);
+                long numberOfDocuments = courseServiceHelper.getNumbersOfDocuments(courseEntity);
+                long numberOfCompletedVideosAndDocuments = userProgressRepository.countNumberOfCompletedVideosAndDocuments(userEntity.getUserId(), courseEntity.getCourseId());
+                double completionPercentage = (double) numberOfCompletedVideosAndDocuments / (numberOfDocuments + numberOfVideos) * 100.0;
+
+                CourseStatusResponse courseStatusResponse = new CourseStatusResponse();
+                courseStatusResponse.setCourseId(courseEntity.getCourseId());
+                courseStatusResponse.setCompletionPercentage(completionPercentage);
+                courseStatusResponseList.add(courseStatusResponse);
+            }
+            return courseStatusResponseList;
+        }
+        return new ArrayList<>();
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilterByAdmin(
@@ -126,7 +137,7 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToCourseResponseList(page);
+        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),

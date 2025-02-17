@@ -6,31 +6,28 @@ import com.entity.CourseEntity;
 import com.entity.RateEntity;
 import com.exception.custom.InvalidRequestInput;
 import jakarta.persistence.criteria.*;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class CourseServiceHelper {
 
     private static final Logger log = LoggerFactory.getLogger(CourseServiceHelper.class);
     private final ModelMapper modelMapper;
     private final ExpertServiceHelper expertServiceHelper;
 
-    public CourseServiceHelper(ModelMapper modelMapper, ExpertServiceHelper expertServiceHelper) {
-        this.modelMapper = modelMapper;
-        this.expertServiceHelper = expertServiceHelper;
-    }
-
-    public List<CourseResponse> convertToCourseResponseList(Page<CourseEntity> page) {
-        return page.getContent()
+    public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
+        return collection
                 .stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
                     courseResponse.setTotalPurchased(courseEntity.getUsers().size());
@@ -38,6 +35,19 @@ public class CourseServiceHelper {
                 })
                 .toList();
     }
+
+    public long getNumbersOfVideos(CourseEntity courseEntity) {
+        return courseEntity.getLessons().stream()
+                .mapToInt(lesson -> lesson.getVideos().size())
+                .sum();
+    }
+
+    public long getNumbersOfDocuments(CourseEntity courseEntity) {
+        return courseEntity.getLessons().stream()
+                .mapToInt(lesson -> lesson.getDocuments().size())
+                .sum();
+    }
+
 
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
         Set<RateEntity> rates = courseEntity.getRates();
