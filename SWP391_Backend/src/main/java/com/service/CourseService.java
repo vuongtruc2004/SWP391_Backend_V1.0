@@ -14,14 +14,10 @@ import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
-import com.repository.CourseRepository;
-import com.repository.ExpertRepository;
-import com.repository.LessonRepository;
-import com.repository.UserRepository;
+import com.repository.*;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,16 +25,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final CourseServiceHelper courseServiceHelper;
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
+    private final SubjectRepository subjectRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -79,6 +76,17 @@ public class CourseService {
             throw new CourseException("Khóa học không tồn tại!");
         }
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+    }
+
+    public List<CourseDetailsResponse> getSuggestedCourses(List<Long> courseIds) {
+        Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds);
+        return resultIds.stream().map(id -> {
+            CourseEntity courseEntity = courseRepository.findById(id).orElse(null);
+            if (courseEntity == null) {
+                return null;
+            }
+            return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+        }).toList();
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {

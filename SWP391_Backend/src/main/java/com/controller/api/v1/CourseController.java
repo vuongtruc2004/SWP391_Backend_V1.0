@@ -51,6 +51,14 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCourseById(courseId));
     }
 
+    @ApiMessage("Lấy các khóa học thành công!")
+    @GetMapping("/suggestion")
+    public ResponseEntity<List<CourseDetailsResponse>> getSuggestedCourses(
+            @RequestParam(name = "courseIds") List<Long> courseIds
+    ) {
+        return ResponseEntity.ok(courseService.getSuggestedCourses(courseIds));
+    }
+
     @GetMapping("/users")
     public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getAllCoursesOfUser(
             @RequestParam(name = "user_id") Long userId,
