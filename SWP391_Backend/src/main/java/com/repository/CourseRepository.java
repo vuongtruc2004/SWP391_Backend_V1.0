@@ -1,7 +1,6 @@
 package com.repository;
 
 import com.entity.CourseEntity;
-import com.entity.UserEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +13,17 @@ import java.util.Set;
 
 @Repository
 public interface CourseRepository extends JpaSpecificationRepository<CourseEntity, Long> {
-    Page<CourseEntity> findAllByUsers(UserEntity user, Pageable pageable);
 
-    @Query("SELECT c FROM CourseEntity c WHERE c.accepted = true ORDER BY size(c.users) desc ")
+    @Query("SELECT c FROM CourseEntity c " +
+            "WHERE c.accepted = true " +
+            "AND c.courseId NOT IN :courseIds " +
+            "ORDER BY size(c.users) DESC")
+    Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable, @Param("courseIds") Set<Long> courseIds);
+
+    @Query("SELECT c FROM CourseEntity c " +
+            "WHERE c.accepted = true " +
+            "ORDER BY size(c.users) DESC")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable);
-
 
     @Query(value = """
                 SELECT c.course_id

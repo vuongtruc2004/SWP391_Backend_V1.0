@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -91,7 +92,17 @@ public class CourseService {
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
-        Page<CourseEntity> page = courseRepository.findCoursesAndOrderByPurchasersDesc(pageable);
+        String email = JwtService.extractUsernameFromToken().orElse(null);
+        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
+        Set<Long> courseIds = new HashSet<>();
+        if (email != null && accountType != null) {
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
+            userEntity.getCourses().forEach(course -> courseIds.add(course.getCourseId()));
+        }
+        Page<CourseEntity> page = courseIds.isEmpty() ?
+                courseRepository.findCoursesAndOrderByPurchasersDesc(pageable) :
+                courseRepository.findCoursesAndOrderByPurchasersDesc(pageable, courseIds);
         List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,

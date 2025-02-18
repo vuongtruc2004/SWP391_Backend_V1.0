@@ -598,6 +598,7 @@ LOCK TABLES `course_user` WRITE;
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,1);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,1);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,1);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,1);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,10);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,10);
 INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,10);
@@ -2366,7 +2367,15 @@ INSERT INTO `user_progress` (`course_id`, `document_id`, `lesson_id`, `user_id`,
 
 -- Hoàn thành video 1, 2 trong khóa học 2, lesson 2
 (2, NULL, 2, 1, 1),
-(2, NULL, 2, 1, 2);
+(2, NULL, 2, 1, 2),
+
+-- Hoàn thành khóa học 3
+(3, NULL, 7, 1, 7),
+(3, NULL, 8, 1, 8),
+(3, NULL, 9, 1, 9),
+(3, 7, 7, 1, NULL),
+(3, 8, 8, 1, NULL),
+(3, 9, 9, 1, NULL);
 /*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
