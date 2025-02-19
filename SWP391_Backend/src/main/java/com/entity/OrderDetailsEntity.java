@@ -21,9 +21,7 @@ public class OrderDetailsEntity {
 
     Double price;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    CourseEntity course;
+    Long courseId;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

@@ -29,7 +29,7 @@ public class CourseServiceHelper {
     public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
         return collection.stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setTotalPurchased(courseEntity.getOrderDetails().size());
+                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
                     return courseResponse;
                 })
                 .toList();
@@ -46,14 +46,14 @@ public class CourseServiceHelper {
                 .mapToInt(lesson -> lesson.getDocuments().size())
                 .sum();
     }
-    
+
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
         Set<RateEntity> rates = courseEntity.getRates();
         double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);
 
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
-        courseDetailsResponse.setTotalPurchased(courseEntity.getOrderDetails().size());
+        courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
         courseDetailsResponse.setAverageRating(averageRating);
         courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
@@ -71,7 +71,7 @@ public class CourseServiceHelper {
             Expression<?> sortField;
             switch (sortOption) {
                 case "purchaser": {
-                    sortField = criteriaBuilder.size(root.get("orderDetails"));
+                    sortField = criteriaBuilder.size(root.get("users"));
                     break;
                 }
                 case "rate": {

@@ -16,21 +16,13 @@ import java.util.Set;
 public interface CourseRepository extends JpaSpecificationRepository<CourseEntity, Long> {
 
     @Query("select c from CourseEntity c " +
-            "left join c.orderDetails od " +
-            "left join od.order o " +
             "where c.accepted = true and c.courseId not in (:courseIds) " +
-            "and (o is null or o.orderStatus = 'COMPLETED') " +
-            "group by c " +
-            "order by count(od) desc")
+            "order by size(c.users) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable, @Param("courseIds") Set<Long> courseIds);
 
     @Query("select c from CourseEntity c " +
-            "left join c.orderDetails od " +
-            "left join od.order o " +
             "where c.accepted = true " +
-            "and (o is null or o.orderStatus = 'COMPLETED') " +
-            "group by c " +
-            "order by count(od) desc")
+            "order by size(c.users) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable);
 
     Optional<CourseEntity> findByCourseIdAndAcceptedTrue(Long courseId);

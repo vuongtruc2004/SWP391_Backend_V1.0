@@ -85,7 +85,7 @@ public class CourseService {
         List<Long> notCourseIds = new ArrayList<>(courseIds);
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity != null) {
-            userRepository.getUserPurchaseCourses(userEntity.getUserId()).forEach(courseEntity -> notCourseIds.add(courseEntity.getCourseId()));
+            userEntity.getCourses().forEach(courseEntity -> notCourseIds.add(courseEntity.getCourseId()));
         }
 
         Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds, notCourseIds);
@@ -102,7 +102,7 @@ public class CourseService {
         Set<Long> courseIds = new HashSet<>();
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity != null) {
-            userRepository.getUserPurchaseCourses(userEntity.getUserId()).forEach(courseEntity -> courseIds.add(courseEntity.getCourseId()));
+            userEntity.getCourses().forEach(courseEntity -> courseIds.add(courseEntity.getCourseId()));
         }
         Page<CourseEntity> page = courseIds.isEmpty() ?
                 courseRepository.findCoursesAndOrderByPurchasersDesc(pageable) :
@@ -121,7 +121,7 @@ public class CourseService {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity != null) {
             List<CourseStatusResponse> courseStatusResponseList = new ArrayList<>();
-            for (CourseEntity courseEntity : userRepository.getUserPurchaseCourses(userEntity.getUserId())) {
+            for (CourseEntity courseEntity : userEntity.getCourses()) {
                 long numberOfVideos = courseServiceHelper.getNumbersOfVideos(courseEntity);
                 long numberOfDocuments = courseServiceHelper.getNumbersOfDocuments(courseEntity);
                 long numberOfCompletedVideosAndDocuments = userProgressRepository.countNumberOfCompletedVideosAndDocuments(userEntity.getUserId(), courseEntity.getCourseId());
@@ -168,7 +168,7 @@ public class CourseService {
     public ApiResponse<String> deleteByCourseId(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
-        if (courseEntity != null && (courseEntity.getOrderDetails().isEmpty() || !courseEntity.getAccepted())) {
+        if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity); // gỡ bỏ quan hệ (remove là xóa trong list)
                 expertRepository.save(expert); // Save changes

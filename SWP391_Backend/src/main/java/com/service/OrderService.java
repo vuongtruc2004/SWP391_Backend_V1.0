@@ -30,11 +30,11 @@ public class OrderService {
     public OrderResponse createOrder(OrderRequest orderRequest) {
         UserEntity userEntity = userRepository.findByUserIdAndLockedFalse(orderRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại!"));
-        Set<CourseEntity> purchasedCourses = userRepository.getUserPurchaseCourses(userEntity.getUserId());
+        Set<CourseEntity> purchasedCourses = userEntity.getCourses();
 
         OrderEntity orderEntity = new OrderEntity();
         Set<OrderDetailsEntity> orderDetailsEntities = new HashSet<>();
-        orderEntity.setUser(userEntity);
+        orderEntity.setUserId(userEntity.getUserId());
 
         for (Long courseId : orderRequest.getCourseIds()) {
             CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
@@ -45,7 +45,7 @@ public class OrderService {
             OrderDetailsEntity orderDetailsEntity = OrderDetailsEntity.builder()
                     .order(orderEntity)
                     .price(courseEntity.getSalePrice())
-                    .course(courseEntity)
+                    .courseId(courseEntity.getCourseId())
                     .build();
             orderDetailsEntities.add(orderDetailsEntity);
         }

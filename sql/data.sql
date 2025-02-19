@@ -2522,8 +2522,40 @@ INSERT INTO order_details (price, course_id, order_id)
 VALUES 
 (225000, 1, 1), -- Khóa học 1 mua hôm nay (order_id = 1)
 (225000, 2, 2), -- Khóa học 2 mua hôm qua (order_id = 2)
-(320000, 3, 3); 
+(320000, 3, 3),
+(332500, 4, 1);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `course_user`
+--
+
+DROP TABLE IF EXISTS `course_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_user` (
+  `course_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`course_id`,`user_id`),
+  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
+  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `course_user`
+--
+
+LOCK TABLES `course_user` WRITE;
+/*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES 
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1);
+/*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 -- Dump completed on 2025-02-14 18:07:42
