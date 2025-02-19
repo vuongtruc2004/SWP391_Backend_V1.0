@@ -147,7 +147,7 @@ public class SubjectService {
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );
     }
-    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest){
+    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest) throws Exception{
         Set<SubjectEntity> subjectEntitySet = new HashSet<>();
         for (String subjectName : courseRequest.getSubjects()) {
             Boolean checkExistsSubject = this.subjectRepository.existsBySubjectName(subjectName.trim());
@@ -155,11 +155,7 @@ public class SubjectService {
                 SubjectEntity currentSubject = this.subjectRepository.findBySubjectName(subjectName.trim());
                 subjectEntitySet.add(currentSubject);
             } else {
-                SubjectEntity subjectEntity = SubjectEntity.builder()
-                        .subjectName(subjectName.trim()
-                        )
-                        .build();
-                this.subjectRepository.save(subjectEntity);
+                throw new Exception("Lĩnh vực công nghệ chưa tồn tại");
             }
         }
         return subjectEntitySet;

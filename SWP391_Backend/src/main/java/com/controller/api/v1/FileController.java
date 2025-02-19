@@ -49,5 +49,26 @@ public class FileController {
         fileService.createDirectory(assetURI + folder);
         return ResponseEntity.ok().body(fileService.uploadImage(file, folder));
     }
+
+    @PostMapping("/video")
+    public ResponseEntity<ApiResponse<String>> uploadVideo(
+            @RequestParam(name = "file", required = false) MultipartFile file,
+            @RequestParam(name = "folder") String folder
+    ) throws URISyntaxException, IOException {
+        if (file == null || file.isEmpty()) {
+            throw new StorageException("File bị rỗng");
+        }
+        String fileName = file.getOriginalFilename();
+        List<String> allowedExtensions = Arrays.asList("mp4");
+        boolean isValid = allowedExtensions.stream().anyMatch(item -> {
+            assert fileName != null;
+            return fileName.toLowerCase().endsWith(item);
+        });
+        if (!isValid) {
+            throw new StorageException("File không hợp lệ, chọn một trong các loại:  " + allowedExtensions.toString());
+        }
+        fileService.createDirectory(assetURI + folder);
+        return ResponseEntity.ok().body(fileService.uploadVideo(file, folder));
+    }
     
 }

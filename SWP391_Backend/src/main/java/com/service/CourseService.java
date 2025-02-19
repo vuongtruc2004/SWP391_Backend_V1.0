@@ -208,38 +208,21 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseResponse updateCourse(CourseEntity courseEntity) throws Exception {
+    public CourseResponse updateCourse(CourseRequest courseRequest) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
-        CourseEntity newCourse = this.courseRepository.findById(courseEntity.getCourseId()).orElse(null);
+        CourseEntity newCourse = this.courseRepository.findById(courseRequest.getCourseId()).orElse(null);
         newCourse.setExpert(userEntity.getExpert());
-        newCourse.setCourseName(courseEntity.getCourseName());
-        newCourse.setDescription(courseEntity.getDescription());
-        newCourse.setObjectives(courseEntity.getObjectives());
-        newCourse.setIntroduction(courseEntity.getIntroduction());
-        newCourse.setOriginalPrice(courseEntity.getOriginalPrice());
-        newCourse.setSalePrice(courseEntity.getSalePrice());
-        newCourse.setThumbnail(courseEntity.getThumbnail());
+        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setObjectiveList(courseRequest.getObjectives());
+        newCourse.setIntroduction(courseRequest.getIntroduction());
+        newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
+        newCourse.setSalePrice(courseRequest.getSalePrice());
+        newCourse.setThumbnail(courseRequest.getThumbnail());
         newCourse=this.courseRepository.save(newCourse);
-        Set<SubjectEntity> subjectEntitySet=new HashSet<>();
-        for(SubjectEntity subjectEntity : courseEntity.getSubjects()) {
-            Boolean checkExistsSubject=this.subjectRepository.existsBySubjectName(subjectEntity.getSubjectName());
-            if(checkExistsSubject) {
-                SubjectEntity currentSubject=this.subjectRepository.findBySubjectName(subjectEntity.getSubjectName());
-                subjectEntitySet.add(currentSubject);
-            }else{
-                SubjectEntity newSubject=new SubjectEntity();
-                newSubject.setSubjectName(subjectEntity.getSubjectName());
-                newSubject.setDescription(subjectEntity.getDescription());
-                newSubject.setThumbnail(subjectEntity.getThumbnail());
-                this.subjectRepository.save(subjectEntity);
-            }
-        }
+        Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
-//        for (LessonEntity lessonEntity : courseEntity.getLessons()) {
-//            lessonEntity.setCourse(newCourse);
-//            this.lessonService.save(lessonEntity);
-//        }
         this.courseRepository.save(newCourse);
         CourseResponse courseResponse=new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);

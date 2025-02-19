@@ -3,6 +3,7 @@ package com.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.jsoup.Jsoup;
 
 import java.time.Instant;
 import java.util.Set;
