@@ -1,5 +1,6 @@
 package com.controller.api.v1;
 
+import com.dto.request.OrderRequest;
 import com.service.OrderService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class OrderController {
 
     @ApiMessage("")
     @PostMapping
-    public void createOrder(@RequestBody String key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        orderService.createOrder(key);
+    public void createOrder(@RequestBody OrderRequest orderRequest) {
+        orderService.createOrder(orderRequest);
     }
 }

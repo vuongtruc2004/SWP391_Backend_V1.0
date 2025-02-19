@@ -27,10 +27,9 @@ public class CourseServiceHelper {
     private final ExpertServiceHelper expertServiceHelper;
 
     public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
-        return collection
-                .stream().map(courseEntity -> {
+        return collection.stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+                    courseResponse.setTotalPurchased(courseEntity.getOrderDetails().size());
                     return courseResponse;
                 })
                 .toList();
@@ -55,7 +54,7 @@ public class CourseServiceHelper {
 
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
-        courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseDetailsResponse.setTotalPurchased(courseEntity.getOrderDetails().size());
         courseDetailsResponse.setAverageRating(averageRating);
         courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
@@ -73,7 +72,7 @@ public class CourseServiceHelper {
             Expression<?> sortField;
             switch (sortOption) {
                 case "purchaser": {
-                    sortField = criteriaBuilder.size(root.get("users"));
+                    sortField = criteriaBuilder.size(root.get("orderDetails"));
                     break;
                 }
                 case "rate": {
@@ -123,5 +122,4 @@ public class CourseServiceHelper {
             return join.get(joinIdField).in(idSet);
         };
     }
-
 }

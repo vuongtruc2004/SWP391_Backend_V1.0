@@ -59,11 +59,8 @@ public class CourseEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     Set<SubjectEntity> subjects;
 
-    @ManyToMany
-    @JoinTable(name = "course_user",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<UserEntity> users;
+    @OneToMany(mappedBy = "course")
+    Set<OrderDetailsEntity> orderDetails;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     Set<LessonEntity> lessons;

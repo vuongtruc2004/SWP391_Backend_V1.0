@@ -9,12 +9,11 @@ import com.entity.LessonEntity;
 import com.entity.UserEntity;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
-import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
+import com.helper.OrderServiceHelper;
+import com.helper.UserServiceHelper;
 import com.repository.*;
-import com.service.auth.JwtService;
 import com.util.BuildResponse;
-import com.util.enums.AccountTypeEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,6 +37,8 @@ public class CourseService {
     private final ExpertRepository expertRepository;
     private final SubjectRepository subjectRepository;
     private final UserProgressRepository userProgressRepository;
+    private final UserServiceHelper userServiceHelper;
+    private final OrderServiceHelper orderServiceHelper;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -82,14 +83,11 @@ public class CourseService {
 
     public List<CourseDetailsResponse> getSuggestedCourses(List<Long> courseIds) {
         List<Long> notCourseIds = new ArrayList<>(courseIds);
-        String email = JwtService.extractUsernameFromToken().orElse(null);
-        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
-        if (email != null && accountType != null) {
-            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
-            userEntity.getCourses().forEach(course -> notCourseIds.add(course.getCourseId()));
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity != null) {
+            userRepository.getUserPurchaseCourses(userEntity.getUserId()).forEach(courseEntity -> notCourseIds.add(courseEntity.getCourseId()));
         }
-        
+
         Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds, notCourseIds);
         return resultIds.stream().map(id -> {
             CourseEntity courseEntity = courseRepository.findById(id).orElse(null);
@@ -101,13 +99,10 @@ public class CourseService {
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
-        String email = JwtService.extractUsernameFromToken().orElse(null);
-        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
         Set<Long> courseIds = new HashSet<>();
-        if (email != null && accountType != null) {
-            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
-            userEntity.getCourses().forEach(course -> courseIds.add(course.getCourseId()));
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity != null) {
+            userRepository.getUserPurchaseCourses(userEntity.getUserId()).forEach(courseEntity -> courseIds.add(courseEntity.getCourseId()));
         }
         Page<CourseEntity> page = courseIds.isEmpty() ?
                 courseRepository.findCoursesAndOrderByPurchasersDesc(pageable) :
@@ -123,14 +118,10 @@ public class CourseService {
     }
 
     public List<CourseStatusResponse> getPurchasedCourses() {
-        String email = JwtService.extractUsernameFromToken().orElse(null);
-        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
-        if (email != null && accountType != null) {
-            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity != null) {
             List<CourseStatusResponse> courseStatusResponseList = new ArrayList<>();
-
-            for (CourseEntity courseEntity : userEntity.getCourses()) {
+            for (CourseEntity courseEntity : userRepository.getUserPurchaseCourses(userEntity.getUserId())) {
                 long numberOfVideos = courseServiceHelper.getNumbersOfVideos(courseEntity);
                 long numberOfDocuments = courseServiceHelper.getNumbersOfDocuments(courseEntity);
                 long numberOfCompletedVideosAndDocuments = userProgressRepository.countNumberOfCompletedVideosAndDocuments(userEntity.getUserId(), courseEntity.getCourseId());
@@ -177,7 +168,7 @@ public class CourseService {
     public ApiResponse<String> deleteByCourseId(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
-        if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
+        if (courseEntity != null && (courseEntity.getOrderDetails().isEmpty() || !courseEntity.getAccepted())) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity); // gỡ bỏ quan hệ (remove là xóa trong list)
                 expertRepository.save(expert); // Save changes

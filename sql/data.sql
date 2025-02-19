@@ -573,114 +573,6 @@ INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,26);
 UNLOCK TABLES;
 
 --
--- Table structure for table `course_user`
---
-
-DROP TABLE IF EXISTS `course_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `course_user` (
-  `course_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`user_id`),
-  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
-  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `course_user`
---
-
-LOCK TABLES `course_user` WRITE;
-/*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,1);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,1);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,1);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,1);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (5,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (7,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,12);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (17,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,13);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (5,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,14);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,15);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (17,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,16);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,17);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (15,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,18);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (5,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,19);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (5,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (9,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (18,20);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,20);
-/*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `courses`
 --
 
@@ -2564,5 +2456,72 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) DEFAULT NULL,
+  `order_status` enum('CANCELLED','COMPLETED','PENDING') DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO orders (created_at, order_status, updated_at, user_id) 
+VALUES 
+('2025-02-14 10:56:52.748692', 'COMPLETED', '2025-02-14 10:56:52.748692', 1), -- Hôm nay
+('2025-02-13 10:56:52.748692', 'COMPLETED', '2025-02-13 10:56:52.748692', 1), -- Hôm qua
+('2025-02-12 10:56:52.748692', 'COMPLETED', '2025-02-12 10:56:52.748692', 1); -- Hôm kia
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_details` (
+  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
+  `price` double DEFAULT NULL,
+  `course_id` bigint DEFAULT NULL,
+  `order_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`order_details_id`),
+  KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
+  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO order_details (price, course_id, order_id) 
+VALUES 
+(225000, 1, 1), -- Khóa học 1 mua hôm nay (order_id = 1)
+(225000, 2, 2), -- Khóa học 2 mua hôm qua (order_id = 2)
+(320000, 3, 3); 
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- Dump completed on 2025-02-14 18:07:42

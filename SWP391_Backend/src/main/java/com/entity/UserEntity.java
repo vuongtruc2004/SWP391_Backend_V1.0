@@ -61,8 +61,8 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     ExpertEntity expert;
 
-    @ManyToMany(mappedBy = "users")
-    Set<CourseEntity> courses;
+    @OneToMany(mappedBy = "user")
+    Set<OrderEntity> orders;
 
     @OneToMany(mappedBy = "user")
     Set<LikeEntity> likes;

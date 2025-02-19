@@ -19,11 +19,13 @@ public class OrderDetailsEntity {
     @Column(name = "order_details_id")
     Long orderDetailsId;
 
-    @Column(name = "order_id")
-    Long orderId;
-
-    @Column(name = "course_id")
-    Long courseId;
-
     Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    CourseEntity course;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    OrderEntity order;
 }

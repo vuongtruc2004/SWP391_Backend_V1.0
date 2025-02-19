@@ -133,15 +133,16 @@ public class UserService {
                 userResponses
         );
     }
+
     public boolean lockUser(Long id) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
-        if(user.getRole().getRoleName().equals(RoleNameEnum.ADMIN)) {
+        if (user.getRole().getRoleName().equals(RoleNameEnum.ADMIN)) {
             throw new UserException("Không được khóa ADMIN");
         }
-        if(Boolean.TRUE.equals(user.getLocked())) {
+        if (Boolean.TRUE.equals(user.getLocked())) {
             user.setLocked(false);
-        }else{
+        } else {
             user.setLocked(true);
         }
         return userRepository.save(user).getLocked();
@@ -174,7 +175,7 @@ public class UserService {
             throw new UserException("Email đã được sử dụng");
         }
         UserEntity user = userRepository.findById(request.getUserId())
-                .orElseThrow(()-> new UserException("Không tìm thấy người dùng"));
+                .orElseThrow(() -> new UserException("Không tìm thấy người dùng"));
         user.setRole(roleEntity);
         user.setDob(request.getDob());
         user.setAvatar(request.getAvatar());
@@ -194,7 +195,10 @@ public class UserService {
     }
 
     public UserResponse getUserProFile() {
-        UserEntity userEntity = userServiceHelper.extractFromToken();
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Người dùng không tồn tại!");
+        }
         UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
         userResponse.setRoleName(userEntity.getRole().getRoleName());
         return userResponse;
@@ -215,7 +219,10 @@ public class UserService {
         }
         ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
         if (fileResponse.getStatus() == 200) {
-            UserEntity userEntity = userServiceHelper.extractFromToken();
+            UserEntity userEntity = userServiceHelper.extractUserFromToken();
+            if (userEntity == null) {
+                throw new UserException("Người dùng không tồn tại!");
+            }
             userEntity.setAvatar(fileResponse.getData());
             return modelMapper.map(userRepository.save(userEntity), UserResponse.class);
         } else {

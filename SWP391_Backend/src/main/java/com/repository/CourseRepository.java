@@ -9,21 +9,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface CourseRepository extends JpaSpecificationRepository<CourseEntity, Long> {
 
     @Query("SELECT c FROM CourseEntity c " +
-            "WHERE c.accepted = true " +
-            "AND c.courseId NOT IN :courseIds " +
-            "ORDER BY size(c.users) DESC")
+            "where c.accepted = true and c.courseId not in (:courseIds)" +
+            "order by size(c.orderDetails) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable, @Param("courseIds") Set<Long> courseIds);
 
     @Query("SELECT c FROM CourseEntity c " +
-            "WHERE c.accepted = true " +
-            "ORDER BY size(c.users) DESC")
+            "where c.accepted = true " +
+            "order by size(c.orderDetails) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable);
+
+    @Query("select c from CourseEntity c " +
+            "join c.orderDetails od " +
+            "join od.order o " +
+            "where o.user.userId != :userId and c.courseId = :courseId and c.accepted = true")
+    Optional<CourseEntity> findCourseByIdWithFilter(Long courseId, Long userId);
 
     @Query(value = """
                 SELECT c.course_id

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,9 +23,6 @@ public class OrderEntity {
     @Column(name = "order_id")
     Long orderId;
 
-    @Column(name = "user_id")
-    Long userId;
-
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
     OrderStatusEnum orderStatus;
@@ -35,9 +33,17 @@ public class OrderEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    UserEntity user;
+
+    @OneToMany(mappedBy = "order")
+    Set<OrderDetailsEntity> orderDetails;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
         if (this.orderStatus == null) {
             this.orderStatus = OrderStatusEnum.PENDING;
         }

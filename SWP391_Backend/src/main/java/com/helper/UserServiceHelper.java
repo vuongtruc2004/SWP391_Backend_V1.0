@@ -17,18 +17,18 @@ public class UserServiceHelper {
         this.userRepository = userRepository;
     }
 
-    public UserEntity extractFromToken() {
-        String email = JwtService.extractUsernameFromToken()
-                .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
+    public UserEntity extractUserFromToken() {
+        String email = JwtService.extractUsernameFromToken().orElse(null);
+        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
 
-        String accountType = JwtService.extractAccountTypeFromToken()
-                .orElseThrow(() -> new NotFoundException("Account type không tìm thấy"));
-
-        UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
-        if (Boolean.TRUE.equals(userEntity.getLocked())) {
-            throw new UserException("Không tìm thấy");
+        if (email != null && accountType != null) {
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
+            if (Boolean.TRUE.equals(userEntity.getLocked())) {
+                throw new UserException("Không tìm thấy");
+            }
+            return userEntity;
         }
-        return userEntity;
+        return null;
     }
 }

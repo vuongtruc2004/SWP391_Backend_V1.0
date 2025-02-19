@@ -1,8 +1,8 @@
 package com.helper;
 
 import com.dto.response.details.ExpertDetailsResponse;
-import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
+import com.repository.ExpertRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,23 +10,17 @@ import org.springframework.stereotype.Component;
 public class ExpertServiceHelper {
 
     private final ModelMapper modelMapper;
+    private final ExpertRepository expertRepository;
 
-    public ExpertServiceHelper(ModelMapper modelMapper) {
+    public ExpertServiceHelper(ModelMapper modelMapper, ExpertRepository expertRepository) {
         this.modelMapper = modelMapper;
+        this.expertRepository = expertRepository;
     }
 
     public ExpertDetailsResponse convertToExpertDetailsResponse(ExpertEntity expertEntity) {
         ExpertDetailsResponse expertDetailsResponse = modelMapper.map(expertEntity, ExpertDetailsResponse.class);
         expertDetailsResponse.setTotalCourses(expertEntity.getCourses().size());
-        expertDetailsResponse.setTotalStudents(getTotalStudents(expertEntity));
+        expertDetailsResponse.setTotalStudents(expertRepository.getAllStudents(expertEntity.getExpertId()).size());
         return expertDetailsResponse;
-    }
-
-    private int getTotalStudents(ExpertEntity expertEntity) {
-        int totalStudents = 0;
-        for (CourseEntity course : expertEntity.getCourses()) {
-            totalStudents += course.getUsers().size();
-        }
-        return totalStudents;
     }
 }
