@@ -81,7 +81,16 @@ public class CourseService {
     }
 
     public List<CourseDetailsResponse> getSuggestedCourses(List<Long> courseIds) {
-        Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds);
+        List<Long> notCourseIds = new ArrayList<>(courseIds);
+        String email = JwtService.extractUsernameFromToken().orElse(null);
+        String accountType = JwtService.extractAccountTypeFromToken().orElse(null);
+        if (email != null && accountType != null) {
+            UserEntity userEntity = userRepository.findByEmailAndAccountType(email, AccountTypeEnum.valueOf(accountType))
+                    .orElseThrow(() -> new NotFoundException("Tài khoản không tồn tại!"));
+            userEntity.getCourses().forEach(course -> notCourseIds.add(course.getCourseId()));
+        }
+        
+        Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds, notCourseIds);
         return resultIds.stream().map(id -> {
             CourseEntity courseEntity = courseRepository.findById(id).orElse(null);
             if (courseEntity == null) {

@@ -30,7 +30,8 @@ public class SecurityConfig {
             "api/v1/courses/**",
             "api/v1/subjects/**",
             "/api/v1/users/**",
-            "/api/v1/otp/**"
+            "/api/v1/otp/**",
+            "/api/v1/orders/**"
     };
 
     private final SecurityUtil securityUtil;

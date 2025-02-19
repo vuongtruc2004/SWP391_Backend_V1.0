@@ -35,12 +35,12 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
                     GROUP BY subject_id
                     ORDER BY numOfCourses DESC
                 ) AS temp ON c.subject_id = temp.subject_id
-                WHERE c.course_id NOT IN (:courseIds)
+                WHERE c.course_id NOT IN (:notCourseIds)
                 GROUP BY c.course_id
                 ORDER BY MAX(temp.numOfCourses) DESC
                 LIMIT 10
             """, nativeQuery = true)
-    Set<Long> findSuggestedCourseIds(@Param("courseIds") List<Long> courseIds);
+    Set<Long> findSuggestedCourseIds(@Param("courseIds") List<Long> courseIds, @Param("notCourseIds") List<Long> notCourseIds);
 
     @Query("SELECT MIN(c.originalPrice) FROM CourseEntity c")
     Double findMinPrice(); // Giá nhỏ nhất

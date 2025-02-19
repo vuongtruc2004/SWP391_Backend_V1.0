@@ -37,6 +37,7 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("com.turkraft.springfilter:jpa:3.1.7")
     implementation("org.jsoup:jsoup:1.18.1")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
