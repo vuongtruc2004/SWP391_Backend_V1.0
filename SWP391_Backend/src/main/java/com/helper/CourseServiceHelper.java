@@ -46,8 +46,7 @@ public class CourseServiceHelper {
                 .mapToInt(lesson -> lesson.getDocuments().size())
                 .sum();
     }
-
-
+    
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
         Set<RateEntity> rates = courseEntity.getRates();
         double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);

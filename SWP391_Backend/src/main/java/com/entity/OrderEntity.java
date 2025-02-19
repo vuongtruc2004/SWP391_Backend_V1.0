@@ -37,7 +37,7 @@ public class OrderEntity {
     @JoinColumn(name = "user_id")
     UserEntity user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     Set<OrderDetailsEntity> orderDetails;
 
     @PrePersist

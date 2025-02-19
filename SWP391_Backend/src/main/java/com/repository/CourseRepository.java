@@ -15,42 +15,46 @@ import java.util.Set;
 @Repository
 public interface CourseRepository extends JpaSpecificationRepository<CourseEntity, Long> {
 
-    @Query("SELECT c FROM CourseEntity c " +
-            "where c.accepted = true and c.courseId not in (:courseIds)" +
-            "order by size(c.orderDetails) desc")
+    @Query("select c from CourseEntity c " +
+            "left join c.orderDetails od " +
+            "left join od.order o " +
+            "where c.accepted = true and c.courseId not in (:courseIds) " +
+            "and (o is null or o.orderStatus = 'COMPLETED') " +
+            "group by c " +
+            "order by count(od) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable, @Param("courseIds") Set<Long> courseIds);
 
-    @Query("SELECT c FROM CourseEntity c " +
+    @Query("select c from CourseEntity c " +
+            "left join c.orderDetails od " +
+            "left join od.order o " +
             "where c.accepted = true " +
-            "order by size(c.orderDetails) desc")
+            "and (o is null or o.orderStatus = 'COMPLETED') " +
+            "group by c " +
+            "order by count(od) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable);
 
-    @Query("select c from CourseEntity c " +
-            "join c.orderDetails od " +
-            "join od.order o " +
-            "where o.user.userId != :userId and c.courseId = :courseId and c.accepted = true")
-    Optional<CourseEntity> findCourseByIdWithFilter(Long courseId, Long userId);
+    Optional<CourseEntity> findByCourseIdAndAcceptedTrue(Long courseId);
 
     @Query(value = """
-                SELECT c.course_id
-                FROM course_subject c
-                INNER JOIN (
-                    SELECT subject_id, COUNT(course_id) AS numOfCourses
-                    FROM course_subject
-                    WHERE course_id IN (:courseIds)
-                    GROUP BY subject_id
-                    ORDER BY numOfCourses DESC
-                ) AS temp ON c.subject_id = temp.subject_id
-                WHERE c.course_id NOT IN (:notCourseIds)
-                GROUP BY c.course_id
-                ORDER BY MAX(temp.numOfCourses) DESC
-                LIMIT 10
+                select c.course_id
+                from course_subject c
+                inner join (
+                    select subject_id, COUNT(course_id) as numOfCourses
+                    from course_subject
+                    where course_id IN (:courseIds)
+                    group by subject_id
+                    order by numOfCourses desc
+                ) as temp on c.subject_id = temp.subject_id
+                where c.course_id not in (:notCourseIds)
+                group by c.course_id
+                order by MAX(temp.numOfCourses) desc
+                limit 10
             """, nativeQuery = true)
     Set<Long> findSuggestedCourseIds(@Param("courseIds") List<Long> courseIds, @Param("notCourseIds") List<Long> notCourseIds);
 
-    @Query("SELECT MIN(c.originalPrice) FROM CourseEntity c")
-    Double findMinPrice(); // Giá nhỏ nhất
+    @Query("select MIN(c.originalPrice) FROM CourseEntity c")
+    Double findMinPrice();
 
-    @Query("SELECT MAX(c.originalPrice) FROM CourseEntity c")
-    Double findMaxPrice(); // Giá lớn nhất
+    @Query("select MAX(c.originalPrice) FROM CourseEntity c")
+    Double findMaxPrice();
 }

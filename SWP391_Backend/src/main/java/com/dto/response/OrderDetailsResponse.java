@@ -1,19 +1,19 @@
-package com.dto.request;
+package com.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderRequest {
+public class OrderDetailsResponse {
 
-    Long userId;
+    Long orderDetailsId;
 
-    Set<Long> courseIds;
+    Double price;
+
+    CourseResponse course;
 }

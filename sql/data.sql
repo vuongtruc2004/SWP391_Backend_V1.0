@@ -3,6 +3,8 @@
 -- Host: localhost    Database: online-learning-uat
 -- ------------------------------------------------------
 -- Server version	8.4.2
+create database `online-learning-uat`;
+use `online-learning-uat`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;

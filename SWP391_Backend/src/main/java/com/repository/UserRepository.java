@@ -24,6 +24,8 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
             "from UserEntity u " +
             "join u.orders o " +
             "join o.orderDetails od " +
-            "where u.userId = :userId")
+            "where u.userId = :userId and o.orderStatus = 'COMPLETED'")
     Set<CourseEntity> getUserPurchaseCourses(@Param("userId") Long userId);
+
+    Optional<UserEntity> findByUserIdAndLockedFalse(Long userId);
 }
