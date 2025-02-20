@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    
+
     private final SimpMessagingTemplate messagingTemplate;
 
     public void purchaseSuccessNotification(String fullname) {
-        System.out.println("Purchase Success Notification");
-        messagingTemplate.convertAndSend("/topic/purchased", fullname + " đã mua khóa học thành công!");
+        String payload = "Cảm ơn bạn " + fullname + " đã tin tưởng LearnGo!";
+        messagingTemplate.convertAndSend("/topic/purchased", payload);
     }
 }

@@ -58,7 +58,6 @@ public class OrderService {
     }
 
     public OrderResponse activeCoursesForUser(Long orderId) {
-        notificationService.purchaseSuccessNotification("Truc nay");
         OrderEntity orderEntity = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại!"));
 
@@ -75,7 +74,7 @@ public class OrderService {
             }
             orderEntity.setOrderStatus(OrderStatusEnum.COMPLETED);
             OrderEntity updatedOrder = orderRepository.save(orderEntity);
-
+            notificationService.purchaseSuccessNotification(userEntity.getFullname());
             return modelMapper.map(updatedOrder, OrderResponse.class);
         } else {
             throw new OrderException("Bạn đã thanh toán hóa đơn này rồi!");
