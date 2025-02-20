@@ -1,11 +1,17 @@
 package com.service;
 
+import com.dto.request.BlogRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.BlogResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
+import com.dto.response.details.BlogDetailsResponse;
 import com.entity.BlogEntity;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
+import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
+import com.helper.UserServiceHelper;
 import com.repository.BlogRepository;
 import com.repository.UserRepository;
 import com.service.auth.JwtService;
@@ -16,12 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Service
 public class BlogService {
@@ -29,12 +36,15 @@ public class BlogService {
     private final BlogRepository blogRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
-
+    private final FileService fileService;
+    private final UserServiceHelper userServiceHelper;
     @Autowired
-    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository, FileService fileService, UserServiceHelper userServiceHelper) {
         this.blogRepository = blogRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.fileService = fileService;
+        this.userServiceHelper = userServiceHelper;
     }
 
     public PageDetailsResponse<List<BlogResponse>> getBlogsWithFilter(
@@ -136,5 +146,97 @@ public class BlogService {
         blogResponse.setTotalLikes(blogEntity.getLikes().size());
         blogResponse.setTotalComments(blogEntity.getComments().size());
         return blogResponse;
+    }
+
+
+    public PageDetailsResponse<List<BlogDetailsResponse>> getBlogWithFilterPageAdmin(
+            Specification<BlogEntity> specification,
+            Pageable pageable
+    ){
+        Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
+        List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
+            BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);
+            blogResponse.setTotalLikes(blogEntity.getLikes().size());
+            blogResponse.setTotalComments(blogEntity.getComments().size());
+            blogResponse.setUser(modelMapper.map(blogEntity.getUser(), UserResponse.class));
+            return blogResponse;
+        }).toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                listResponse
+
+        );
+    }
+
+    public ApiResponse<BlogResponse> updateBlog(Long blogId, BlogRequest blogRequest){
+        BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
+        modelMapper.map(blogRequest, blogEntity);
+        blogRepository.save(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành Công!",
+                "Bài viết đã được cập nhật!",
+                modelMapper.map(blogEntity, BlogResponse.class)
+        );
+    }
+
+    public ApiResponse<BlogResponse> createBlog(BlogRequest blogRequest){
+        UserEntity author = userServiceHelper.extractUserFromToken();
+        BlogEntity blogEntity = modelMapper.map(blogRequest, BlogEntity.class);
+        blogEntity.setUser(author);
+        blogRepository.save(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.CREATED.value(),
+                "Thành Công!",
+                "Bài viết đã được tạo!",
+                modelMapper.map(blogEntity, BlogResponse.class)
+        );
+    }
+
+    public ApiResponse<String> getThumbnail(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        if(file == null || file.isEmpty()){
+            throw new StorageException("File bị rỗng");
+        }
+
+        String  fileName = file.getOriginalFilename();
+        List<String> allowedFile = Arrays.asList("jpg", "jpeg", "png");
+        boolean isValid = allowedFile.stream().anyMatch(fileExtension -> {
+            assert fileName != null;
+            return fileName.toLowerCase().endsWith(fileExtension);
+
+        });
+
+        if (!isValid) {
+            throw new StorageException("Bạn phải truyền file có định dạng: " + allowedFile.toString());
+        }
+        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        return fileResponse;
+    }
+
+    public ApiResponse<BlogResponse> changePublishedOfBlog(Long blogId){
+        BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
+        blogEntity.setPublished(!blogEntity.getPublished());
+        blogRepository.save(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành Công!",
+                "Trạng thái bài viết đã được thay đổi!",
+                modelMapper.map(blogEntity, BlogResponse.class)
+        );
+    }
+
+    public ApiResponse<String> deleteBlog(Long blogId){
+        BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(()->new NotFoundException("Không tìm thấy bài viết!"));
+        blogRepository.delete(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành Công!",
+                "Xóa bài viết thành công!",
+                null
+        );
     }
 }

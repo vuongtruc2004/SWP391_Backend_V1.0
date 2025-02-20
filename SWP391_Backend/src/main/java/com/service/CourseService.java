@@ -137,7 +137,7 @@ public class CourseService {
         return new ArrayList<>();
     }
 
-    public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilterByAdmin(
+    public PageDetailsResponse<List<CourseDetailsResponse>> getCoursesWithFilterByAdmin(
             Pageable pageable,
             Specification<CourseEntity> specification,
             Boolean accepted
@@ -148,7 +148,10 @@ public class CourseService {
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
-        List<CourseResponse> listCourseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
+        List<CourseDetailsResponse> listCourseResponses = page.getContent().stream().map(courseEntity -> {
+            CourseDetailsResponse courseDetailsResponse = courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+            return courseDetailsResponse;
+        }).toList();
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),

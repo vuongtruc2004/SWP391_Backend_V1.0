@@ -62,7 +62,7 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/all")
-    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesWithFilterRoleAdmin(
+    public ResponseEntity<PageDetailsResponse<List<CourseDetailsResponse>>> getCoursesWithFilterRoleAdmin(
             Pageable pageable,
             @Filter Specification<CourseEntity> specification,
             @RequestParam(name = "accepted", required = false) Boolean accepted
