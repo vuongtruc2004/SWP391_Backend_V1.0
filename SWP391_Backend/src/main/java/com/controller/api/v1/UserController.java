@@ -2,6 +2,7 @@ package com.controller.api.v1;
 
 import com.dto.request.*;
 import com.dto.response.ApiResponse;
+import com.dto.response.GenderCountResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
 import com.entity.UserEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -129,6 +131,19 @@ public class UserController {
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException {
         return ResponseEntity.ok(userService.updateAvatarByAdmin(file, folder));
+    }
+
+
+    @ApiMessage("Đếm giới tính thành công!")
+    @GetMapping("/gender_count")
+    public ResponseEntity<GenderCountResponse> genderCount() throws NotFoundException {
+        return ResponseEntity.ok(userService.genderCount());
+    }
+
+    @ApiMessage("Thống kê người học theo độ tuôỉ !")
+    @GetMapping("/age_count")
+    public ResponseEntity<Map<String, Long>> ageCount() throws NotFoundException {
+        return ResponseEntity.ok(userService.getUserByAge());
     }
 
 }

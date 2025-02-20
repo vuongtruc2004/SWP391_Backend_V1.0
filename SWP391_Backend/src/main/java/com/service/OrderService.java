@@ -21,9 +21,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -119,5 +120,61 @@ public class OrderService {
                 page.getTotalPages(),
                 page.getTotalElements(),
                 orderResponses);
+    }
+    public Map<String, Long> countOrdersOnEachDayOfWeek(LocalDate startOfWeek, LocalDate endOfWeek) {
+        Map<String, Long> dayOfWeekCounts = new HashMap<>();
+        LocalDate today = LocalDate.now();
+
+        // Lọc danh sách đơn hàng có trạng thái COMPLETED và trong khoảng ngày được chọn
+        List<OrderEntity> completedOrders = orderRepository.findAll().stream()
+                .filter(order -> order.getOrderStatus() == OrderStatusEnum.COMPLETED) // Chỉ lấy đơn hàng COMPLETED
+                .filter(order -> isInSelectedWeek(
+                        order.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate(),
+                        startOfWeek,
+                        endOfWeek
+                ))
+                .toList();
+
+        for (DayOfWeek day : DayOfWeek.values()) {
+            String dayName = day.name();
+            LocalDate currentDay = startOfWeek.with(day); // Lấy ngày thực tế của từng thứ trong tuần
+
+            if (currentDay.isAfter(today)) {
+                // Nếu ngày nằm sau hôm nay, đặt giá trị = 0
+                dayOfWeekCounts.put(dayName, 0L);
+            } else {
+                // Đếm số bản ghi có trạng thái COMPLETED theo từng ngày
+                long count = completedOrders.stream()
+                        .filter(order -> order.getCreatedAt()
+                                .atZone(ZoneId.systemDefault()) // Chuyển Instant → ZonedDateTime
+                                .toLocalDate() // Lấy LocalDate
+                                .getDayOfWeek() == day // So sánh ngày trong tuần
+                        )
+                        .count();
+                dayOfWeekCounts.put(dayName, count);
+            }
+        }
+
+        return dayOfWeekCounts;
+    }
+
+    public DashboardStatisticsResponse getDashboardStatistics() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        return new DashboardStatisticsResponse(
+                orderRepository.getTotalRevenue(),
+                orderRepository.getTodayRevenue(),
+                orderRepository.getYesterdayRevenue(yesterday),
+                orderRepository.getTotalStudents(),
+                orderRepository.getTodayStudents(),
+                orderRepository.getYesterdayStudents(yesterday),
+                orderRepository.getTotalOrders(),
+                orderRepository.getTodayOrders(),
+                orderRepository.getYesterdayOrders(yesterday)
+        );
+    }
+
+    private boolean isInSelectedWeek(LocalDate calculatedAt, LocalDate startOfWeek, LocalDate endOfWeek) {
+        return !calculatedAt.isBefore(startOfWeek) && !calculatedAt.isAfter(endOfWeek);
     }
 }

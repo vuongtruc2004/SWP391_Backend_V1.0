@@ -4,6 +4,7 @@ import com.dto.request.RegisterRequest;
 import com.dto.request.UpdateUserRequest;
 import com.dto.request.UserRequest;
 import com.dto.response.ApiResponse;
+import com.dto.response.GenderCountResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
 import com.entity.CourseEntity;
@@ -21,6 +22,7 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import com.util.enums.GenderEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.criteria.Join;
 import org.modelmapper.ModelMapper;
@@ -33,9 +35,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -286,5 +290,43 @@ public class UserService {
         } else {
             throw new StorageException("Không tìm thấy ảnh");
         }
+    }
+
+    public GenderCountResponse genderCount() {
+        Long countAllGender=this.userRepository.count();
+        Long countMale=this.userRepository.countByGender(GenderEnum.MALE);
+        Long countFemale=this.userRepository.countByGender(GenderEnum.FEMALE);
+        Long countUnknown=countAllGender-countMale-countFemale;
+        return new GenderCountResponse(countMale, countFemale, countUnknown);
+    }
+
+    public Long getUsersByAgeRange(int minAge, int maxAge) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minus(Period.ofYears(maxAge));
+        LocalDate endDate = today.minus(Period.ofYears(minAge));
+        Instant startInstant = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant endInstant = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+        return userRepository.countByDobBetween(startInstant, endInstant);
+    }
+
+    public Map<String, Long> getUserByAge() {
+        Map<String, Long> allAge = new HashMap<>();
+        Long allUser = this.userRepository.count();
+        Long countAge6To12 = getUsersByAgeRange(6, 12);
+        Long countAge13To19 = getUsersByAgeRange(13, 19);
+        Long countAge20To39 = getUsersByAgeRange(20, 39);
+        Long countAge40To59 = getUsersByAgeRange(40, 59);
+        Long countAge60To110 = getUsersByAgeRange(60, 110);
+        Long countAgeUnknown = allUser - countAge6To12 - countAge13To19 - countAge20To39 - countAge40To59 - countAge60To110;
+
+        allAge.put("6-12", countAge6To12);
+        allAge.put("13-19", countAge13To19);
+        allAge.put("20-39", countAge20To39);
+        allAge.put("40-59", countAge40To59);
+        allAge.put("60-110", countAge60To110);
+        allAge.put("Unknown", countAgeUnknown);
+
+        return allAge;
     }
 }

@@ -1,6 +1,7 @@
 package com.controller.api.v1;
 
 import com.dto.request.OrderRequest;
+import com.dto.response.DashboardStatisticsResponse;
 import com.dto.response.OrderResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.OrderEntity;
@@ -13,7 +14,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -39,5 +42,21 @@ public class OrderController {
             Pageable pageable,
             @Filter Specification<OrderEntity> specification) {
         return ResponseEntity.ok(orderService.getOrdersWithFilters(pageable, specification));
+    }
+
+    @ApiMessage("Lấy số khóa học mua vào ngày trong tuần thành công!")
+    @GetMapping("/course_sell_in_week")
+    public ResponseEntity<Map<String, Long>> getTotalSaleByCourseWeek(
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        LocalDate startOfWeek = LocalDate.parse(startDate);
+        LocalDate endOfWeek = LocalDate.parse(endDate);
+        return ResponseEntity.ok(orderService.countOrdersOnEachDayOfWeek(startOfWeek, endOfWeek));
+    }
+
+    @ApiMessage("Lấy số liệu thống kê thành công!")
+    @GetMapping("/dashboard-statistics")
+    public ResponseEntity<DashboardStatisticsResponse> getDashboardStatistics() {
+        return ResponseEntity.ok(orderService.getDashboardStatistics());
     }
 }
