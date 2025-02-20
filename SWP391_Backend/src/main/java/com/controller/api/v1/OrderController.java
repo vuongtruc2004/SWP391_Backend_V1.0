@@ -6,10 +6,7 @@ import com.service.OrderService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -22,5 +19,11 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
         return ResponseEntity.ok(orderService.createOrder(orderRequest));
+    }
+
+    @ApiMessage("Đã thanh toán hóa đơn thành công!")
+    @GetMapping("/active/{orderId}")
+    public ResponseEntity<OrderResponse> activeCoursesForUser(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.activeCoursesForUser(orderId));
     }
 }
