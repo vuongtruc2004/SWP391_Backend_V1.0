@@ -2,7 +2,10 @@ package com.service;
 
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.ExpertDetailsResponse;
 import com.entity.ExpertEntity;
+import com.exception.custom.NotFoundException;
+import com.helper.ExpertServiceHelper;
 import com.repository.ExpertRepository;
 import com.util.BuildResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +21,7 @@ import java.util.List;
 public class ExpertService {
     private final ExpertRepository expertRepository;
     private final ModelMapper modelMapper;
-
+    private final ExpertServiceHelper expertServiceHelper;
     public PageDetailsResponse<List<ExpertResponse>> getExperts(Pageable pageable) {
         Page<ExpertEntity> page = expertRepository.findAll(pageable);
         List<ExpertResponse> expertResponses = page.getContent()
@@ -36,5 +39,11 @@ public class ExpertService {
                 page.getTotalElements(),
                 expertResponses
         );
+    }
+    public ExpertDetailsResponse getExpertById(Long userId) {
+        ExpertEntity expertEntity = expertRepository.findByUser_UserId(userId).
+                orElseThrow(() -> new NotFoundException("Expert không tìm thấy"));
+        return expertServiceHelper.convertToExpertDetailsResponse(expertEntity);
+
     }
 }

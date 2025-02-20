@@ -30,8 +30,6 @@ public class QuizEntity {
 
     Boolean published;
 
-    @Column(name = "published_at")
-    Instant publishedAt;
 
     @Column(name = "created_at")
     Instant createdAt;

@@ -2,12 +2,14 @@ package com.controller.api.v1;
 
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.ExpertDetailsResponse;
 import com.service.ExpertService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +26,11 @@ public class ExpertController {
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExperts(Pageable pageable) {
         return ResponseEntity.ok(expertService.getExperts(pageable));
+    }
+
+    @ApiMessage("Lấy chi tiết chuyên gia thành công")
+    @GetMapping("{userId}")
+    public ResponseEntity<ExpertDetailsResponse> getExpertById(@PathVariable Long userId) {
+        return ResponseEntity.ok(expertService.getExpertById(userId));
     }
 }

@@ -1,7 +1,7 @@
 package com.service;
 
 import com.dto.request.OrderRequest;
-import com.dto.response.OrderResponse;
+import com.dto.response.*;
 import com.entity.CourseEntity;
 import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
@@ -12,13 +12,19 @@ import com.exception.custom.OrderException;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.repository.UserRepository;
+import com.util.BuildResponse;
 import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -79,5 +85,39 @@ public class OrderService {
         } else {
             throw new OrderException("Bạn đã thanh toán hóa đơn này rồi!");
         }
+    }
+
+    public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
+            Pageable pageable,
+            Specification<OrderEntity> specification) {
+        Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
+        List<OrderResponse> orderResponses = page.getContent()
+                .stream()
+                .map(orderEntity -> {
+                    OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
+                    UserEntity userEntity = userRepository.findById(orderEntity.getUserId())
+                            .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy")
+                            );
+                    orderResponse.setUser(modelMapper.map(userEntity, UserResponse.class));
+                    Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
+                            .map(orderDetailsEntity -> {
+                                OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetailsEntity, OrderDetailsResponse.class);
+                                CourseEntity courseEntity = courseRepository.findById(orderDetailsEntity.getCourseId())
+                                        .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học"));
+                                orderDetailsResponse.setCourse(modelMapper.map(courseEntity, CourseResponse.class));
+                                return orderDetailsResponse;
+                            })
+                            .collect(Collectors.toSet());
+                    orderResponse.setOrderDetails(orderDetailsResponses);
+                    return orderResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                orderResponses);
     }
 }

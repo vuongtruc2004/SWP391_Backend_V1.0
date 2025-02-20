@@ -75,6 +75,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserWithFilter(pageable, specification));
     }
 
+    @ApiMessage("Lấy tất cả người dùng ứng với khóa học thành công")
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<PageDetailsResponse<List<UserResponse>>> getUsersByCourse(
+            Pageable pageable,
+            @Filter Specification<UserEntity> specification, @PathVariable Long courseId) {
+        System.out.println("🔹 Received request for course ID: " + courseId);
+        return ResponseEntity.ok(userService.getUserByCourse(pageable, specification, courseId));
+    }
+
 
     @ApiMessage("Khóa người dùng thành công")
     @DeleteMapping("/{id}")
@@ -112,6 +121,14 @@ public class UserController {
             @RequestParam(name = "file", required = false) MultipartFile file,
             @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException {
         return ResponseEntity.ok(userService.updateAvatar(file, folder));
+    }
+
+    @ApiMessage("Cập nhật avatar thành công")
+    @PostMapping("/avataradmin")
+    public ResponseEntity<UserResponse> uploadAvatarByAdmin(
+            @RequestParam(name = "file", required = false) MultipartFile file,
+            @RequestParam(name = "folder") String folder) throws URISyntaxException, IOException {
+        return ResponseEntity.ok(userService.updateAvatarByAdmin(file, folder));
     }
 
 }

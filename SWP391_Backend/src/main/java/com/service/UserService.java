@@ -6,6 +6,7 @@ import com.dto.request.UserRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
+import com.entity.CourseEntity;
 import com.entity.OTPEntity;
 import com.entity.RoleEntity;
 import com.entity.UserEntity;
@@ -21,6 +22,7 @@ import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
+import jakarta.persistence.criteria.Join;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -134,6 +136,40 @@ public class UserService {
         );
     }
 
+    public PageDetailsResponse<List<UserResponse>> getUserByCourse(
+            Pageable pageable, Specification<UserEntity> specification, Long courseId) {
+
+        // Tạo Specification để lọc User có khóa học cụ thể
+        Specification<UserEntity> courseSpecification = (root, query, criteriaBuilder) -> {
+            // Join users với courses
+            Join<UserEntity, CourseEntity> courseJoin = root.join("courses");
+            return criteriaBuilder.equal(courseJoin.get("courseId"), courseId);
+        };
+
+        // Kết hợp Specification tìm kiếm + lọc khóa học
+        Specification<UserEntity> finalSpecification = specification.and(courseSpecification);
+
+        // Lấy danh sách UserEntity theo phân trang + Specification
+        Page<UserEntity> page = userRepository.findAll(finalSpecification, pageable);
+
+        List<UserResponse> userResponses = page.getContent()
+                .stream()
+                .map(userEntity -> {
+                    UserResponse userResponse = modelMapper.map(userEntity, UserResponse.class);
+                    userResponse.setRoleName(userEntity.getRole().getRoleName());
+                    return userResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                userResponses
+        );
+    }
+
     public boolean lockUser(Long id) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy người dùng"));
@@ -223,6 +259,28 @@ public class UserService {
             if (userEntity == null) {
                 throw new UserException("Người dùng không tồn tại!");
             }
+            userEntity.setAvatar(fileResponse.getData());
+            return modelMapper.map(userRepository.save(userEntity), UserResponse.class);
+        } else {
+            throw new StorageException("Không tìm thấy ảnh");
+        }
+    }
+    public UserResponse updateAvatarByAdmin(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        if (file == null || file.isEmpty()) {
+            throw new StorageException("File bị rỗng");
+        }
+        String fileName = file.getOriginalFilename();
+        List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png");
+        boolean isValid = allowedExtensions.stream().anyMatch(item -> {
+            assert fileName != null;
+            return fileName.toLowerCase().endsWith(item);
+        });
+        if (!isValid) {
+            throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
+        }
+        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        if (fileResponse.getStatus() == 200) {
+            UserEntity userEntity = new UserEntity();
             userEntity.setAvatar(fileResponse.getData());
             return modelMapper.map(userRepository.save(userEntity), UserResponse.class);
         } else {

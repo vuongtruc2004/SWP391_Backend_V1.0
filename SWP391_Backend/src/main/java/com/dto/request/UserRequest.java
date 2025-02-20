@@ -47,10 +47,7 @@ public class UserRequest {
     @Enumerated(EnumType.STRING)
     AccountTypeEnum accountType;
 
-    @Pattern(
-            regexp = "^[a-zA-ZÀ-ỹ\\s]+$",
-            message = "Họ và tên chỉ được chứa chữ cái!"
-    )
+
     @NotBlank(message = "Họ và tên không được bỏ trống!")
     String fullname;
 
