@@ -1,21 +1,20 @@
 package com.dto.response;
 
-import com.entity.UserNotificationEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.Instant;
-import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NotificationResponse {
-    Long notificationId;
-    String title;
-    String content;
-    Instant createdAt;
+public class UserNotificationResponse {
+    Long userNotificationId;
+
+    UserResponse user;
+    @JsonIgnoreProperties("userNotifications")
+    NotificationResponse notification;
+    Boolean isRead;
 }

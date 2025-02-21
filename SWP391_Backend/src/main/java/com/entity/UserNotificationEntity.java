@@ -28,4 +28,9 @@ public class UserNotificationEntity {
     NotificationEntity notification;
 
     Boolean isRead;
+
+    @PrePersist
+    public void handlePrePersist(){
+        isRead = false;
+    }
 }

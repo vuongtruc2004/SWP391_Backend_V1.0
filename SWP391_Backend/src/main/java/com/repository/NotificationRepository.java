@@ -7,12 +7,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
     @Query("select n from NotificationEntity n " +
             "left join UserNotificationEntity u on n.notificationId = u.notification.notificationId " +
-            "where n.global = true OR u.user.userId = :userId " +
+            "where (n.global = true OR u.user.userId = :userId) and n.notificationId not in (:readIds) "+
+            "order by n.createdAt desc ")
+    List<NotificationEntity> getNotificationEntitiesByGlobalOrUserId(@Param("userId") Long userId, Set<Long> readIds);
+
+    @Query("select n from NotificationEntity n " +
+            "left join UserNotificationEntity u on n.notificationId = u.notification.notificationId " +
+            "where (n.global = true OR u.user.userId = :userId) "+
             "order by n.createdAt desc ")
     List<NotificationEntity> getNotificationEntitiesByGlobalOrUserId(@Param("userId") Long userId);
 }
