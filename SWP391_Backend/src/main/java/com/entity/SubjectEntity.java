@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,5 +31,6 @@ public class SubjectEntity {
     String thumbnail;
 
     @ManyToMany(mappedBy = "subjects")
+    @JsonIgnoreProperties("subjects")
     Set<CourseEntity> courses;
 }

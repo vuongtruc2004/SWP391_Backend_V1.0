@@ -34,6 +34,12 @@ public class SubjectService {
         this.modelMapper = modelMapper;
     }
 
+    public List<SubjectResponse> getAllSubjects() {
+        List<SubjectEntity> list = subjectRepository.findAll();
+       List<SubjectResponse> subjectResponseList=list.stream().map(subjectEntity -> modelMapper.map(subjectEntity, SubjectResponse.class)).collect(Collectors.toList());
+       return subjectResponseList;
+    }
+
     public PageDetailsResponse<List<SubjectResponse>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
         Page<SubjectEntity> page = subjectRepository.findAllOrderByNumberOfCourses(pageable);
         List<SubjectResponse> subjectResponseList = page.getContent()

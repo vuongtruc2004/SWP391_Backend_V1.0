@@ -185,9 +185,11 @@ public class CourseService {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
         CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseRequest.getCourseName(), userEntity.getExpert());
+
         if (currentCourse != null) {
             throw new NotFoundException("Khoá học đã tồn tại !");
         }
+
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
         newCourse.setCourseName(courseRequest.getCourseName());

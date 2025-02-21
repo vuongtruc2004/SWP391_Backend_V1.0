@@ -20,6 +20,8 @@ public class CourseResponse {
 
     String courseName;
 
+    String introduction;
+
     String description;
 
     List<String> objectives;

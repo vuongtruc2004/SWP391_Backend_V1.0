@@ -88,6 +88,12 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.courseService.createCourse(courseRequest));
     }
 
+//    @ApiMessage("Cập nhật một khoá học")
+//    @PutMapping
+//    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception{
+//        return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
+//    }
+
     @ApiMessage("Cập nhật một khoá học")
     @PutMapping
     public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception{
