@@ -3,7 +3,6 @@ package com.service;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.RateResponse;
 import com.entity.RateEntity;
-import com.exception.custom.CourseException;
 import com.repository.RateRepository;
 import com.util.BuildResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +24,9 @@ public class RateService {
     private final ModelMapper modelMapper;
 
     public PageDetailsResponse<List<RateResponse>> getRateWithFilters(
-            Long courseId,
-            Pageable pageable,
-            Specification<RateEntity> specification
+            Specification<RateEntity> specification,
+            Pageable pageable
     ) {
-        if (courseId != null && courseId > 0) {
-            specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("course").get("courseId"), courseId)));
-        } else {
-            throw new CourseException("ID của khóa học không hợp lệ!");
-        }
         Page<RateEntity> page = rateRepository.findAll(specification, pageable);
         List<RateResponse> rateResponses = page.getContent()
                 .stream().map(rateEntity -> modelMapper.map(rateEntity, RateResponse.class)).toList();

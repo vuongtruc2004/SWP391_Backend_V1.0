@@ -28,11 +28,10 @@ public class RateController {
     @ApiMessage("Lấy các đánh giá của 1 khóa học thành công!")
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<RateResponse>>> getRateWithFilters(
-            @RequestParam(name = "courseId") Long courseId,
-            Pageable pageable,
-            @Filter Specification<RateEntity> specification
+            @Filter Specification<RateEntity> specification,
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(rateService.getRateWithFilters(courseId, pageable, specification));
+        return ResponseEntity.ok(rateService.getRateWithFilters(specification, pageable));
     }
 
     @ApiMessage("Lấy số khóa học của 1 mức đánh giá thành công!")
