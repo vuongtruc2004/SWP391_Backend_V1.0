@@ -31,7 +31,9 @@ public class SecurityConfig {
             "api/v1/subjects/**",
             "/api/v1/users/**",
             "/api/v1/otp/**",
-            "/api/v1/orders/**"
+            "/api/v1/orders/**",
+            "/api/v1/rates/**",
+            "/api/v1/experts/**",
     };
 
     private final SecurityUtil securityUtil;
@@ -48,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(

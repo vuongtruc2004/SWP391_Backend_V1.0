@@ -9,7 +9,6 @@ import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
-import com.helper.OrderServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.*;
 import com.util.BuildResponse;
@@ -129,6 +128,7 @@ public class CourseService {
                 CourseStatusResponse courseStatusResponse = new CourseStatusResponse();
                 courseStatusResponse.setCourseId(courseEntity.getCourseId());
                 courseStatusResponse.setCompletionPercentage(completionPercentage);
+                courseStatusResponse.setTotalCompletionVideosAndDocuments(numberOfCompletedVideosAndDocuments);
                 courseStatusResponseList.add(courseStatusResponse);
             }
             return courseStatusResponseList;
@@ -223,6 +223,7 @@ public class CourseService {
                 null
         );
     }
+
     public CourseResponse createCourse(CourseRequest courseRequest) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
@@ -241,11 +242,11 @@ public class CourseService {
         newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
         newCourse.setSalePrice(courseRequest.getSalePrice());
         newCourse.setThumbnail(courseRequest.getThumbnail());
-        newCourse=this.courseRepository.save(newCourse);
+        newCourse = this.courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
-        newCourse=this.courseRepository.save(newCourse);
-        CourseResponse courseResponse=new CourseResponse();
+        newCourse = this.courseRepository.save(newCourse);
+        CourseResponse courseResponse = new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.map(newCourse, courseResponse);
         return courseResponse;
@@ -264,11 +265,11 @@ public class CourseService {
         newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
         newCourse.setSalePrice(courseRequest.getSalePrice());
         newCourse.setThumbnail(courseRequest.getThumbnail());
-        newCourse=this.courseRepository.save(newCourse);
+        newCourse = this.courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
         this.courseRepository.save(newCourse);
-        CourseResponse courseResponse=new CourseResponse();
+        CourseResponse courseResponse = new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.map(newCourse, courseResponse);
         return courseResponse;
