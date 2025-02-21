@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.entity.CourseEntity;
+import com.entity.ExpertEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,4 +50,5 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
 
     @Query("select MAX(c.originalPrice) FROM CourseEntity c")
     Double findMaxPrice();
+    CourseEntity findByCourseNameAndExpert(String courseName, ExpertEntity expert);
 }

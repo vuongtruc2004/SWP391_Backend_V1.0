@@ -13,6 +13,6 @@ public interface SubjectRepository extends JpaSpecificationRepository<SubjectEnt
             "ORDER BY SIZE(s.courses) DESC")
     Page<SubjectEntity> findAllOrderByNumberOfCourses(Pageable pageable);
     boolean existsBySubjectName(String subjectName);
-
+    SubjectEntity findBySubjectName(String subjectName);
 
 }

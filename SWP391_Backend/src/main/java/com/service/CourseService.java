@@ -1,14 +1,13 @@
 package com.service;
 
 
+import com.dto.request.CourseRequest;
 import com.dto.response.*;
 import com.dto.response.details.CourseDetailsResponse;
-import com.entity.CourseEntity;
-import com.entity.ExpertEntity;
-import com.entity.LessonEntity;
-import com.entity.UserEntity;
+import com.entity.*;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
+import com.exception.custom.NotFoundException;
 import com.helper.CourseServiceHelper;
 import com.helper.OrderServiceHelper;
 import com.helper.UserServiceHelper;
@@ -16,16 +15,16 @@ import com.repository.*;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.service.auth.JwtService.extractUsernameFromToken;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +34,10 @@ public class CourseService {
     private final CourseServiceHelper courseServiceHelper;
     private final LessonRepository lessonRepository;
     private final ExpertRepository expertRepository;
-    private final SubjectRepository subjectRepository;
     private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
-    private final OrderServiceHelper orderServiceHelper;
+    private final ModelMapper modelMapper;
+    private final SubjectService subjectService;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -223,5 +222,55 @@ public class CourseService {
                 "Khóa học " + courseEntity.getCourseName() + " đã được ẩn!",
                 null
         );
+    }
+    public CourseResponse createCourse(CourseRequest courseRequest) throws Exception {
+        Optional<String> email = extractUsernameFromToken();
+        UserEntity userEntity = this.userRepository.findByEmail(email.get());
+        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseRequest.getCourseName(), userEntity.getExpert());
+
+        if (currentCourse != null) {
+            throw new NotFoundException("Khoá học đã tồn tại !");
+        }
+
+        CourseEntity newCourse = new CourseEntity();
+        newCourse.setExpert(userEntity.getExpert());
+        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setObjectiveList(courseRequest.getObjectives());
+        newCourse.setIntroduction(courseRequest.getIntroduction());
+        newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
+        newCourse.setSalePrice(courseRequest.getSalePrice());
+        newCourse.setThumbnail(courseRequest.getThumbnail());
+        newCourse=this.courseRepository.save(newCourse);
+        Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
+        newCourse.setSubjects(subjectEntitySet);
+        newCourse=this.courseRepository.save(newCourse);
+        CourseResponse courseResponse=new CourseResponse();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(newCourse, courseResponse);
+        return courseResponse;
+    }
+
+    @Transactional
+    public CourseResponse updateCourse(CourseRequest courseRequest) throws Exception {
+        Optional<String> email = extractUsernameFromToken();
+        UserEntity userEntity = this.userRepository.findByEmail(email.get());
+        CourseEntity newCourse = this.courseRepository.findById(courseRequest.getCourseId()).orElse(null);
+        newCourse.setExpert(userEntity.getExpert());
+        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setDescription(courseRequest.getDescription());
+        newCourse.setObjectiveList(courseRequest.getObjectives());
+        newCourse.setIntroduction(courseRequest.getIntroduction());
+        newCourse.setOriginalPrice(courseRequest.getOriginalPrice());
+        newCourse.setSalePrice(courseRequest.getSalePrice());
+        newCourse.setThumbnail(courseRequest.getThumbnail());
+        newCourse=this.courseRepository.save(newCourse);
+        Set<SubjectEntity> subjectEntitySet = this.subjectService.saveSubjectWithCourse(courseRequest);
+        newCourse.setSubjects(subjectEntitySet);
+        this.courseRepository.save(newCourse);
+        CourseResponse courseResponse=new CourseResponse();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.map(newCourse, courseResponse);
+        return courseResponse;
     }
 }

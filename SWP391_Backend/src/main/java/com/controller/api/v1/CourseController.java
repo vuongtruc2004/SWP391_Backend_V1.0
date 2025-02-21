@@ -1,5 +1,6 @@
 package com.controller.api.v1;
 
+import com.dto.request.CourseRequest;
 import com.dto.response.*;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
@@ -9,6 +10,7 @@ import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,6 +91,16 @@ public class CourseController {
     @PutMapping("/unaccept/{courseId}")
     public ResponseEntity<ApiResponse<String>> unacceptCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.changeUnacceptACourse(courseId));
+    }
+    @ApiMessage("Tạo mới một khoá học")
+    @PostMapping
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest courseRequest) throws Exception{
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.courseService.createCourse(courseRequest));
+    }
+    @ApiMessage("Cập nhật một khoá học")
+    @PutMapping
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception{
+        return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
     }
 
 }

@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(
                         oauth2 -> oauth2

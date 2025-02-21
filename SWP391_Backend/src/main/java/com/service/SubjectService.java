@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.request.CourseRequest;
 import com.dto.request.SubjectRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -187,5 +190,18 @@ public class SubjectService {
                 null,
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );
+    }
+    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest) throws Exception{
+        Set<SubjectEntity> subjectEntitySet = new HashSet<>();
+        for (String subjectName : courseRequest.getSubjects()) {
+            Boolean checkExistsSubject = this.subjectRepository.existsBySubjectName(subjectName.trim());
+            if (checkExistsSubject) {
+                SubjectEntity currentSubject = this.subjectRepository.findBySubjectName(subjectName.trim());
+                subjectEntitySet.add(currentSubject);
+            } else {
+                throw new Exception("Lĩnh vực công nghệ chưa tồn tại");
+            }
+        }
+        return subjectEntitySet;
     }
 }

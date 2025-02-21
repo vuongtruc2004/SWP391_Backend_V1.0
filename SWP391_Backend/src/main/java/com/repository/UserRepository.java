@@ -22,5 +22,6 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
     Long countByGender(GenderEnum gender);
 
     Long countByDobBetween(Instant startDate, Instant endDate);
+    UserEntity findByEmail(String email);
 
 }

@@ -1,9 +1,10 @@
 package com.util;
 
-import com.dto.response.ApiResponse;
-import com.dto.response.LoginResponse;
-import com.dto.response.PageDetailsResponse;
-import com.dto.response.UserResponse;
+import com.dto.request.LessonRequest;
+import com.dto.response.*;
+import com.entity.LessonEntity;
+import com.helper.DocumentServiceHelper;
+import com.helper.VideoServiceHelper;
 
 import java.time.Instant;
 
@@ -41,5 +42,13 @@ public class BuildResponse {
                 .totalElements(totalElements)
                 .content(content)
                 .build();
+    }
+    public static LessonResponse buildLessonResponse(LessonRequest lessonRequest, LessonEntity newLesson) {
+        LessonResponse lessonResponse = new LessonResponse();
+        lessonResponse.setLessonId(newLesson.getLessonId());
+        lessonResponse.setTitle(lessonRequest.getTitle());
+        lessonResponse.setDocuments(DocumentServiceHelper.mapToResponseSet(lessonRequest.getDocuments()));
+        lessonResponse.setVideos(VideoServiceHelper.mapToResponseSet(lessonRequest.getVideos()));
+        return lessonResponse;
     }
 }
