@@ -7,6 +7,7 @@ import com.entity.VideoEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,9 +23,9 @@ public class LessonRequest {
 
     CourseEntity course;
 
-    Set<VideoEntity> videos;
+    List<VideoEntity> videos;
 
-    Set<DocumentEntity> documents;
+    List<DocumentEntity> documents;
 
     Set<QuizEntity> quizzes;
 }

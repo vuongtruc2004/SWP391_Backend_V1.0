@@ -28,7 +28,8 @@ public class UserServiceHelper {
                 throw new UserException("Không tìm thấy");
             }
             return userEntity;
+        } else {
+            throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-        return null;
     }
 }

@@ -5,14 +5,13 @@ import com.entity.VideoEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class VideoServiceHelper {
 
-    public static Set<VideoResponse> mapToResponseSet(Set<VideoEntity> videoEntities) {
+    public static List<VideoResponse> mapToResponseList(List<VideoEntity> videoEntities) {
         return videoEntities.stream()
                 .map(videoEntity -> VideoResponse.builder()
                         .videoId(videoEntity.getVideoId())
@@ -22,6 +21,6 @@ public class VideoServiceHelper {
                         .createdAt(videoEntity.getCreatedAt())
                         .updatedAt(videoEntity.getUpdatedAt())
                         .build())
-                .collect(Collectors.toSet());
+                .toList();
     }
 }

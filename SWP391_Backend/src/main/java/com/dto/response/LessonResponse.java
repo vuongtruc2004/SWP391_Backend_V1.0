@@ -3,7 +3,7 @@ package com.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class LessonResponse {
 
     String description;
 
-    Set<VideoResponse> videos;
+    List<VideoResponse> videos;
 
-    Set<DocumentResponse> documents;
+    List<DocumentResponse> documents;
 }

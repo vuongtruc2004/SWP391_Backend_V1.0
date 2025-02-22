@@ -26,7 +26,7 @@ public class CourseDetailsResponse extends CourseResponse {
 
     Set<SubjectResponse> subjects;
 
-    Set<LessonResponse> lessons;
+    List<LessonResponse> lessons;
 
     Double averageRating;
 

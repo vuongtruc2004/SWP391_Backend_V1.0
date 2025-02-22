@@ -128,7 +128,6 @@ public class CourseService {
                 CourseStatusResponse courseStatusResponse = new CourseStatusResponse();
                 courseStatusResponse.setCourseId(courseEntity.getCourseId());
                 courseStatusResponse.setCompletionPercentage(completionPercentage);
-                courseStatusResponse.setTotalCompletionVideosAndDocuments(numberOfCompletedVideosAndDocuments);
                 courseStatusResponseList.add(courseStatusResponse);
             }
             return courseStatusResponseList;

@@ -7,12 +7,12 @@ import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
-import com.service.ExpertService;
 import com.service.OTPService;
 import com.service.UserService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -27,17 +27,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
     private final OTPService otpService;
-    private final ExpertService expertService;
-
-    public UserController(UserService userService, OTPService otpService,
-                          ExpertService expertService) {
-        this.userService = userService;
-        this.otpService = otpService;
-        this.expertService = expertService;
-    }
 
     @ApiMessage("Gửi yêu cầu đăng kí tài khoản thành công!")
     @PostMapping("/request_register")

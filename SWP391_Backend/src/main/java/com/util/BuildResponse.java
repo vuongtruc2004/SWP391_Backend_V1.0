@@ -43,12 +43,13 @@ public class BuildResponse {
                 .content(content)
                 .build();
     }
+
     public static LessonResponse buildLessonResponse(LessonRequest lessonRequest, LessonEntity newLesson) {
         LessonResponse lessonResponse = new LessonResponse();
         lessonResponse.setLessonId(newLesson.getLessonId());
         lessonResponse.setTitle(lessonRequest.getTitle());
-        lessonResponse.setDocuments(DocumentServiceHelper.mapToResponseSet(lessonRequest.getDocuments()));
-        lessonResponse.setVideos(VideoServiceHelper.mapToResponseSet(lessonRequest.getVideos()));
+        lessonResponse.setDocuments(DocumentServiceHelper.mapToResponseList(lessonRequest.getDocuments()));
+        lessonResponse.setVideos(VideoServiceHelper.mapToResponseList(lessonRequest.getVideos()));
         return lessonResponse;
     }
 }

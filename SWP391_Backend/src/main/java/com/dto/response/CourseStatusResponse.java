@@ -13,6 +13,4 @@ public class CourseStatusResponse {
     Long courseId;
 
     Double completionPercentage;
-
-    Long totalCompletionVideosAndDocuments;
 }

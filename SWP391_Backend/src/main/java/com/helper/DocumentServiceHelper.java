@@ -1,16 +1,17 @@
 package com.helper;
+
 import com.dto.response.DocumentResponse;
 import com.entity.DocumentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class DocumentServiceHelper {
 
-    public static Set<DocumentResponse> mapToResponseSet(Set<DocumentEntity> documentEntities) {
+    public static List<DocumentResponse> mapToResponseList(List<DocumentEntity> documentEntities) {
         return documentEntities.stream()
                 .map(document -> DocumentResponse.builder()
                         .documentId(document.getDocumentId())
@@ -21,6 +22,6 @@ public class DocumentServiceHelper {
                         .updatedAt(document.getUpdatedAt())
                         .build()
                 )
-                .collect(Collectors.toSet());
+                .toList();
     }
 }
