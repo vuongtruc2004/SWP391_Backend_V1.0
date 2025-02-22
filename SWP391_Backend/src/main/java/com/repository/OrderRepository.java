@@ -21,15 +21,15 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     Long getYesterdayRevenue(@Param("yesterday") LocalDate yesterday);
 
     // Tổng số lượng học viên từ trước đến nay (đếm DISTINCT user_id)
-    @Query("SELECT COUNT(DISTINCT o.userId) FROM OrderEntity o")
+    @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o")
     Long getTotalStudents();
 
     // Tổng số lượng học viên hôm nay (đếm DISTINCT user_id)
-    @Query("SELECT COUNT(DISTINCT o.userId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE)")
+    @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE)")
     Long getTodayStudents();
 
     // Tổng số lượng học viên hôm qua (đếm DISTINCT user_id)
-    @Query("SELECT COUNT(DISTINCT o.userId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = :yesterday")
+    @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = :yesterday")
     Long getYesterdayStudents(@Param("yesterday") LocalDate yesterday);
 
     // Tổng số khóa học đã bán từ trước đến nay (đếm DISTINCT order_id)

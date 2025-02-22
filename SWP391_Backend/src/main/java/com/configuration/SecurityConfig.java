@@ -34,6 +34,8 @@ public class SecurityConfig {
             "/api/v1/orders/**",
             "/api/v1/rates/**",
             "/api/v1/experts/**",
+            "/api/v1/questions/**",
+
     };
 
     private final SecurityUtil securityUtil;

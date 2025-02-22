@@ -86,6 +86,9 @@ public class UserEntity {
     @JoinColumn(name = "role_id")
     RoleEntity role;
 
+    @OneToMany(mappedBy = "user")
+    Set<OrderEntity> orders;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

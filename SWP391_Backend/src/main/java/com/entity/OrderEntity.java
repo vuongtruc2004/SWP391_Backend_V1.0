@@ -33,8 +33,9 @@ public class OrderEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @Column(name = "user_id")
-    Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    UserEntity user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     Set<OrderDetailsEntity> orderDetails;
