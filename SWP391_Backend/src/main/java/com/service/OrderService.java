@@ -192,14 +192,14 @@ public class OrderService {
         LocalDate yesterday = LocalDate.now().minusDays(1);
 
         return new DashboardStatisticsResponse(
-                orderRepository.getTotalRevenue(),
-                orderRepository.getTodayRevenue(),
+                orderRepository.getTotalRevenue(OrderStatusEnum.COMPLETED),
+                orderRepository.getTodayRevenue(OrderStatusEnum.COMPLETED),
                 orderRepository.getYesterdayRevenue(yesterday),
-                orderRepository.getTotalStudents(),
-                orderRepository.getTodayStudents(),
+                orderRepository.getTotalStudents(OrderStatusEnum.COMPLETED),
+                orderRepository.getTodayStudents(OrderStatusEnum.COMPLETED),
                 orderRepository.getYesterdayStudents(yesterday),
-                orderRepository.getTotalOrders(),
-                orderRepository.getTodayOrders(),
+                orderRepository.getTotalOrders(OrderStatusEnum.COMPLETED),
+                orderRepository.getTodayOrders(OrderStatusEnum.COMPLETED),
                 orderRepository.getYesterdayOrders(yesterday)
         );
     }
