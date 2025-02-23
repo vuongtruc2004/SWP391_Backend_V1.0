@@ -35,6 +35,8 @@ public class GlobalExceptionHandler {
             InvalidRequestInput.class,
             CourseException.class,
             OrderException.class,
+            QuestionException.class,
+
     })
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(

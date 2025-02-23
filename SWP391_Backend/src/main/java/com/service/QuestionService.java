@@ -8,6 +8,7 @@ import com.dto.response.QuestionResponse;
 import com.entity.AnswerEntity;
 import com.entity.QuestionEntity;
 import com.exception.custom.NotFoundException;
+import com.exception.custom.QuestionException;
 import com.helper.QuestionServiceHelper;
 import com.repository.AnswerRepository;
 import com.repository.QuestionRepository;
@@ -60,8 +61,11 @@ public class QuestionService {
 
     public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
         QuestionEntity questionEntityOptional = new QuestionEntity();
+        boolean existTitle = questionRepository.existsByTitle(request.getTitle().trim());
+        if(existTitle) {
+            throw new QuestionException("Câu hỏi đã tồn tại!");
+        }
         questionEntityOptional.setTitle(request.getTitle());
-
         Set<AnswerEntity> answerEntities = request.getAnswersId().stream()
                 .map(answerId -> answerRepository.findById(answerId)
                         .orElseThrow(() -> new NotFoundException("Không tìm thấy đáp án với ID: " + answerId)))
