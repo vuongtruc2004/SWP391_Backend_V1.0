@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserProgressRepository extends JpaSpecificationRepository<UserProgressEntity, Long> {
 
@@ -15,4 +16,9 @@ public interface UserProgressRepository extends JpaSpecificationRepository<UserP
     long countNumberOfCompletedVideosAndDocuments(@Param("userId") Long userId, @Param("courseId") Long courseId);
 
     List<UserProgressEntity> findAllByCourseIdAndUserId(Long courseId, Long userId);
+
+    Optional<UserProgressEntity> findByUserIdAndCourseIdAndLessonIdAndVideoId(Long userId, Long courseId, Long lessonId, Long videoId);
+
+    Optional<UserProgressEntity> findByUserIdAndCourseIdAndLessonIdAndDocumentId(Long userId, Long courseId, Long lessonId, Long documentId);
+
 }

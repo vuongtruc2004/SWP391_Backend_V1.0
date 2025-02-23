@@ -1,14 +1,12 @@
 package com.controller.api.v1;
 
+import com.dto.request.UserProgressRequest;
 import com.entity.UserProgressEntity;
 import com.service.UserProgressService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,11 @@ public class UserProgressController {
     @GetMapping
     public ResponseEntity<List<UserProgressEntity>> getUserProgressByCourseId(@RequestParam Long courseId) {
         return ResponseEntity.ok(userProgressService.getUserProgressByCourseId(courseId));
+    }
+
+    @ApiMessage("Cập nhật tiến độ thành công!")
+    @PostMapping
+    public ResponseEntity<UserProgressEntity> changeStatus(@RequestBody UserProgressRequest userProgressRequest) {
+        return ResponseEntity.ok(userProgressService.changeStatus(userProgressRequest));
     }
 }
