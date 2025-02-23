@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface OrderRepository extends JpaSpecificationRepository<OrderEntity, Long> {
+    @Query("select o from OrderEntity o " +
+            "join o.orderDetails od " +
+            "where o.user.userId = :userId and od.courseId in (:courseIds)")
+    List<OrderEntity> findByUserIdAndCourseIds(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
+
     // Tổng doanh thu từ trước đến nay
     @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od")
     Long getTotalRevenue();

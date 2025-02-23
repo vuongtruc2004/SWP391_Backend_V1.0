@@ -11,9 +11,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderRequest {
-
+public class CreateOrderRequest {
     Long userId;
-
-    Set<Long> courseIds;
+    
+    Set<CourseOrderRequest> courseOrders;
 }

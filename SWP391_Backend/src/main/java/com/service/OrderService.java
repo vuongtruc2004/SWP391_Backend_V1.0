@@ -1,7 +1,17 @@
 package com.service;
 
+import com.dto.request.CourseOrderRequest;
+import com.dto.request.CreateOrderRequest;
+import com.dto.response.CourseResponse;
 import com.dto.response.DashboardStatisticsResponse;
+import com.dto.response.OrderResponse;
+import com.entity.CourseEntity;
+import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
+import com.entity.UserEntity;
+import com.exception.custom.CourseException;
+import com.exception.custom.InvalidRequestInput;
+import com.exception.custom.NotFoundException;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.repository.UserRepository;
@@ -13,9 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,32 +35,39 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final NotificationService notificationService;
 
-//    public OrderResponse createOrder(OrderRequest orderRequest) {
-//        UserEntity userEntity = userRepository.findByUserIdAndLockedFalse(orderRequest.getUserId())
-//                .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại!"));
-//        Set<CourseEntity> purchasedCourses = userEntity.getCourses();
-//
-//        OrderEntity orderEntity = new OrderEntity();
-//        Set<OrderDetailsEntity> orderDetailsEntities = new HashSet<>();
-//        orderEntity.setUserId(userEntity.getUserId());
-//
-//        for (Long courseId : orderRequest.getCourseIds()) {
-//            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
-//                    .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
-//            if (purchasedCourses.contains(courseEntity)) {
-//                throw new CourseException("Bạn đã mua khóa học này rồi!");
-//            }
-//            OrderDetailsEntity orderDetailsEntity = OrderDetailsEntity.builder()
-//                    .order(orderEntity)
-//                    .price(courseEntity.getSalePrice())
-//                    .courseId(courseEntity.getCourseId())
-//                    .build();
-//            orderDetailsEntities.add(orderDetailsEntity);
-//        }
-//        orderEntity.setOrderDetails(orderDetailsEntities);
-//        OrderEntity newOrder = orderRepository.save(orderEntity);
-//        return modelMapper.map(newOrder, OrderResponse.class);
-//    }
+    public OrderResponse createOrder(CreateOrderRequest orderRequest) {
+        List<OrderEntity> orderEntityList = orderRepository.findByUserIdAndCourseIds(
+                orderRequest.getUserId(),
+                orderRequest.getCourseOrders().stream().map(CourseOrderRequest::getCourseId).toList()
+        );
+        if (!orderEntityList.isEmpty()) {
+            throw new InvalidRequestInput("Người dùng đã có phiếu với khóa học này rồi!");
+        }
+        UserEntity userEntity = userRepository.findByUserIdAndLockedFalse(orderRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại!"));
+        Set<CourseEntity> purchasedCourses = userEntity.getCourses();
+
+        OrderEntity orderEntity = new OrderEntity();
+        Set<OrderDetailsEntity> orderDetailsEntities = new HashSet<>();
+        orderEntity.setUser(userEntity);
+
+        for (CourseOrderRequest courseOrderRequest : orderRequest.getCourseOrders()) {
+            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(courseOrderRequest.getCourseId())
+                    .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+            if (purchasedCourses.contains(courseEntity)) {
+                throw new CourseException("Bạn đã mua khóa học này rồi!");
+            }
+            OrderDetailsEntity orderDetailsEntity = OrderDetailsEntity.builder()
+                    .order(orderEntity)
+                    .price(courseOrderRequest.getPrice())
+                    .courseId(courseOrderRequest.getCourseId())
+                    .build();
+            orderDetailsEntities.add(orderDetailsEntity);
+        }
+        orderEntity.setOrderDetails(orderDetailsEntities);
+        OrderEntity newOrder = orderRepository.save(orderEntity);
+        return modelMapper.map(newOrder, OrderResponse.class);
+    }
 
 //    public OrderResponse activeCoursesForUser(Long orderId) {
 //        OrderEntity orderEntity = orderRepository.findById(orderId)
@@ -163,6 +178,11 @@ public class OrderService {
                 orderRepository.getTodayOrders(),
                 orderRepository.getYesterdayOrders(yesterday)
         );
+    }
+
+    public List<CourseResponse> getCoursesByIds(List<Long> courseIds) {
+        List<CourseEntity> courseEntityList = courseRepository.findAllById(courseIds);
+        return courseEntityList.stream().map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class)).toList();
     }
 
     private boolean isInSelectedWeek(LocalDate calculatedAt, LocalDate startOfWeek, LocalDate endOfWeek) {
