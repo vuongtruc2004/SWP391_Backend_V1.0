@@ -140,4 +140,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByAge());
     }
 
+    @GetMapping("/get-all")
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 }

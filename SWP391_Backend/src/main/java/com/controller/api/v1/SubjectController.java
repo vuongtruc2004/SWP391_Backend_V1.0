@@ -75,4 +75,9 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.updateThumbnail(file, folder));
     }
 
+    @GetMapping("/all-inpagination")
+    public ResponseEntity<List<SubjectResponse>> getSubjectsWithInPagination(){
+        return ResponseEntity.ok().body(this.subjectService.getAllSubjectInPagination());
+    }
+
 }

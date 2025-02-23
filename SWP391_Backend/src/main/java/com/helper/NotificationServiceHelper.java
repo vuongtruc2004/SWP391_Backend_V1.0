@@ -1,6 +1,5 @@
 package com.helper;
 
-import com.dto.response.NotificationResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserNotificationResponse;
 import com.entity.UserNotificationEntity;

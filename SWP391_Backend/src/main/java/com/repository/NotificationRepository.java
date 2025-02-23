@@ -1,6 +1,9 @@
 package com.repository;
 
 import com.entity.NotificationEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +25,6 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
             "where (n.global = true OR u.user.userId = :userId) "+
             "order by n.createdAt desc ")
     List<NotificationEntity> getNotificationEntitiesByGlobalOrUserId(@Param("userId") Long userId);
+    Page<NotificationEntity> findAll(Specification<NotificationEntity> specification, Pageable pageable);
+    void deleteNotificationEntityByNotificationId(Long notificationId);
 }

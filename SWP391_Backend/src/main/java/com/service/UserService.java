@@ -329,4 +329,9 @@ public class UserService {
 
         return allAge;
     }
+
+    public List<UserResponse> getAllUsers() {
+        List<UserResponse> list = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
+        return list;
+    }
 }

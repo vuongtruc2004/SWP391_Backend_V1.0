@@ -204,4 +204,24 @@ public class SubjectService {
         }
         return subjectEntitySet;
     }
+
+    public List<SubjectResponse> getAllSubjectInPagination() {
+        List<SubjectEntity> subjectEntities = this.subjectRepository.findAll();
+        List<SubjectResponse> subjectResponses = subjectEntities
+                .stream().map(subjectEntity -> {
+                    SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
+                    subjectResponse.setSubjectId(subjectEntity.getSubjectId());
+                    subjectResponse.setSubjectName(subjectEntity.getSubjectName());
+                    subjectResponse.setDescription(subjectEntity.getDescription());
+                    subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
+                    subjectResponse.setListCourses(subjectEntity.getCourses()
+                            .stream()
+                            .map(CourseEntity::getCourseName)
+                            .collect(Collectors.toSet()));
+                    subjectResponse.setThumbnail(subjectEntity.getThumbnail());
+                    return subjectResponse;
+                })
+                .toList();
+        return subjectResponses;
+    }
 }

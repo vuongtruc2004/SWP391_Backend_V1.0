@@ -1,11 +1,16 @@
 package com.controller.api.v1;
 
+import com.dto.request.NotificationRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.NotificationResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserNotificationResponse;
+import com.entity.NotificationEntity;
+import com.repository.UserNotificationRepository;
 import com.service.NotificationService;
+import com.turkraft.springfilter.boot.Filter;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +20,11 @@ import java.util.List;
 @RequestMapping("/api/v1/notifications")
 public class NotificationController {
     private final NotificationService notificationService;
+    private final UserNotificationRepository userNotificationRepository;
 
-    public NotificationController(NotificationService notificationService) {
+    public NotificationController(NotificationService notificationService, UserNotificationRepository userNotificationRepository) {
         this.notificationService = notificationService;
+        this.userNotificationRepository = userNotificationRepository;
     }
 
     @GetMapping
@@ -38,5 +45,36 @@ public class NotificationController {
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<ApiResponse<String>> deleteANotification(@PathVariable("notificationId") Long notificationId) {
         return ResponseEntity.ok(notificationService.deleteNotification(notificationId));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<String>> createANotification(@RequestBody NotificationRequest notificationRequest) {
+        return ResponseEntity.ok(notificationService.createNotification(notificationRequest));
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<PageDetailsResponse<List<NotificationResponse>>> getAdminNotifications(
+            Pageable pageable,
+            @Filter Specification<NotificationEntity> specification
+    ) {
+        return ResponseEntity.ok(notificationService.getAllNotificationWithFilter(pageable, specification));
+    }
+
+    @DeleteMapping("/admin/{notificationId}")
+    public ResponseEntity<ApiResponse<String>> deleteAdminNotification(@PathVariable("notificationId") Long notificationId) {
+        return ResponseEntity.ok(notificationService.deleteNotificationByNotificationId(notificationId));
+    }
+
+    @GetMapping("/detail/{notificationId}")
+    public ResponseEntity<PageDetailsResponse<List<UserNotificationResponse>>> getUserNotifications(
+            @PathVariable("notificationId") Long notificationId,
+            Pageable pageable
+            ) {
+        return ResponseEntity.ok(notificationService.getUserNotificationBYNotificationId(notificationId, pageable));
+    }
+
+    @DeleteMapping("/delete-user/{userNotificationId}")
+    public ResponseEntity<ApiResponse<String>> deleteUserNotification(@PathVariable("userNotificationId") Long userNotificationId) {
+        return ResponseEntity.ok(notificationService.deleteUserNotification(userNotificationId));
     }
 }

@@ -1,21 +1,19 @@
-package com.dto.response;
+package com.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NotificationResponse {
-    Long notificationId;
+public class NotificationRequest {
     String title;
     String content;
-    Instant createdAt;
     Boolean global;
-    Set<UserNotificationResponse> userNotifications;
+    List<String> fullname;
 }
