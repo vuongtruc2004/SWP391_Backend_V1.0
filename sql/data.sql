@@ -2250,26 +2250,6 @@ CREATE TABLE `user_progress` (
 
 LOCK TABLES `user_progress` WRITE;
 /*!40000 ALTER TABLE `user_progress` DISABLE KEYS */;
-INSERT INTO `user_progress` (`course_id`, `document_id`, `lesson_id`, `user_id`, `video_id`) VALUES
--- Hoàn thành video 1, 2 trong khóa học 1, lesson 1
-(1, NULL, 1, 1, 1),
-(1, NULL, 1, 1, 2),
-
--- Hoàn thành document 1, 2 trong khóa học 1, lesson 1
-(1, 1, 1, 1, NULL),
-(1, 2, 1, 1, NULL),
-
--- Hoàn thành video 1, 2 trong khóa học 2, lesson 2
-(2, NULL, 2, 1, 1),
-(2, NULL, 2, 1, 2),
-
--- Hoàn thành khóa học 3
-(3, NULL, 7, 1, 7),
-(3, NULL, 8, 1, 8),
-(3, NULL, 9, 1, 9),
-(3, 7, 7, 1, NULL),
-(3, 8, 8, 1, NULL),
-(3, 9, 9, 1, NULL);
 /*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2484,11 +2464,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO orders (created_at, order_status, updated_at, user_id) 
-VALUES 
-('2025-02-14 10:56:52.748692', 'COMPLETED', '2025-02-14 10:56:52.748692', 1), -- Hôm nay
-('2025-02-13 10:56:52.748692', 'COMPLETED', '2025-02-13 10:56:52.748692', 1), -- Hôm qua
-('2025-02-12 10:56:52.748692', 'COMPLETED', '2025-02-12 10:56:52.748692', 1); -- Hôm kia
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2518,12 +2493,6 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO order_details (price, course_id, order_id) 
-VALUES 
-(225000, 1, 1), -- Khóa học 1 mua hôm nay (order_id = 1)
-(225000, 2, 2), -- Khóa học 2 mua hôm qua (order_id = 2)
-(320000, 3, 3),
-(332500, 4, 1);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2550,11 +2519,6 @@ CREATE TABLE `course_user` (
 
 LOCK TABLES `course_user` WRITE;
 /*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES 
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1);
 /*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
 UNLOCK TABLES;
 

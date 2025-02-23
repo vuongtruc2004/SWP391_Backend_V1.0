@@ -28,15 +28,13 @@ public class OrderController {
     public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
         return ResponseEntity.ok(orderService.createOrder(createOrderRequest));
     }
-//
-//    @ApiMessage("Đã thanh toán hóa đơn thành công!")
-//    @GetMapping("/active/{orderId}")
-//    public ResponseEntity<OrderResponse> activeCoursesForUser(@PathVariable Long orderId) {
-//        return ResponseEntity.ok(orderService.activeCoursesForUser(orderId));
-//    }
-//
 
-
+    @ApiMessage("Đã thanh toán hóa đơn thành công!")
+    @GetMapping("/active/{orderId}")
+    public ResponseEntity<OrderResponse> activeCoursesForUser(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.activeCoursesForUser(orderId));
+    }
+    
     @ApiMessage("Lấy tất cả hóa đơn thành công")
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getOrdersWithFilter(
@@ -51,11 +49,11 @@ public class OrderController {
     }
 
 
-
     @GetMapping("/price-range")
     public ResponseEntity<MinMaxPriceResponse> getRangePrice() {
         return ResponseEntity.ok(orderService.getMaxMinPriceOfOrder());
     }
+
     @ApiMessage("Lấy số khóa học mua vào ngày trong tuần thành công!")
     @GetMapping("/course_sell_in_week")
     public ResponseEntity<Map<String, Long>> getTotalSaleByCourseWeek(

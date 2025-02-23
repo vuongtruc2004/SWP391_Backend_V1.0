@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaSpecificationRepository<OrderEntity, Long> {
     @Query("select o from OrderEntity o " +
@@ -49,12 +50,13 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     // Tổng số khóa học đã bán hôm qua (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT o.orderId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = :yesterday")
     Long getYesterdayOrders(@Param("yesterday") LocalDate yesterday);
+
     @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
             "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
-    OrderEntity findOrderWithMinTotalPrice();
+    Optional<OrderEntity> findOrderWithMinTotalPrice();
 
     @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
             "GROUP BY o ORDER BY SUM(od.price) DESC LIMIT 1")
-    OrderEntity findOrderWithMaxTotalPrice();
+    Optional<OrderEntity> findOrderWithMaxTotalPrice();
 
 }

@@ -30,38 +30,27 @@ public class UserProgressService {
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập!");
         }
-        UserProgressEntity userProgressEntity;
-        if (userProgressRequest.getDocumentId() != null) {
-            userProgressEntity = userProgressRepository.findByUserIdAndCourseIdAndLessonIdAndDocumentId(
-                    userEntity.getUserId(),
-                    userProgressRequest.getCourseId(),
-                    userProgressRequest.getLessonId(),
-                    userProgressRequest.getDocumentId()
-            ).orElse(null);
-        } else if (userProgressRequest.getVideoId() != null) {
-            userProgressEntity = userProgressRepository.findByUserIdAndCourseIdAndLessonIdAndVideoId(
-                    userEntity.getUserId(),
-                    userProgressRequest.getCourseId(),
-                    userProgressRequest.getLessonId(),
-                    userProgressRequest.getVideoId()
-            ).orElse(null);
-        } else {
-            throw new InvalidRequestInput("Thiếu thông tin về videoId hoặc documentId");
+        if (userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndDocumentId(
+                userEntity.getUserId(),
+                userProgressRequest.getCourseId(),
+                userProgressRequest.getLessonId(),
+                userProgressRequest.getDocumentId()
+        ) || userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndVideoId(
+                userEntity.getUserId(),
+                userProgressRequest.getCourseId(),
+                userProgressRequest.getLessonId(),
+                userProgressRequest.getVideoId()
+        )) {
+            throw new InvalidRequestInput("Bài học này đã hoàn thành!");
         }
-        if (userProgressEntity == null) {
-            UserProgressEntity newUserProgressEntity = UserProgressEntity.builder()
-                    .userId(userEntity.getUserId())
-                    .courseId(userProgressRequest.getCourseId())
-                    .lessonId(userProgressRequest.getLessonId())
-                    .documentId(userProgressRequest.getDocumentId())
-                    .videoId(userProgressRequest.getVideoId())
-                    .build();
-            notificationService.purchaseSuccessNotification();
-            return userProgressRepository.save(newUserProgressEntity);
-        } else {
-            userProgressRepository.delete(userProgressEntity);
-            notificationService.purchaseSuccessNotification();
-            return userProgressEntity;
-        }
+        UserProgressEntity newUserProgressEntity = UserProgressEntity.builder()
+                .userId(userEntity.getUserId())
+                .courseId(userProgressRequest.getCourseId())
+                .lessonId(userProgressRequest.getLessonId())
+                .documentId(userProgressRequest.getDocumentId())
+                .videoId(userProgressRequest.getVideoId())
+                .build();
+        notificationService.purchaseSuccessNotification();
+        return userProgressRepository.save(newUserProgressEntity);
     }
 }

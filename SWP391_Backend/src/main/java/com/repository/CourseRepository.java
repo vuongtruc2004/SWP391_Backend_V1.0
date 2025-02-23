@@ -50,5 +50,11 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
 
     @Query("select MAX(c.originalPrice) FROM CourseEntity c")
     Double findMaxPrice();
+
     CourseEntity findByCourseNameAndExpert(String courseName, ExpertEntity expert);
+
+    @Query("select c from UserEntity u " +
+            "join u.courses c " +
+            "where c.courseId = :courseId")
+    Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId);
 }

@@ -48,6 +48,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCourseById(courseId));
     }
 
+    @ApiMessage("Lấy khóa học đã mua với ID thành công!")
+    @GetMapping("/purchased/{courseId}")
+    public ResponseEntity<CourseDetailsResponse> getCoursePurchasedByCourseId(@PathVariable(name = "courseId") Long courseId) {
+        return ResponseEntity.ok(courseService.getCoursePurchasedByCourseId(courseId));
+    }
+
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/suggestion")
     public ResponseEntity<List<CourseDetailsResponse>> getSuggestedCourses(
@@ -92,14 +98,16 @@ public class CourseController {
     public ResponseEntity<ApiResponse<String>> unacceptCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.changeUnacceptACourse(courseId));
     }
+
     @ApiMessage("Tạo mới một khoá học")
     @PostMapping
-    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest courseRequest) throws Exception{
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest courseRequest) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.courseService.createCourse(courseRequest));
     }
+
     @ApiMessage("Cập nhật một khoá học")
     @PutMapping
-    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception{
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception {
         return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
     }
 

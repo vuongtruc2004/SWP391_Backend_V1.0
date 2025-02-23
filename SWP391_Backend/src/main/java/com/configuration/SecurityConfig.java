@@ -38,6 +38,7 @@ public class SecurityConfig {
             "/api/v1/notifications/**",
             "/api/v1/quiz/**",
             "/api/v1/answers/**",
+            "/api/v1/files/**"
     };
 
     private final SecurityUtil securityUtil;

@@ -39,6 +39,7 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final NotificationService notificationService;
     private final OrderServiceHelper orderServiceHelper;
+
     public OrderResponse createOrder(CreateOrderRequest orderRequest) {
         List<OrderEntity> orderEntityList = orderRepository.findByUserIdAndCourseIds(
                 orderRequest.getUserId(),
@@ -73,29 +74,27 @@ public class OrderService {
         return modelMapper.map(newOrder, OrderResponse.class);
     }
 
-//    public OrderResponse activeCoursesForUser(Long orderId) {
-//        OrderEntity orderEntity = orderRepository.findById(orderId)
-//                .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại!"));
-//
-//        if (orderEntity.getOrderStatus().equals(OrderStatusEnum.PENDING)) {
-//            UserEntity userEntity = userRepository.findByUserIdAndLockedFalse(orderEntity.getUserId())
-//                    .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại!"));
-//            for (OrderDetailsEntity orderDetailsEntity : orderEntity.getOrderDetails()) {
-//                CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourseId())
-//                        .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
-//                Set<UserEntity> currentRegister = courseEntity.getUsers();
-//                currentRegister.add(userEntity);
-//                courseEntity.setUsers(currentRegister);
-//                courseRepository.save(courseEntity);
-//            }
-//            orderEntity.setOrderStatus(OrderStatusEnum.COMPLETED);
-//            OrderEntity updatedOrder = orderRepository.save(orderEntity);
-//            notificationService.purchaseSuccessNotification(userEntity.getFullname());
-//            return modelMapper.map(updatedOrder, OrderResponse.class);
-//        } else {
-//            throw new OrderException("Bạn đã thanh toán hóa đơn này rồi!");
-//        }
-//    }
+    public OrderResponse activeCoursesForUser(Long orderId) {
+        OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại!"));
+
+        if (orderEntity.getOrderStatus().equals(OrderStatusEnum.PENDING)) {
+            for (OrderDetailsEntity orderDetailsEntity : orderEntity.getOrderDetails()) {
+                CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourseId())
+                        .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+                Set<UserEntity> currentRegister = courseEntity.getUsers();
+                currentRegister.add(orderEntity.getUser());
+                courseEntity.setUsers(currentRegister);
+                courseRepository.save(courseEntity);
+            }
+            orderEntity.setOrderStatus(OrderStatusEnum.COMPLETED);
+            OrderEntity updatedOrder = orderRepository.save(orderEntity);
+            notificationService.purchaseSuccessNotification();
+            return modelMapper.map(updatedOrder, OrderResponse.class);
+        } else {
+            throw new InvalidRequestInput("Bạn đã thanh toán hóa đơn này rồi!");
+        }
+    }
 
     public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
             Pageable pageable,
@@ -107,7 +106,7 @@ public class OrderService {
         Double maxPriceDouble = orderServiceHelper.parseDoubleOrNull(maxPrice);
 
 
-        if(minPriceDouble != null || maxPriceDouble != null) {
+        if (minPriceDouble != null || maxPriceDouble != null) {
             specification = specification.and(orderServiceHelper.filterByPrice(minPriceDouble, maxPriceDouble));
         }
         Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
@@ -116,9 +115,6 @@ public class OrderService {
                 .stream()
                 .map(orderEntity -> {
                     OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
-//                    UserEntity userEntity = userRepository.findById(orderEntity.getUserId())
-//                            .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
-//                    orderResponse.setUser(modelMapper.map(userEntity, UserResponse.class));
 
                     Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
                             .map(orderDetailsEntity -> {
@@ -144,8 +140,11 @@ public class OrderService {
     }
 
     public MinMaxPriceResponse getMaxMinPriceOfOrder() {
-        OrderEntity minOrder = orderRepository.findOrderWithMinTotalPrice();
-        OrderEntity maxOrder = orderRepository.findOrderWithMaxTotalPrice();
+        OrderEntity minOrder = orderRepository.findOrderWithMinTotalPrice().orElse(null);
+        OrderEntity maxOrder = orderRepository.findOrderWithMaxTotalPrice().orElse(null);
+        if (minOrder == null && maxOrder == null) {
+            return new MinMaxPriceResponse(0.0, 0.0);
+        }
         Double minPrice = minOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
         Double maxPrice = maxOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
 

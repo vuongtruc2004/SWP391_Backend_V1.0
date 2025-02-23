@@ -8,6 +8,7 @@ import com.entity.*;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
+import com.exception.custom.UserException;
 import com.helper.CourseServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.*;
@@ -70,12 +71,22 @@ public class CourseService {
         );
     }
 
-    public CourseDetailsResponse getCourseById(Long id) {
-        CourseEntity courseEntity = courseRepository.findById(id)
+    public CourseDetailsResponse getCourseById(Long courseId) {
+        CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
         if (Boolean.FALSE.equals(courseEntity.getAccepted())) {
             throw new CourseException("Khóa học không tồn tại!");
         }
+        return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+    }
+
+    public CourseDetailsResponse getCoursePurchasedByCourseId(Long courseId) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
+        }
+        CourseEntity courseEntity = courseRepository.findPurchasedCourseByCourseId(courseId)
+                .orElseThrow(() -> new NotFoundException("Bạn chưa mua khóa học này!"));
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
