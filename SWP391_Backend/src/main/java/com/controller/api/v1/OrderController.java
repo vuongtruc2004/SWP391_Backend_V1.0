@@ -1,12 +1,14 @@
 package com.controller.api.v1;
 
 import com.dto.request.CreateOrderRequest;
-import com.dto.response.CourseResponse;
-import com.dto.response.DashboardStatisticsResponse;
-import com.dto.response.OrderResponse;
+import com.dto.response.*;
+import com.entity.OrderEntity;
 import com.service.OrderService;
+import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,14 +35,27 @@ public class OrderController {
 //        return ResponseEntity.ok(orderService.activeCoursesForUser(orderId));
 //    }
 //
-//    @ApiMessage("Lấy tất cả bài hóa đơn thành công")
-//    @GetMapping
-//    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getQuizWithFilter(
-//            Pageable pageable,
-//            @Filter Specification<OrderEntity> specification) {
-//        return ResponseEntity.ok(orderService.getOrdersWithFilters(pageable, specification));
-//    }
 
+
+    @ApiMessage("Lấy tất cả hóa đơn thành công")
+    @GetMapping
+    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getOrdersWithFilter(
+            Pageable pageable,
+            @Filter Specification<OrderEntity> specification,
+            @RequestParam(required = false) String minPrice,
+            @RequestParam(required = false) String maxPrice
+    ) {
+
+        PageDetailsResponse<List<OrderResponse>> response = orderService.getOrdersWithFilters(pageable, specification, minPrice, maxPrice);
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    @GetMapping("/price-range")
+    public ResponseEntity<MinMaxPriceResponse> getRangePrice() {
+        return ResponseEntity.ok(orderService.getMaxMinPriceOfOrder());
+    }
     @ApiMessage("Lấy số khóa học mua vào ngày trong tuần thành công!")
     @GetMapping("/course_sell_in_week")
     public ResponseEntity<Map<String, Long>> getTotalSaleByCourseWeek(

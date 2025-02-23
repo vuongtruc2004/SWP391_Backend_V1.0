@@ -44,6 +44,13 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.updateQuestion(questionId, questionRequest));
     }
 
+    @ApiMessage("Lấy tất cả câu hỏi không phân trang thành công")
+    @GetMapping("/all-inpagination")
+    public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
+        return ResponseEntity.ok(questionService.getAllQuestions());
+    }
+
+
 
 
 }

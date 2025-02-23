@@ -2,6 +2,7 @@ package com.service;
 
 
 import com.dto.request.QuestionRequest;
+import com.dto.request.QuizRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -117,5 +119,37 @@ public class QuestionService {
         );
     }
 
+    public Set<QuestionEntity> saveQuestionWithQuiz(QuizRequest quizRequest) throws Exception {
+        Set<QuestionEntity> questionEntitySet = new HashSet<>();
+        for (String question : quizRequest.getQuestions()) {
+            boolean checkExistsQuestion = questionRepository.existsByTitle(question.trim());
+            if (checkExistsQuestion) {
+                QuestionEntity questionEntity = questionRepository.findByTitle(question.trim());
+                questionEntitySet.add(questionEntity);
+            } else {
+                throw new NotFoundException("Câu hỏi chưa tồn tại");
+            }
+        }
+        return questionEntitySet;
+    }
+
+    public List<QuestionResponse> getAllQuestions() {
+        List<QuestionEntity> questionEntityList = this.questionRepository.findAll();
+
+        return questionEntityList.stream()
+                .map(questionEntity -> {
+                    List<String> correctAnswers = questionEntity.getAnswers().stream()
+                            .filter(AnswerEntity::getCorrect)
+                            .map(AnswerEntity::getContent)
+                            .collect(Collectors.toList());
+
+                    return QuestionResponse.builder()
+                            .questionId(questionEntity.getQuestionId())
+                            .title(questionEntity.getTitle())
+                            .correctAnswer(correctAnswers)
+                            .build();
+                })
+                .toList();
+    }
 
 }

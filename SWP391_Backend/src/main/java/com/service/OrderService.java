@@ -2,9 +2,7 @@ package com.service;
 
 import com.dto.request.CourseOrderRequest;
 import com.dto.request.CreateOrderRequest;
-import com.dto.response.CourseResponse;
-import com.dto.response.DashboardStatisticsResponse;
-import com.dto.response.OrderResponse;
+import com.dto.response.*;
 import com.entity.CourseEntity;
 import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
@@ -12,18 +10,24 @@ import com.entity.UserEntity;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
+import com.helper.OrderServiceHelper;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.repository.UserRepository;
+import com.util.BuildResponse;
 import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +38,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
     private final NotificationService notificationService;
-
+    private final OrderServiceHelper orderServiceHelper;
     public OrderResponse createOrder(CreateOrderRequest orderRequest) {
         List<OrderEntity> orderEntityList = orderRepository.findByUserIdAndCourseIds(
                 orderRequest.getUserId(),
@@ -93,39 +97,60 @@ public class OrderService {
 //        }
 //    }
 
-//    public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
-//            Pageable pageable,
-//            Specification<OrderEntity> specification) {
-//        Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
-//        List<OrderResponse> orderResponses = page.getContent()
-//                .stream()
-//                .map(orderEntity -> {
-//                    OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
+    public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
+            Pageable pageable,
+            Specification<OrderEntity> specification,
+            String minPrice,
+            String maxPrice) {
+
+        Double minPriceDouble = orderServiceHelper.parseDoubleOrNull(minPrice);
+        Double maxPriceDouble = orderServiceHelper.parseDoubleOrNull(maxPrice);
+
+
+        if(minPriceDouble != null || maxPriceDouble != null) {
+            specification = specification.and(orderServiceHelper.filterByPrice(minPriceDouble, maxPriceDouble));
+        }
+        Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
+
+        List<OrderResponse> orderResponses = page.getContent()
+                .stream()
+                .map(orderEntity -> {
+                    OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
 //                    UserEntity userEntity = userRepository.findById(orderEntity.getUserId())
-//                            .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy")
-//                            );
+//                            .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 //                    orderResponse.setUser(modelMapper.map(userEntity, UserResponse.class));
-//                    Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
-//                            .map(orderDetailsEntity -> {
-//                                OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetailsEntity, OrderDetailsResponse.class);
-//                                CourseEntity courseEntity = courseRepository.findById(orderDetailsEntity.getCourseId())
-//                                        .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học"));
-//                                orderDetailsResponse.setCourse(modelMapper.map(courseEntity, CourseResponse.class));
-//                                return orderDetailsResponse;
-//                            })
-//                            .collect(Collectors.toSet());
-//                    orderResponse.setOrderDetails(orderDetailsResponses);
-//                    return orderResponse;
-//                })
-//                .toList();
-//
-//        return BuildResponse.buildPageDetailsResponse(
-//                page.getNumber() + 1,
-//                page.getSize(),
-//                page.getTotalPages(),
-//                page.getTotalElements(),
-//                orderResponses);
-//    }
+
+                    Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
+                            .map(orderDetailsEntity -> {
+                                OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetailsEntity, OrderDetailsResponse.class);
+                                CourseEntity courseEntity = courseRepository.findById(orderDetailsEntity.getCourseId())
+                                        .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học"));
+                                orderDetailsResponse.setCourse(modelMapper.map(courseEntity, CourseResponse.class));
+                                return orderDetailsResponse;
+                            })
+                            .collect(Collectors.toSet());
+
+                    orderResponse.setOrderDetails(orderDetailsResponses);
+                    return orderResponse;
+                })
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                orderResponses);
+    }
+
+    public MinMaxPriceResponse getMaxMinPriceOfOrder() {
+        OrderEntity minOrder = orderRepository.findOrderWithMinTotalPrice();
+        OrderEntity maxOrder = orderRepository.findOrderWithMaxTotalPrice();
+        Double minPrice = minOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
+        Double maxPrice = maxOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
+
+        return new MinMaxPriceResponse(minPrice, maxPrice);
+    }
 
     public Map<String, Long> countOrdersOnEachDayOfWeek(LocalDate startOfWeek, LocalDate endOfWeek) {
         Map<String, Long> dayOfWeekCounts = new HashMap<>();

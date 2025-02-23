@@ -76,7 +76,6 @@ public class UserController {
     public ResponseEntity<PageDetailsResponse<List<UserResponse>>> getUsersByCourse(
             Pageable pageable,
             @Filter Specification<UserEntity> specification, @PathVariable Long courseId) {
-        System.out.println("🔹 Received request for course ID: " + courseId);
         return ResponseEntity.ok(userService.getUserByCourse(pageable, specification, courseId));
     }
 

@@ -35,7 +35,9 @@ public class SecurityConfig {
             "/api/v1/rates/**",
             "/api/v1/experts/**",
             "/api/v1/questions/**",
-            "/api/v1/notifications/**"
+            "/api/v1/notifications/**",
+            "/api/v1/quiz/**",
+            "/api/v1/answers/**",
     };
 
     private final SecurityUtil securityUtil;

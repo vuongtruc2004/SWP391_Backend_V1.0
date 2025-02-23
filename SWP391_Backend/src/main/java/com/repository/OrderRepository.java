@@ -49,4 +49,12 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     // Tổng số khóa học đã bán hôm qua (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT o.orderId) FROM OrderEntity o WHERE FUNCTION('DATE', o.createdAt) = :yesterday")
     Long getYesterdayOrders(@Param("yesterday") LocalDate yesterday);
+    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
+            "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
+    OrderEntity findOrderWithMinTotalPrice();
+
+    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
+            "GROUP BY o ORDER BY SUM(od.price) DESC LIMIT 1")
+    OrderEntity findOrderWithMaxTotalPrice();
+
 }
