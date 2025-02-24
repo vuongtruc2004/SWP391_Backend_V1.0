@@ -204,6 +204,10 @@ public class CourseService {
 
     public ApiResponse<String> changeAcceptACourse(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
+        if(courseEntity.getLessons()== null || courseEntity.getLessons().size() ==0){
+            throw new InvalidRequestInput("Khóa học này chưa có bài giảng, không thể kích hoạt");
+        }
+
         if (courseEntity != null) {
             courseEntity.setAccepted(true);
             courseRepository.save(courseEntity);

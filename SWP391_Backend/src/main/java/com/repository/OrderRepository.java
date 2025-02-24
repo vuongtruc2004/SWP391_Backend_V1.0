@@ -1,11 +1,13 @@
 package com.repository;
 
+import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.OrderStatusEnum;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -65,14 +67,17 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
 
     // Tổng số khóa học đã bán hôm nay (đếm DISTINCT order_id)
-    @Query("SELECT COUNT(DISTINCT o.orderId) FROM OrderEntity o " +
+    @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
+            "join OrderDetailsEntity od " +
             "WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE) " +
             "AND o.orderStatus = :status")
     Long getTodayOrders(@Param("status") OrderStatusEnum status);
 
 
+
     // Tổng số khóa học đã bán hôm qua (đếm DISTINCT order_id)
-    @Query("SELECT COUNT(DISTINCT o.orderId) FROM OrderEntity o " +
+    @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
+            "join OrderDetailsEntity od " +
             "WHERE FUNCTION('DATE', o.createdAt) = :yesterday " +
             "AND o.orderStatus = 'COMPLETED'")
     Long getYesterdayOrders(@Param("yesterday") LocalDate yesterday);
