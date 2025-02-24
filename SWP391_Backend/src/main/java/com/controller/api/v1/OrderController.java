@@ -3,6 +3,7 @@ package com.controller.api.v1;
 import com.dto.request.CreateOrderRequest;
 import com.dto.response.*;
 import com.entity.OrderEntity;
+import com.service.OrderDetailService;
 import com.service.OrderService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderDetailService orderDetailService;
 
     @ApiMessage("Tạo phiếu mua hàng thành công!")
     @PostMapping
@@ -74,5 +76,10 @@ public class OrderController {
     @GetMapping("/course")
     public ResponseEntity<List<CourseResponse>> getCoursesByIds(@RequestParam List<Long> courseIds) {
         return ResponseEntity.ok(orderService.getCoursesByIds(courseIds));
+    }
+
+    @GetMapping("/count")
+    public List<Map.Entry<String,Long>> count(){
+        return this.orderDetailService.count();
     }
 }

@@ -61,26 +61,29 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
 
     // Tổng số khóa học đã bán từ trước đến nay (đếm DISTINCT order_id)
-    @Query("SELECT COUNT(DISTINCT o.orderId) FROM OrderEntity o " +
+    @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
+            "JOIN o.orderDetails od " +
             "WHERE o.orderStatus = :status")
     Long getTotalOrders(@Param("status") OrderStatusEnum status);
 
 
     // Tổng số khóa học đã bán hôm nay (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
-            "join OrderDetailsEntity od " +
+            "JOIN o.orderDetails od " +
             "WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE) " +
             "AND o.orderStatus = :status")
     Long getTodayOrders(@Param("status") OrderStatusEnum status);
 
 
 
+
     // Tổng số khóa học đã bán hôm qua (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
-            "join OrderDetailsEntity od " +
+            "JOIN o.orderDetails od " +
             "WHERE FUNCTION('DATE', o.createdAt) = :yesterday " +
             "AND o.orderStatus = 'COMPLETED'")
     Long getYesterdayOrders(@Param("yesterday") LocalDate yesterday);
+
 
     @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
             "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
