@@ -30,15 +30,11 @@ public class UserProgressService {
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập!");
         }
-        if (userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndDocumentId(
+        if (userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndDocumentIdAndVideoId(
                 userEntity.getUserId(),
                 userProgressRequest.getCourseId(),
                 userProgressRequest.getLessonId(),
-                userProgressRequest.getDocumentId()
-        ) || userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndVideoId(
-                userEntity.getUserId(),
-                userProgressRequest.getCourseId(),
-                userProgressRequest.getLessonId(),
+                userProgressRequest.getDocumentId(),
                 userProgressRequest.getVideoId()
         )) {
             throw new InvalidRequestInput("Bài học này đã hoàn thành!");

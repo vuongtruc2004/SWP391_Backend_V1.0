@@ -19,4 +19,6 @@ public interface UserProgressRepository extends JpaSpecificationRepository<UserP
     boolean existsByUserIdAndCourseIdAndLessonIdAndVideoId(Long userId, Long courseId, Long lessonId, Long videoId);
 
     boolean existsByUserIdAndCourseIdAndLessonIdAndDocumentId(Long userId, Long courseId, Long lessonId, Long documentId);
+
+    boolean existsByUserIdAndCourseIdAndLessonIdAndDocumentIdAndVideoId(Long userId, Long courseId, Long lessonId, Long documentId, Long videoId);
 }
