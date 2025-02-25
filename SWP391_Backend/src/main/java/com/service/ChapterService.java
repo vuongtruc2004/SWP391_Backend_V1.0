@@ -32,6 +32,7 @@ public class ChapterService {
             ChapterEntity newChapter = new ChapterEntity();
             newChapter.setCourse(chapterRequest.getCourse());
             newChapter.setTitle(chapterRequest.getTitle());
+            newChapter.setDescription(chapterRequest.getDescription());
             this.chapterRepository.save(newChapter);
             this.documentService.saveDocumentsWithChapter(chapterRequest.getDocuments(), newChapter);
             this.videoService.saveVideosWithChapter(chapterRequest.getVideos(), newChapter);

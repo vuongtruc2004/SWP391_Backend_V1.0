@@ -21,6 +21,8 @@ public class ChapterRequest {
 
     String title;
 
+    String description;
+
     CourseEntity course;
 
     List<VideoEntity> videos;
