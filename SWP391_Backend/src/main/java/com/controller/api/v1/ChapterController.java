@@ -1,9 +1,9 @@
 package com.controller.api.v1;
 
 
-import com.dto.request.LessonRequest;
-import com.dto.response.LessonResponse;
-import com.service.LessonService;
+import com.dto.request.ChapterRequest;
+import com.dto.response.ChapterResponse;
+import com.service.ChapterService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,20 +15,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/lessons")
 @RequiredArgsConstructor
-public class LessonController {
-    private final LessonService lessonService;
+public class ChapterController {
+    private final ChapterService chapterService;
 
     @DeleteMapping("/{id}")
     @ApiMessage("Xoá bài giảng thành công")
-    public ResponseEntity<Void> deleteLesson(@PathVariable  Long id) {
-        this.lessonService.deleteLesson(id);
+    public ResponseEntity<Void> deleteChapter(@PathVariable  Long id) {
+        this.chapterService.deleteChapter(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping
     @ApiMessage("Tạo mới bài giảng thành công")
-    public ResponseEntity<List<LessonResponse>> createLesson(@RequestBody List<LessonRequest> lessonRequests) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.lessonService.save(lessonRequests));
+    public ResponseEntity<List<ChapterResponse>> createChapter(@RequestBody List<ChapterRequest> chapterRequests) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.chapterService.save(chapterRequests));
     }
 
 }

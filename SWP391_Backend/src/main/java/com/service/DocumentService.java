@@ -1,7 +1,7 @@
 package com.service;
 
 import com.entity.DocumentEntity;
-import com.entity.LessonEntity;
+import com.entity.ChapterEntity;
 import com.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -18,9 +18,9 @@ public class DocumentService {
         documentRepository.deleteById(id);
     }
 
-    public void saveDocumentsWithLesson(List<DocumentEntity> documents, LessonEntity lesson) {
+    public void saveDocumentsWithChapter(List<DocumentEntity> documents, ChapterEntity chapter) {
         documents.forEach(document -> {
-            document.setLesson(lesson);
+            document.setChapter(chapter);
             String content = document.getContent();
             document.setPlainContent(Jsoup.parse(content).text());
             this.documentRepository.save(document);

@@ -14,12 +14,12 @@ import java.util.Set;
 @Entity
 @Table(name = "lessons")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonEntity {
+public class ChapterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lesson_id")
-    Long lessonId;
+    Long chapterId;
 
     String title;
 
@@ -30,12 +30,12 @@ public class LessonEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     Set<VideoEntity> videos;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     Set<DocumentEntity> documents;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     Set<QuizEntity> quizzes;
 }

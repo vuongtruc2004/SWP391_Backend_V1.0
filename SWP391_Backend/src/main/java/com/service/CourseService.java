@@ -32,7 +32,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final CourseServiceHelper courseServiceHelper;
-    private final LessonRepository lessonRepository;
+    private final ChapterRepository chapterRepository;
     private final ExpertRepository expertRepository;
     private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
@@ -185,8 +185,8 @@ public class CourseService {
                 expert.getCourses().remove(courseEntity); // gỡ bỏ quan hệ (remove là xóa trong list)
                 expertRepository.save(expert); // Save changes
                 if (courseEntity.getLessons() != null) {
-                    for (LessonEntity lessonEntity : courseEntity.getLessons()) {
-                        lessonRepository.delete(lessonEntity);
+                    for (ChapterEntity chapterEntity : courseEntity.getLessons()) {
+                        chapterRepository.delete(chapterEntity);
                     }
                 }
                 courseRepository.deleteById(courseId);

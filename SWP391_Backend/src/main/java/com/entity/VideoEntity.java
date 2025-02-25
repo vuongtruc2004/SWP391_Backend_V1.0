@@ -38,8 +38,8 @@ public class VideoEntity {
     Instant updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    LessonEntity lesson;
+    @JoinColumn(name = "chapter_id")
+    ChapterEntity chapter;
 
     @PrePersist
     public void handlePrePersist() {

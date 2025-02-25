@@ -1,8 +1,8 @@
 package com.util;
 
-import com.dto.request.LessonRequest;
+import com.dto.request.ChapterRequest;
 import com.dto.response.*;
-import com.entity.LessonEntity;
+import com.entity.ChapterEntity;
 import com.helper.DocumentServiceHelper;
 import com.helper.VideoServiceHelper;
 
@@ -44,12 +44,12 @@ public class BuildResponse {
                 .build();
     }
 
-    public static LessonResponse buildLessonResponse(LessonRequest lessonRequest, LessonEntity newLesson) {
-        LessonResponse lessonResponse = new LessonResponse();
-        lessonResponse.setLessonId(newLesson.getLessonId());
-        lessonResponse.setTitle(lessonRequest.getTitle());
-        lessonResponse.setDocuments(DocumentServiceHelper.mapToResponseList(lessonRequest.getDocuments()));
-        lessonResponse.setVideos(VideoServiceHelper.mapToResponseList(lessonRequest.getVideos()));
-        return lessonResponse;
+    public static ChapterResponse buildChapterResponse(ChapterRequest chapterRequest, ChapterEntity newChapter) {
+        ChapterResponse chapterResponse = new ChapterResponse();
+        chapterResponse.setChapterId(newChapter.getChapterId());
+        chapterResponse.setTitle(chapterRequest.getTitle());
+        chapterResponse.setDocuments(DocumentServiceHelper.mapToResponseList(chapterRequest.getDocuments()));
+        chapterResponse.setVideos(VideoServiceHelper.mapToResponseList(chapterRequest.getVideos()));
+        return chapterResponse;
     }
 }

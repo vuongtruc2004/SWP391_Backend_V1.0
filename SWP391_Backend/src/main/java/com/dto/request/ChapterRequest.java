@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonRequest {
+public class ChapterRequest {
     Long lessonId;
 
     String title;

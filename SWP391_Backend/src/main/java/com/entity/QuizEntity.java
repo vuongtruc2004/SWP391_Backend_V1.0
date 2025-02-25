@@ -44,8 +44,8 @@ public class QuizEntity {
     Instant endedAt;
 
     @ManyToOne
-    @JoinColumn(name = "lesson_id")
-    LessonEntity lesson;
+    @JoinColumn(name = "chapter_id")
+    ChapterEntity chapter;
 
     @ManyToOne
     @JoinColumn(name = "expert_id")

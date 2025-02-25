@@ -1,6 +1,6 @@
 package com.service;
 
-import com.entity.LessonEntity;
+import com.entity.ChapterEntity;
 import com.entity.VideoEntity;
 import com.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,10 @@ public class VideoService {
         videoRepository.deleteById(id);
     }
 
-    public void saveVideosWithLesson(List<VideoEntity> videos, LessonEntity lesson) {
+    public void saveVideosWithChapter(List<VideoEntity> videos, ChapterEntity chapter) {
         videos.forEach(video -> {
-            video.setLesson(lesson);
+            video.setDuration(video.getDuration());
+            video.setChapter(chapter);
             this.videoRepository.save(video);
         });
     }

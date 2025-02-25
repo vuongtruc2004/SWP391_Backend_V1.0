@@ -66,7 +66,7 @@ public class CourseEntity implements Serializable {
     Set<UserEntity> users;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    List<LessonEntity> lessons;
+    List<ChapterEntity> lessons;
 
     @ManyToOne
     @JoinColumn(name = "expert_id")

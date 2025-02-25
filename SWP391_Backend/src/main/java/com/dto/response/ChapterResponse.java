@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonResponse {
+public class ChapterResponse {
 
-    Long lessonId;
+    Long chapterId;
 
     String title;
 

@@ -1,7 +1,7 @@
 package com.dto.response.details;
 
 import com.dto.response.CourseResponse;
-import com.dto.response.LessonResponse;
+import com.dto.response.ChapterResponse;
 import com.dto.response.SubjectResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +26,7 @@ public class CourseDetailsResponse extends CourseResponse {
 
     Set<SubjectResponse> subjects;
 
-    List<LessonResponse> lessons;
+    List<ChapterResponse> lessons;
 
     Double averageRating;
 
