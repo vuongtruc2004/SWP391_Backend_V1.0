@@ -6,6 +6,12 @@
 create database `online-learning-uat`;
 use `online-learning-uat`;
 
+-- MySQL dump 10.13  Distrib 8.4.2, for Win64 (x86_64)
+--
+-- Host: localhost    Database: online-learning-uat
+-- ------------------------------------------------------
+-- Server version	8.4.2
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -16,6 +22,14 @@ use `online-learning-uat`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `online-learning-uat`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `online-learning-uat` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `online-learning-uat`;
 
 --
 -- Table structure for table `answers`
@@ -385,193 +399,169 @@ CREATE TABLE `course_subject` (
 LOCK TABLES `course_subject` WRITE;
 /*!40000 ALTER TABLE `course_subject` DISABLE KEYS */;
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,1);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,1);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,1);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,1);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,1);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,1);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,1);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,1);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,1);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,1);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,2);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,2);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,2);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,2);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,2);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,2);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,2);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (6,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,3);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,3);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,4);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,5);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,6);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,6);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,6);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,3);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (6,4);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,6);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,6);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,6);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,6);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,6);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,6);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,7);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,7);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,7);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,7);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,7);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,7);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,7);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,7);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,7);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,8);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,8);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,8);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,8);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,8);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,8);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,8);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,9);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,9);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,9);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,9);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,9);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (12,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,10);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,10);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,9);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,10);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,11);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,11);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,11);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,11);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,12);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,12);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,11);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,11);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,12);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,12);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,12);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,12);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,12);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,12);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,12);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,12);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,12);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,13);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,13);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,13);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,13);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,13);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (12,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,13);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,13);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,13);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,14);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,14);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,14);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,14);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,14);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,14);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,14);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,14);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,14);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,14);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,14);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,15);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,16);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,17);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,17);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,15);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,16);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,17);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,17);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,17);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,18);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,18);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,18);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (12,18);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,18);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (14,18);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,18);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,18);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,18);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,18);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,19);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,19);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,19);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,19);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,19);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,19);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,19);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (12,19);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,19);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,19);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,19);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,20);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,20);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,20);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,20);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,20);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,20);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,20);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,21);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,20);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,21);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,21);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,21);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,21);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,21);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,21);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,22);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,21);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (9,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (10,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,22);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,23);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,23);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (5,23);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,22);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,22);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,22);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,22);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,23);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,23);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,23);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,23);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,23);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (17,23);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,23);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,23);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (4,24);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,24);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,24);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,24);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,24);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,24);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (1,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,25);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,24);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (6,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (16,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,25);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (2,26);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (3,26);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (7,26);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (11,26);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (8,26);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (13,26);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (18,26);
-INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (19,26);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,26);
 INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,26);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (14,27);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (15,28);
+INSERT INTO `course_subject` (`course_id`, `subject_id`) VALUES (20,28);
 /*!40000 ALTER TABLE `course_subject` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `course_user`
+--
+
+DROP TABLE IF EXISTS `course_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_user` (
+  `course_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`course_id`,`user_id`),
+  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
+  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `course_user`
+--
+
+LOCK TABLES `course_user` WRITE;
+/*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,2);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,6);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,6);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,9);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,9);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,10);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,10);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (9,10);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,11);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,11);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (15,11);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (7,21);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (9,22);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (10,22);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,22);
+INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,22);
+/*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -606,26 +596,26 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (1,_binary '','Java Cơ Bản','2025-02-14 10:56:52.317864','Học Java từ cơ bản đến nâng cao.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Java Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',300000,255000,'1.jpg','2025-02-14 10:56:52.317864',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (2,_binary '','Lập trình Python','2025-02-14 10:56:52.318863','Khóa học giúp bạn làm chủ Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',250000,225000,'2.jpg','2025-02-14 10:56:52.318863',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (3,_binary '','Spring Boot Web','2025-02-14 10:56:52.318863','Xây dựng ứng dụng web với Spring Boot.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Spring Boot Web\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,320000,'3.jpg','2025-02-14 10:56:52.318863',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (4,_binary '','JavaScript và React','2025-02-14 10:56:52.318863','Lập trình front-end với React.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về JavaScript và React\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',350000,332500,'4.jpg','2025-02-14 10:56:52.318863',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (5,_binary '','Lập trình Android','2025-02-14 10:56:52.319864','Học Kotlin và xây dựng ứng dụng Android.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Android\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',320000,262400,'5.jpg','2025-02-14 10:56:52.319864',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (6,_binary '','C++ từ cơ bản đến nâng cao','2025-02-14 10:56:52.319864','Lập trình C++ cho người mới bắt đầu.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về C++ từ cơ bản đến nâng cao\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',280000,246400,'6.jpg','2025-02-14 10:56:52.319864',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (7,_binary '','Lập trình Node.js','2025-02-14 10:56:52.319864','Phát triển backend với Node.js và Express.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Node.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',360000,270000,'7.jpg','2025-02-14 10:56:52.319864',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (8,_binary '','Fullstack với Next.js','2025-02-14 10:56:52.320863','Tạo website fullstack với Next.js.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Fullstack với Next.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,280000,'8.jpg','2025-02-14 10:56:52.320863',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (9,_binary '','Data Science với Python','2025-02-14 10:56:52.320863','Phân tích dữ liệu với Python, Pandas.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Data Science với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',420000,378000,'9.jpg','2025-02-14 10:56:52.320863',3);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (10,_binary '','Machine Learning','2025-02-14 10:56:52.320863','Giới thiệu về AI và Machine Learning.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Machine Learning\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',450000,351000,'10.jpg','2025-02-14 10:56:52.320863',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (11,_binary '','HTML & CSS Cơ Bản','2025-02-14 10:56:52.321864','Học cách xây dựng giao diện web với HTML và CSS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về HTML & CSS Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,165600,'11.jpg','2025-02-14 10:56:52.321864',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (12,_binary '','SQL cho người mới bắt đầu','2025-02-14 10:56:52.321864','Học cách truy vấn và quản lý cơ sở dữ liệu với SQL.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về SQL cho người mới bắt đầu\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',150000,142500,'12.jpg','2025-02-14 10:56:52.321864',3);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (13,_binary '','Kiến trúc Microservices','2025-02-14 10:56:52.321864','Triển khai hệ thống Microservices với Spring Cloud.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kiến trúc Microservices\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,612000,'13.jpg','2025-02-14 10:56:52.321864',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (14,_binary '','Lập trình Golang','2025-02-14 10:56:52.321864','Học cách lập trình với ngôn ngữ Golang.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Golang\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,792000,'14.jpg','2025-02-14 10:56:52.321864',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (15,_binary '','Kubernetes & Docker','2025-02-14 10:56:52.322863','Triển khai ứng dụng với Docker và Kubernetes.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kubernetes & Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',950000,760000,'15.jpg','2025-02-14 10:56:52.322863',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (16,_binary '','Thiết kế UI/UX','2025-02-14 10:56:52.322863','Học cách thiết kế giao diện đẹp và trải nghiệm tốt.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Thiết kế UI/UX\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,180000,'16.jpg','2025-02-14 10:56:52.322863',3);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (17,_binary '','Cấu trúc dữ liệu & Giải thuật','2025-02-14 10:56:52.322863','Học thuật toán và cấu trúc dữ liệu để tối ưu code.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Cấu trúc dữ liệu & Giải thuật\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',190000,176700,'17.jpg','2025-02-14 10:56:52.322863',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (18,_binary '','Lập trình AI với Python','2025-02-14 10:56:52.323863','Khóa học AI từ cơ bản đến nâng cao với Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình AI với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,595000,'18.jpg','2025-02-14 10:56:52.323863',1);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (19,_binary '','Blockchain và Smart Contracts','2025-02-14 10:56:52.323863','Xây dựng ứng dụng phi tập trung với Blockchain.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Blockchain và Smart Contracts\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,675000,'19.jpg','2025-02-14 10:56:52.323863',2);
-INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (20,_binary '','DevOps với AWS và Docker','2025-02-14 10:56:52.323863','Học DevOps từ cơ bản, triển khai CI/CD với AWS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về DevOps với AWS và Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',1500000,1050000,'20.jpg','2025-02-14 10:56:52.323863',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (1,_binary '','Java Cơ Bản','2025-02-14 10:56:52.317864','Học Java từ cơ bản đến nâng cao.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Java Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',300000,255000,'1.jpg','2025-02-25 02:15:15.505993',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (2,_binary '','Lập trình Python','2025-02-14 10:56:52.318863','Khóa học giúp bạn làm chủ Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',250000,225000,'2.jpg','2025-02-25 02:15:43.897610',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (3,_binary '','Spring Boot Web','2025-02-14 10:56:52.318863','Xây dựng ứng dụng web với Spring Boot.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Spring Boot Web\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,320000,'3.jpg','2025-02-25 02:16:00.729570',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (4,_binary '','JavaScript và React','2025-02-14 10:56:52.318863','Lập trình front-end với React.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về JavaScript và React\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',350000,332500,'4.jpg','2025-02-25 02:16:35.317286',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (5,_binary '','Lập trình Android','2025-02-14 10:56:52.319864','Học Kotlin và xây dựng ứng dụng Android.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Android\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',320000,262400,'5.jpg','2025-02-25 02:21:52.037595',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (6,_binary '','C++ từ cơ bản đến nâng cao','2025-02-14 10:56:52.319864','Lập trình C++ cho người mới bắt đầu.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về C++ từ cơ bản đến nâng cao\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',280000,246400,'6.jpg','2025-02-25 02:17:11.002936',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (7,_binary '','Lập trình Node.js','2025-02-14 10:56:52.319864','Phát triển backend với Node.js và Express.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Node.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',360000,270000,'7.jpg','2025-02-25 02:17:30.118941',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (8,_binary '','Fullstack với Next.js','2025-02-14 10:56:52.320863','Tạo website fullstack với Next.js.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Fullstack với Next.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,280000,'8.jpg','2025-02-25 02:17:49.397203',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (9,_binary '','Data Science với Python','2025-02-14 10:56:52.320863','Phân tích dữ liệu với Python, Pandas.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Data Science với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',420000,378000,'9.jpg','2025-02-25 02:18:00.897062',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (10,_binary '','Machine Learning','2025-02-14 10:56:52.320863','Giới thiệu về AI và Machine Learning.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Machine Learning\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',450000,351000,'10.jpg','2025-02-25 02:18:09.401771',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (11,_binary '','HTML & CSS Cơ Bản','2025-02-14 10:56:52.321864','Học cách xây dựng giao diện web với HTML và CSS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về HTML & CSS Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,165600,'11.jpg','2025-02-25 02:18:23.314908',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (12,_binary '','SQL cho người mới bắt đầu','2025-02-14 10:56:52.321864','Học cách truy vấn và quản lý cơ sở dữ liệu với SQL.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về SQL cho người mới bắt đầu\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',150000,142500,'12.jpg','2025-02-25 02:18:30.651516',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (13,_binary '','Kiến trúc Microservices','2025-02-14 10:56:52.321864','Triển khai hệ thống Microservices với Spring Cloud.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kiến trúc Microservices\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,612000,'13.jpg','2025-02-25 02:18:51.843736',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (14,_binary '','Lập trình Golang','2025-02-14 10:56:52.321864','Học cách lập trình với ngôn ngữ Golang.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Golang\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,792000,'14.jpg','2025-02-25 02:21:58.883494',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (15,_binary '','Kubernetes & Docker','2025-02-14 10:56:52.322863','Triển khai ứng dụng với Docker và Kubernetes.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kubernetes & Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',950000,760000,'15.jpg','2025-02-25 02:24:21.590114',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (16,_binary '','Thiết kế UI/UX','2025-02-14 10:56:52.322863','Học cách thiết kế giao diện đẹp và trải nghiệm tốt.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Thiết kế UI/UX\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,180000,'16.jpg','2025-02-25 02:24:43.651671',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (17,_binary '','Cấu trúc dữ liệu & Giải thuật','2025-02-14 10:56:52.322863','Học thuật toán và cấu trúc dữ liệu để tối ưu code.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Cấu trúc dữ liệu & Giải thuật\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',190000,176700,'17.jpg','2025-02-25 02:25:04.112248',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (18,_binary '','Lập trình AI với Python','2025-02-14 10:56:52.323863','Khóa học AI từ cơ bản đến nâng cao với Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình AI với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,595000,'18.jpg','2025-02-25 02:25:18.276525',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (19,_binary '','Blockchain và Smart Contracts','2025-02-14 10:56:52.323863','Xây dựng ứng dụng phi tập trung với Blockchain.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Blockchain và Smart Contracts\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,675000,'19.jpg','2025-02-25 02:25:35.407738',1);
+INSERT INTO `courses` (`course_id`, `accepted`, `course_name`, `created_at`, `description`, `introduction`, `objectives`, `original_price`, `sale_price`, `thumbnail`, `updated_at`, `expert_id`) VALUES (20,_binary '','DevOps với AWS và Docker','2025-02-14 10:56:52.323863','Học DevOps từ cơ bản, triển khai CI/CD với AWS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về DevOps với AWS và Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',1500000,1050000,'20.jpg','2025-02-25 02:25:56.281960',1);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -951,6 +941,86 @@ CREATE TABLE `notifications` (
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_details` (
+  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
+  `price` double DEFAULT NULL,
+  `course_id` bigint DEFAULT NULL,
+  `order_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`order_details_id`),
+  KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
+  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (1,255000,1,1);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (2,225000,2,1);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (3,1050000,20,2);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (4,675000,19,2);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (5,270000,7,3);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (6,378000,9,4);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (7,165600,11,4);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (8,142500,12,4);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (9,351000,10,4);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (10,320000,3,5);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (11,332500,4,5);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (12,378000,9,5);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (13,792000,14,6);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (14,760000,15,6);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (15,612000,13,6);
+INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (16,280000,8,7);
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) DEFAULT NULL,
+  `order_status` enum('CANCELLED','COMPLETED','PENDING') DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (1,'2025-02-25 02:26:42.881292','COMPLETED','2025-02-25 02:26:44.517111',6);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (2,'2025-02-25 02:27:31.678505','COMPLETED','2025-02-25 02:27:32.640592',9);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (3,'2025-02-25 02:28:24.702544','COMPLETED','2025-02-25 02:28:27.840493',21);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (4,'2025-02-25 02:29:21.527474','COMPLETED','2025-02-25 02:29:23.216122',22);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (5,'2025-02-24 02:31:03.417066','COMPLETED','2025-02-24 02:31:39.424105',10);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (6,'2025-02-24 02:32:36.311306','COMPLETED','2025-02-24 02:32:39.690530',11);
+INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (7,'2025-02-25 02:36:00.252045','COMPLETED','2025-02-25 02:36:03.445583',2);
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1792,7 +1862,7 @@ CREATE TABLE `rates` (
   KEY `FKanlgavwqngljux10mtly8qr6f` (`user_id`),
   CONSTRAINT `FKanlgavwqngljux10mtly8qr6f` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `FKt5wuc6askynohbdaqeaj5wjeq` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1801,293 +1871,106 @@ CREATE TABLE `rates` (
 
 LOCK TABLES `rates` WRITE;
 /*!40000 ALTER TABLE `rates` DISABLE KEYS */;
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học không hữu ích như mong đợi.', '2025-02-14 10:56:52.684130', 1, '2025-02-14 10:56:52.684130', 1, 1);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung khá cơ bản, chưa thực sự chuyên sâu.', '2025-02-14 10:56:52.684130', 2, '2025-02-14 10:56:52.684130', 1, 2);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học tạm ổn, có thể cải thiện thêm.', '2025-02-14 10:56:52.684130', 3, '2025-02-14 10:56:52.684130', 1, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên dạy dễ hiểu, kiến thức hữu ích.', '2025-02-14 10:56:52.684130', 4, '2025-02-14 10:56:52.684130', 1, 4);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất tuyệt vời, đáng để học!', '2025-02-14 10:56:52.684130', 5, '2025-02-14 10:56:52.684130', 1, 5);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất hữu ích, giảng viên dạy dễ hiểu.', '2025-02-14 10:56:52.688130', 5, '2025-02-14 10:56:52.688130', 2, 15);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung khá ổn nhưng có thể cải thiện thêm.', '2025-02-14 10:56:52.688130', 3, '2025-02-14 10:56:52.688130', 2, 8);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng rõ ràng nhưng phần thực hành hơi ít.', '2025-02-14 10:56:52.688130', 3, '2025-02-14 10:56:52.688130', 2, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học tốt, đáng để học thử!', '2025-02-14 10:56:52.688130', 4, '2025-02-14 10:56:52.688130', 2, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng giảng dạy tuyệt vời!', '2025-02-14 10:56:52.688130', 5, '2025-02-14 10:56:52.688130', 2, 19);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học chưa thực sự như mong đợi.', '2025-02-14 10:56:52.691671', 2, '2025-02-14 10:56:52.691671', 3, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung hơi sơ sài, cần bổ sung thêm.', '2025-02-14 10:56:52.691671', 2, '2025-02-14 10:56:52.691671', 3, 14);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng khá nhàm chán, chưa hấp dẫn.', '2025-02-14 10:56:52.691671', 2, '2025-02-14 10:56:52.691671', 3, 9);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Hơi thất vọng vì thiếu phần thực hành.', '2025-02-14 10:56:52.691671', 2, '2025-02-14 10:56:52.691671', 3, 18);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên giảng hơi nhanh, khó hiểu.', '2025-02-14 10:56:52.691671', 2, '2025-02-14 10:56:52.691671', 3, 5);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học ở mức trung bình, không quá xuất sắc.', '2025-02-14 10:56:52.695635', 3, '2025-02-14 10:56:52.695635', 4, 11);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng chưa đủ sâu, nhưng tạm chấp nhận.', '2025-02-14 10:56:52.695635', 2, '2025-02-14 10:56:52.695635', 4, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng giảng dạy tốt, nhưng giá hơi cao.', '2025-02-14 10:56:52.695635', 4, '2025-02-14 10:56:52.695635', 4, 19);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung cần cải thiện thêm, nhưng ổn.', '2025-02-14 10:56:52.695635', 3, '2025-02-14 10:56:52.695635', 4, 5);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất hay, đáng giá từng đồng!', '2025-02-14 10:56:52.695635', 5, '2025-02-14 10:56:52.695635', 4, 2);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất hữu ích, kiến thức thực tế.', '2025-02-14 10:56:52.699635', 5, '2025-02-14 10:56:52.699635', 5, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên dạy dễ hiểu, nhưng tốc độ hơi nhanh.', '2025-02-14 10:56:52.699635', 4, '2025-02-14 10:56:52.699635', 5, 8);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung cần cập nhật thêm, hơi lỗi thời.', '2025-02-14 10:56:52.699635', 3, '2025-02-14 10:56:52.699635', 5, 17);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng chưa đủ sâu, chưa đi vào thực tế.', '2025-02-14 10:56:52.699635', 2, '2025-02-14 10:56:52.699635', 5, 6);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Hoàn toàn không đáng tiền, thất vọng.', '2025-02-14 10:56:52.699635', 1, '2025-02-14 10:56:52.699635', 5, 14);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng khóa học không như mong đợi.', '2025-02-14 10:56:52.703635', 2, '2025-02-14 10:56:52.703635', 6, 10);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng cần chi tiết hơn, còn hơi sơ sài.', '2025-02-14 10:56:52.703635', 3, '2025-02-14 10:56:52.703635', 6, 4);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học ổn, nhưng có thể cải thiện hơn.', '2025-02-14 10:56:52.703635', 4, '2025-02-14 10:56:52.703635', 6, 15);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên giảng rất dễ hiểu, rất hài lòng!', '2025-02-14 10:56:52.703635', 5, '2025-02-14 10:56:52.703635', 6, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung bài học rất hữu ích, đáng để học.', '2025-02-14 10:56:52.703635', 5, '2025-02-14 10:56:52.703635', 6, 20);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học chất lượng, đáng giá tiền!', '2025-02-14 10:56:52.706635', 5, '2025-02-14 10:56:52.706635', 7, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Học phí rẻ nhưng nội dung rất tốt.', '2025-02-14 10:56:52.706635', 4, '2025-02-14 10:56:52.706635', 7, 6);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung khá cơ bản, chưa chuyên sâu.', '2025-02-14 10:56:52.706635', 3, '2025-02-14 10:56:52.706635', 7, 18);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Cần cập nhật thêm bài học mới.', '2025-02-14 10:56:52.706635', 2, '2025-02-14 10:56:52.706635', 7, 9);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không đáng tiền lắm, hơi sơ sài.', '2025-02-14 10:56:52.706635', 1, '2025-02-14 10:56:52.706635', 7, 3);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học này không như mong đợi.', '2025-02-14 10:56:52.711214', 2, '2025-02-14 10:56:52.711214', 8, 5);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giá hơi cao so với nội dung.', '2025-02-14 10:56:52.711214', 3, '2025-02-14 10:56:52.711214', 8, 14);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không có nhiều kiến thức mới.', '2025-02-14 10:56:52.711214', 2, '2025-02-14 10:56:52.711214', 8, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khá ổn nhưng cần cải thiện.', '2025-02-14 10:56:52.711214', 3, '2025-02-14 10:56:52.711214', 8, 19);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chưa thực sự hữu ích lắm.', '2025-02-14 10:56:52.711214', 1, '2025-02-14 10:56:52.711214', 8, 2);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất đáng tiền!', '2025-02-14 10:56:52.715218', 5, '2025-02-14 10:56:52.715218', 9, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không ngờ lại hay đến vậy.', '2025-02-14 10:56:52.715218', 4, '2025-02-14 10:56:52.715218', 9, 17);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung súc tích, dễ hiểu.', '2025-02-14 10:56:52.715218', 5, '2025-02-14 10:56:52.715218', 9, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Mình học xong có thể áp dụng ngay.', '2025-02-14 10:56:52.715218', 5, '2025-02-14 10:56:52.715218', 9, 8);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên rất có tâm.', '2025-02-14 10:56:52.715218', 4, '2025-02-14 10:56:52.715218', 9, 5);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất bổ ích!', '2025-02-14 10:56:52.719217', 5, '2025-02-14 10:56:52.719217', 10, 2);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng nội dung rất tốt.', '2025-02-14 10:56:52.719217', 4, '2025-02-14 10:56:52.719217', 10, 15);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng hơi khó hiểu.', '2025-02-14 10:56:52.719217', 3, '2025-02-14 10:56:52.719217', 10, 8);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên nhiệt tình nhưng hơi nhanh.', '2025-02-14 10:56:52.719217', 4, '2025-02-14 10:56:52.719217', 10, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung quá hay, cảm ơn giảng viên.', '2025-02-14 10:56:52.719217', 5, '2025-02-14 10:56:52.719217', 10, 6);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất bổ ích!', '2025-02-14 10:56:52.723183', 5, '2025-02-14 10:56:52.723183', 11, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng nội dung rất tốt.', '2025-02-14 10:56:52.723183', 4, '2025-02-14 10:56:52.723183', 11, 17);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng hơi khó hiểu.', '2025-02-14 10:56:52.723183', 3, '2025-02-14 10:56:52.723183', 11, 10);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên nhiệt tình nhưng hơi nhanh.', '2025-02-14 10:56:52.723183', 4, '2025-02-14 10:56:52.723183', 11, 6);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung quá hay, cảm ơn giảng viên.', '2025-02-14 10:56:52.723183', 5, '2025-02-14 10:56:52.723183', 11, 12);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES 
-('Dạy chán quá!', '2025-02-14 10:56:52.727183', 1, '2025-02-14 10:56:52.727183', 12, 12),
-('Bài giảng khó hiểu.', '2025-02-14 10:56:52.727183', 2, '2025-02-14 10:56:52.727183', 12, 5),
-('Không đáng tiền.', '2025-02-14 10:56:52.727183', 1, '2025-02-14 10:56:52.727183', 12, 8),
-('Không hài lòng lắm.', '2025-02-14 10:56:52.727183', 2, '2025-02-14 10:56:52.727183', 12, 15),
-('Cần cải thiện nội dung.', '2025-02-14 10:56:52.727183', 3, '2025-02-14 10:56:52.727183', 12, 18);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES 
-('Khóa học này rất hay!', '2025-02-14 10:56:52.730183', 5, '2025-02-14 10:56:52.730183', 13, 13),
-('Nội dung hữu ích, nhưng cần cải thiện.', '2025-02-14 10:57:00.123456', 4, '2025-02-14 10:57:00.123456', 13, 14),
-('Giảng viên giảng dễ hiểu.', '2025-02-14 10:57:05.654321', 5, '2025-02-14 10:57:05.654321', 13, 15),
-('Bài tập thực hành còn ít.', '2025-02-14 10:57:10.789012', 3, '2025-02-14 10:57:10.789012', 13, 16),
-('Chưa thực sự chuyên sâu.', '2025-02-14 10:57:15.111213', 3, '2025-02-14 10:57:15.111213', 13, 17);
---
-INSERT INTO rates (content, created_at, stars, updated_at, course_id, user_id) 
-VALUES ('Khóa học rất bổ ích', '2025-02-14 10:56:52.734183', 5, '2025-02-14 10:56:52.734183', 14, 7);
-
-INSERT INTO rates (content, created_at, stars, updated_at, course_id, user_id) 
-VALUES ('Bài giảng dễ hiểu', '2025-02-14 10:56:52.734183', 4, '2025-02-14 10:56:52.734183', 14, 12);
-
-INSERT INTO rates (content, created_at, stars, updated_at, course_id, user_id) 
-VALUES ('Nội dung cần cập nhật thêm', '2025-02-14 10:56:52.734183', 3, '2025-02-14 10:56:52.734183', 14, 5);
-
-INSERT INTO rates (content, created_at, stars, updated_at, course_id, user_id) 
-VALUES ('Hơi khó hiểu với người mới', '2025-02-14 10:56:52.734183', 2, '2025-02-14 10:56:52.734183', 14, 18);
-
-INSERT INTO rates (content, created_at, stars, updated_at, course_id, user_id) 
-VALUES ('Không đáng tiền', '2025-02-14 10:56:52.734183', 1, '2025-02-14 10:56:52.734183', 14, 9);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất đáng giá', '2025-02-14 10:56:52.737661', 5, '2025-02-14 10:56:52.737661', 15, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên giảng khá dễ hiểu', '2025-02-14 10:56:52.737661', 4, '2025-02-14 10:56:52.737661', 15, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng bài học trung bình', '2025-02-14 10:56:52.737661', 3, '2025-02-14 10:56:52.737661', 15, 14);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung chưa thực sự hấp dẫn', '2025-02-14 10:56:52.737661', 2, '2025-02-14 10:56:52.737661', 15, 19);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không đáng tiền', '2025-02-14 10:56:52.737661', 1, '2025-02-14 10:56:52.737661', 15, 10);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất hữu ích', '2025-02-14 10:56:52.740692', 5, '2025-02-14 10:56:52.740692', 16, 4);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung cần bổ sung thêm', '2025-02-14 10:56:52.740692', 3, '2025-02-14 10:56:52.740692', 16, 11);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên giảng dễ hiểu', '2025-02-14 10:56:52.740692', 4, '2025-02-14 10:56:52.740692', 16, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không phù hợp với người mới', '2025-02-14 10:56:52.740692', 2, '2025-02-14 10:56:52.740692', 16, 19);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không đáng tiền', '2025-02-14 10:56:52.740692', 1, '2025-02-14 10:56:52.740692', 16, 15);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học rất thú vị', '2025-02-14 10:56:52.744701', 5, '2025-02-14 10:56:52.744701', 17, 6);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung chưa thực sự hấp dẫn', '2025-02-14 10:56:52.744701', 3, '2025-02-14 10:56:52.744701', 17, 14);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Hơi khó hiểu với người mới', '2025-02-14 10:56:52.744701', 2, '2025-02-14 10:56:52.744701', 17, 9);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên dạy dễ hiểu', '2025-02-14 10:56:52.744701', 4, '2025-02-14 10:56:52.744701', 17, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không đáng tiền', '2025-02-14 10:56:52.744701', 1, '2025-02-14 10:56:52.744701', 17, 20);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung rất bổ ích', '2025-02-14 10:56:52.748692', 5, '2025-02-14 10:56:52.748692', 18, 3);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng hơi nhanh, khó theo kịp', '2025-02-14 10:56:52.748692', 2, '2025-02-14 10:56:52.748692', 18, 17);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học này giúp tôi hiểu rõ hơn', '2025-02-14 10:56:52.748692', 4, '2025-02-14 10:56:52.748692', 18, 8);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không phù hợp với mong đợi của tôi', '2025-02-14 10:56:52.748692', 1, '2025-02-14 10:56:52.748692', 18, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Giảng viên giảng rất dễ hiểu', '2025-02-14 10:56:52.748692', 5, '2025-02-14 10:56:52.748692', 18, 6);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học thực sự rất hữu ích!', '2025-02-14 10:56:52.758692', 5, '2025-02-14 10:56:52.758692', 19, 7);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung ổn nhưng thiếu bài tập', '2025-02-14 10:56:52.758692', 3, '2025-02-14 10:56:52.758692', 19, 14);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng giảng dạy tốt, rất đáng tiền', '2025-02-14 10:56:52.758692', 4, '2025-02-14 10:56:52.758692', 19, 2);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học khá hay, nhưng hơi khó hiểu', '2025-02-14 10:56:52.758692', 2, '2025-02-14 10:56:52.758692', 19, 11);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Thầy dạy rất nhiệt tình và dễ hiểu', '2025-02-14 10:56:52.758692', 5, '2025-02-14 10:56:52.758692', 19, 5);
---
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Không phù hợp với người mới bắt đầu', '2025-02-14 10:56:52.758692', 1, '2025-02-14 10:56:52.758692', 20, 18);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Bài giảng rõ ràng, dễ hiểu nhưng cần thêm ví dụ thực tế', '2025-02-14 10:56:52.758692', 4, '2025-02-14 10:56:52.758692', 20, 9);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Chất lượng kém, không đáng tiền', '2025-02-14 10:56:52.758692', 1, '2025-02-14 10:56:52.758692', 20, 16);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Nội dung khá cơ bản, phù hợp cho người mới', '2025-02-14 10:56:52.760692', 3, '2025-02-14 10:56:52.760692', 20, 12);
-
-INSERT INTO `rates` (`content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) 
-VALUES ('Khóa học tuyệt vời! Mình rất hài lòng', '2025-02-14 10:56:52.760692', 5, '2025-02-14 10:56:52.760692', 20, 8);
-
-
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (21,'Khóa học không hữu ích như mong đợi.','2025-02-14 10:56:52.684130',1,'2025-02-14 10:56:52.684130',1,1);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (22,'Nội dung khá cơ bản, chưa thực sự chuyên sâu.','2025-02-14 10:56:52.684130',2,'2025-02-14 10:56:52.684130',1,2);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (23,'Khóa học tạm ổn, có thể cải thiện thêm.','2025-02-14 10:56:52.684130',3,'2025-02-14 10:56:52.684130',1,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (24,'Giảng viên dạy dễ hiểu, kiến thức hữu ích.','2025-02-14 10:56:52.684130',4,'2025-02-14 10:56:52.684130',1,4);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (25,'Khóa học rất tuyệt vời, đáng để học!','2025-02-14 10:56:52.684130',5,'2025-02-14 10:56:52.684130',1,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (26,'Khóa học rất hữu ích, giảng viên dạy dễ hiểu.','2025-02-14 10:56:52.688130',5,'2025-02-14 10:56:52.688130',2,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (27,'Nội dung khá ổn nhưng có thể cải thiện thêm.','2025-02-14 10:56:52.688130',3,'2025-02-14 10:56:52.688130',2,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (28,'Bài giảng rõ ràng nhưng phần thực hành hơi ít.','2025-02-14 10:56:52.688130',3,'2025-02-14 10:56:52.688130',2,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (29,'Khóa học tốt, đáng để học thử!','2025-02-14 10:56:52.688130',4,'2025-02-14 10:56:52.688130',2,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (30,'Chất lượng giảng dạy tuyệt vời!','2025-02-14 10:56:52.688130',5,'2025-02-14 10:56:52.688130',2,19);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (31,'Khóa học chưa thực sự như mong đợi.','2025-02-14 10:56:52.691671',2,'2025-02-14 10:56:52.691671',3,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (32,'Nội dung hơi sơ sài, cần bổ sung thêm.','2025-02-14 10:56:52.691671',2,'2025-02-14 10:56:52.691671',3,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (33,'Bài giảng khá nhàm chán, chưa hấp dẫn.','2025-02-14 10:56:52.691671',2,'2025-02-14 10:56:52.691671',3,9);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (34,'Hơi thất vọng vì thiếu phần thực hành.','2025-02-14 10:56:52.691671',2,'2025-02-14 10:56:52.691671',3,18);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (35,'Giảng viên giảng hơi nhanh, khó hiểu.','2025-02-14 10:56:52.691671',2,'2025-02-14 10:56:52.691671',3,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (36,'Khóa học ở mức trung bình, không quá xuất sắc.','2025-02-14 10:56:52.695635',3,'2025-02-14 10:56:52.695635',4,11);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (37,'Bài giảng chưa đủ sâu, nhưng tạm chấp nhận.','2025-02-14 10:56:52.695635',2,'2025-02-14 10:56:52.695635',4,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (38,'Chất lượng giảng dạy tốt, nhưng giá hơi cao.','2025-02-14 10:56:52.695635',4,'2025-02-14 10:56:52.695635',4,19);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (39,'Nội dung cần cải thiện thêm, nhưng ổn.','2025-02-14 10:56:52.695635',3,'2025-02-14 10:56:52.695635',4,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (40,'Khóa học rất hay, đáng giá từng đồng!','2025-02-14 10:56:52.695635',5,'2025-02-14 10:56:52.695635',4,2);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (41,'Khóa học rất hữu ích, kiến thức thực tế.','2025-02-14 10:56:52.699635',5,'2025-02-14 10:56:52.699635',5,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (42,'Giảng viên dạy dễ hiểu, nhưng tốc độ hơi nhanh.','2025-02-14 10:56:52.699635',4,'2025-02-14 10:56:52.699635',5,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (43,'Nội dung cần cập nhật thêm, hơi lỗi thời.','2025-02-14 10:56:52.699635',3,'2025-02-14 10:56:52.699635',5,17);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (44,'Bài giảng chưa đủ sâu, chưa đi vào thực tế.','2025-02-14 10:56:52.699635',2,'2025-02-14 10:56:52.699635',5,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (45,'Hoàn toàn không đáng tiền, thất vọng.','2025-02-14 10:56:52.699635',1,'2025-02-14 10:56:52.699635',5,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (46,'Chất lượng khóa học không như mong đợi.','2025-02-14 10:56:52.703635',2,'2025-02-14 10:56:52.703635',6,10);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (47,'Bài giảng cần chi tiết hơn, còn hơi sơ sài.','2025-02-14 10:56:52.703635',3,'2025-02-14 10:56:52.703635',6,4);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (48,'Khóa học ổn, nhưng có thể cải thiện hơn.','2025-02-14 10:56:52.703635',4,'2025-02-14 10:56:52.703635',6,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (49,'Giảng viên giảng rất dễ hiểu, rất hài lòng!','2025-02-14 10:56:52.703635',5,'2025-02-14 10:56:52.703635',6,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (50,'Nội dung bài học rất hữu ích, đáng để học.','2025-02-14 10:56:52.703635',5,'2025-02-14 10:56:52.703635',6,20);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (51,'Khóa học chất lượng, đáng giá tiền!','2025-02-14 10:56:52.706635',5,'2025-02-14 10:56:52.706635',7,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (52,'Học phí rẻ nhưng nội dung rất tốt.','2025-02-14 10:56:52.706635',4,'2025-02-14 10:56:52.706635',7,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (53,'Nội dung khá cơ bản, chưa chuyên sâu.','2025-02-14 10:56:52.706635',3,'2025-02-14 10:56:52.706635',7,18);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (54,'Cần cập nhật thêm bài học mới.','2025-02-14 10:56:52.706635',2,'2025-02-14 10:56:52.706635',7,9);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (55,'Không đáng tiền lắm, hơi sơ sài.','2025-02-14 10:56:52.706635',1,'2025-02-14 10:56:52.706635',7,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (56,'Khóa học này không như mong đợi.','2025-02-14 10:56:52.711214',2,'2025-02-14 10:56:52.711214',8,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (57,'Giá hơi cao so với nội dung.','2025-02-14 10:56:52.711214',3,'2025-02-14 10:56:52.711214',8,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (58,'Không có nhiều kiến thức mới.','2025-02-14 10:56:52.711214',2,'2025-02-14 10:56:52.711214',8,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (59,'Khá ổn nhưng cần cải thiện.','2025-02-14 10:56:52.711214',3,'2025-02-14 10:56:52.711214',8,19);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (60,'Chưa thực sự hữu ích lắm.','2025-02-14 10:56:52.711214',1,'2025-02-14 10:56:52.711214',8,2);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (61,'Khóa học rất đáng tiền!','2025-02-14 10:56:52.715218',5,'2025-02-14 10:56:52.715218',9,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (62,'Không ngờ lại hay đến vậy.','2025-02-14 10:56:52.715218',4,'2025-02-14 10:56:52.715218',9,17);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (63,'Nội dung súc tích, dễ hiểu.','2025-02-14 10:56:52.715218',5,'2025-02-14 10:56:52.715218',9,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (64,'Mình học xong có thể áp dụng ngay.','2025-02-14 10:56:52.715218',5,'2025-02-14 10:56:52.715218',9,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (65,'Giảng viên rất có tâm.','2025-02-14 10:56:52.715218',4,'2025-02-14 10:56:52.715218',9,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (66,'Khóa học rất bổ ích!','2025-02-14 10:56:52.719217',5,'2025-02-14 10:56:52.719217',10,2);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (67,'Chất lượng nội dung rất tốt.','2025-02-14 10:56:52.719217',4,'2025-02-14 10:56:52.719217',10,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (68,'Bài giảng hơi khó hiểu.','2025-02-14 10:56:52.719217',3,'2025-02-14 10:56:52.719217',10,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (69,'Giảng viên nhiệt tình nhưng hơi nhanh.','2025-02-14 10:56:52.719217',4,'2025-02-14 10:56:52.719217',10,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (70,'Nội dung quá hay, cảm ơn giảng viên.','2025-02-14 10:56:52.719217',5,'2025-02-14 10:56:52.719217',10,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (71,'Khóa học rất bổ ích!','2025-02-14 10:56:52.723183',5,'2025-02-14 10:56:52.723183',11,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (72,'Chất lượng nội dung rất tốt.','2025-02-14 10:56:52.723183',4,'2025-02-14 10:56:52.723183',11,17);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (73,'Bài giảng hơi khó hiểu.','2025-02-14 10:56:52.723183',3,'2025-02-14 10:56:52.723183',11,10);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (74,'Giảng viên nhiệt tình nhưng hơi nhanh.','2025-02-14 10:56:52.723183',4,'2025-02-14 10:56:52.723183',11,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (75,'Nội dung quá hay, cảm ơn giảng viên.','2025-02-14 10:56:52.723183',5,'2025-02-14 10:56:52.723183',11,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (76,'Dạy chán quá!','2025-02-14 10:56:52.727183',1,'2025-02-14 10:56:52.727183',12,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (77,'Bài giảng khó hiểu.','2025-02-14 10:56:52.727183',2,'2025-02-14 10:56:52.727183',12,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (78,'Không đáng tiền.','2025-02-14 10:56:52.727183',1,'2025-02-14 10:56:52.727183',12,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (79,'Không hài lòng lắm.','2025-02-14 10:56:52.727183',2,'2025-02-14 10:56:52.727183',12,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (80,'Cần cải thiện nội dung.','2025-02-14 10:56:52.727183',3,'2025-02-14 10:56:52.727183',12,18);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (81,'Khóa học này rất hay!','2025-02-14 10:56:52.730183',5,'2025-02-14 10:56:52.730183',13,13);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (82,'Nội dung hữu ích, nhưng cần cải thiện.','2025-02-14 10:57:00.123456',4,'2025-02-14 10:57:00.123456',13,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (83,'Giảng viên giảng dễ hiểu.','2025-02-14 10:57:05.654321',5,'2025-02-14 10:57:05.654321',13,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (84,'Bài tập thực hành còn ít.','2025-02-14 10:57:10.789012',3,'2025-02-14 10:57:10.789012',13,16);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (85,'Chưa thực sự chuyên sâu.','2025-02-14 10:57:15.111213',3,'2025-02-14 10:57:15.111213',13,17);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (86,'Khóa học rất bổ ích','2025-02-14 10:56:52.734183',5,'2025-02-14 10:56:52.734183',14,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (87,'Bài giảng dễ hiểu','2025-02-14 10:56:52.734183',4,'2025-02-14 10:56:52.734183',14,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (88,'Nội dung cần cập nhật thêm','2025-02-14 10:56:52.734183',3,'2025-02-14 10:56:52.734183',14,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (89,'Hơi khó hiểu với người mới','2025-02-14 10:56:52.734183',2,'2025-02-14 10:56:52.734183',14,18);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (90,'Không đáng tiền','2025-02-14 10:56:52.734183',1,'2025-02-14 10:56:52.734183',14,9);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (91,'Khóa học rất đáng giá','2025-02-14 10:56:52.737661',5,'2025-02-14 10:56:52.737661',15,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (92,'Giảng viên giảng khá dễ hiểu','2025-02-14 10:56:52.737661',4,'2025-02-14 10:56:52.737661',15,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (93,'Chất lượng bài học trung bình','2025-02-14 10:56:52.737661',3,'2025-02-14 10:56:52.737661',15,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (94,'Nội dung chưa thực sự hấp dẫn','2025-02-14 10:56:52.737661',2,'2025-02-14 10:56:52.737661',15,19);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (95,'Không đáng tiền','2025-02-14 10:56:52.737661',1,'2025-02-14 10:56:52.737661',15,10);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (96,'Khóa học rất hữu ích','2025-02-14 10:56:52.740692',5,'2025-02-14 10:56:52.740692',16,4);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (97,'Nội dung cần bổ sung thêm','2025-02-14 10:56:52.740692',3,'2025-02-14 10:56:52.740692',16,11);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (98,'Giảng viên giảng dễ hiểu','2025-02-14 10:56:52.740692',4,'2025-02-14 10:56:52.740692',16,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (99,'Không phù hợp với người mới','2025-02-14 10:56:52.740692',2,'2025-02-14 10:56:52.740692',16,19);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (100,'Không đáng tiền','2025-02-14 10:56:52.740692',1,'2025-02-14 10:56:52.740692',16,15);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (101,'Khóa học rất thú vị','2025-02-14 10:56:52.744701',5,'2025-02-14 10:56:52.744701',17,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (102,'Nội dung chưa thực sự hấp dẫn','2025-02-14 10:56:52.744701',3,'2025-02-14 10:56:52.744701',17,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (103,'Hơi khó hiểu với người mới','2025-02-14 10:56:52.744701',2,'2025-02-14 10:56:52.744701',17,9);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (104,'Giảng viên dạy dễ hiểu','2025-02-14 10:56:52.744701',4,'2025-02-14 10:56:52.744701',17,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (105,'Không đáng tiền','2025-02-14 10:56:52.744701',1,'2025-02-14 10:56:52.744701',17,20);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (106,'Nội dung rất bổ ích','2025-02-14 10:56:52.748692',5,'2025-02-14 10:56:52.748692',18,3);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (107,'Bài giảng hơi nhanh, khó theo kịp','2025-02-14 10:56:52.748692',2,'2025-02-14 10:56:52.748692',18,17);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (108,'Khóa học này giúp tôi hiểu rõ hơn','2025-02-14 10:56:52.748692',4,'2025-02-14 10:56:52.748692',18,8);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (109,'Không phù hợp với mong đợi của tôi','2025-02-14 10:56:52.748692',1,'2025-02-14 10:56:52.748692',18,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (110,'Giảng viên giảng rất dễ hiểu','2025-02-14 10:56:52.748692',5,'2025-02-14 10:56:52.748692',18,6);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (111,'Khóa học thực sự rất hữu ích!','2025-02-14 10:56:52.758692',5,'2025-02-14 10:56:52.758692',19,7);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (112,'Nội dung ổn nhưng thiếu bài tập','2025-02-14 10:56:52.758692',3,'2025-02-14 10:56:52.758692',19,14);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (113,'Chất lượng giảng dạy tốt, rất đáng tiền','2025-02-14 10:56:52.758692',4,'2025-02-14 10:56:52.758692',19,2);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (114,'Khóa học khá hay, nhưng hơi khó hiểu','2025-02-14 10:56:52.758692',2,'2025-02-14 10:56:52.758692',19,11);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (115,'Thầy dạy rất nhiệt tình và dễ hiểu','2025-02-14 10:56:52.758692',5,'2025-02-14 10:56:52.758692',19,5);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (116,'Không phù hợp với người mới bắt đầu','2025-02-14 10:56:52.758692',1,'2025-02-14 10:56:52.758692',20,18);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (117,'Bài giảng rõ ràng, dễ hiểu nhưng cần thêm ví dụ thực tế','2025-02-14 10:56:52.758692',4,'2025-02-14 10:56:52.758692',20,9);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (118,'Chất lượng kém, không đáng tiền','2025-02-14 10:56:52.758692',1,'2025-02-14 10:56:52.758692',20,16);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (119,'Nội dung khá cơ bản, phù hợp cho người mới','2025-02-14 10:56:52.760692',3,'2025-02-14 10:56:52.760692',20,12);
+INSERT INTO `rates` (`rate_id`, `content`, `created_at`, `stars`, `updated_at`, `course_id`, `user_id`) VALUES (120,'Khóa học tuyệt vời! Mình rất hài lòng','2025-02-14 10:56:52.760692',5,'2025-02-14 10:56:52.760692',20,8);
 /*!40000 ALTER TABLE `rates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2157,7 +2040,7 @@ CREATE TABLE `subjects` (
   `subject_name` varchar(255) DEFAULT NULL,
   `thumbnail` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`subject_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2192,6 +2075,8 @@ INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`
 INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`) VALUES (24,'Framework CSS phổ biến giúp phát triển web nhanh.','Bootstrap','bootstrap.png');
 INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`) VALUES (25,'Ngôn ngữ lập trình mạnh mẽ, nền tảng cho nhiều ngôn ngữ khác.','C','c.png');
 INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`) VALUES (26,'Nền tảng container hóa giúp triển khai và quản lý ứng dụng dễ dàng hơn.','Docker','docker.png');
+INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`) VALUES (27,'Ngôn ngữ lập trình mã nguồn mở do Google phát triển, nổi bật với hiệu suất cao, cú pháp đơn giản và hỗ trợ xử lý đồng thời (concurrency) mạnh mẽ','Go','golang.png');
+INSERT INTO `subjects` (`subject_id`, `description`, `subject_name`, `thumbnail`) VALUES (28,'Nền tảng mã nguồn mở giúp tự động triển khai, mở rộng và quản lý các ứng dụng container.','Kubernates','kubernates.png');
 /*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2227,33 +2112,6 @@ LOCK TABLES `user_answers` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_progress`
---
-
-DROP TABLE IF EXISTS `user_progress`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_progress` (
-  `progress_id` bigint NOT NULL AUTO_INCREMENT,
-  `course_id` bigint DEFAULT NULL,
-  `document_id` bigint DEFAULT NULL,
-  `lesson_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  `video_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`progress_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_progress`
---
-
-LOCK TABLES `user_progress` WRITE;
-/*!40000 ALTER TABLE `user_progress` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user_notifications`
 --
 
@@ -2283,6 +2141,33 @@ LOCK TABLES `user_notifications` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_progress`
+--
+
+DROP TABLE IF EXISTS `user_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_progress` (
+  `progress_id` bigint NOT NULL AUTO_INCREMENT,
+  `course_id` bigint DEFAULT NULL,
+  `document_id` bigint DEFAULT NULL,
+  `lesson_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
+  `video_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`progress_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_progress`
+--
+
+LOCK TABLES `user_progress` WRITE;
+/*!40000 ALTER TABLE `user_progress` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -2307,7 +2192,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   KEY `FKp56c1712k691lhsyewcssf40f` (`role_id`),
   CONSTRAINT `FKp56c1712k691lhsyewcssf40f` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2317,16 +2202,16 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (1,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.769286',NULL,'trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc Admin','MALE',_binary '\0','$2a$10$tC4IhQM1AjJdsnCS4Lgu5uRY6.ZNNuPi.9dUrLBgrhetOag3/X7o6',NULL,NULL,1);
-INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (2,'CREDENTIALS',_binary '','cuong.jpg','2025-02-14 10:56:50.772279',NULL,'cuongdo13042004@gmail.com','Do Xuan Cuong Admin','MALE',_binary '\0','$2a$10$vZJfI4a59Wah2IqC/CTxlOLCZnRRa9d2rjgmhkyFJT08es44SE8dK',NULL,NULL,1);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (2,'CREDENTIALS',_binary '','cuong.jpg','2025-02-14 10:56:50.772279',NULL,'cuongdo13042004@gmail.com','Do Xuan Cuong Admin','MALE',_binary '\0','$2a$10$vZJfI4a59Wah2IqC/CTxlOLCZnRRa9d2rjgmhkyFJT08es44SE8dK','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjdW9uZ2RvMTMwNDIwMDRAZ21haWwuY29tIiwiZXhwIjoxNzQ5MDkwOTA5LCJpYXQiOjE3NDA0NTA5MDksImFjY291bnRUeXBlIjoiQ1JFREVOVElBTFMifQ.f0fJuntCGOebRvHiR3KhJLbt5Fo05d2EhCwzPwrQT0PwIcLt-Xccoq1HjY5y_-JlST3lgMdklBhEQh9zTBIREA','2025-02-25 02:35:09.579696',1);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (3,'CREDENTIALS',_binary '','dung.jpg','2025-02-14 10:56:50.773282',NULL,'dung06032004@gmail.com','Tran Nam Dung Admin','MALE',_binary '\0','$2a$10$O0AjuLpnr0fAgWcR3jYrJeYgpvU8p5FBNA5Z2usBYuXrl/XOof/wC',NULL,NULL,1);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (4,'CREDENTIALS',_binary '','duc.jpg','2025-02-14 10:56:50.775282',NULL,'ducnhhe186325@fpt.edu.vn','Nong Hoang Duc Admin','MALE',_binary '\0','$2a$10$D7tO60G8ZchfhgkNHpebpOBWiG/znZzUcp7ozUc5jYkn7Z/VG1XFi',NULL,NULL,1);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (5,'CREDENTIALS',_binary '','truong.jpg','2025-02-14 10:56:50.775282',NULL,'luongtruong15122004@gmail.com','Luong Hoang Truong Admin','MALE',_binary '\0','$2a$10$/PEz3lZpTCTEP54fe1dBVeC6bRUyAbumTTT3JW81VMq3NrYP68h1G',NULL,NULL,1);
-INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (6,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.776283',NULL,'vuongtruc2004@gmail.com','Nguyen Vuong Truc Expert','MALE',_binary '\0','$2a$10$7bK28BYj16lVHFznZf9hX.AKqcnjv4xwaw2tlVhQyu/1rnVUaD7BS',NULL,NULL,3);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (6,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.776283',NULL,'vuongtruc2004@gmail.com','Nguyen Vuong Truc Expert','MALE',_binary '\0','$2a$10$7bK28BYj16lVHFznZf9hX.AKqcnjv4xwaw2tlVhQyu/1rnVUaD7BS',NULL,'2025-02-25 02:27:00.643947',3);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (7,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.777283',NULL,'vuongtruc20042@gmail.com','Vuong Truc Expert','MALE',_binary '\0','$2a$10$iGVslfwYEIBb1mhzwY9InujO.eJNWkBvZGps4aopLQeimga3yLyJ6',NULL,NULL,3);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (8,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.778283',NULL,'vuongtruc20043@gmail.com','Anh Truc Expert','MALE',_binary '\0','$2a$10$W6/.UBd5AxOfx7Ld.n0N1empgiphyOapAQfNQ5Ra1Shd5lGVLvw.m',NULL,NULL,3);
-INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (9,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.779282',NULL,'vuongtruc2008@gmail.com','Nguyen Vuong Truc Marketing','MALE',_binary '\0','$2a$10$juJQTIE2Pz9KCqqq6MdJWeKrH8Q.FXnS0cd2sLm1ZmqATGQQdnyU6',NULL,NULL,4);
-INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (10,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.780282',NULL,'1@gmail.com','Nguyen Vuong Truc 1','FEMALE',_binary '\0','$2a$10$ZlDuG4L9DbhAD1AtLqS5vO8/I2ZTO8s8jb/8rXgB6shlMm7d.N3b2',NULL,NULL,2);
-INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (11,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.781283',NULL,'2@gmail.com','Nguyen Vuong Truc 2','MALE',_binary '\0','$2a$10$ZJwsYFeXLvWTfAlItg/tRuQGBYb0cFICVYWvj8Ovr0ngXXPYqjQW6',NULL,NULL,2);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (9,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.779282',NULL,'vuongtruc2008@gmail.com','Nguyen Vuong Truc Marketing','MALE',_binary '\0','$2a$10$juJQTIE2Pz9KCqqq6MdJWeKrH8Q.FXnS0cd2sLm1ZmqATGQQdnyU6',NULL,'2025-02-25 02:27:43.701949',4);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (10,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.780282',NULL,'1@gmail.com','Nguyen Vuong Truc 1','FEMALE',_binary '\0','$2a$10$ZlDuG4L9DbhAD1AtLqS5vO8/I2ZTO8s8jb/8rXgB6shlMm7d.N3b2',NULL,'2025-02-25 02:31:58.338138',2);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (11,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.781283','2016-02-18 00:00:00.000000','2@gmail.com','Nguyen Vuong Truc 2','FEMALE',_binary '\0','$2a$10$ZJwsYFeXLvWTfAlItg/tRuQGBYb0cFICVYWvj8Ovr0ngXXPYqjQW6',NULL,'2025-02-25 02:35:02.343307',2);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (12,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'3@gmail.com','Nguyen Vuong Truc 3','FEMALE',_binary '\0','$2a$10$ddgj0a/Ku6W2lIrswaYVJegGwh2NRitrTle.OVSX.BwEt.9OWvhRO',NULL,NULL,2);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (13,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'4@gmail.com','Nguyen Vuong Truc 4','MALE',_binary '\0','$2a$10$TuasB4q/WxQAhhg6xsMobuDGyVB3Abfzk7lTzG9icBQQLQUoY4OrG',NULL,NULL,2);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (14,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.785282',NULL,'5@gmail.com','Nguyen Vuong Truc 5','FEMALE',_binary '\0','$2a$10$OBhosIl/a7g9yFqf86g0I.Wp6HgVc/qicPPksdBk26LfrUhKF2VWG',NULL,NULL,2);
@@ -2336,6 +2221,8 @@ INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (18,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.788282',NULL,'9@gmail.com','Nguyen Vuong Truc 9','FEMALE',_binary '\0','$2a$10$7OLvM.fezw/n.UnR9dfyRek0NWCyphhPstuls0S6GKRUkoEMwnYQe',NULL,NULL,2);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (19,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.790362',NULL,'10@gmail.com','Nguyen Vuong Truc 10','MALE',_binary '\0','$2a$10$qXua6F2XD/AjEaNgtCim8.8he0iXsjYqelwbMcHerLI6pAcCF7W8e',NULL,NULL,2);
 INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (20,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.791363',NULL,'11@gmail.com','Nguyen Vuong Truc 11','FEMALE',_binary '\0','$2a$10$.jNRupXxR.8U73lToXuKTu4/s1tnwTNi55zWq2FZL7i0U9nRMqMwC',NULL,NULL,2);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (21,'GOOGLE',_binary '','https://lh3.googleusercontent.com/a/ACg8ocINA6x0fKz0WIb9x7RyQST-hxYZjvUicoCpLVKlUE_w-zfg1zw=s96-c','2025-02-25 02:27:51.580424','2004-02-20 00:00:00.000000','trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc (K18 HL)','MALE',_binary '\0',NULL,NULL,'2025-02-25 02:28:53.652993',2);
+INSERT INTO `users` (`user_id`, `account_type`, `active`, `avatar`, `created_at`, `dob`, `email`, `fullname`, `gender`, `locked`, `password`, `refresh_token`, `updated_at`, `role_id`) VALUES (22,'GITHUB',_binary '','https://avatars.githubusercontent.com/u/153248550?v=4','2025-02-25 02:28:58.692734',NULL,'trucnvhe180248@fpt.edu.vn','Vuong Truc (mail truong)',NULL,_binary '\0',NULL,NULL,'2025-02-25 02:30:34.535081',2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2439,87 +2326,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
---
--- Table structure for table `orders`
---
-
-DROP TABLE IF EXISTS `orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `orders` (
-  `order_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `order_status` enum('CANCELLED','COMPLETED','PENDING') DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
-  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `orders`
---
-
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `order_details`
---
-
-DROP TABLE IF EXISTS `order_details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_details` (
-  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
-  `price` double DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `order_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_details_id`),
-  KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
-  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
-  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_details`
---
-
-LOCK TABLES `order_details` WRITE;
-/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `course_user`
---
-
-DROP TABLE IF EXISTS `course_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `course_user` (
-  `course_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`user_id`),
-  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
-  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `course_user`
---
-
-LOCK TABLES `course_user` WRITE;
-/*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
--- Dump completed on 2025-02-14 18:07:42
+-- Dump completed on 2025-02-25  9:38:44

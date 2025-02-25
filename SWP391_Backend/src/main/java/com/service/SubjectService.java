@@ -116,9 +116,9 @@ public class SubjectService {
     }
 
     public ApiResponse<String> deleteSubject(Long subjectId) {
-        if(subjectRepository.existsById(subjectId)) {
+        if (subjectRepository.existsById(subjectId)) {
             SubjectEntity subjectEntity = subjectRepository.findById(subjectId).get();
-            if(subjectEntity.getCourses().size() == 0) {
+            if (subjectEntity.getCourses().size() == 0) {
                 subjectRepository.deleteById(subjectId);
             } else {
                 return BuildResponse.buildApiResponse(
@@ -139,23 +139,19 @@ public class SubjectService {
         );
     }
 
-    public ApiResponse<SubjectResponse> updateSubject(Long subjectId, SubjectRequest subjectRequest) {
-        SubjectEntity subjectEntity = null;
-        if(subjectRepository.existsById(subjectId)) {
-            subjectEntity = subjectRepository.findById(subjectId).get();
-            subjectEntity.setSubjectName(subjectRequest.getSubjectName());
-            subjectEntity.setDescription(subjectRequest.getDescription());
-            subjectEntity.setThumbnail(subjectRequest.getThumbnail());
-            subjectRepository.save(subjectEntity);
-        } else {
-            throw new NotFoundException("Không tìm thấy Id công nghệ!");
+    public SubjectResponse updateSubject(SubjectRequest subjectRequest) {
+        if (subjectRequest.getSubjectId() == null) {
+            throw new SubjectException("ID của công nghệ không được null!");
         }
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thay đổi thông tin công nghệ",
-                null,
-                modelMapper.map(subjectEntity, SubjectResponse.class)
-        );
+        if (subjectRepository.existsBySubjectNameAndSubjectIdNot(subjectRequest.getSubjectName(), subjectRequest.getSubjectId())) {
+            throw new SubjectException("Tên công nghệ đã tồn tại!");
+        }
+        SubjectEntity subjectEntity = subjectRepository.findById(subjectRequest.getSubjectId())
+                .orElseThrow(() -> new NotFoundException("Công nghệ không tồn tại!"));
+        subjectEntity.setSubjectName(subjectRequest.getSubjectName());
+        subjectEntity.setThumbnail(subjectRequest.getThumbnail());
+        subjectEntity.setDescription(subjectRequest.getDescription());
+        return modelMapper.map(subjectRepository.save(subjectEntity), SubjectResponse.class);
     }
 
     public ApiResponse<String> updateThumbnail(MultipartFile file, String folder) throws URISyntaxException, IOException {
@@ -179,7 +175,7 @@ public class SubjectService {
         if (request.getSubjectId() != null) {
             throw new SubjectException("Không được để id");
         }
-        if(subjectRepository.existsBySubjectName(request.getSubjectName())) {
+        if (subjectRepository.existsBySubjectName(request.getSubjectName())) {
             throw new SubjectException("Tên công nghệ đã tồn tại!");
         }
         SubjectEntity subjectEntity = modelMapper.map(request, SubjectEntity.class);
@@ -191,7 +187,8 @@ public class SubjectService {
                 modelMapper.map(subjectEntity, SubjectResponse.class)
         );
     }
-    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest) throws Exception{
+
+    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest) throws Exception {
         Set<SubjectEntity> subjectEntitySet = new HashSet<>();
         for (String subjectName : courseRequest.getSubjects()) {
             Boolean checkExistsSubject = this.subjectRepository.existsBySubjectName(subjectName.trim());

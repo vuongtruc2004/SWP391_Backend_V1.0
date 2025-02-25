@@ -56,9 +56,9 @@ public class SubjectController {
     }
 
     @ApiMessage("Thay đổi thông tin công nghệ thành công!")
-    @PatchMapping("/update/{subjectId}")
-    public ResponseEntity<ApiResponse<SubjectResponse>> updateSubject(@PathVariable Long subjectId, @RequestBody SubjectRequest subjectRequest) {
-        return ResponseEntity.ok(subjectService.updateSubject(subjectId, subjectRequest));
+    @PatchMapping("/update")
+    public ResponseEntity<SubjectResponse> updateSubject(@RequestBody SubjectRequest subjectRequest) {
+        return ResponseEntity.ok(subjectService.updateSubject(subjectRequest));
     }
 
     @ApiMessage("Tạo công nghệ thành công!")
@@ -76,8 +76,7 @@ public class SubjectController {
     }
 
     @GetMapping("/all-inpagination")
-    public ResponseEntity<List<SubjectResponse>> getSubjectsWithInPagination(){
+    public ResponseEntity<List<SubjectResponse>> getSubjectsWithInPagination() {
         return ResponseEntity.ok().body(this.subjectService.getAllSubjectInPagination());
     }
-
 }
