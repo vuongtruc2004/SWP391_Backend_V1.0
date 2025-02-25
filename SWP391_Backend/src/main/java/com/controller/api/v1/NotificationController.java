@@ -33,7 +33,7 @@ public class NotificationController {
     }
 
     @PostMapping("/{notificationId}")
-    public ResponseEntity<ApiResponse<String>> readANotification(@PathVariable("notificationId") Long notificationId) {
+    public ResponseEntity<UserNotificationResponse> readANotification(@PathVariable("notificationId") Long notificationId) {
         return ResponseEntity.ok(notificationService.readANotification(notificationId));
     }
 
@@ -43,7 +43,7 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{notificationId}")
-    public ResponseEntity<ApiResponse<String>> deleteANotification(@PathVariable("notificationId") Long notificationId) {
+    public ResponseEntity<UserNotificationResponse> deleteANotification(@PathVariable("notificationId") Long notificationId) {
         return ResponseEntity.ok(notificationService.deleteNotification(notificationId));
     }
 

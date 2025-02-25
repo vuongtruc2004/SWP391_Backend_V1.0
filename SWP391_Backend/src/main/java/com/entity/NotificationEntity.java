@@ -24,6 +24,7 @@ public class NotificationEntity {
 
     String title;
 
+    @Column(columnDefinition = "LONGTEXT")
     String content;
 
     @Column(name = "created_at")

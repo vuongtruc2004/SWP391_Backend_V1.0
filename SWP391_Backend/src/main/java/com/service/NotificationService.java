@@ -60,19 +60,13 @@ public class NotificationService {
 
     }
 
-    public ApiResponse<String> readANotification(Long notificationId) {
+    public UserNotificationResponse readANotification(Long notificationId) {
         UserEntity user = userServiceHelper.extractUserFromToken();
         UserNotificationEntity userNotificationEntity = userNotificationRepository.findByNotification_NotificationIdAndUser_UserId(notificationId, user.getUserId())
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy thông báo!"));
         userNotificationEntity.setIsRead(true);
         userNotificationRepository.save(userNotificationEntity);
-        readSuccessNotification();
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thành công!",
-                null,
-                "Đã đọc!"
-        );
+        return modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
     }
 
     public ApiResponse<String> readAllNotifications() {
@@ -91,18 +85,12 @@ public class NotificationService {
         );
     }
     @Transactional
-    public ApiResponse<String> deleteNotification(Long notificationId) {
+    public UserNotificationResponse deleteNotification(Long notificationId) {
         UserEntity user = userServiceHelper.extractUserFromToken();
         UserNotificationEntity userNotificationEntity = userNotificationRepository.findByNotification_NotificationIdAndUser_UserId(notificationId, user.getUserId())
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy thông báo!"));
         userNotificationRepository.delete(userNotificationEntity);
-        readSuccessNotification();
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thành công!",
-                null,
-                "Đã xóa!"
-        );
+        return modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
     }
 
     @Transactional
