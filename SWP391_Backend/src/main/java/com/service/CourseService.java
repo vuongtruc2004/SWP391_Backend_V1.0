@@ -241,12 +241,16 @@ public class CourseService {
     public CourseResponse createCourse(CourseRequest courseRequest) throws Exception {
         Optional<String> email = extractUsernameFromToken();
         UserEntity userEntity = this.userRepository.findByEmail(email.get());
-        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseRequest.getCourseName(), userEntity.getExpert());
-
+        String courseName[]=courseRequest.getCourseName().trim().split("\\s+");
+        StringBuilder courseNameReplace=new StringBuilder();
+        for(String name:courseName){
+            courseNameReplace.append(name).append(" ");
+        }
+        courseNameReplace.deleteCharAt(courseNameReplace.length()-1);
+        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace.toString(), userEntity.getExpert());
         if (currentCourse != null) {
             throw new NotFoundException("Khoá học đã tồn tại !");
         }
-
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(userEntity.getExpert());
         newCourse.setCourseName(courseRequest.getCourseName());
