@@ -56,7 +56,7 @@ public class BuildResponse {
                     if(lessonRequest.getLessonType().equals(LessonTypeEnum.DOCUMENT)){
                         lessonResponse.setLessonType(LessonTypeEnum.DOCUMENT);
                         lessonResponse.setDocumentContent(lessonRequest.getDocumentContent());
-                        lessonResponse.setDuration(LessonServiceHelper.countDuration(lessonResponse.getDocumentContent()));
+                        lessonResponse.setDuration(lessonResponse.getDuration());
                     }else{
                         lessonResponse.setLessonType(LessonTypeEnum.VIDEO);
                         lessonResponse.setVideoUrl(lessonRequest.getVideoUrl());
