@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.request.UserProgressRequest;
+import com.dto.response.UserProgressResponse;
 import com.entity.UserEntity;
 import com.entity.UserProgressEntity;
 import com.exception.custom.InvalidRequestInput;
@@ -8,9 +9,11 @@ import com.exception.custom.UserException;
 import com.helper.UserServiceHelper;
 import com.repository.UserProgressRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,34 +22,35 @@ public class UserProgressService {
     private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
     private final NotificationService notificationService;
+    private final ModelMapper modelMapper;
 
-    public List<UserProgressEntity> getUserProgressByCourseId(Long courseId) {
+    public Set<UserProgressResponse> getUserProgressByCourseId(Long courseId) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        return userProgressRepository.findAllByCourseIdAndUserId(courseId, userEntity.getUserId());
+        return userProgressRepository.findAllByUser_UserIdAndCourseId(courseId, userEntity.getUserId())
+                .stream().map(userProgressEntity -> modelMapper.map(userProgressEntity, UserProgressResponse.class)).collect(Collectors.toSet());
     }
 
-    public UserProgressEntity changeStatus(UserProgressRequest userProgressRequest) {
+    public UserProgressResponse changeStatus(UserProgressRequest userProgressRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập!");
         }
-        if (userProgressRepository.existsByUserIdAndCourseIdAndLessonIdAndDocumentIdAndVideoId(
+        if (userProgressRepository.existsByUser_UserIdAndChapterIdAndLessonId(
                 userEntity.getUserId(),
-                userProgressRequest.getCourseId(),
-                userProgressRequest.getLessonId(),
-                userProgressRequest.getDocumentId(),
-                userProgressRequest.getVideoId()
+                userProgressRequest.getChapterId(),
+                userProgressRequest.getLessonId()
         )) {
             throw new InvalidRequestInput("Bài học này đã hoàn thành!");
         }
+        
         UserProgressEntity newUserProgressEntity = UserProgressEntity.builder()
-                .userId(userEntity.getUserId())
+                .user(userEntity)
                 .courseId(userProgressRequest.getCourseId())
+                .chapterId(userProgressRequest.getChapterId())
                 .lessonId(userProgressRequest.getLessonId())
-                .documentId(userProgressRequest.getDocumentId())
-                .videoId(userProgressRequest.getVideoId())
                 .build();
+
         notificationService.purchaseSuccessNotification();
-        return userProgressRepository.save(newUserProgressEntity);
+        return modelMapper.map(userProgressRepository.save(newUserProgressEntity), UserProgressResponse.class);
     }
 }

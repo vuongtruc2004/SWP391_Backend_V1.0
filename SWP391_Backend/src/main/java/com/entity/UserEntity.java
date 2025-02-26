@@ -82,6 +82,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<UserNotificationEntity> userNotifications;
 
+    @OneToMany(mappedBy = "user")
+    Set<UserProgressEntity> userProgresses;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     RoleEntity role;

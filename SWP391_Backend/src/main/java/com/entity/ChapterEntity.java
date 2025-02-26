@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -12,13 +13,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lessons")
+@Table(name = "chapters")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lesson_id")
+    @Column(name = "chapter_id")
     Long chapterId;
 
     String title;
@@ -30,11 +31,8 @@ public class ChapterEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
-    Set<VideoEntity> videos;
-
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
-    Set<DocumentEntity> documents;
+    @OneToMany(mappedBy = "chapter")
+    List<LessonEntity> lessons;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     Set<QuizEntity> quizzes;

@@ -19,7 +19,5 @@ public class ChapterResponse {
 
     String description;
 
-    List<VideoResponse> videos;
-
-    List<DocumentResponse> documents;
+    List<LessonResponse> lessons;
 }

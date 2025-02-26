@@ -30,10 +30,6 @@ public class LikeEntity {
     BlogEntity blog;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
-    CourseEntity course;
-
-    @ManyToOne
     @JoinColumn(name = "comment_id")
     CommentEntity comment;
 

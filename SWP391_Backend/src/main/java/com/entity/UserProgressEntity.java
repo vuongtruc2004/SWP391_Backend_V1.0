@@ -19,18 +19,16 @@ public class UserProgressEntity {
     @Column(name = "progress_id")
     Long progressId;
 
-    @Column(name = "user_id")
-    Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    UserEntity user;
 
     @Column(name = "course_id")
     Long courseId;
 
+    @Column(name = "chapter_id")
+    Long chapterId;
+
     @Column(name = "lesson_id")
     Long lessonId;
-
-    @Column(name = "video_id")
-    Long videoId;
-
-    @Column(name = "document_id")
-    Long documentId;
 }

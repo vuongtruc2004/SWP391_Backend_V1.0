@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,11 +38,7 @@ public class CourseEntity implements Serializable {
 
     String introduction;
 
-    @Column(name = "original_price")
-    Double originalPrice;
-
-    @Column(name = "sale_price")
-    Double salePrice;
+    Double price;
 
     Boolean accepted;
 
@@ -66,14 +61,20 @@ public class CourseEntity implements Serializable {
     Set<UserEntity> users;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    List<ChapterEntity> lessons;
+    List<ChapterEntity> chapters;
 
     @ManyToOne
     @JoinColumn(name = "expert_id")
     ExpertEntity expert;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RateEntity> rates = new HashSet<>();
+    Set<RateEntity> rates;
+
+    @ManyToMany(mappedBy = "courses")
+    Set<CouponEntity> coupons;
+
+    @ManyToMany(mappedBy = "courses")
+    Set<CampaignEntity> campaigns;
 
     @PrePersist
     public void handlePrePersist() {

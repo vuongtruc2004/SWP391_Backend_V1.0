@@ -10,9 +10,7 @@ import lombok.*;
 public class UserProgressRequest {
     Long courseId;
 
+    Long chapterId;
+    
     Long lessonId;
-
-    Long videoId;
-
-    Long documentId;
 }

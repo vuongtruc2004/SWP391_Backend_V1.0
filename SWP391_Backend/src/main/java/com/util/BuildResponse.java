@@ -3,8 +3,6 @@ package com.util;
 import com.dto.request.ChapterRequest;
 import com.dto.response.*;
 import com.entity.ChapterEntity;
-import com.helper.DocumentServiceHelper;
-import com.helper.VideoServiceHelper;
 
 import java.time.Instant;
 
@@ -48,8 +46,7 @@ public class BuildResponse {
         ChapterResponse chapterResponse = new ChapterResponse();
         chapterResponse.setChapterId(newChapter.getChapterId());
         chapterResponse.setTitle(chapterRequest.getTitle());
-        chapterResponse.setDocuments(DocumentServiceHelper.mapToResponseList(chapterRequest.getDocuments()));
-        chapterResponse.setVideos(VideoServiceHelper.mapToResponseList(chapterRequest.getVideos()));
+//        chapterResponse.setVideos(VideoServiceHelper.mapToResponseList(chapterRequest.getVideos()));
         return chapterResponse;
     }
 }

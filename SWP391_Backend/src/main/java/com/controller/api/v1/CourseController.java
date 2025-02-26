@@ -48,7 +48,7 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCourseById(courseId));
     }
 
-    @ApiMessage("Lấy khóa học đã mua với ID thành công!")
+    @ApiMessage("Lấy khóa học đã mua với courseId thành công!")
     @GetMapping("/purchased/{courseId}")
     public ResponseEntity<CourseDetailsResponse> getCoursePurchasedByCourseId(@PathVariable(name = "courseId") Long courseId) {
         return ResponseEntity.ok(courseService.getCoursePurchasedByCourseId(courseId));
@@ -89,14 +89,9 @@ public class CourseController {
         return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 
-    @PutMapping("/accept/{courseId}")
-    public ResponseEntity<ApiResponse<String>> updateCourse(@PathVariable Long courseId) {
-        return ResponseEntity.ok(courseService.changeAcceptACourse(courseId));
-    }
-
-    @PutMapping("/unaccept/{courseId}")
-    public ResponseEntity<ApiResponse<String>> unacceptCourse(@PathVariable Long courseId) {
-        return ResponseEntity.ok(courseService.changeUnacceptACourse(courseId));
+    @PutMapping("/accept-status/{courseId}")
+    public ResponseEntity<ApiResponse<String>> changeAcceptStatusOfCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(courseService.changeAcceptStatusOfCourse(courseId));
     }
 
     @ApiMessage("Tạo mới một khoá học")

@@ -30,7 +30,6 @@ public class QuizEntity {
 
     Boolean published;
 
-
     @Column(name = "created_at")
     Instant createdAt;
 
@@ -51,7 +50,7 @@ public class QuizEntity {
     @JoinColumn(name = "expert_id")
     ExpertEntity expert;
 
-    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("quizzes")
     Set<QuizAttemptEntity> quizAttempts;
 

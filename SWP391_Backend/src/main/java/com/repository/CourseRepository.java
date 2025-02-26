@@ -45,10 +45,10 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
             """, nativeQuery = true)
     Set<Long> findSuggestedCourseIds(@Param("courseIds") List<Long> courseIds, @Param("notCourseIds") List<Long> notCourseIds);
 
-    @Query("select MIN(c.originalPrice) FROM CourseEntity c")
+    @Query("select MIN(c.price) FROM CourseEntity c")
     Double findMinPrice();
 
-    @Query("select MAX(c.originalPrice) FROM CourseEntity c")
+    @Query("select MAX(c.price) FROM CourseEntity c")
     Double findMaxPrice();
 
     CourseEntity findByCourseNameAndExpert(String courseName, ExpertEntity expert);

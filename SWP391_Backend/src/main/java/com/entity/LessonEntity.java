@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.util.enums.LessonTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,30 +13,34 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "videos")
+@Table(name = "lessons")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class VideoEntity {
+public class LessonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "video_id")
-    Long videoId;
+    @Column(name = "lesson_id")
+    Long lessonId;
 
     String title;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    String description;
-
-    @Column(name = "video_url")
-    String videoUrl;
-
-    Integer duration;
+    Long duration;
 
     @Column(name = "created_at")
     Instant createdAt;
 
     @Column(name = "updated_at")
     Instant updatedAt;
+
+    @Column(name = "lesson_type")
+    @Enumerated(EnumType.STRING)
+    LessonTypeEnum lessonType;
+
+    @Column(name = "video_url")
+    String videoUrl;
+
+    @Column(name = "document_content", columnDefinition = "LONGTEXT")
+    String documentContent;
 
     @ManyToOne
     @JoinColumn(name = "chapter_id")

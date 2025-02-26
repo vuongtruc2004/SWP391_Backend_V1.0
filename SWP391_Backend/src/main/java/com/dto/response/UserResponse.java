@@ -10,6 +10,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class UserResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
     Instant dob;
-    
+
     Boolean locked;
 
     @Enumerated(EnumType.STRING)
@@ -46,4 +47,6 @@ public class UserResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
+    
+    Set<UserProgressResponse> userProgresses;
 }

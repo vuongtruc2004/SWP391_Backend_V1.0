@@ -25,6 +25,7 @@ public class CourseServiceHelper {
     private static final Logger log = LoggerFactory.getLogger(CourseServiceHelper.class);
     private final ModelMapper modelMapper;
     private final ExpertServiceHelper expertServiceHelper;
+    private final UserServiceHelper userServiceHelper;
 
     public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
         return collection.stream().map(courseEntity -> {
@@ -33,18 +34,6 @@ public class CourseServiceHelper {
                     return courseResponse;
                 })
                 .toList();
-    }
-
-    public long getNumbersOfVideos(CourseEntity courseEntity) {
-        return courseEntity.getLessons().stream()
-                .mapToInt(lesson -> lesson.getVideos().size())
-                .sum();
-    }
-
-    public long getNumbersOfDocuments(CourseEntity courseEntity) {
-        return courseEntity.getLessons().stream()
-                .mapToInt(lesson -> lesson.getDocuments().size())
-                .sum();
     }
 
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {

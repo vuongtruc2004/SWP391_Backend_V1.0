@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+
 import java.util.List;
 
 
@@ -22,15 +23,9 @@ public class CourseRequest {
 
     String thumbnail;
 
-    Double salePrice;
-
+    Double price;
 
     List<String> subjects;
 
-//    @OneToMany(mappedBy = "course",cascade = CascadeType.ALL)
-//    Set<LessonEntity> lessons;
-
     String introduction;
-
-    Double originalPrice;
 }
