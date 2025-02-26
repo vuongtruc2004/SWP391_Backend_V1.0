@@ -67,9 +67,9 @@ public class OrderController {
     }
 
     @ApiMessage("Lấy số liệu thống kê thành công!")
-    @GetMapping("/dashboard-statistics")
-    public ResponseEntity<DashboardStatisticsResponse> getDashboardStatistics() {
-        return ResponseEntity.ok(orderService.getDashboardStatistics());
+    @GetMapping("/dashboard-statistics/{type}")
+    public ResponseEntity<DashboardStatisticsResponse> getDashboardStatistics(@PathVariable String type) {
+        return ResponseEntity.ok(orderService.getDashboardStatistics(type));
     }
 
     @ApiMessage("Lấy các khóa học muốn mua thành công!")

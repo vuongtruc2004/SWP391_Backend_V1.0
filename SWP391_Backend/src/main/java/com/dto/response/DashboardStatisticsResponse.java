@@ -9,13 +9,13 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DashboardStatisticsResponse {
-    Long totalRevenue;
     Long todayRevenue;
     Long yesterdayRevenue;
-    Long totalStudents;
     Long todayStudents;
     Long yesterdayStudents;
-    Long totalOrders;
     Long todayOrders;
     Long yesterdayOrders;
+    Long revenue;
+    Long orders;
+    Long students;
 }
