@@ -1,8 +1,11 @@
 package com.dto.request;
 
 import com.entity.CourseEntity;
+import com.entity.LessonEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +21,7 @@ public class ChapterRequest {
     String description;
 
     CourseEntity course;
+
+    List<LessonRequest> lessons;
 
 }

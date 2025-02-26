@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChapterService {
     private final ChapterRepository chapterRepository;
-
+    private final LessonService lessonService;
     public List<ChapterResponse> save(List<ChapterRequest> chapterRequestList) throws Exception {
         List<ChapterResponse> chapterResponseList = new ArrayList<>();
         for (ChapterRequest chapterRequest : chapterRequestList) {
@@ -27,6 +27,7 @@ public class ChapterService {
             newChapter.setTitle(chapterRequest.getTitle());
             newChapter.setDescription(chapterRequest.getDescription());
             chapterRepository.save(newChapter);
+            this.lessonService.saveLessonWithChapter(chapterRequest.getLessons(), newChapter);
             chapterResponseList.add(BuildResponse.buildChapterResponse(chapterRequest, newChapter));
             chapterRepository.save(newChapter);
         }

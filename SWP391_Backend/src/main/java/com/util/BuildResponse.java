@@ -3,8 +3,11 @@ package com.util;
 import com.dto.request.ChapterRequest;
 import com.dto.response.*;
 import com.entity.ChapterEntity;
+import com.util.enums.LessonTypeEnum;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BuildResponse {
 
@@ -46,7 +49,23 @@ public class BuildResponse {
         ChapterResponse chapterResponse = new ChapterResponse();
         chapterResponse.setChapterId(newChapter.getChapterId());
         chapterResponse.setTitle(chapterRequest.getTitle());
-//        chapterResponse.setVideos(VideoServiceHelper.mapToResponseList(chapterRequest.getVideos()));
+        List<LessonResponse> lessonResponses = chapterRequest.getLessons().stream()
+                .map(lessonRequest -> {
+                    LessonResponse lessonResponse = new LessonResponse();
+                    lessonResponse.setTitle(lessonRequest.getTitle());
+                    if(lessonRequest.getLessonType().equals(LessonTypeEnum.DOCUMENT)){
+                        lessonResponse.setLessonType(LessonTypeEnum.DOCUMENT);
+                        lessonResponse.setDocumentContent(lessonRequest.getDocumentContent());
+                        lessonResponse.setDuration(LessonServiceHelper.countDuration(lessonResponse.getDocumentContent()));
+                    }else{
+                        lessonResponse.setLessonType(LessonTypeEnum.VIDEO);
+                        lessonResponse.setVideoUrl(lessonRequest.getVideoUrl());
+                        lessonResponse.setDuration(lessonRequest.getDuration());
+                    }
+                    return lessonResponse;
+                })
+                .collect(Collectors.toList());
+        chapterResponse.setLessons(lessonResponses);
         return chapterResponse;
     }
 }
