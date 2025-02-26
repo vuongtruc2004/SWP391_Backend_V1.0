@@ -8,6 +8,7 @@ import com.repository.ChapterRepository;
 import com.util.BuildResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,13 +20,12 @@ import java.util.List;
 public class ChapterService {
     private final ChapterRepository chapterRepository;
     private final LessonService lessonService;
+    private final ModelMapper modelMapper;
     public List<ChapterResponse> save(List<ChapterRequest> chapterRequestList) throws Exception {
         List<ChapterResponse> chapterResponseList = new ArrayList<>();
         for (ChapterRequest chapterRequest : chapterRequestList) {
             ChapterEntity newChapter = new ChapterEntity();
-            newChapter.setCourse(chapterRequest.getCourse());
-            newChapter.setTitle(chapterRequest.getTitle());
-            newChapter.setDescription(chapterRequest.getDescription());
+            modelMapper.map(chapterRequest, newChapter);
             chapterRepository.save(newChapter);
             this.lessonService.saveLessonWithChapter(chapterRequest.getLessons(), newChapter);
             chapterResponseList.add(BuildResponse.buildChapterResponse(chapterRequest, newChapter));

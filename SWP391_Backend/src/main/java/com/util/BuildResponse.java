@@ -4,13 +4,14 @@ import com.dto.request.ChapterRequest;
 import com.dto.response.*;
 import com.entity.ChapterEntity;
 import com.util.enums.LessonTypeEnum;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BuildResponse {
-
     public static <T> ApiResponse<T> buildApiResponse(Integer status, Object message, String errorMessage, T data) {
         return ApiResponse.<T>builder()
                 .status(status)
