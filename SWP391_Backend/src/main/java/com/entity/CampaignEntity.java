@@ -48,8 +48,7 @@ public class CampaignEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
-    @ManyToMany
-    @JoinTable(name = "coupon_course", joinColumns = @JoinColumn(name = "coupon_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @OneToMany(mappedBy = "campaign")
     Set<CourseEntity> courses;
 
     @PrePersist

@@ -73,8 +73,9 @@ public class CourseEntity implements Serializable {
     @ManyToMany(mappedBy = "courses")
     Set<CouponEntity> coupons;
 
-    @ManyToMany(mappedBy = "courses")
-    Set<CampaignEntity> campaigns;
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    CampaignEntity campaign;
 
     @PrePersist
     public void handlePrePersist() {

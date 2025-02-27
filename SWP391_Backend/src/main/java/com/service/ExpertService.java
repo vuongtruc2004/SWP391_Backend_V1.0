@@ -22,8 +22,9 @@ public class ExpertService {
     private final ExpertRepository expertRepository;
     private final ModelMapper modelMapper;
     private final ExpertServiceHelper expertServiceHelper;
-    public PageDetailsResponse<List<ExpertResponse>> getExperts(Pageable pageable) {
-        Page<ExpertEntity> page = expertRepository.findAll(pageable);
+
+    public PageDetailsResponse<List<ExpertResponse>> getExpertsHaveCourses(Pageable pageable) {
+        Page<ExpertEntity> page = expertRepository.findAllByCoursesIsNotEmpty(pageable);
         List<ExpertResponse> expertResponses = page.getContent()
                 .stream().map(expertEntity -> {
                     ExpertResponse expertResponse = modelMapper.map(expertEntity, ExpertResponse.class);
@@ -40,6 +41,7 @@ public class ExpertService {
                 expertResponses
         );
     }
+
     public ExpertDetailsResponse getExpertById(Long userId) {
         ExpertEntity expertEntity = expertRepository.findByUser_UserId(userId).
                 orElseThrow(() -> new NotFoundException("Expert không tìm thấy"));

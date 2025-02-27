@@ -37,9 +37,10 @@ public class CourseController {
             Pageable pageable,
             @RequestParam(name = "specialSort", required = false) String specialSort,
             @RequestParam(name = "expertIds", required = false) String expertIds,
-            @RequestParam(name = "subjectIds", required = false) String subjectIds
+            @RequestParam(name = "subjectIds", required = false) String subjectIds,
+            @RequestParam(name = "event", required = false) String event
     ) {
-        return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable, specialSort, expertIds, subjectIds));
+        return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable, specialSort, expertIds, subjectIds, event));
     }
 
     @ApiMessage("Lấy khóa học thành công!")

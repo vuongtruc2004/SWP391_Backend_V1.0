@@ -23,9 +23,9 @@ public class ExpertController {
     private final ExpertService expertService;
 
     @ApiMessage("Lấy tất cả chuyên gia thành công !")
-    @GetMapping
-    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExperts(Pageable pageable) {
-        return ResponseEntity.ok(expertService.getExperts(pageable));
+    @GetMapping("/course")
+    public ResponseEntity<PageDetailsResponse<List<ExpertResponse>>> getExpertsHaveCourses(Pageable pageable) {
+        return ResponseEntity.ok(expertService.getExpertsHaveCourses(pageable));
     }
 
     @ApiMessage("Lấy chi tiết chuyên gia thành công")

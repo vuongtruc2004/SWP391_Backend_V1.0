@@ -21,9 +21,7 @@ public class CourseResponse {
 
     String thumbnail;
 
-    Double originalPrice;
-
-    Double salePrice;
+    Double price;
 
     ExpertResponse expert;
 

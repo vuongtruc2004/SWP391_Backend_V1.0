@@ -48,7 +48,8 @@ public class CourseService {
             Pageable pageable,
             String specialSort,
             String expertIds,
-            String subjectIds
+            String subjectIds,
+            String event
     ) {
         try {
             if (specialSort != null && !specialSort.isBlank()) {
@@ -62,7 +63,20 @@ public class CourseService {
         }
         specification = specification.and(courseServiceHelper.filterByAttribute(expertIds, "expert", "expertId"));
         specification = specification.and(courseServiceHelper.filterByAttribute(subjectIds, "subjects", "subjectId"));
-        specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("accepted"), true)));
+        specification = specification.and(((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("accepted"), true)));
+
+        if (event != null) {
+            if (event.equalsIgnoreCase("sale")) {
+                specification = specification.and((root, query, criteriaBuilder) ->
+                        criteriaBuilder.isNotNull(root.get("campaign"))
+                );
+            } else if (event.equalsIgnoreCase("noSale")) {
+                specification = specification.and((root, query, criteriaBuilder) ->
+                        criteriaBuilder.isNull(root.get("campaign"))
+                );
+            }
+        }
 
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
