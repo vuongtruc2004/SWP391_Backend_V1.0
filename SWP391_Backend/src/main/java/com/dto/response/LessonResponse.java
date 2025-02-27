@@ -6,8 +6,6 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.Instant;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +13,9 @@ import java.time.Instant;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LessonResponse {
+
+    Long lessonId;
+
     String title;
 
     Long duration;
