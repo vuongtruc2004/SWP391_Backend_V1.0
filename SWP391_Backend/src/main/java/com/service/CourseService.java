@@ -248,19 +248,15 @@ public class CourseService {
         }
 
         String[] courseName = courseRequest.getCourseName().trim().split("\\s+");
-        StringBuilder courseNameReplace = new StringBuilder();
-        for (String name : courseName) {
-            courseNameReplace.append(name).append(" ");
-        }
-        courseNameReplace.deleteCharAt(courseNameReplace.length() - 1);
-        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace.toString(), user.getExpert());
+        String courseNameReplace = String.join(" ", courseName);
+        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace, user.getExpert());
         if (currentCourse != null) {
             throw new NotFoundException("Khoá học đã tồn tại!");
         }
 
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(user.getExpert());
-        newCourse.setCourseName(courseRequest.getCourseName());
+        newCourse.setCourseName(courseNameReplace);
         newCourse.setDescription(courseRequest.getDescription());
         newCourse.setObjectiveList(courseRequest.getObjectives());
         newCourse.setIntroduction(courseRequest.getIntroduction());
