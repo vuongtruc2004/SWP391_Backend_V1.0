@@ -18,21 +18,12 @@ public class LessonRequest {
 
     String title;
 
-    Long duration;
-
-    @Column(name = "lesson_type")
     @Enumerated(EnumType.STRING)
     LessonTypeEnum lessonType;
 
-    @Column(name = "video_url")
+    Long duration;
+
     String videoUrl;
 
-    @Column(name = "document_content", columnDefinition = "LONGTEXT")
     String documentContent;
-
-    @ManyToOne
-    @JoinColumn(name = "chapter_id")
-    ChapterEntity chapter;
-
-
 }

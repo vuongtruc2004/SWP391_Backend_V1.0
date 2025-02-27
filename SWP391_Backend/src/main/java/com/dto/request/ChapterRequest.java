@@ -14,14 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterRequest {
-    Long lessonId;
+    Long chapterId;
 
     String title;
 
     String description;
 
-    CourseEntity course;
+    Long courseId;
 
     List<LessonRequest> lessons;
-
 }

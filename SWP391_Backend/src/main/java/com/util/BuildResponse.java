@@ -61,7 +61,7 @@ public class BuildResponse {
                     }else{
                         lessonResponse.setLessonType(LessonTypeEnum.VIDEO);
                         lessonResponse.setVideoUrl(lessonRequest.getVideoUrl());
-                        lessonResponse.setDuration(lessonRequest.getDuration());
+//                        lessonResponse.setDuration(lessonRequest.getDuration());
                     }
                     return lessonResponse;
                 })

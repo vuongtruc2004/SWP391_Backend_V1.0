@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/v1/chapters")
@@ -18,7 +19,7 @@ import java.util.List;
 public class ChapterController {
 
     private final ChapterService chapterService;
-
+    private final Logger logger= Logger.getLogger(this.getClass().getName());
     @DeleteMapping("/{id}")
     @ApiMessage("Xoá bài giảng thành công")
     public ResponseEntity<Void> deleteChapter(@PathVariable Long id) {
@@ -29,6 +30,6 @@ public class ChapterController {
     @PostMapping
     @ApiMessage("Tạo mới bài giảng thành công")
     public ResponseEntity<List<ChapterResponse>> createChapter(@RequestBody List<ChapterRequest> chapterRequests) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(chapterService.save(chapterRequests));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.chapterService.save(chapterRequests));
     }
 }
