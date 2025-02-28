@@ -63,7 +63,6 @@ public class QuestionService {
         int toIndex = (int) Math.min(fromIndex + pageSize, totalElements);
         List<QuestionResponse> pagedResponses = (fromIndex >= totalElements) ? Collections.emptyList() :
                 questionResponses.subList(fromIndex, toIndex);
-
         return BuildResponse.buildPageDetailsResponse(
                 pageNumber + 1,
                 pageSize,
