@@ -30,7 +30,11 @@ public class UserProgressService {
             throw new UserException("Vui lòng đăng nhập!");
         }
         return userEntity.getUserProgresses()
-                .stream().map(userProgressEntity -> modelMapper.map(userProgressEntity, UserProgressResponse.class))
+                .stream().map(userProgressEntity -> {
+                    UserProgressResponse userProgressResponse = modelMapper.map(userProgressEntity, UserProgressResponse.class);
+                    userProgressResponse.setUserId(userEntity.getUserId());
+                    return userProgressResponse;
+                })
                 .collect(Collectors.toSet());
     }
 

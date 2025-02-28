@@ -10,8 +10,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserProgressResponse {
-    
+
     Long progressId;
+
+    Long userId;
 
     Long courseId;
 
