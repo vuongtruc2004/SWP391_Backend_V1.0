@@ -104,8 +104,7 @@ public class OrderService {
 
         Double minPriceDouble = orderServiceHelper.parseDoubleOrNull(minPrice);
         Double maxPriceDouble = orderServiceHelper.parseDoubleOrNull(maxPrice);
-
-
+        
         if (minPriceDouble != null || maxPriceDouble != null) {
             specification = specification.and(orderServiceHelper.filterByPrice(minPriceDouble, maxPriceDouble));
         }
@@ -191,15 +190,15 @@ public class OrderService {
     public DashboardStatisticsResponse getDashboardStatistics(String type) {
         LocalDate yesterday = LocalDate.now().minusDays(1);
         DashboardStatisticsResponse response = new DashboardStatisticsResponse();
-        if(type.equals("week")) {
+        if (type.equals("week")) {
             response.setRevenue(orderRepository.getCurrentWeekRevenue(OrderStatusEnum.COMPLETED));
             response.setStudents(orderRepository.getCurrentWeekStudents(OrderStatusEnum.COMPLETED));
             response.setOrders(orderRepository.getCurrentWeekOrders(OrderStatusEnum.COMPLETED));
-        } else if(type.equals("month")) {
+        } else if (type.equals("month")) {
             response.setRevenue(orderRepository.getCurrentMonthRevenue(OrderStatusEnum.COMPLETED));
             response.setStudents(orderRepository.getCurrentMonthStudents(OrderStatusEnum.COMPLETED));
             response.setOrders(orderRepository.getCurrentMonthOrders(OrderStatusEnum.COMPLETED));
-        } else if(type.equals("quarter")) {
+        } else if (type.equals("quarter")) {
             response.setRevenue(orderRepository.getCurrentQuarterRevenue(OrderStatusEnum.COMPLETED));
             response.setStudents(orderRepository.getCurrentQuarterStudents(OrderStatusEnum.COMPLETED));
             response.setOrders(orderRepository.getCurrentQuarterOrders(OrderStatusEnum.COMPLETED));

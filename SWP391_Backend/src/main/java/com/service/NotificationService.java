@@ -25,7 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,7 +56,6 @@ public class NotificationService {
             page = userNotificationRepository.findAllByUser_UserId(pageable, user.getUserId());
         }
         return notificationServiceHelper.convertToPageDetailsResponse(page);
-
     }
 
     public UserNotificationResponse readANotification(Long notificationId) {
@@ -84,6 +82,7 @@ public class NotificationService {
                 "Đã đọc!"
         );
     }
+
     @Transactional
     public UserNotificationResponse deleteNotification(Long notificationId) {
         UserEntity user = userServiceHelper.extractUserFromToken();
@@ -97,10 +96,8 @@ public class NotificationService {
     public ApiResponse<String> createNotification(NotificationRequest notificationRequest) {
         NotificationEntity newNotificationEntity = modelMapper.map(notificationRequest, NotificationEntity.class);
         notificationRepository.save(newNotificationEntity);
-        List<UserNotificationEntity> userNotificationEntities = new ArrayList<>();
-        if(notificationRequest.getGlobal()){
+        if (Boolean.TRUE.equals(notificationRequest.getGlobal())) {
             userNotificationRepository.insertUserNotification(newNotificationEntity.getNotificationId());
-
         } else {
             userNotificationRepository.insertUserSpecificationNotifications(newNotificationEntity.getNotificationId(), notificationRequest.getFullname());
         }
@@ -123,7 +120,7 @@ public class NotificationService {
             return userNotificationResponse;
         }).toList();
         return BuildResponse.buildPageDetailsResponse(
-                page.getNumber()+1,
+                page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
@@ -131,7 +128,7 @@ public class NotificationService {
         );
     }
 
-    public PageDetailsResponse<List<UserNotificationResponse>> getUserNotificationBYNotificationId(Long notificationId, Pageable pageable){
+    public PageDetailsResponse<List<UserNotificationResponse>> getUserNotificationBYNotificationId(Long notificationId, Pageable pageable) {
         Page<UserNotificationEntity> page = userNotificationRepository.findByNotification_NotificationId(notificationId, pageable);
         List<UserNotificationResponse> userNotificationResponseList = page.getContent().stream()
                 .map(userNotificationEntity -> {
@@ -139,7 +136,7 @@ public class NotificationService {
                     return userNotificationResponse;
                 }).toList();
         return BuildResponse.buildPageDetailsResponse(
-                page.getNumber()+1,
+                page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),

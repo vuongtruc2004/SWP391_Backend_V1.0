@@ -13,7 +13,10 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NotificationRequest {
     String title;
+
     String content;
+
     Boolean global;
+    
     List<String> fullname;
 }
