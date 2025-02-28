@@ -41,15 +41,16 @@ public class QuestionServiceHelper {
                             )
                             .filter(Objects::nonNull)
                             .max(Comparator.naturalOrder())
-                            .orElse(questionEntity.getCreatedAt());
+                            .orElse(null);
                     questionResponse.setLatestUpdate(latestUpdate);
                     return questionResponse;
                 })
                 .sorted(Comparator.comparing(
-                        QuestionResponse::getLatestUpdate, Comparator.reverseOrder()
+                        QuestionResponse::getLatestUpdate, Comparator.nullsLast(Comparator.reverseOrder())
                 ))
                 .toList();
     }
+
 
 
 

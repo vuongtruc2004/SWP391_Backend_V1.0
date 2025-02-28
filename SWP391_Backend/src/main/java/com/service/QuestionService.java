@@ -18,15 +18,14 @@ import com.util.BuildResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -44,21 +43,36 @@ public class QuestionService {
             Pageable pageable,
             String title
     ) {
-
         if (title != null && !title.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.like(root.get("title"), "%" + title.trim() + "%"));
         }
-            Page<QuestionEntity> page = questionRepository.findAll(specification, pageable);
-            List<QuestionResponse> questionResponses = questionServiceHelper.convertToListResponse(page);
-            return BuildResponse.buildPageDetailsResponse(
-                    page.getNumber() + 1,
-                    page.getSize(),
-                    page.getTotalPages(),
-                    page.getTotalElements(),
-                    questionResponses
-            );
+        List<QuestionEntity> allQuestions = questionRepository.findAll(specification);
+        List<QuestionResponse> questionResponses = questionServiceHelper.convertToListResponse(new PageImpl<>(allQuestions));
+        questionResponses = questionResponses.stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(
+                        q -> Optional.ofNullable(q.getLatestUpdate()).orElse(Instant.MIN),
+                        Comparator.reverseOrder()
+                ))
+                .toList();
+        Long totalElements = (long) questionResponses.size();
+        int pageNumber = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        int fromIndex = pageNumber * pageSize;
+        int toIndex = (int) Math.min(fromIndex + pageSize, totalElements);
+        List<QuestionResponse> pagedResponses = (fromIndex >= totalElements) ? Collections.emptyList() :
+                questionResponses.subList(fromIndex, toIndex);
+
+        return BuildResponse.buildPageDetailsResponse(
+                pageNumber + 1,
+                pageSize,
+                (int) Math.ceil((double) totalElements / pageSize),
+                totalElements,
+                pagedResponses
+        );
     }
+
 
 
     public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
