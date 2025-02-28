@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
+
 public interface SubjectRepository extends JpaSpecificationRepository<SubjectEntity, Long> {
     @Query("SELECT s FROM SubjectEntity s " +
             "ORDER BY SIZE(s.courses) DESC")
@@ -16,4 +18,7 @@ public interface SubjectRepository extends JpaSpecificationRepository<SubjectEnt
     SubjectEntity findBySubjectName(String subjectName);
 
     boolean existsBySubjectNameAndSubjectIdNot(String subjectName, Long subjectId);
+
+    @Query("SELECT COUNT(s) > 0 FROM SubjectEntity s WHERE s.updatedAt IS NOT NULL")
+    boolean hasUpdatedRecords();
 }

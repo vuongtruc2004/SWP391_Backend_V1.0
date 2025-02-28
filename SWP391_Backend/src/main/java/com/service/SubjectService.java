@@ -14,7 +14,9 @@ import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -89,7 +91,17 @@ public class SubjectService {
             Pageable pageable,
             Specification<SubjectEntity> specification
     ) {
-        Page<SubjectEntity> page = subjectRepository.findAll(specification, pageable);
+        boolean hasUpdatedRecords = subjectRepository.hasUpdatedRecords();
+
+        Sort sort = hasUpdatedRecords ? Sort.by("updatedAt").descending() : Sort.by("createdAt").descending();
+
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sort
+        );
+
+        Page<SubjectEntity> page = subjectRepository.findAll(specification, sortedPageable);
         List<SubjectResponse> subjectResponses = page.getContent()
                 .stream().map(subjectEntity -> {
                     SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);

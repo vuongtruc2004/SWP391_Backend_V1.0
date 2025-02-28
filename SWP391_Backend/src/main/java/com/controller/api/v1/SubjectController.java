@@ -28,19 +28,19 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
-    @ApiMessage("Lấy các môn học thành công!")
+    @ApiMessage("Lấy các lĩnh vực thành công!")
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjects(Pageable pageable) {
         return ResponseEntity.ok(subjectService.getSubjects(pageable));
     }
 
-    @ApiMessage("Lấy các môn học thành công!")
+    @ApiMessage("Lấy các lĩnh vực thành công!")
     @GetMapping("/courses")
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjectsSortByNumberOfCourses(Pageable pageable) {
         return ResponseEntity.ok(subjectService.getSubjectsSortByNumberOfCourses(pageable));
     }
 
-    @ApiMessage("Lấy các môn học thành công!")
+    @ApiMessage("Lấy các lĩnh vực thành công!")
     @GetMapping("/all")
     public ResponseEntity<PageDetailsResponse<List<SubjectResponse>>> getSubjectsWithFilter(
             Pageable pageable,
@@ -49,7 +49,7 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubjectsWithFilter(pageable, specification));
     }
 
-    @ApiMessage("Xóa môn học thành công!")
+    @ApiMessage("Xóa lĩnh vực thành công!")
     @DeleteMapping("/delete/{subjectId}")
     public ResponseEntity<ApiResponse<String>> deleteSubject(@PathVariable Long subjectId) {
         return ResponseEntity.ok(subjectService.deleteSubject(subjectId));

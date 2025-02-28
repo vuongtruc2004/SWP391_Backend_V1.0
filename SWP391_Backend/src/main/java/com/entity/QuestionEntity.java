@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,19 @@ public class QuestionEntity {
     @JsonIgnoreProperties("questions")
     List<QuizEntity> quizzes;
 
-    public QuestionEntity(String title) {
-        this.title = title;
+    @Column(name = "created_at")
+    Instant createdAt;
+
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
+    @PrePersist
+    public void handlePrePersist() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
     }
 }

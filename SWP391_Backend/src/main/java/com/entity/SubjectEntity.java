@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Getter
@@ -29,6 +30,22 @@ public class SubjectEntity {
 
     String thumbnail;
 
+    @Column(name = "created_at")
+    Instant createdAt;
+
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
     @ManyToMany(mappedBy = "subjects")
     Set<CourseEntity> courses;
+
+    @PrePersist
+    public void handlePrePersist() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
+    }
 }
