@@ -24,6 +24,9 @@ public class LessonEntity {
 
     String title;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String description;
+
     Long duration;
 
     @Column(name = "created_at")

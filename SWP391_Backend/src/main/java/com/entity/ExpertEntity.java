@@ -41,4 +41,8 @@ public class ExpertEntity {
 
     @OneToMany(mappedBy = "expert")
     Set<QuizEntity> quizzes;
+
+    @ManyToMany
+    @JoinTable(name = "expert_user", joinColumns = @JoinColumn(name = "expert_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<UserEntity> users; // cac nguoi dung follow
 }

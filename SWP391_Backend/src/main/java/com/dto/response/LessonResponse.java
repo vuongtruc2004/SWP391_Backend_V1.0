@@ -18,6 +18,8 @@ public class LessonResponse {
 
     String title;
 
+    String description;
+    
     Long duration;
 
     @Enumerated(EnumType.STRING)

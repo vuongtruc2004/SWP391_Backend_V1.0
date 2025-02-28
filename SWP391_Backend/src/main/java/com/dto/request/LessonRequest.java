@@ -1,12 +1,10 @@
 package com.dto.request;
 
-import com.entity.ChapterEntity;
 import com.util.enums.LessonTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -17,6 +15,8 @@ import java.time.Instant;
 public class LessonRequest {
 
     String title;
+
+    String description;
 
     @Enumerated(EnumType.STRING)
     LessonTypeEnum lessonType;

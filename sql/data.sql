@@ -2332,6 +2332,32 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `expert_user`
+--
+
+DROP TABLE IF EXISTS `expert_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `expert_user` (
+  `expert_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`expert_id`,`user_id`),
+  KEY `FK27s6rcj7h83qrn59yipsmi23k` (`user_id`),
+  CONSTRAINT `FK27s6rcj7h83qrn59yipsmi23k` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `FKn4dtwbtnefruftss8p21v96aj` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `expert_user`
+--
+
+LOCK TABLES `expert_user` WRITE;
+/*!40000 ALTER TABLE `expert_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `expert_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `users`
 --
 

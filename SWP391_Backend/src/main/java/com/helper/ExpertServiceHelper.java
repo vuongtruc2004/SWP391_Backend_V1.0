@@ -21,6 +21,7 @@ public class ExpertServiceHelper {
         ExpertDetailsResponse expertDetailsResponse = modelMapper.map(expertEntity, ExpertDetailsResponse.class);
         expertDetailsResponse.setTotalCourses(expertEntity.getCourses().size());
         expertDetailsResponse.setTotalStudents(expertRepository.countTotalStudents(expertEntity.getExpertId()));
+        expertDetailsResponse.setTotalFollowers(expertEntity.getUsers().size());
         return expertDetailsResponse;
     }
 }

@@ -85,6 +85,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<UserProgressEntity> userProgresses;
 
+    @ManyToMany(mappedBy = "users") // cac tac gia ma nguoi dung follow
+    Set<ExpertEntity> experts;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     RoleEntity role;
