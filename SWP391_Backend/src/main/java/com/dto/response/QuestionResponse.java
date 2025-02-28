@@ -5,6 +5,7 @@ import com.entity.AnswerEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
 import java.util.List;
 
 @Builder
@@ -19,5 +20,7 @@ public class QuestionResponse {
     List<AnswerEntity> answers;
     List<String> quizzes;
     List<String> correctAnswer;
-
+    Instant createdAt;
+    Instant updatedAt;
+    Instant latestUpdate;
 }

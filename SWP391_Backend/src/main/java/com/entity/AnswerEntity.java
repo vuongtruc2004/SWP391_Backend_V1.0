@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Builder
@@ -28,6 +30,22 @@ public class AnswerEntity {
     @JoinColumn(name = "question_id")
     @JsonBackReference
     QuestionEntity question;
+
+    @Column(name = "created_at")
+    Instant createdAt;
+
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
+    @PrePersist
+    public void handlePrePersist() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
+    }
 
     public AnswerEntity(String content, Boolean correct, QuestionEntity question) {
         this.content = content;
