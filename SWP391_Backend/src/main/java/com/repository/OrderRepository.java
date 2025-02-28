@@ -57,7 +57,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getCurrentQuarterRevenue(@Param("status") OrderStatusEnum status);
 
-    // Tổng doanh thu của quý hiện tại
+    // Tổng doanh thu của năm hiện tại
     @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
             "JOIN od.order o " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
@@ -102,7 +102,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getCurrentQuarterStudents(@Param("status") OrderStatusEnum status);
 
-    // Tổng số lượng học viên quý hiện tại (đếm DISTINCT user_id)
+    // Tổng số lượng học viên năm hiện tại (đếm DISTINCT user_id)
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
             "AND DATE(o.createdAt) <= CURRENT_DATE " +
@@ -134,7 +134,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     // Tổng số khóa học đã bán tháng hiện tại (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
             "JOIN o.orderDetails od " +
-            "WHERE QUARTER(o.createdAt) = QUARTER(CURRENT_DATE) " +
+            "WHERE MONTH(o.createdAt) = MONTH(CURRENT_DATE) " +
             "AND YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
             "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
@@ -149,7 +149,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getCurrentQuarterOrders(@Param("status") OrderStatusEnum status);
 
-    // Tổng số khóa học đã bán quý hiện tại (đếm DISTINCT order_id)
+    // Tổng số khóa học đã bán năm hiện tại (đếm DISTINCT order_id)
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
             "JOIN o.orderDetails od " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
