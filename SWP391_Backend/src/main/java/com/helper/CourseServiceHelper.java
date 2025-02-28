@@ -25,12 +25,16 @@ public class CourseServiceHelper {
     private static final Logger log = LoggerFactory.getLogger(CourseServiceHelper.class);
     private final ModelMapper modelMapper;
     private final ExpertServiceHelper expertServiceHelper;
-    private final UserServiceHelper userServiceHelper;
 
     public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
         return collection.stream().map(courseEntity -> {
                     CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
                     courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+                    courseResponse.setTotalLessons(
+                            courseEntity.getChapters().stream()
+                                    .mapToInt(chapter -> chapter.getLessons().size())
+                                    .sum()
+                    );
                     return courseResponse;
                 })
                 .toList();
@@ -44,6 +48,11 @@ public class CourseServiceHelper {
         courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
         courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
         courseDetailsResponse.setAverageRating(averageRating);
+        courseDetailsResponse.setTotalLessons(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getLessons().size())
+                        .sum()
+        );
         courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
         return courseDetailsResponse;

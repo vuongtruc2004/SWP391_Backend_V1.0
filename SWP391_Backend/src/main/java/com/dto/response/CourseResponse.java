@@ -27,6 +27,8 @@ public class CourseResponse {
 
     Integer totalPurchased;
 
+    Integer totalLessons;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 

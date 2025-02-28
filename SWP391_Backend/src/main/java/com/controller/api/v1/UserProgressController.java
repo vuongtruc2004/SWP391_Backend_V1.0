@@ -19,8 +19,8 @@ public class UserProgressController {
 
     @ApiMessage("Lấy tiến độ của người dùng thành công")
     @GetMapping
-    public ResponseEntity<Set<UserProgressResponse>> getUserProgressByCourseId(@RequestParam Long courseId) {
-        return ResponseEntity.ok(userProgressService.getUserProgressByCourseId(courseId));
+    public ResponseEntity<Set<UserProgressResponse>> getUserProgresses() {
+        return ResponseEntity.ok(userProgressService.getUserProgresses());
     }
 
     @ApiMessage("Cập nhật tiến độ thành công!")

@@ -2,7 +2,10 @@ package com.service;
 
 
 import com.dto.request.CourseRequest;
-import com.dto.response.*;
+import com.dto.response.ApiResponse;
+import com.dto.response.CourseResponse;
+import com.dto.response.MinMaxPriceResponse;
+import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
@@ -103,7 +106,7 @@ public class CourseService {
         if (userEntity == null) {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-        CourseEntity courseEntity = courseRepository.findPurchasedCourseByCourseId(courseId)
+        CourseEntity courseEntity = courseRepository.findPurchasedCourseByCourseId(courseId, userEntity.getUserId())
                 .orElseThrow(() -> new NotFoundException("Bạn chưa mua khóa học này!"));
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
@@ -144,25 +147,15 @@ public class CourseService {
         );
     }
 
-    public List<CourseStatusResponse> getPurchasedCourses() {
+    public List<Long> getPurchasedCourseIds() {
+        List<Long> purchasedCourseIds = new ArrayList<>();
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity != null) {
-            List<CourseStatusResponse> courseStatusResponseList = new ArrayList<>();
             for (CourseEntity courseEntity : userEntity.getCourses()) {
-                long numberOfCompletedLessons = userProgressRepository.countAllByUser_UserIdAndCourseId(userEntity.getUserId(), courseEntity.getCourseId());
-                long numberOfLessons = courseEntity.getChapters()
-                        .stream()
-                        .mapToLong(chapter -> chapter.getLessons().size())
-                        .sum();
-
-                CourseStatusResponse courseStatusResponse = new CourseStatusResponse();
-                courseStatusResponse.setCourseId(courseEntity.getCourseId());
-                courseStatusResponse.setCompletionPercentage((numberOfCompletedLessons * 1.0 / numberOfLessons) * 100);
-                courseStatusResponseList.add(courseStatusResponse);
+                purchasedCourseIds.add(courseEntity.getCourseId());
             }
-            return courseStatusResponseList;
         }
-        return new ArrayList<>();
+        return purchasedCourseIds;
     }
 
     public PageDetailsResponse<List<CourseDetailsResponse>> getCoursesWithFilterByAdmin(

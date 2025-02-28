@@ -1,7 +1,10 @@
 package com.controller.api.v1;
 
 import com.dto.request.CourseRequest;
-import com.dto.response.*;
+import com.dto.response.ApiResponse;
+import com.dto.response.CourseResponse;
+import com.dto.response.MinMaxPriceResponse;
+import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.service.CourseService;
@@ -65,8 +68,8 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học đã mua thành công!")
     @GetMapping("/user/purchased")
-    public ResponseEntity<List<CourseStatusResponse>> getPurchasedCourses() {
-        return ResponseEntity.ok(courseService.getPurchasedCourses());
+    public ResponseEntity<List<Long>> getPurchasedCourseIds() {
+        return ResponseEntity.ok(courseService.getPurchasedCourseIds());
     }
 
     @ApiMessage("Lấy các khóa học thành công!")

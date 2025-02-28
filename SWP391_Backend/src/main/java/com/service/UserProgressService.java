@@ -24,10 +24,14 @@ public class UserProgressService {
     private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
-    public Set<UserProgressResponse> getUserProgressByCourseId(Long courseId) {
+    public Set<UserProgressResponse> getUserProgresses() {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        return userProgressRepository.findAllByUser_UserIdAndCourseId(courseId, userEntity.getUserId())
-                .stream().map(userProgressEntity -> modelMapper.map(userProgressEntity, UserProgressResponse.class)).collect(Collectors.toSet());
+        if (userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập!");
+        }
+        return userEntity.getUserProgresses()
+                .stream().map(userProgressEntity -> modelMapper.map(userProgressEntity, UserProgressResponse.class))
+                .collect(Collectors.toSet());
     }
 
     public UserProgressResponse changeStatus(UserProgressRequest userProgressRequest) {
@@ -42,7 +46,7 @@ public class UserProgressService {
         )) {
             throw new InvalidRequestInput("Bài học này đã hoàn thành!");
         }
-        
+
         UserProgressEntity newUserProgressEntity = UserProgressEntity.builder()
                 .user(userEntity)
                 .courseId(userProgressRequest.getCourseId())
