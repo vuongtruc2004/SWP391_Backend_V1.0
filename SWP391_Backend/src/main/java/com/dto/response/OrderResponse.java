@@ -20,6 +20,8 @@ public class OrderResponse {
 
     Long orderId;
 
+    String orderCode;
+    
     @Enumerated(EnumType.STRING)
     OrderStatusEnum orderStatus;
 
@@ -29,7 +31,10 @@ public class OrderResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
 
-    UserResponse user;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    Instant expiredAt;
+
+    Long userId;
 
     Set<OrderDetailsResponse> orderDetails;
 }

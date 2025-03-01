@@ -1091,7 +1091,6 @@ DROP TABLE IF EXISTS `order_details`;
 CREATE TABLE `order_details` (
   `order_details_id` bigint NOT NULL AUTO_INCREMENT,
   `course_id` bigint DEFAULT NULL,
-  `price` double DEFAULT NULL,
   `order_id` bigint DEFAULT NULL,
   PRIMARY KEY (`order_details_id`),
   KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
@@ -1105,22 +1104,6 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (1,255000,1,1);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (2,225000,2,1);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (3,1050000,20,2);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (4,675000,19,2);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (5,270000,7,3);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (6,378000,9,4);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (7,165600,11,4);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (8,142500,12,4);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (9,351000,10,4);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (10,320000,3,5);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (11,332500,4,5);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (12,378000,9,5);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (13,792000,14,6);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (14,760000,15,6);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (15,612000,13,6);
-INSERT INTO `order_details` (`order_details_id`, `price`, `course_id`, `order_id`) VALUES (16,280000,8,7);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1134,7 +1117,10 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `order_id` bigint NOT NULL AUTO_INCREMENT,
   `created_at` datetime(6) DEFAULT NULL,
-  `order_status` enum('COMPLETED','PENDING') DEFAULT NULL,
+  `expired_at` datetime(6) DEFAULT NULL,
+  `order_code` varchar(255) DEFAULT NULL,
+  `order_status` enum('CANCELLED','COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
+  `total_amount` int DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`order_id`),
@@ -1149,13 +1135,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (1,'2025-02-25 02:26:42.881292','COMPLETED','2025-02-25 02:26:44.517111',6);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (2,'2025-02-25 02:27:31.678505','COMPLETED','2025-02-25 02:27:32.640592',9);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (3,'2025-02-25 02:28:24.702544','COMPLETED','2025-02-25 02:28:27.840493',21);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (4,'2025-02-25 02:29:21.527474','COMPLETED','2025-02-25 02:29:23.216122',22);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (5,'2025-02-24 02:31:03.417066','COMPLETED','2025-02-24 02:31:39.424105',10);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (6,'2025-02-24 02:32:36.311306','COMPLETED','2025-02-24 02:32:39.690530',11);
-INSERT INTO `orders` (`order_id`, `created_at`, `order_status`, `updated_at`, `user_id`) VALUES (7,'2025-02-25 02:36:00.252045','COMPLETED','2025-02-25 02:36:03.445583',2);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -3,15 +3,15 @@ package com.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailsResponse {
+public class PurchaseResponse {
 
-    Long orderDetailsId;
+    OrderResponse order;
 
-    Long courseId;
+    String redirectUrl;
 }

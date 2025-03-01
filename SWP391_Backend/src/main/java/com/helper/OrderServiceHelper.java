@@ -1,14 +1,22 @@
 package com.helper;
 
+import com.dto.response.OrderResponse;
 import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderServiceHelper {
+    private final ModelMapper modelMapper;
+
+    public OrderServiceHelper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
     public Specification<OrderEntity> filterByPrice(Double minPrice, Double maxPrice) {
         return (root, query, criteriaBuilder) -> {
             // Tạo subquery để tính tổng price của OrderDetails theo từng OrderEntity
@@ -20,26 +28,19 @@ public class OrderServiceHelper {
                     .where(criteriaBuilder.equal(orderDetailsRoot.get("order"), root));
 
             // Điều kiện lọc tổng price nằm trong khoảng minPrice - maxPrice
-            if(minPrice == null && maxPrice != null) {
+            if (minPrice == null && maxPrice != null) {
                 return criteriaBuilder.lessThanOrEqualTo(subquery, maxPrice);
-            }
-            else if(minPrice != null && maxPrice == null) {
+            } else if (minPrice != null && maxPrice == null) {
                 return criteriaBuilder.greaterThanOrEqualTo(subquery, minPrice);
-            }else {
-                return criteriaBuilder.between(subquery, minPrice,maxPrice);
+            } else {
+                return criteriaBuilder.between(subquery, minPrice, maxPrice);
             }
         };
     }
 
-
-    public Double parseDoubleOrNull(String value) {
-        if(value == null) {
-            return null;
-        }
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+    public OrderResponse convertToOrderResponse(OrderEntity orderEntity) {
+        OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
+        orderResponse.setUserId(orderEntity.getUser().getUserId());
+        return orderResponse;
     }
 }

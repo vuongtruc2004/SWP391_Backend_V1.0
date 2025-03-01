@@ -18,9 +18,7 @@ public class OrderDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_details_id")
     Long orderDetailsId;
-
-    Double price;
-
+    
     Long courseId;
 
     @ManyToOne

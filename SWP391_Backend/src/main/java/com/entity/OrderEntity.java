@@ -23,6 +23,9 @@ public class OrderEntity {
     @Column(name = "order_id")
     Long orderId;
 
+    @Column(name = "order_code")
+    String orderCode;
+
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
     OrderStatusEnum orderStatus;
@@ -33,6 +36,12 @@ public class OrderEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
+    @Column(name = "expired_at")
+    Instant expiredAt;
+
+    @Column(name = "total_amount")
+    Integer totalAmount;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
@@ -42,8 +51,6 @@ public class OrderEntity {
 
     @PrePersist
     public void handlePrePersist() {
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
         if (this.orderStatus == null) {
             this.orderStatus = OrderStatusEnum.PENDING;
         }

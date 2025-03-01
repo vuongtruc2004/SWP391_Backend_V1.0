@@ -1,69 +1,74 @@
 package com.repository;
 
-import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.OrderStatusEnum;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderRepository extends JpaSpecificationRepository<OrderEntity, Long> {
-    @Query("select o from OrderEntity o " +
-            "join o.orderDetails od " +
-            "where o.user.userId = :userId and od.courseId in (:courseIds)")
-    List<OrderEntity> findByUserIdAndCourseIds(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
-    // Tổng doanh thu của hôm nay
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE) " +
-            "AND o.orderStatus = :status")
-    Long getTodayRevenue(@Param("status") OrderStatusEnum status);
+    @Query("""
+            SELECT CASE WHEN COUNT(o) > 0 THEN TRUE ELSE FALSE END 
+            FROM OrderEntity o 
+            JOIN o.orderDetails od 
+            WHERE o.user.userId = :userId 
+            AND od.courseId in (:courseIds)
+            AND o.orderStatus = 'COMPLETED'
+            """)
+    boolean existsCompletedOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
 
-    // Tổng doanh thu của hôm qua
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE FUNCTION('DATE', o.createdAt) = :yesterday " +
-            "AND o.orderStatus = :status")
-    Long getYesterdayRevenue(@Param("yesterday") LocalDate yesterday, @Param("status") OrderStatusEnum status);
+    List<OrderEntity> findAllByOrderCode(String orderCode);
 
-    // Tổng doanh thu của tuần hiện tại
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
-            "AND o.createdAt <= CURRENT_DATE " +
-            "AND o.orderStatus = :status")
-    Long getCurrentWeekRevenue(@Param("status") OrderStatusEnum status);
-
-    // Tổng doanh thu của tháng hiện tại
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND MONTH(o.createdAt) = MONTH(CURRENT_DATE) " +
-            "AND o.createdAt <= CURRENT_DATE " +
-            "AND o.orderStatus = :status")
-    Long getCurrentMonthRevenue(@Param("status") OrderStatusEnum status);
-
-    // Tổng doanh thu của quý hiện tại
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE QUARTER(o.createdAt) = QUARTER(CURRENT_DATE) " +
-            "AND YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND o.createdAt <= CURRENT_DATE " +
-            "AND o.orderStatus = :status")
-    Long getCurrentQuarterRevenue(@Param("status") OrderStatusEnum status);
-
-    // Tổng doanh thu của năm hiện tại
-    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
-            "JOIN od.order o " +
-            "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND DATE(o.createdAt) <= CURRENT_DATE " +
-            "AND o.orderStatus = :status")
-    Long getCurrentYearRevenue(@Param("status") OrderStatusEnum status);
+//    // Tổng doanh thu của hôm nay
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE) " +
+//            "AND o.orderStatus = :status")
+//    Long getTodayRevenue(@Param("status") OrderStatusEnum status);
+//
+//    // Tổng doanh thu của hôm qua
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE FUNCTION('DATE', o.createdAt) = :yesterday " +
+//            "AND o.orderStatus = :status")
+//    Long getYesterdayRevenue(@Param("yesterday") LocalDate yesterday, @Param("status") OrderStatusEnum status);
+//
+//    // Tổng doanh thu của tuần hiện tại
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
+//            "AND o.createdAt <= CURRENT_DATE " +
+//            "AND o.orderStatus = :status")
+//    Long getCurrentWeekRevenue(@Param("status") OrderStatusEnum status);
+//
+//    // Tổng doanh thu của tháng hiện tại
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
+//            "AND MONTH(o.createdAt) = MONTH(CURRENT_DATE) " +
+//            "AND o.createdAt <= CURRENT_DATE " +
+//            "AND o.orderStatus = :status")
+//    Long getCurrentMonthRevenue(@Param("status") OrderStatusEnum status);
+//
+//    // Tổng doanh thu của quý hiện tại
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE QUARTER(o.createdAt) = QUARTER(CURRENT_DATE) " +
+//            "AND YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
+//            "AND o.createdAt <= CURRENT_DATE " +
+//            "AND o.orderStatus = :status")
+//    Long getCurrentQuarterRevenue(@Param("status") OrderStatusEnum status);
+//
+//    // Tổng doanh thu của năm hiện tại
+//    @Query("SELECT COALESCE(SUM(od.price), 0) FROM OrderDetailsEntity od " +
+//            "JOIN od.order o " +
+//            "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
+//            "AND DATE(o.createdAt) <= CURRENT_DATE " +
+//            "AND o.orderStatus = :status")
+//    Long getCurrentYearRevenue(@Param("status") OrderStatusEnum status);
 
 
     // Tổng số lượng học viên hôm nay (đếm DISTINCT user_id)
@@ -158,12 +163,11 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     Long getCurrentYearOrders(@Param("status") OrderStatusEnum status);
 
 
-    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
-            "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
-    Optional<OrderEntity> findOrderWithMinTotalPrice();
-
-    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
-            "GROUP BY o ORDER BY SUM(od.price) DESC LIMIT 1")
-    Optional<OrderEntity> findOrderWithMaxTotalPrice();
-
+//    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
+//            "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
+//    Optional<OrderEntity> findOrderWithMinTotalPrice();
+//
+//    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
+//            "GROUP BY o ORDER BY SUM(od.price) DESC LIMIT 1")
+//    Optional<OrderEntity> findOrderWithMaxTotalPrice();
 }
