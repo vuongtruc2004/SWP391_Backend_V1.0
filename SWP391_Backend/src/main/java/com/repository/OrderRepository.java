@@ -76,10 +76,12 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getYesterdayStudents(@Param("yesterday") LocalDate yesterday, @Param("status") OrderStatusEnum status);
 
-    @Query("SELECT COUNT(distinct o.user.userId) FROM OrderEntity o " +
-            "WHERE FUNCTION('YEARWEEK', o.createdAt, 1) = FUNCTION('YEARWEEK', CURRENT_DATE, 1) " +
+    // Tổng số lượng học viên tuần hiện tại (đếm DISTINCT user_id)
+    @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
+            "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
+            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
-    Long countOrdersInCurrentWeek(@Param("status") OrderStatusEnum status);
+    Long getCurrentWeekStudents(@Param("status") OrderStatusEnum status);
 
     // Tổng số lượng học viên tháng hiện tại (đếm DISTINCT user_id)
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +

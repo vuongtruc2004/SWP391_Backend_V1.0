@@ -133,7 +133,7 @@ public class OrderService {
         DashboardStatisticsResponse response = new DashboardStatisticsResponse();
         if (type.equals("week")) {
             response.setRevenue(orderRepository.getCurrentWeekRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.countOrdersInCurrentWeek(OrderStatusEnum.COMPLETED));
+            response.setStudents(orderRepository.getCurrentWeekStudents(OrderStatusEnum.COMPLETED));
             response.setOrders(orderRepository.getCurrentWeekOrders(OrderStatusEnum.COMPLETED));
         } else if (type.equals("month")) {
             response.setRevenue(orderRepository.getCurrentMonthRevenue(OrderStatusEnum.COMPLETED));
