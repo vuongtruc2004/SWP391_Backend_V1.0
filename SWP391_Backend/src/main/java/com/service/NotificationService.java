@@ -64,6 +64,7 @@ public class NotificationService {
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy thông báo!"));
         userNotificationEntity.setIsRead(true);
         userNotificationRepository.save(userNotificationEntity);
+        readSuccessNotification();
         return modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
     }
 
@@ -99,7 +100,7 @@ public class NotificationService {
         if (Boolean.TRUE.equals(notificationRequest.getGlobal())) {
             userNotificationRepository.insertUserNotification(newNotificationEntity.getNotificationId());
         } else {
-            userNotificationRepository.insertUserSpecificationNotifications(newNotificationEntity.getNotificationId(), notificationRequest.getFullname());
+            userNotificationRepository.insertUserSpecificationNotifications(newNotificationEntity.getNotificationId(), notificationRequest.getEmails());
         }
         readSuccessNotification();
         return BuildResponse.buildApiResponse(
@@ -114,7 +115,7 @@ public class NotificationService {
             Pageable pageable,
             Specification<NotificationEntity> specification
     ) {
-        Page<NotificationEntity> page = notificationRepository.findAll(specification, pageable);
+        Page<NotificationEntity> page = notificationRepository.findAllNotificationSorted(specification, pageable);
         List<NotificationResponse> userNotificationResponses = page.getContent().stream().map(NotificationEntity -> {
             NotificationResponse userNotificationResponse = modelMapper.map(NotificationEntity, NotificationResponse.class);
             return userNotificationResponse;
@@ -158,14 +159,16 @@ public class NotificationService {
     }
 
     @Transactional
-    public ApiResponse<String> deleteUserNotification(Long userNotificationId) {
-        userNotificationRepository.deleteUserNotificationEntityByUserNotificationId(userNotificationId);
+    public ApiResponse<UserNotificationResponse> deleteUserNotification(Long userNotificationId) {
+        UserNotificationEntity userNotificationEntity =  userNotificationRepository.findById(userNotificationId)
+                .orElseThrow(() -> new NotFoundException("Tìm kiếm thất bại!"));
+        UserNotificationResponse userNotificationResponse = modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
         readSuccessNotification();
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
                 "Thành công!",
                 "Bạn đã xóa người nhận thông báo thất bại!",
-                "Bạn đã xóa người nhận thông báo thành công!"
+                userNotificationResponse
         );
     }
 }

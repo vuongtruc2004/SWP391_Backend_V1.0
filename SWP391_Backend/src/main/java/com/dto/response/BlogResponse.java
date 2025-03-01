@@ -31,7 +31,7 @@ public class BlogResponse {
 
     Boolean published;
 
-    Boolean accepted;
+    Boolean pinned;
     
     Integer totalLikes;
 

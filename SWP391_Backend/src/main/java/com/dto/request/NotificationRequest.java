@@ -18,5 +18,5 @@ public class NotificationRequest {
 
     Boolean global;
     
-    List<String> fullname;
+    List<String> emails;
 }

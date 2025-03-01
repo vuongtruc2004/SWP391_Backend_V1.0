@@ -4,6 +4,7 @@ import com.entity.BlogEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -30,4 +31,16 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
     Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(Long userId, Long blogId, Pageable pageable);
 
     Optional<BlogEntity> findByBlogIdAndPublishedTrue(Long blogId);
+    @Query(value = """
+    SELECT * FROM blogs
+    ORDER BY 
+        CASE 
+            WHEN updated_at IS NOT NULL THEN updated_at
+            ELSE created_at
+        END DESC,
+        created_at DESC
+    """,
+            countQuery = "SELECT COUNT(*) FROM blogs",
+            nativeQuery = true)
+    Page<BlogEntity> findAllBlogsSorted(Specification<BlogEntity> specification, Pageable pageable);
 }

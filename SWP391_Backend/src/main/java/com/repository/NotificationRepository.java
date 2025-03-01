@@ -27,4 +27,17 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     List<NotificationEntity> getNotificationEntitiesByGlobalOrUserId(@Param("userId") Long userId);
     Page<NotificationEntity> findAll(Specification<NotificationEntity> specification, Pageable pageable);
     void deleteNotificationEntityByNotificationId(Long notificationId);
+
+    @Query(value = """
+    SELECT * FROM notifications
+    ORDER BY 
+        CASE 
+            WHEN udpated_at IS NOT NULL THEN udpated_at
+            ELSE created_at
+        END DESC,
+        created_at DESC
+    """,
+            countQuery = "SELECT COUNT(*) FROM notifications",
+            nativeQuery = true)
+    Page<NotificationEntity> findAllNotificationSorted(Specification<NotificationEntity> specification, Pageable pageable);
 }

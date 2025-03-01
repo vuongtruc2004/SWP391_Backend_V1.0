@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -19,4 +21,6 @@ public class BlogRequest {
     String plainContent;
     @NotBlank(message = "Cần có ít nhất một thumbnail!")
     String thumbnail;
+
+    List<String> hashtags;
 }

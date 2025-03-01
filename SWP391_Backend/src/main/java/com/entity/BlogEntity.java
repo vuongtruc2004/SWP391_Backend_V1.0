@@ -63,7 +63,7 @@ public class BlogEntity {
         this.createdAt = Instant.now();
         if (pinned == null) pinned = false;
         if (published == null) {
-            this.published = true;
+            this.published = false;
         }
     }
 

@@ -74,7 +74,7 @@ public class NotificationController {
     }
 
     @DeleteMapping("/delete-user/{userNotificationId}")
-    public ResponseEntity<ApiResponse<String>> deleteUserNotification(@PathVariable("userNotificationId") Long userNotificationId) {
+    public ResponseEntity<ApiResponse<UserNotificationResponse>> deleteUserNotification(@PathVariable("userNotificationId") Long userNotificationId) {
         return ResponseEntity.ok(notificationService.deleteUserNotification(userNotificationId));
     }
 }

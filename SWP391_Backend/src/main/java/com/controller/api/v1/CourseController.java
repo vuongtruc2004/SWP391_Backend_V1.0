@@ -116,4 +116,9 @@ public class CourseController {
         return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
     }
 
+    @GetMapping("/get-course/{courseId}")
+    public ResponseEntity<CourseDetailsResponse> getCourseDetailsAdmin(@PathVariable Long courseId) {
+        return ResponseEntity.ok().body(this.courseService.getCourseDetailsAdmin(courseId));
+    }
+
 }

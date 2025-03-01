@@ -38,13 +38,15 @@ public class BlogService {
     private final UserRepository userRepository;
     private final FileService fileService;
     private final UserServiceHelper userServiceHelper;
+    private final HashtagService hashtagService;
     @Autowired
-    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository, FileService fileService, UserServiceHelper userServiceHelper) {
+    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper, UserRepository userRepository, FileService fileService, UserServiceHelper userServiceHelper, HashtagService  hashtagService) {
         this.blogRepository = blogRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.fileService = fileService;
         this.userServiceHelper = userServiceHelper;
+        this.hashtagService = hashtagService;
     }
 
     public PageDetailsResponse<List<BlogResponse>> getBlogsWithFilter(
@@ -153,7 +155,7 @@ public class BlogService {
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
-        Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
+        Page<BlogEntity> page = blogRepository.findAllBlogsSorted(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);
             blogResponse.setTotalLikes(blogEntity.getLikes().size());
@@ -175,6 +177,7 @@ public class BlogService {
     public ApiResponse<BlogResponse> updateBlog(Long blogId, BlogRequest blogRequest){
         BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
         modelMapper.map(blogRequest, blogEntity);
+        blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
@@ -188,6 +191,7 @@ public class BlogService {
         UserEntity author = userServiceHelper.extractUserFromToken();
         BlogEntity blogEntity = modelMapper.map(blogRequest, BlogEntity.class);
         blogEntity.setUser(author);
+        blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(
                 HttpStatus.CREATED.value(),
