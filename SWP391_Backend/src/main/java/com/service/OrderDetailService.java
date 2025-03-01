@@ -15,39 +15,36 @@ import java.util.stream.Collectors;
 public class OrderDetailService {
 private final OrderDetailsRepository orderDetailsRepository;
 private final CourseRepository courseRepository;
-    public List<Map.Entry<String,Long>> count(){
-        List<Long> courseIds = this.orderDetailsRepository.findAllCourseId();
+    public List<Map.Entry<String, Long>> count() {
+        // Lấy danh sách tất cả courseId đã được bán
+        List<Long> soldCourseIds = this.orderDetailsRepository.findAllCourseId();
+
+        // Lấy toàn bộ khóa học
+        Map<Long, String> courseMap = this.courseRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(CourseEntity::getCourseId, CourseEntity::getCourseName));
+
+        // Dùng LinkedHashMap để giữ thứ tự nhập vào
         Map<String, Long> courseSold = new LinkedHashMap<>();
-        for (Long courseId : courseIds) {
-            String courseName = this.courseRepository.findById(courseId).get().getCourseName();
+
+        // Lặp qua danh sách course đã bán để tính tổng số lượng
+        for (Long courseId : soldCourseIds) {
+            String courseName = courseMap.get(courseId);
             Long countSold = this.orderDetailsRepository.countByCourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
             courseSold.put(courseName, countSold);
         }
-        List<CourseEntity> courseIdRemains = this.courseRepository.findAll();
-        for (CourseEntity course : courseIdRemains) {
-            if (!courseIds.contains(course.getCourseId())) { // Sửa lỗi contains
-                String courseName = course.getCourseName();
-                Long countSold = 0L;
-                courseSold.put(courseName, countSold);
-            }
 
+        // Xử lý các khóa học chưa bán
+        for (Map.Entry<Long, String> entry : courseMap.entrySet()) {
+            if (!courseSold.containsKey(entry.getValue())) {
+                courseSold.put(entry.getValue(), 0L);
+            }
         }
 
-        List<Map.Entry<String, Long> > list
-                = new ArrayList<>(
-                courseSold.entrySet());
-        Collections.sort(
-                list,
-                new Comparator<Map.Entry<String, Long>>() {
-                    public int compare(
-                            Map.Entry<String, Long> entry1,
-                            Map.Entry<String, Long> entry2)
-                    {
-                        return (int)(entry2.getValue() - entry1.getValue());
-
-                    }
-                });
-
-        return list;
+        // Sắp xếp danh sách theo số lượng bán giảm dần
+        return courseSold.entrySet()
+                .stream()
+                .sorted(Comparator.comparingLong(Map.Entry<String, Long>::getValue).reversed())
+                .collect(Collectors.toList());
     }
 }

@@ -91,17 +91,8 @@ public class SubjectService {
             Pageable pageable,
             Specification<SubjectEntity> specification
     ) {
-        boolean hasUpdatedRecords = subjectRepository.hasUpdatedRecords();
 
-        Sort sort = hasUpdatedRecords ? Sort.by("updatedAt").descending() : Sort.by("createdAt").descending();
-
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                sort
-        );
-
-        Page<SubjectEntity> page = subjectRepository.findAll(specification, sortedPageable);
+        Page<SubjectEntity> page = subjectRepository.findAllSubjectsSorted(specification, pageable);
         List<SubjectResponse> subjectResponses = page.getContent()
                 .stream().map(subjectEntity -> {
                     SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
