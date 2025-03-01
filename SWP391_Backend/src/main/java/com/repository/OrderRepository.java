@@ -163,11 +163,10 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     Long getCurrentYearOrders(@Param("status") OrderStatusEnum status);
 
 
-//    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
-//            "GROUP BY o ORDER BY SUM(od.price) ASC LIMIT 1")
-//    Optional<OrderEntity> findOrderWithMinTotalPrice();
-//
-//    @Query("SELECT o FROM OrderEntity o JOIN o.orderDetails od " +
-//            "GROUP BY o ORDER BY SUM(od.price) DESC LIMIT 1")
-//    Optional<OrderEntity> findOrderWithMaxTotalPrice();
+    @Query("select MIN(o.totalAmount) FROM OrderEntity o")
+    Double findMinTotalAmount();
+
+
+    @Query("SELECT MAX(o.totalAmount) FROM OrderEntity o")
+    Double findMaxTotalAmount();
 }

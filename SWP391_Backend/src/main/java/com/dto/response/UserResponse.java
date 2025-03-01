@@ -49,4 +49,9 @@ public class UserResponse {
     Instant updatedAt;
     
     Set<UserProgressResponse> userProgresses;
+
+    String job;
+    String achievement;
+    String description;
+    Integer yearOfExperience;
 }

@@ -34,7 +34,9 @@ public class OrderResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant expiredAt;
 
-    Long userId;
+    Integer totalAmount;
+
+    UserResponse user;
 
     Set<OrderDetailsResponse> orderDetails;
 }

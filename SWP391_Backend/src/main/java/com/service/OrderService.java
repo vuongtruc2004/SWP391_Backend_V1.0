@@ -1,6 +1,9 @@
 package com.service;
 
+import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.OrderResponse;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.UserResponse;
 import com.entity.CourseEntity;
 import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
@@ -11,11 +14,16 @@ import com.helper.OrderServiceHelper;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.repository.UserRepository;
+import com.util.BuildResponse;
 import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -50,60 +58,35 @@ public class OrderService {
             throw new InvalidRequestInput("Bạn đã thanh toán hóa đơn này rồi!");
         }
     }
+    public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
+            Pageable pageable,
+            Specification<OrderEntity> specification) {
+        Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
 
-//    public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
-//            Pageable pageable,
-//            Specification<OrderEntity> specification,
-//            String minPrice,
-//            String maxPrice) {
-//
-//        Double minPriceDouble = orderServiceHelper.parseDoubleOrNull(minPrice);
-//        Double maxPriceDouble = orderServiceHelper.parseDoubleOrNull(maxPrice);
-//
-//        if (minPriceDouble != null || maxPriceDouble != null) {
-//            specification = specification.and(orderServiceHelper.filterByPrice(minPriceDouble, maxPriceDouble));
-//        }
-//        Page<OrderEntity> page = orderRepository.findAll(specification, pageable);
-//
-//        List<OrderResponse> orderResponses = page.getContent()
-//                .stream()
-//                .map(orderEntity -> {
-//                    OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
-//
-//                    Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
-//                            .map(orderDetailsEntity -> {
-//                                OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetailsEntity, OrderDetailsResponse.class);
-//                                CourseEntity courseEntity = courseRepository.findById(orderDetailsEntity.getCourseId())
-//                                        .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học"));
-//                                orderDetailsResponse.setCourse(modelMapper.map(courseEntity, CourseResponse.class));
-//                                return orderDetailsResponse;
-//                            })
-//                            .collect(Collectors.toSet());
-//
-//                    orderResponse.setOrderDetails(orderDetailsResponses);
-//                    return orderResponse;
-//                })
-//                .toList();
-//
-//        return BuildResponse.buildPageDetailsResponse(
-//                page.getNumber() + 1,
-//                page.getSize(),
-//                page.getTotalPages(),
-//                page.getTotalElements(),
-//                orderResponses);
-//    }
+        List<OrderResponse> orderResponses = page.getContent()
+                .stream()
+                .map(orderEntity -> {
+                    OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
+                    UserEntity userEntity = orderEntity.getUser();
+                    orderResponse.setUser(modelMapper.map(userEntity, UserResponse.class));
+                    return orderResponse;
+                })
+                .toList();
 
-//    public MinMaxPriceResponse getMaxMinPriceOfOrder() {
-//        OrderEntity minOrder = orderRepository.findOrderWithMinTotalPrice().orElse(null);
-//        OrderEntity maxOrder = orderRepository.findOrderWithMaxTotalPrice().orElse(null);
-//        if (minOrder == null && maxOrder == null) {
-//            return new MinMaxPriceResponse(0.0, 0.0);
-//        }
-//        Double minPrice = minOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
-//        Double maxPrice = maxOrder.getOrderDetails().stream().mapToDouble(OrderDetailsEntity::getPrice).sum();
-//
-//        return new MinMaxPriceResponse(minPrice, maxPrice);
-//    }
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                orderResponses);
+    }
+
+    public MinMaxPriceResponse getMaxMinPriceOfOrder() {
+        Double minPrice = orderRepository.findMinTotalAmount();
+        Double maxPrice = orderRepository.findMaxTotalAmount();
+
+        return new MinMaxPriceResponse(minPrice, maxPrice);
+    }
 //
 //    public Map<String, Long> countOrdersOnEachDayOfWeek(LocalDate startOfWeek, LocalDate endOfWeek) {
 //        Map<String, Long> dayOfWeekCounts = new HashMap<>();

@@ -57,4 +57,9 @@ public class UserRequest {
     @JsonDeserialize(using = StringToInstantDeserializer.class)
     @DobConstraint(min = 6)
     Instant dob;
+
+    String job;
+    String achievement;
+    String description;
+    Integer yearOfExperience;
 }

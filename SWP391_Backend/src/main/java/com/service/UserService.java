@@ -7,15 +7,13 @@ import com.dto.response.ApiResponse;
 import com.dto.response.GenderCountResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserResponse;
-import com.entity.CourseEntity;
-import com.entity.OTPEntity;
-import com.entity.RoleEntity;
-import com.entity.UserEntity;
+import com.entity.*;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
 import com.helper.UserServiceHelper;
+import com.repository.ExpertRepository;
 import com.repository.OTPRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
@@ -52,8 +50,9 @@ public class UserService {
     private final OTPRepository otpRepository;
     private final FileService fileService;
     private final UserServiceHelper userServiceHelper;
+    private final ExpertRepository expertRepository;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
@@ -62,6 +61,7 @@ public class UserService {
         this.otpRepository = otpRepository;
         this.fileService = fileService;
         this.userServiceHelper = userServiceHelper;
+        this.expertRepository = expertRepository;
     }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
@@ -84,7 +84,6 @@ public class UserService {
         UserEntity userEntity = modelMapper.map(registerRequest, UserEntity.class);
         userEntity.setAccountType(AccountTypeEnum.CREDENTIALS);
         userEntity.setActive(false);
-        userEntity.setGender(GenderEnum.UNKNOWN);
         userEntity.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         userEntity.setRole(roleEntity);
         UserEntity savedUser = userRepository.save(userEntity);
@@ -190,20 +189,60 @@ public class UserService {
     }
 
     public UserResponse createUser(UserRequest request) {
-        if (request.getUserId() != null) {
-            throw new UserException("Không được để id");
+        try {
+            if (request.getUserId() != null) {
+                throw new UserException("Không được để id");
+            }
+            // Tìm role
+            RoleEntity roleEntity = roleRepository.findByRoleName(request.getRoleName())
+                    .orElseThrow(() -> new RoleException("Role không tìm thấy"));
+
+            // Kiểm tra email đã tồn tại hay chưa
+            if (userRepository.existsByEmailAndAccountType(request.getEmail(), AccountTypeEnum.CREDENTIALS)) {
+                throw new UserException("Email đã được sử dụng");
+            }
+
+            // Tạo UserEntity
+            UserEntity user = modelMapper.map(request, UserEntity.class);
+            user.setRole(roleEntity);
+            user.setAccountType(AccountTypeEnum.CREDENTIALS);
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+            // Lưu user trước
+            UserEntity savedUser = userRepository.save(user);
+
+// Nếu role là EXPERT, tạo ExpertEntity và lưu tiếp
+            if (RoleNameEnum.EXPERT.equals(request.getRoleName())) {
+                ExpertEntity expert = ExpertEntity.builder()
+                        .user(savedUser)  // ✅ Dùng savedUser đã có ID
+                        .job(request.getJob())
+                        .achievement(request.getAchievement())
+                        .description(request.getDescription())
+                        .yearOfExperience(request.getYearOfExperience())
+                        .build();
+
+                expert = expertRepository.save(expert); // ✅ Lưu expert vào DB
+                savedUser.setExpert(expert);
+            }
+
+// Map dữ liệu sang UserResponse
+            UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
+
+
+            // Nếu là EXPERT, gán thêm thông tin
+            if (savedUser.getExpert() != null) {
+                userResponse.setJob(savedUser.getExpert().getJob());
+                userResponse.setAchievement(savedUser.getExpert().getAchievement());
+                userResponse.setDescription(savedUser.getExpert().getDescription());
+                userResponse.setYearOfExperience(savedUser.getExpert().getYearOfExperience());
+            }
+
+            return userResponse;
+        } catch (Exception e) {
+            e.printStackTrace();  // In lỗi ra console để debug
+            throw new RuntimeException("Lỗi khi tạo người dùng: " + e.getMessage());
         }
-        RoleEntity roleEntity = roleRepository.findByRoleName(request.getRoleName())
-                .orElseThrow(() -> new RoleException("Role không tìm thấy"));
-        if (userRepository.existsByEmailAndAccountType(request.getEmail(), AccountTypeEnum.CREDENTIALS)) {
-            throw new UserException("Email đã được sử dụng");
-        }
-        UserEntity user = modelMapper.map(request, UserEntity.class);
-        user.setRole(roleEntity);
-        user.setAccountType(AccountTypeEnum.CREDENTIALS);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        UserEntity savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserResponse.class);
+
     }
 
     public UserResponse updateUser(UserRequest request) {
@@ -270,6 +309,7 @@ public class UserService {
             throw new StorageException("Không tìm thấy ảnh");
         }
     }
+
     public UserResponse updateAvatarByAdmin(MultipartFile file, String folder) throws URISyntaxException, IOException {
         if (file == null || file.isEmpty()) {
             throw new StorageException("File bị rỗng");
@@ -294,10 +334,10 @@ public class UserService {
     }
 
     public GenderCountResponse genderCount() {
-        Long countAllGender=this.userRepository.count();
-        Long countMale=this.userRepository.countByGender(GenderEnum.MALE);
-        Long countFemale=this.userRepository.countByGender(GenderEnum.FEMALE);
-        Long countUnknown=countAllGender-countMale-countFemale;
+        Long countAllGender = this.userRepository.count();
+        Long countMale = this.userRepository.countByGender(GenderEnum.MALE);
+        Long countFemale = this.userRepository.countByGender(GenderEnum.FEMALE);
+        Long countUnknown = countAllGender - countMale - countFemale;
         return new GenderCountResponse(countMale, countFemale, countUnknown);
     }
 
