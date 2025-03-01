@@ -92,12 +92,18 @@ public class CourseService {
         );
     }
 
-    public CourseDetailsResponse getCourseById(Long courseId) {
+    public CourseDetailsResponse getCourseByIdAndAccepted(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
         if (Boolean.FALSE.equals(courseEntity.getAccepted())) {
             throw new CourseException("Khóa học không tồn tại!");
         }
+        return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+    }
+
+    public CourseDetailsResponse getCourseById(Long courseId) {
+        CourseEntity courseEntity = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
@@ -217,11 +223,11 @@ public class CourseService {
             throw new InvalidRequestInput("Khóa học này chưa có bài giảng, không thể kích hoạt");
         }
 
-        String message = "chấp nhận";
+        String message = "ẩn";
         if (Boolean.TRUE.equals(courseEntity.getAccepted())) {
             courseEntity.setAccepted(false);
         } else {
-            message = "ẩn";
+            message = "chấp nhận";
             courseEntity.setAccepted(true);
         }
 

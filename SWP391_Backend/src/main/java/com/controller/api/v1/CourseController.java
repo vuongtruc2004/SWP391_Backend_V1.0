@@ -46,6 +46,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getCoursesWithFilter(specification, pageable, specialSort, expertIds, subjectIds, event));
     }
 
+    @ApiMessage("Lấy khóa học đã được kích hoạt thành công!")
+    @GetMapping("/accepted/{courseId}")
+    public ResponseEntity<CourseDetailsResponse> getCourseByIdAndAccepted(@PathVariable(name = "courseId") Long courseId) {
+        return ResponseEntity.ok(courseService.getCourseByIdAndAccepted(courseId));
+    }
+
     @ApiMessage("Lấy khóa học thành công!")
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailsResponse> getCourseById(@PathVariable(name = "courseId") Long courseId) {

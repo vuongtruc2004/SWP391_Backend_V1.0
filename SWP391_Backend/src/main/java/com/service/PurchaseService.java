@@ -3,6 +3,7 @@ package com.service;
 import com.dto.request.PurchaseRequest;
 import com.dto.response.OrderResponse;
 import com.dto.response.PurchaseResponse;
+import com.entity.CourseEntity;
 import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
 import com.entity.UserEntity;
@@ -109,6 +110,16 @@ public class PurchaseService {
         }
 
         orderEntityList.get(0).setOrderStatus(OrderStatusEnum.COMPLETED);
+
+        for (OrderDetailsEntity orderDetailsEntity : orderEntityList.get(0).getOrderDetails()) {
+            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourseId())
+                    .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+            Set<UserEntity> currentRegister = courseEntity.getUsers();
+            currentRegister.add(orderEntityList.get(0).getUser());
+            courseEntity.setUsers(currentRegister);
+            courseRepository.save(courseEntity);
+        }
+
         OrderEntity newOrderEntity = orderRepository.save(orderEntityList.get(0));
         return orderServiceHelper.convertToOrderResponse(newOrderEntity);
     }
