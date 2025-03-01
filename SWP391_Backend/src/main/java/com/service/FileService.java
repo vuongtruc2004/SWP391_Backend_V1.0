@@ -55,5 +55,22 @@ public class FileService {
                 finalName
         );
     }
+    public ApiResponse<String> uploadDocument(MultipartFile file, String folder) throws URISyntaxException,
+            IOException {
+        // create unique filename
+        String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+        URI uri = new URI(assetURI + "/" + folder + "/" + finalName);
+        Path path = Paths.get(uri);
+        try (InputStream inputStream = file.getInputStream()) {
+            Files.copy(inputStream, path,
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
+        return BuildResponse.buildApiResponse(
+                200,
+                "Upload tài liệu thành công",
+                null,
+                finalName
+        );
+    }
 
 }
