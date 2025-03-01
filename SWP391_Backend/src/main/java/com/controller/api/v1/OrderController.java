@@ -71,8 +71,8 @@ public class OrderController {
 //        return ResponseEntity.ok(orderService.getCoursesByIds(courseIds));
 //    }
 
-//    @GetMapping("/count")
-//    public List<Map.Entry<String, Long>> count() {
-//        return this.orderDetailService.count();
-//    }
+    @GetMapping("/count")
+    public List<Map.Entry<String, Long>> count() {
+        return this.orderDetailService.count();
+    }
 }
