@@ -31,6 +31,12 @@ public class PurchaseController {
         return ResponseEntity.ok(paymentService.createPurchaseRequest(purchaseRequest, ipAddress));
     }
 
+    @ApiMessage("Kích hoạt đơn hàng thành công!")
+    @GetMapping
+    public ResponseEntity<OrderResponse> activeOrder(@RequestParam String orderCode) {
+        return ResponseEntity.ok(paymentService.activeOrder(orderCode));
+    }
+
     @ApiMessage("Thanh toán đơn hàng thành công!")
     @GetMapping("/vnpay-ipn")
     public String processIpn(@RequestParam Map<String, String> params, Model model) {

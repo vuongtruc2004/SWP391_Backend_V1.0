@@ -60,6 +60,7 @@ public class OrderService {
             throw new InvalidRequestInput("Bạn đã thanh toán hóa đơn này rồi!");
         }
     }
+
     public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
             Pageable pageable,
             Specification<OrderEntity> specification) {
@@ -89,6 +90,7 @@ public class OrderService {
 
         return new MinMaxPriceResponse(minPrice, maxPrice);
     }
+
     public Map<String, Long> countOrdersOnEachDayOfWeek(LocalDate startOfWeek, LocalDate endOfWeek) {
         Map<String, Long> dayOfWeekCounts = new HashMap<>();
         LocalDate today = LocalDate.now();
@@ -131,7 +133,7 @@ public class OrderService {
         DashboardStatisticsResponse response = new DashboardStatisticsResponse();
         if (type.equals("week")) {
             response.setRevenue(orderRepository.getCurrentWeekRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.getCurrentWeekStudents(OrderStatusEnum.COMPLETED));
+            response.setStudents(orderRepository.countOrdersInCurrentWeek(OrderStatusEnum.COMPLETED));
             response.setOrders(orderRepository.getCurrentWeekOrders(OrderStatusEnum.COMPLETED));
         } else if (type.equals("month")) {
             response.setRevenue(orderRepository.getCurrentMonthRevenue(OrderStatusEnum.COMPLETED));
@@ -155,7 +157,8 @@ public class OrderService {
 
         return response;
     }
-//
+
+    //
 //    public List<CourseResponse> getCoursesByIds(List<Long> courseIds) {
 //        List<CourseEntity> courseEntityList = courseRepository.findAllById(courseIds);
 //        return courseEntityList.stream().map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class)).toList();

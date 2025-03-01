@@ -29,6 +29,8 @@ CREATE TABLE `answers` (
   `content` varchar(255) DEFAULT NULL,
   `correct` bit(1) DEFAULT NULL,
   `question_id` bigint DEFAULT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`answer_id`),
   KEY `FK3erw1a3t0r78st8ty27x6v3g1` (`question_id`),
   CONSTRAINT `FK3erw1a3t0r78st8ty27x6v3g1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
@@ -710,22 +712,6 @@ CREATE TABLE `course_user` (
 
 LOCK TABLES `course_user` WRITE;
 /*!40000 ALTER TABLE `course_user` DISABLE KEYS */;
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (8,2);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (1,6);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (2,6);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (19,9);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (20,9);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (3,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (4,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (9,10);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (13,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (14,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (15,11);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (7,21);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (9,22);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (10,22);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (11,22);
-INSERT INTO `course_user` (`course_id`, `user_id`) VALUES (12,22);
 /*!40000 ALTER TABLE `course_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,10 +874,11 @@ CREATE TABLE `lessons` (
   `updated_at` datetime(6) DEFAULT NULL,
   `video_url` varchar(255) DEFAULT NULL,
   `chapter_id` bigint DEFAULT NULL,
+  `description` mediumtext,
   PRIMARY KEY (`lesson_id`),
   KEY `FKmb78vk1f2oljr16oj1hpo45ma` (`chapter_id`),
   CONSTRAINT `FKmb78vk1f2oljr16oj1hpo45ma` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1200,9 +1187,12 @@ DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `question_id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `questions`

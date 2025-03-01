@@ -30,7 +30,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getTodayRevenue(@Param("status") OrderStatusEnum status);
 
-
     // Tổng doanh thu của hôm qua
     @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM OrderEntity o " +
             "WHERE FUNCTION('DATE', o.createdAt) = :yesterday " +
@@ -77,12 +76,10 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "AND o.orderStatus = :status")
     Long getYesterdayStudents(@Param("yesterday") LocalDate yesterday, @Param("status") OrderStatusEnum status);
 
-    // Tổng số lượng học viên tuần hiện tại (đếm DISTINCT user_id)
-    @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
-            "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
-            "AND o.createdAt <= CURRENT_DATE " +
+    @Query("SELECT COUNT(distinct o.user.userId) FROM OrderEntity o " +
+            "WHERE FUNCTION('YEARWEEK', o.createdAt, 1) = FUNCTION('YEARWEEK', CURRENT_DATE, 1) " +
             "AND o.orderStatus = :status")
-    Long getCurrentWeekStudents(@Param("status") OrderStatusEnum status);
+    Long countOrdersInCurrentWeek(@Param("status") OrderStatusEnum status);
 
     // Tổng số lượng học viên tháng hiện tại (đếm DISTINCT user_id)
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +

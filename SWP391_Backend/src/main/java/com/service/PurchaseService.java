@@ -94,17 +94,8 @@ public class PurchaseService {
                 .build();
     }
 
-    public OrderResponse processIpn(Map<String, String> params) {
-        if (!paymentServiceHelper.verifyIpn(params)) {
-            throw new PurchaseException("Thông tin không hợp lệ!");
-        }
-        String txnRef = params.get(VnPayUtil.VNP_TXN_REF);
-        String responseCode = params.get(VnPayUtil.VNP_RESPONSE_CODE);
-
-        if (!responseCode.equals(VnPayUtil.VNP_SUCCESS_CODE)) {
-            throw new PurchaseException("Thanh toán không thành công, vui lòng liên hệ với FanPage LearnGo để được hỗ trợ!");
-        }
-        List<OrderEntity> orderEntityList = orderRepository.findAllByOrderCode(txnRef);
+    public OrderResponse activeOrder(String orderCode) {
+        List<OrderEntity> orderEntityList = orderRepository.findAllByOrderCode(orderCode);
         if (orderEntityList.size() != 1 || !orderEntityList.get(0).getOrderStatus().equals(OrderStatusEnum.PENDING)) {
             throw new PurchaseException("Đơn hàng không hợp lệ!");
         }
@@ -124,6 +115,19 @@ public class PurchaseService {
         return orderServiceHelper.convertToOrderResponse(newOrderEntity);
     }
 
+    public OrderResponse processIpn(Map<String, String> params) {
+        if (!paymentServiceHelper.verifyIpn(params)) {
+            throw new PurchaseException("Thông tin không hợp lệ!");
+        }
+        String txnRef = params.get(VnPayUtil.VNP_TXN_REF);
+        String responseCode = params.get(VnPayUtil.VNP_RESPONSE_CODE);
+
+        if (!responseCode.equals(VnPayUtil.VNP_SUCCESS_CODE)) {
+            throw new PurchaseException("Thanh toán không thành công, vui lòng liên hệ với FanPage LearnGo để được hỗ trợ!");
+        }
+        return activeOrder(txnRef);
+    }
+
     private OrderResponse createOrder(PurchaseRequest purchaseRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
         if (orderRepository.existsCompletedOrder(userEntity.getUserId(), purchaseRequest.getCourseIds())) {
             throw new PurchaseException("Bạn đã mua khóa học này rồi!");
@@ -133,6 +137,7 @@ public class PurchaseService {
         Set<OrderDetailsEntity> orderDetailsEntitySet = new HashSet<>();
         orderEntity.setUser(userEntity);
         orderEntity.setOrderCode(txnRef);
+        orderEntity.setTotalAmount(purchaseRequest.getTotalPrice());
         orderEntity.setCreatedAt(purchaseServiceHelper.parseVnTime(createDate));
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 
