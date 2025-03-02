@@ -61,6 +61,7 @@ public class BlogEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
         if (pinned == null) pinned = false;
         if (published == null) {
             this.published = false;

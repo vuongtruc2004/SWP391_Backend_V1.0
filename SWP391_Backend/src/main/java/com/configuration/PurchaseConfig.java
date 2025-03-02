@@ -17,7 +17,7 @@ public class PurchaseConfig {
 
     private final OrderRepository orderRepository;
 
-    @Scheduled(cron = "0 */15 * * * *") // Chạy mỗi 15 phút (phút chia hết cho 15)
+    @Scheduled(fixedRate = 3000000)
     @Transactional
     public void removeAllExpiredOrders() {
         Instant now = Instant.now();
