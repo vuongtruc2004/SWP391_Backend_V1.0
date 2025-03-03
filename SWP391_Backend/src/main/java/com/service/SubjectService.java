@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -92,7 +93,7 @@ public class SubjectService {
             Specification<SubjectEntity> specification
     ) {
 
-        Page<SubjectEntity> page = subjectRepository.findAllSubjectsSorted(specification, pageable);
+        Page<SubjectEntity> page = subjectRepository.findAll(specification, pageable);
         List<SubjectResponse> subjectResponses = page.getContent()
                 .stream().map(subjectEntity -> {
                     SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
@@ -100,19 +101,13 @@ public class SubjectService {
                     subjectResponse.setSubjectName(subjectEntity.getSubjectName());
                     subjectResponse.setDescription(subjectEntity.getDescription());
                     subjectResponse.setTotalCourses(subjectEntity.getCourses().size());
-                    subjectResponse.setListCourses(subjectEntity.getCourses()
-                            .stream()
-                            .map(CourseEntity::getCourseName)
-                            .collect(Collectors.toSet()));
+                    subjectResponse.setListCourses(subjectEntity.getCourses().stream().map(CourseEntity::getCourseName).collect(Collectors.toSet()));
                     subjectResponse.setThumbnail(subjectEntity.getThumbnail());
                     return subjectResponse;
-                })
-                .toList();
-
+                }).toList();
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
-                page.getSize(),
-                page.getTotalPages(),
+                page.getSize(), page.getTotalPages(),
                 page.getTotalElements(),
                 subjectResponses
         );
@@ -154,6 +149,7 @@ public class SubjectService {
         subjectEntity.setSubjectName(subjectRequest.getSubjectName());
         subjectEntity.setThumbnail(subjectRequest.getThumbnail());
         subjectEntity.setDescription(subjectRequest.getDescription());
+        subjectEntity.setUpdatedAt(Instant.now());
         return modelMapper.map(subjectRepository.save(subjectEntity), SubjectResponse.class);
     }
 

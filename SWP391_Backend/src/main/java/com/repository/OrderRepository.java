@@ -25,6 +25,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
     List<OrderEntity> findAllByOrderCode(String orderCode);
 
+    // Tổng doanh thu của hôm nay
     @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM OrderEntity o " +
             "WHERE FUNCTION('DATE', o.createdAt) = FUNCTION('DATE', CURRENT_DATE) " +
             "AND o.orderStatus = :status")
@@ -79,7 +80,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     // Tổng số lượng học viên tuần hiện tại (đếm DISTINCT user_id)
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
             "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
-            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentWeekStudents(@Param("status") OrderStatusEnum status);
 
@@ -87,7 +87,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
             "AND MONTH(o.createdAt) = MONTH(CURRENT_DATE) " +
-            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentMonthStudents(@Param("status") OrderStatusEnum status);
 
@@ -102,7 +101,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     // Tổng số lượng học viên năm hiện tại (đếm DISTINCT user_id)
     @Query("SELECT COUNT(DISTINCT o.user.userId) FROM OrderEntity o " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND DATE(o.createdAt) <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentYearStudents(@Param("status") OrderStatusEnum status);
 
@@ -124,7 +122,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
             "JOIN o.orderDetails od " +
             "WHERE YEARWEEK(o.createdAt, 1) = YEARWEEK(CURRENT_DATE, 1) " +
-            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentWeekOrders(@Param("status") OrderStatusEnum status);
 
@@ -133,7 +130,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "JOIN o.orderDetails od " +
             "WHERE MONTH(o.createdAt) = MONTH(CURRENT_DATE) " +
             "AND YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentMonthOrders(@Param("status") OrderStatusEnum status);
 
@@ -142,7 +138,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             "JOIN o.orderDetails od " +
             "WHERE QUARTER(o.createdAt) = QUARTER(CURRENT_DATE) " +
             "AND YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND o.createdAt <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentQuarterOrders(@Param("status") OrderStatusEnum status);
 
@@ -150,7 +145,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     @Query("SELECT COUNT(DISTINCT od.orderDetailsId) FROM OrderEntity o " +
             "JOIN o.orderDetails od " +
             "WHERE YEAR(o.createdAt) = YEAR(CURRENT_DATE) " +
-            "AND DATE(o.createdAt) <= CURRENT_DATE " +
             "AND o.orderStatus = :status")
     Long getCurrentYearOrders(@Param("status") OrderStatusEnum status);
 

@@ -20,16 +20,4 @@ public interface SubjectRepository extends JpaSpecificationRepository<SubjectEnt
 
     boolean existsBySubjectNameAndSubjectIdNot(String subjectName, Long subjectId);
 
-    @Query(value = """
-    SELECT * FROM subjects
-    ORDER BY 
-        CASE 
-            WHEN updated_at IS NOT NULL THEN updated_at
-            ELSE created_at
-        END DESC,
-        created_at DESC
-    """,
-            countQuery = "SELECT COUNT(*) FROM subjects",
-            nativeQuery = true)
-    Page<SubjectEntity> findAllSubjectsSorted(Specification<SubjectEntity> specification, Pageable pageable);
 }

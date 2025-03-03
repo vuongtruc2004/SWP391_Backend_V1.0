@@ -42,6 +42,7 @@ public class SubjectEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @PreUpdate
