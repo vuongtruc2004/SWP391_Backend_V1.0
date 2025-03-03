@@ -155,7 +155,7 @@ public class BlogService {
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
-        Page<BlogEntity> page = blogRepository.findAllBlogsSorted(specification, pageable);
+        Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);
             blogResponse.setTotalLikes(blogEntity.getLikes().size());

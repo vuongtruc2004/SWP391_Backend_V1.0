@@ -163,6 +163,7 @@ public class NotificationService {
         UserNotificationEntity userNotificationEntity =  userNotificationRepository.findById(userNotificationId)
                 .orElseThrow(() -> new NotFoundException("Tìm kiếm thất bại!"));
         UserNotificationResponse userNotificationResponse = modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
+        userNotificationRepository.delete(userNotificationEntity);
         readSuccessNotification();
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
