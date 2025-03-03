@@ -741,7 +741,7 @@ CREATE TABLE `quizzes` (
   `published` bit(1) DEFAULT NULL,
   `started_at` datetime(6) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `udpated_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `chapter_id` bigint DEFAULT NULL,
   `expert_id` bigint DEFAULT NULL,
   PRIMARY KEY (`quiz_id`),

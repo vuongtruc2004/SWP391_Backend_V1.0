@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,7 +34,7 @@ public class QuizEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
-    @Column(name = "udpated_at")
+    @Column(name = "updated_at")
     Instant updatedAt;
 
     @Column(name = "started_at")
@@ -65,6 +66,7 @@ public class QuizEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @PreUpdate
