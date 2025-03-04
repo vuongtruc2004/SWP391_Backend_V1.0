@@ -28,11 +28,9 @@ public class QuestionEntity {
     String title;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @JsonManagedReference
     Set<AnswerEntity> answers;
 
     @ManyToMany(mappedBy = "questions",cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("questions")
     List<QuizEntity> quizzes;
 
     @Column(name = "created_at")
