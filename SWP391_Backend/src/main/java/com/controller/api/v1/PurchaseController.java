@@ -37,6 +37,12 @@ public class PurchaseController {
         return ResponseEntity.ok(paymentService.activeOrder(orderCode));
     }
 
+    @ApiMessage("Xóa hóa đơn thành công!")
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> deleteOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(paymentService.deleteOrder(orderId));
+    }
+
     @ApiMessage("Thanh toán đơn hàng thành công!")
     @GetMapping("/vnpay-ipn")
     public String processIpn(@RequestParam Map<String, String> params, Model model) {

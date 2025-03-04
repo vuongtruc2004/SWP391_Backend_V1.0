@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaSpecificationRepository<OrderEntity, Long> {
     @Query("""
@@ -155,4 +156,6 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
     @Query("SELECT MAX(o.totalAmount) FROM OrderEntity o")
     Double findMaxTotalAmount();
+
+    Optional<OrderEntity> findByOrderIdAndOrderStatusNot(Long orderId, OrderStatusEnum orderStatus);
 }

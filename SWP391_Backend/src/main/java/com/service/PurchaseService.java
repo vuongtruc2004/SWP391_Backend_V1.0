@@ -115,6 +115,16 @@ public class PurchaseService {
         return orderServiceHelper.convertToOrderResponse(newOrderEntity);
     }
 
+    public OrderResponse deleteOrder(Long orderId) {
+        if (orderId == null) {
+            throw new PurchaseException("OrderId không được null!");
+        }
+        OrderEntity orderEntity = orderRepository.findByOrderIdAndOrderStatusNot(orderId, OrderStatusEnum.COMPLETED)
+                .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại hoặc đã được thanh toán!"));
+        orderRepository.delete(orderEntity);
+        return orderServiceHelper.convertToOrderResponse(orderEntity);
+    }
+
     public OrderResponse processIpn(Map<String, String> params) {
         if (!paymentServiceHelper.verifyIpn(params)) {
             throw new PurchaseException("Thông tin không hợp lệ!");
