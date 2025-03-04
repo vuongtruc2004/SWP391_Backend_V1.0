@@ -98,6 +98,7 @@ public class UserEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
         if (active == null) {
             active = true;
         }

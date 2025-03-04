@@ -1,5 +1,6 @@
 package com.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.util.deserializer.StringToInstantDeserializer;
 import lombok.AccessLevel;
@@ -27,9 +28,9 @@ public class QuizRequest {
 
 
 
-    @JsonDeserialize(using = StringToInstantDeserializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant startedAt;
-    @JsonDeserialize(using = StringToInstantDeserializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant endedAt;
 
     List<String> questions;

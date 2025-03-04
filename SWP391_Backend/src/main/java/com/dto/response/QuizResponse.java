@@ -21,16 +21,16 @@ public class QuizResponse {
     Integer maxAttempts;
     Boolean published;
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant startedAt;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+7")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant endedAt;
-    ChapterResponse lesson;
+    ChapterResponse chapter;
 
     ExpertResponse expert;
 
