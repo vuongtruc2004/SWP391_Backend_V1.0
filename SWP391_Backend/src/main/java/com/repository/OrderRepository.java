@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             """)
     boolean existsCompletedOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
 
-    List<OrderEntity> findAllByOrderStatusAndExpiredAtLessThan(OrderStatusEnum orderStatus, Instant currentTime);
+    List<OrderEntity> findAllByOrderStatusNotAndExpiredAtLessThan(OrderStatusEnum orderStatus, Instant expiredAtIsLessThan);
 
     List<OrderEntity> findAllByOrderCode(String orderCode);
 
