@@ -22,6 +22,7 @@ public class ChapterEntity {
     @Column(name = "chapter_id")
     Long chapterId;
 
+
     String title;
 
     @Column(columnDefinition = "MEDIUMTEXT")

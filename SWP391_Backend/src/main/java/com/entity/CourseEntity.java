@@ -27,6 +27,7 @@ public class CourseEntity implements Serializable {
     @Column(name = "course_id")
     Long courseId;
 
+
     String courseName;
 
     @Column(columnDefinition = "LONGTEXT")

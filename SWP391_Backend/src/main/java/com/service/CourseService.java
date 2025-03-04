@@ -19,6 +19,7 @@ import com.helper.CourseServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.*;
 import com.util.BuildResponse;
+import com.util.CourseValidUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -245,7 +246,7 @@ public class CourseService {
         if (user == null) {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-
+        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(),courseRequest.getDescription());
         String[] courseName = courseRequest.getCourseName().trim().split("\\s+");
         String courseNameReplace = String.join(" ", courseName);
         CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace, user.getExpert());
@@ -277,7 +278,7 @@ public class CourseService {
         if (user == null) {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-
+        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(),courseRequest.getDescription());
         CourseEntity newCourse = courseRepository.findById(courseRequest.getCourseId()).orElse(null);
         newCourse.setExpert(user.getExpert());
         newCourse.setCourseName(courseRequest.getCourseName());
