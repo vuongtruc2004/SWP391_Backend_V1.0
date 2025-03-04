@@ -290,6 +290,7 @@ public class CourseService {
         newCourse = courseRepository.save(newCourse);
         Set<SubjectEntity> subjectEntitySet = subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
+        newCourse.setAccepted(false);
         courseRepository.save(newCourse);
         CourseResponse courseResponse = new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
