@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +29,9 @@ public class QuizEntity {
     Integer maxAttempts;
 
     Boolean published;
+
+    @Column(name = "allow_see_answers")
+    Boolean allowSeeAnswers;
 
     @Column(name = "created_at")
     Instant createdAt;
