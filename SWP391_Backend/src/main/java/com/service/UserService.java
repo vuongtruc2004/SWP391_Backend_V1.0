@@ -95,7 +95,9 @@ public class UserService {
                 null
         );
     }
-
+    public UserEntity getUserByEmail(String email){
+        return this.userRepository.findByEmail(email);
+    }
     public UserResponse getUserById(Long id) {
         String email = JwtService.extractUsernameFromToken()
                 .orElseThrow(() -> new NotFoundException("Email không tìm thấy"));
