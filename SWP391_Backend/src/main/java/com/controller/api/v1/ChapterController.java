@@ -32,4 +32,12 @@ public class ChapterController {
     public ResponseEntity<List<ChapterResponse>> createChapter(@RequestBody List<ChapterRequest> chapterRequests) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.chapterService.save(chapterRequests));
     }
+
+    @GetMapping("/{courseId}")
+    @ApiMessage("Lấy các chương học thuộc khoá học thành công!")
+    public ResponseEntity<List<ChapterResponse>> getChapterByCourse(@PathVariable Long courseId) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.chapterService.getChapterByCourse(courseId));
+    }
+
+
 }

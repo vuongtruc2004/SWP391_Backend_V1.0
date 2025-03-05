@@ -18,8 +18,10 @@ import com.exception.custom.UserException;
 import com.helper.CourseServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.*;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
+import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,10 +31,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +54,7 @@ public class CourseService {
             String subjectIds,
             String event
     ) {
+
         try {
             if (specialSort != null && !specialSort.isBlank()) {
                 String[] parts = specialSort.split(",");
@@ -170,7 +170,7 @@ public class CourseService {
             Specification<CourseEntity> specification,
             Boolean accepted
     ) {
-        if (accepted != null) {
+       if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accepted"), accepted)
             );

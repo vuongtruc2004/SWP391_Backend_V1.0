@@ -17,6 +17,7 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -155,6 +156,7 @@ public class BlogService {
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
+
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);
@@ -163,7 +165,6 @@ public class BlogService {
             blogResponse.setUser(modelMapper.map(blogEntity.getUser(), UserResponse.class));
             return blogResponse;
         }).toList();
-
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),

@@ -3,6 +3,7 @@ package com.service;
 
 import com.dto.request.ChapterRequest;
 import com.dto.response.ChapterResponse;
+import com.dto.response.CourseResponse;
 import com.entity.ChapterEntity;
 import com.entity.CourseEntity;
 import com.exception.custom.NotFoundException;
@@ -45,5 +46,15 @@ public class ChapterService {
     @Transactional
     public void deleteChapter(Long chapterId) {
         chapterRepository.deleteById(chapterId);
+    }
+
+    public List<ChapterResponse> getChapterByCourse(Long courseId) {
+        List<ChapterEntity> chapterEntityList=this.chapterRepository.findByCourse_CourseId(courseId);
+        List<ChapterResponse> chapterResponseList = new ArrayList<>();
+        for (ChapterEntity chapterEntity : chapterEntityList) {
+            ChapterResponse chapterResponse = modelMapper.map(chapterEntity, ChapterResponse.class);
+            chapterResponseList.add(chapterResponse);
+        }
+        return chapterResponseList;
     }
 }

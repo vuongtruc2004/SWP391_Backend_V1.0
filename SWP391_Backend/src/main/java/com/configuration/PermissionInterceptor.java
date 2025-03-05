@@ -30,25 +30,25 @@ public class PermissionInterceptor implements HandlerInterceptor {
         System.out.println(">>> path= " + path);
         System.out.println(">>> httpMethod= " + httpMethod);
         System.out.println(">>> requestURI= " + requestURI);
-
         String email= JwtService.extractUsernameFromToken().isPresent() ==true ? JwtService.extractUsernameFromToken().get() : "";
-        if(email!=null){
-            UserEntity user=this.userService.getUserByEmail(email);
-            if(user!=null){
-                RoleEntity role= user.getRole();
-                if(role!=null){
-                    List<PermissionEntity> permissions=role.getPermissions();
-                    Boolean isAllow=permissions.stream().anyMatch(item->item.getApiPath().equals(path) && item.getApiMethod().equals(httpMethod));
-                    System.out.println(">>> isAllow :" +isAllow );
-                    if(!isAllow){
-                        throw new UserException("Access denied");
-                    }
-                }else{
-                    throw new UserException("Access denied");
-                }
-            }
-        }
         return true;
+//        if(email!=null){
+//            UserEntity user=this.userService.getUserByEmail(email);
+//            if(user!=null){
+//                RoleEntity role= user.getRole();
+//                if(role!=null){
+//                    List<PermissionEntity> permissions=role.getPermissions();
+//                    Boolean isAllow=permissions.stream().anyMatch(item->item.getApiPath().equals(path) && item.getApiMethod().equals(httpMethod));
+//                    System.out.println(">>> isAllow :" +isAllow );
+//                    if(!isAllow){
+//                        throw new UserException("Access denied");
+//                    }
+//                }else{
+//                    throw new UserException("Access denied");
+//                }
+//            }
+//        }
+//        return true;
     }
 
 }
