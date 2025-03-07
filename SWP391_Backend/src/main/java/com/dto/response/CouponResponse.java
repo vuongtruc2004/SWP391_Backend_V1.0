@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,7 +39,6 @@ public class CouponResponse {
 
     Double minOrderValue;
 
-
     Long maxUses;
 
     Long usedCount;
@@ -47,6 +47,6 @@ public class CouponResponse {
 
     Instant endTime;
 
-    Set<CourseEntity> courses;
+    List<String> courseName;
 
 }

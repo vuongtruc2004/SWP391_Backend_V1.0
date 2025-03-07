@@ -165,7 +165,6 @@ public class BlogService {
             specification=specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId()));
         }
-
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);

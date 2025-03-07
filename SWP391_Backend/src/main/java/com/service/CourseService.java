@@ -41,7 +41,6 @@ public class CourseService {
     private final CourseServiceHelper courseServiceHelper;
     private final ChapterRepository chapterRepository;
     private final ExpertRepository expertRepository;
-    private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
     private final SubjectService subjectService;

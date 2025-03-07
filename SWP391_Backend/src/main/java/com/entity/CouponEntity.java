@@ -66,6 +66,9 @@ public class CouponEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
     @ManyToMany
     @JoinTable(name = "coupon_course", joinColumns = @JoinColumn(name = "coupon_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     Set<CourseEntity> courses;
@@ -73,5 +76,6 @@ public class CouponEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 }
