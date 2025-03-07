@@ -31,7 +31,8 @@ public class ChatEntity {
     @JoinColumn(name = "user_id")
     UserEntity user;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @OrderBy("createdAt ASC")
     List<MessageEntity> messages;
 
     @PrePersist

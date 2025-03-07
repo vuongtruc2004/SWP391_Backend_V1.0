@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.util.enums.MessageSenderEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,9 +22,11 @@ public class MessageEntity {
     @Column(name = "message_id")
     Long messageId;
 
-    String question;
+    @Column(columnDefinition = "LONGTEXT")
+    String content;
 
-    String answer;
+    @Enumerated(EnumType.STRING)
+    MessageSenderEnum role;
 
     @Column(name = "created_at")
     Instant createdAt;
@@ -34,6 +37,10 @@ public class MessageEntity {
 
     @PrePersist
     public void handlePrePersist() {
-        this.createdAt = Instant.now();
+        if (role.equals(MessageSenderEnum.USER)) {
+            this.createdAt = Instant.now();
+        } else {
+            this.createdAt = Instant.now().plusSeconds(1);
+        }
     }
 }

@@ -539,9 +539,9 @@ DROP TABLE IF EXISTS `messages`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `messages` (
   `message_id` bigint NOT NULL AUTO_INCREMENT,
-  `answer` varchar(255) DEFAULT NULL,
+  `content` longtext,
   `created_at` datetime(6) DEFAULT NULL,
-  `question` varchar(255) DEFAULT NULL,
+  `role` enum('FUNCTION','MODEL','SYSTEM','USER') DEFAULT NULL,
   `chat_id` bigint DEFAULT NULL,
   PRIMARY KEY (`message_id`),
   KEY `FK64w44ngcpqp99ptcb9werdfmb` (`chat_id`),
@@ -1065,4 +1065,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-04 23:04:21
+-- Dump completed on 2025-03-07 21:37:33

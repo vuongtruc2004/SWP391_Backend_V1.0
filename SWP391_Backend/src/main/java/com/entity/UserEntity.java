@@ -85,6 +85,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<UserProgressEntity> userProgresses;
 
+    @OneToMany(mappedBy = "user") // cac doan chat cua nguoi dung voi AI
+    Set<ChatEntity> chats;
+
     @ManyToMany(mappedBy = "users") // cac tac gia ma nguoi dung follow
     Set<ExpertEntity> experts;
 
