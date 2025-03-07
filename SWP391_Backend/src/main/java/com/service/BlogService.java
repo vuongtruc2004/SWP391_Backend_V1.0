@@ -156,6 +156,15 @@ public class BlogService {
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
+        Optional<String> email= JwtService.extractUsernameFromToken();
+        UserEntity userEntity=this.userRepository.findByEmail(email.get());
+        if(userEntity==null){
+            throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
+        }
+        if(userEntity.getRole().getRoleName().equals(RoleNameEnum.MARKETING)){
+            specification=specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId()));
+        }
 
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {

@@ -25,15 +25,15 @@ DROP TABLE IF EXISTS `answers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `answers` (
-  `answer_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `correct` bit(1) DEFAULT NULL,
-  `question_id` bigint DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`answer_id`),
-  KEY `FK3erw1a3t0r78st8ty27x6v3g1` (`question_id`),
-  CONSTRAINT `FK3erw1a3t0r78st8ty27x6v3g1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+                           `answer_id` bigint NOT NULL AUTO_INCREMENT,
+                           `content` varchar(255) DEFAULT NULL,
+                           `correct` bit(1) DEFAULT NULL,
+                           `question_id` bigint DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           PRIMARY KEY (`answer_id`),
+                           KEY `FK3erw1a3t0r78st8ty27x6v3g1` (`question_id`),
+                           CONSTRAINT `FK3erw1a3t0r78st8ty27x6v3g1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,12 +55,12 @@ DROP TABLE IF EXISTS `blog_tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_tag` (
-  `blog_id` bigint NOT NULL,
-  `tag_id` bigint NOT NULL,
-  PRIMARY KEY (`blog_id`,`tag_id`),
-  KEY `FK3c6t9f1bjwx4qic9vwi0kbqos` (`tag_id`),
-  CONSTRAINT `FK3c6t9f1bjwx4qic9vwi0kbqos` FOREIGN KEY (`tag_id`) REFERENCES `hashtags` (`tag_id`),
-  CONSTRAINT `FKdl2hedc2u6i0kw0q5lg31ipmw` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
+                            `blog_id` bigint NOT NULL,
+                            `tag_id` bigint NOT NULL,
+                            PRIMARY KEY (`blog_id`,`tag_id`),
+                            KEY `FK3c6t9f1bjwx4qic9vwi0kbqos` (`tag_id`),
+                            CONSTRAINT `FK3c6t9f1bjwx4qic9vwi0kbqos` FOREIGN KEY (`tag_id`) REFERENCES `hashtags` (`tag_id`),
+                            CONSTRAINT `FKdl2hedc2u6i0kw0q5lg31ipmw` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,19 +82,19 @@ DROP TABLE IF EXISTS `blogs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blogs` (
-  `blog_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` longtext,
-  `created_at` datetime(6) DEFAULT NULL,
-  `pinned` bit(1) DEFAULT NULL,
-  `plain_content` longtext,
-  `published` bit(1) DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`blog_id`),
-  KEY `FKpg4damav6db6a6fh5peylcni5` (`user_id`),
-  CONSTRAINT `FKpg4damav6db6a6fh5peylcni5` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `blog_id` bigint NOT NULL AUTO_INCREMENT,
+                         `content` longtext,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `pinned` bit(1) DEFAULT NULL,
+                         `plain_content` longtext,
+                         `published` bit(1) DEFAULT NULL,
+                         `thumbnail` varchar(255) DEFAULT NULL,
+                         `title` varchar(255) DEFAULT NULL,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`blog_id`),
+                         KEY `FKpg4damav6db6a6fh5peylcni5` (`user_id`),
+                         CONSTRAINT `FKpg4damav6db6a6fh5peylcni5` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,16 +116,16 @@ DROP TABLE IF EXISTS `campaigns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `campaigns` (
-  `campaign_id` bigint NOT NULL AUTO_INCREMENT,
-  `campaign_description` varchar(255) DEFAULT NULL,
-  `campaign_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `discount_percentage` double DEFAULT NULL,
-  `discount_range` tinyint DEFAULT NULL,
-  `discount_type` tinyint DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`campaign_id`)
+                             `campaign_id` bigint NOT NULL AUTO_INCREMENT,
+                             `campaign_description` varchar(255) DEFAULT NULL,
+                             `campaign_name` varchar(255) DEFAULT NULL,
+                             `created_at` datetime(6) DEFAULT NULL,
+                             `discount_percentage` double DEFAULT NULL,
+                             `discount_range` tinyint DEFAULT NULL,
+                             `discount_type` tinyint DEFAULT NULL,
+                             `end_time` datetime(6) DEFAULT NULL,
+                             `start_time` datetime(6) DEFAULT NULL,
+                             PRIMARY KEY (`campaign_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -146,13 +146,13 @@ DROP TABLE IF EXISTS `chapters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chapters` (
-  `chapter_id` bigint NOT NULL AUTO_INCREMENT,
-  `description` longtext,
-  `title` varchar(255) DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`chapter_id`),
-  KEY `FK6h1m0nrtdwj37570c0sp2tdcs` (`course_id`),
-  CONSTRAINT `FK6h1m0nrtdwj37570c0sp2tdcs` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                            `chapter_id` bigint NOT NULL AUTO_INCREMENT,
+                            `description` longtext,
+                            `title` varchar(255) DEFAULT NULL,
+                            `course_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`chapter_id`),
+                            KEY `FK6h1m0nrtdwj37570c0sp2tdcs` (`course_id`),
+                            CONSTRAINT `FK6h1m0nrtdwj37570c0sp2tdcs` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -174,13 +174,13 @@ DROP TABLE IF EXISTS `chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chats` (
-  `chat_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`chat_id`),
-  KEY `FKmolqi1xj49bg3jjr33674limy` (`user_id`),
-  CONSTRAINT `FKmolqi1xj49bg3jjr33674limy` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `chat_id` bigint NOT NULL AUTO_INCREMENT,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `title` varchar(255) DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`chat_id`),
+                         KEY `FKmolqi1xj49bg3jjr33674limy` (`user_id`),
+                         CONSTRAINT `FKmolqi1xj49bg3jjr33674limy` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -201,23 +201,23 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `comment_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `blog_id` bigint DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `parent_comment_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`comment_id`),
-  KEY `FK9aakob3a7aghrm94k9kmbrjqd` (`blog_id`),
-  KEY `FK7ktrfqv6fgfuw6fvwludvibu4` (`course_id`),
-  KEY `FK7h839m3lkvhbyv3bcdv7sm4fj` (`parent_comment_id`),
-  KEY `FK8omq0tc18jd43bu5tjh6jvraq` (`user_id`),
-  CONSTRAINT `FK7h839m3lkvhbyv3bcdv7sm4fj` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `FK7ktrfqv6fgfuw6fvwludvibu4` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FK8omq0tc18jd43bu5tjh6jvraq` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FK9aakob3a7aghrm94k9kmbrjqd` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
+                            `comment_id` bigint NOT NULL AUTO_INCREMENT,
+                            `content` varchar(255) DEFAULT NULL,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `updated_at` datetime(6) DEFAULT NULL,
+                            `blog_id` bigint DEFAULT NULL,
+                            `course_id` bigint DEFAULT NULL,
+                            `parent_comment_id` bigint DEFAULT NULL,
+                            `user_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`comment_id`),
+                            KEY `FK9aakob3a7aghrm94k9kmbrjqd` (`blog_id`),
+                            KEY `FK7ktrfqv6fgfuw6fvwludvibu4` (`course_id`),
+                            KEY `FK7h839m3lkvhbyv3bcdv7sm4fj` (`parent_comment_id`),
+                            KEY `FK8omq0tc18jd43bu5tjh6jvraq` (`user_id`),
+                            CONSTRAINT `FK7h839m3lkvhbyv3bcdv7sm4fj` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`),
+                            CONSTRAINT `FK7ktrfqv6fgfuw6fvwludvibu4` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+                            CONSTRAINT `FK8omq0tc18jd43bu5tjh6jvraq` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                            CONSTRAINT `FK9aakob3a7aghrm94k9kmbrjqd` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,12 +238,12 @@ DROP TABLE IF EXISTS `coupon_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coupon_course` (
-  `coupon_id` bigint NOT NULL,
-  `course_id` bigint NOT NULL,
-  PRIMARY KEY (`coupon_id`,`course_id`),
-  KEY `FKosww4taai8gbc8s8celm19au3` (`course_id`),
-  CONSTRAINT `FK84yjg4cd7hhiir7mrhbstxsp0` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`),
-  CONSTRAINT `FKosww4taai8gbc8s8celm19au3` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                                 `coupon_id` bigint NOT NULL,
+                                 `course_id` bigint NOT NULL,
+                                 PRIMARY KEY (`coupon_id`,`course_id`),
+                                 KEY `FKosww4taai8gbc8s8celm19au3` (`course_id`),
+                                 CONSTRAINT `FK84yjg4cd7hhiir7mrhbstxsp0` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`),
+                                 CONSTRAINT `FKosww4taai8gbc8s8celm19au3` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -264,22 +264,22 @@ DROP TABLE IF EXISTS `coupons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coupons` (
-  `coupon_id` bigint NOT NULL AUTO_INCREMENT,
-  `coupon_code` varchar(255) DEFAULT NULL,
-  `coupon_description` varchar(255) DEFAULT NULL,
-  `coupon_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `discount_amount` double DEFAULT NULL,
-  `discount_percent` double DEFAULT NULL,
-  `discount_range` tinyint DEFAULT NULL,
-  `discount_type` tinyint DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `max_discount_amount` double DEFAULT NULL,
-  `max_uses` bigint DEFAULT NULL,
-  `min_order_value` double DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  `used_count` bigint DEFAULT NULL,
-  PRIMARY KEY (`coupon_id`)
+                           `coupon_id` bigint NOT NULL AUTO_INCREMENT,
+                           `coupon_code` varchar(255) DEFAULT NULL,
+                           `coupon_description` longtext DEFAULT NULL,
+                           `coupon_name` longtext DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `discount_amount` double DEFAULT NULL,
+                           `discount_percent` double DEFAULT NULL,
+                           `discount_range` tinyint DEFAULT NULL,
+                           `discount_type` tinyint DEFAULT NULL,
+                           `end_time` datetime(6) DEFAULT NULL,
+                           `max_discount_amount` double DEFAULT NULL,
+                           `max_uses` bigint DEFAULT NULL,
+                           `min_order_value` double DEFAULT NULL,
+                           `start_time` datetime(6) DEFAULT NULL,
+                           `used_count` bigint DEFAULT NULL,
+                           PRIMARY KEY (`coupon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -300,12 +300,12 @@ DROP TABLE IF EXISTS `course_subject`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_subject` (
-  `course_id` bigint NOT NULL,
-  `subject_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`subject_id`),
-  KEY `FKdgqvcdk05rc11txucpjrqai5n` (`subject_id`),
-  CONSTRAINT `FKdgqvcdk05rc11txucpjrqai5n` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
-  CONSTRAINT `FKq0h1llihdiqg9ak6xhntlgyk1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                                  `course_id` bigint NOT NULL,
+                                  `subject_id` bigint NOT NULL,
+                                  PRIMARY KEY (`course_id`,`subject_id`),
+                                  KEY `FKdgqvcdk05rc11txucpjrqai5n` (`subject_id`),
+                                  CONSTRAINT `FKdgqvcdk05rc11txucpjrqai5n` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
+                                  CONSTRAINT `FKq0h1llihdiqg9ak6xhntlgyk1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -327,12 +327,12 @@ DROP TABLE IF EXISTS `course_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_user` (
-  `course_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`user_id`),
-  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
-  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                               `course_id` bigint NOT NULL,
+                               `user_id` bigint NOT NULL,
+                               PRIMARY KEY (`course_id`,`user_id`),
+                               KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
+                               CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+                               CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -354,23 +354,23 @@ DROP TABLE IF EXISTS `courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `courses` (
-  `course_id` bigint NOT NULL AUTO_INCREMENT,
-  `accepted` bit(1) DEFAULT NULL,
-  `course_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `description` longtext,
-  `introduction` varchar(255) DEFAULT NULL,
-  `objectives` text,
-  `price` double DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `campaign_id` bigint DEFAULT NULL,
-  `expert_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`course_id`),
-  KEY `FK7l13d4e1nvy06049rlobu4wq8` (`campaign_id`),
-  KEY `FKaog0x4gdi738saifl8upy44sb` (`expert_id`),
-  CONSTRAINT `FK7l13d4e1nvy06049rlobu4wq8` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`campaign_id`),
-  CONSTRAINT `FKaog0x4gdi738saifl8upy44sb` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+                           `course_id` bigint NOT NULL AUTO_INCREMENT,
+                           `accepted` bit(1) DEFAULT NULL,
+                           `course_name` varchar(255) DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `description` longtext,
+                           `introduction` varchar(255) DEFAULT NULL,
+                           `objectives` text,
+                           `price` double DEFAULT NULL,
+                           `thumbnail` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `campaign_id` bigint DEFAULT NULL,
+                           `expert_id` bigint DEFAULT NULL,
+                           PRIMARY KEY (`course_id`),
+                           KEY `FK7l13d4e1nvy06049rlobu4wq8` (`campaign_id`),
+                           KEY `FKaog0x4gdi738saifl8upy44sb` (`expert_id`),
+                           CONSTRAINT `FK7l13d4e1nvy06049rlobu4wq8` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`campaign_id`),
+                           CONSTRAINT `FKaog0x4gdi738saifl8upy44sb` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -392,12 +392,12 @@ DROP TABLE IF EXISTS `expert_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `expert_user` (
-  `expert_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`expert_id`,`user_id`),
-  KEY `FK27s6rcj7h83qrn59yipsmi23k` (`user_id`),
-  CONSTRAINT `FK27s6rcj7h83qrn59yipsmi23k` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKn4dtwbtnefruftss8p21v96aj` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+                               `expert_id` bigint NOT NULL,
+                               `user_id` bigint NOT NULL,
+                               PRIMARY KEY (`expert_id`,`user_id`),
+                               KEY `FK27s6rcj7h83qrn59yipsmi23k` (`user_id`),
+                               CONSTRAINT `FK27s6rcj7h83qrn59yipsmi23k` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                               CONSTRAINT `FKn4dtwbtnefruftss8p21v96aj` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -418,15 +418,15 @@ DROP TABLE IF EXISTS `experts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `experts` (
-  `expert_id` bigint NOT NULL AUTO_INCREMENT,
-  `achievement` mediumtext,
-  `description` mediumtext,
-  `job` varchar(255) DEFAULT NULL,
-  `year_of_experience` int DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`expert_id`),
-  UNIQUE KEY `UK66kp2njuac7qdaov6pocl0896` (`user_id`),
-  CONSTRAINT `FK5os9nnfapw3vwad4yac038kvk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                           `expert_id` bigint NOT NULL AUTO_INCREMENT,
+                           `achievement` mediumtext,
+                           `description` mediumtext,
+                           `job` varchar(255) DEFAULT NULL,
+                           `year_of_experience` int DEFAULT NULL,
+                           `user_id` bigint DEFAULT NULL,
+                           PRIMARY KEY (`expert_id`),
+                           UNIQUE KEY `UK66kp2njuac7qdaov6pocl0896` (`user_id`),
+                           CONSTRAINT `FK5os9nnfapw3vwad4yac038kvk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -448,9 +448,9 @@ DROP TABLE IF EXISTS `hashtags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashtags` (
-  `tag_id` bigint NOT NULL AUTO_INCREMENT,
-  `tag_name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`tag_id`)
+                            `tag_id` bigint NOT NULL AUTO_INCREMENT,
+                            `tag_name` varchar(255) DEFAULT NULL,
+                            PRIMARY KEY (`tag_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -472,19 +472,19 @@ DROP TABLE IF EXISTS `lessons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lessons` (
-  `lesson_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `document_content` longtext,
-  `duration` bigint DEFAULT NULL,
-  `lesson_type` enum('DOCUMENT','VIDEO') DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `video_url` varchar(255) DEFAULT NULL,
-  `chapter_id` bigint DEFAULT NULL,
-  `description` longtext,
-  PRIMARY KEY (`lesson_id`),
-  KEY `FKmb78vk1f2oljr16oj1hpo45ma` (`chapter_id`),
-  CONSTRAINT `FKmb78vk1f2oljr16oj1hpo45ma` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
+                           `lesson_id` bigint NOT NULL AUTO_INCREMENT,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `document_content` longtext,
+                           `duration` bigint DEFAULT NULL,
+                           `lesson_type` enum('DOCUMENT','VIDEO') DEFAULT NULL,
+                           `title` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `video_url` varchar(255) DEFAULT NULL,
+                           `chapter_id` bigint DEFAULT NULL,
+                           `description` longtext,
+                           PRIMARY KEY (`lesson_id`),
+                           KEY `FKmb78vk1f2oljr16oj1hpo45ma` (`chapter_id`),
+                           CONSTRAINT `FKmb78vk1f2oljr16oj1hpo45ma` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=221 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -506,18 +506,18 @@ DROP TABLE IF EXISTS `likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `likes` (
-  `like_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `blog_id` bigint DEFAULT NULL,
-  `comment_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`like_id`),
-  KEY `FKl0jvfq4a7glp0xeuhd8hm05yt` (`blog_id`),
-  KEY `FKe4guax66lb963pf27kvm7ikik` (`comment_id`),
-  KEY `FKnvx9seeqqyy71bij291pwiwrg` (`user_id`),
-  CONSTRAINT `FKe4guax66lb963pf27kvm7ikik` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `FKl0jvfq4a7glp0xeuhd8hm05yt` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`),
-  CONSTRAINT `FKnvx9seeqqyy71bij291pwiwrg` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `like_id` bigint NOT NULL AUTO_INCREMENT,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `blog_id` bigint DEFAULT NULL,
+                         `comment_id` bigint DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`like_id`),
+                         KEY `FKl0jvfq4a7glp0xeuhd8hm05yt` (`blog_id`),
+                         KEY `FKe4guax66lb963pf27kvm7ikik` (`comment_id`),
+                         KEY `FKnvx9seeqqyy71bij291pwiwrg` (`user_id`),
+                         CONSTRAINT `FKe4guax66lb963pf27kvm7ikik` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`),
+                         CONSTRAINT `FKl0jvfq4a7glp0xeuhd8hm05yt` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`),
+                         CONSTRAINT `FKnvx9seeqqyy71bij291pwiwrg` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -538,14 +538,14 @@ DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `messages` (
-  `message_id` bigint NOT NULL AUTO_INCREMENT,
-  `answer` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `question` varchar(255) DEFAULT NULL,
-  `chat_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`message_id`),
-  KEY `FK64w44ngcpqp99ptcb9werdfmb` (`chat_id`),
-  CONSTRAINT `FK64w44ngcpqp99ptcb9werdfmb` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`chat_id`)
+                            `message_id` bigint NOT NULL AUTO_INCREMENT,
+                            `answer` varchar(255) DEFAULT NULL,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `question` varchar(255) DEFAULT NULL,
+                            `chat_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`message_id`),
+                            KEY `FK64w44ngcpqp99ptcb9werdfmb` (`chat_id`),
+                            CONSTRAINT `FK64w44ngcpqp99ptcb9werdfmb` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`chat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -566,13 +566,13 @@ DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notifications` (
-  `notification_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` longtext,
-  `created_at` datetime(6) DEFAULT NULL,
-  `global` bit(1) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `udpated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`notification_id`)
+                                 `notification_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `content` longtext,
+                                 `created_at` datetime(6) DEFAULT NULL,
+                                 `global` bit(1) DEFAULT NULL,
+                                 `title` varchar(255) DEFAULT NULL,
+                                 `udpated_at` datetime(6) DEFAULT NULL,
+                                 PRIMARY KEY (`notification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -593,12 +593,12 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
-  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
-  `course_id` bigint DEFAULT NULL,
-  `order_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_details_id`),
-  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
-  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
+                                 `order_details_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `course_id` bigint DEFAULT NULL,
+                                 `order_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`order_details_id`),
+                                 KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+                                 CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -620,17 +620,17 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-  `order_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `expired_at` datetime(6) DEFAULT NULL,
-  `order_code` varchar(255) DEFAULT NULL,
-  `order_status` enum('CANCELLED','COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
-  `total_amount` int DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
-  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                          `order_id` bigint NOT NULL AUTO_INCREMENT,
+                          `created_at` datetime(6) DEFAULT NULL,
+                          `expired_at` datetime(6) DEFAULT NULL,
+                          `order_code` varchar(255) DEFAULT NULL,
+                          `order_status` enum('CANCELLED','COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
+                          `total_amount` int DEFAULT NULL,
+                          `updated_at` datetime(6) DEFAULT NULL,
+                          `user_id` bigint DEFAULT NULL,
+                          PRIMARY KEY (`order_id`),
+                          KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+                          CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -652,14 +652,14 @@ DROP TABLE IF EXISTS `otp`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `otp` (
-  `otp_id` bigint NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `expired_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`otp_id`),
-  UNIQUE KEY `UK4mkxc1wpojj1vymcvurokktwm` (`user_id`),
-  CONSTRAINT `FKs0hlsjury48cekfbfusk11lyr` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                       `otp_id` bigint NOT NULL AUTO_INCREMENT,
+                       `code` varchar(255) DEFAULT NULL,
+                       `created_at` datetime(6) DEFAULT NULL,
+                       `expired_at` datetime(6) DEFAULT NULL,
+                       `user_id` bigint DEFAULT NULL,
+                       PRIMARY KEY (`otp_id`),
+                       UNIQUE KEY `UK4mkxc1wpojj1vymcvurokktwm` (`user_id`),
+                       CONSTRAINT `FKs0hlsjury48cekfbfusk11lyr` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -680,10 +680,11 @@ DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
-  `permission_id` bigint NOT NULL AUTO_INCREMENT,
-  `api_method` enum('DELETE','GET','PATCH','POST','PUT') DEFAULT NULL,
-  `api_path` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`permission_id`)
+                               `permission_id` bigint NOT NULL AUTO_INCREMENT,
+                               `api_method` enum('DELETE','GET','PATCH','POST','PUT') DEFAULT NULL,
+                               `api_path` varchar(255) DEFAULT NULL,
+                               `module` varchar(255) default null,
+                               PRIMARY KEY (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -704,11 +705,11 @@ DROP TABLE IF EXISTS `questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `questions` (
-  `question_id` bigint NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`question_id`)
+                             `question_id` bigint NOT NULL AUTO_INCREMENT,
+                             `title` varchar(255) DEFAULT NULL,
+                             `created_at` datetime(6) DEFAULT NULL,
+                             `updated_at` datetime(6) DEFAULT NULL,
+                             PRIMARY KEY (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -730,18 +731,18 @@ DROP TABLE IF EXISTS `quiz_attempts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quiz_attempts` (
-  `quiz_attempt_id` bigint NOT NULL AUTO_INCREMENT,
-  `attempt_number` int DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `score` double DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  `quiz_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`quiz_attempt_id`),
-  KEY `FKfwipvfipnnwsoacoyv5k7fbxc` (`quiz_id`),
-  KEY `FKpj4a9hw0iv1mo1ut6rppg594u` (`user_id`),
-  CONSTRAINT `FKfwipvfipnnwsoacoyv5k7fbxc` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
-  CONSTRAINT `FKpj4a9hw0iv1mo1ut6rppg594u` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                 `quiz_attempt_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `attempt_number` int DEFAULT NULL,
+                                 `end_time` datetime(6) DEFAULT NULL,
+                                 `score` double DEFAULT NULL,
+                                 `start_time` datetime(6) DEFAULT NULL,
+                                 `quiz_id` bigint DEFAULT NULL,
+                                 `user_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`quiz_attempt_id`),
+                                 KEY `FKfwipvfipnnwsoacoyv5k7fbxc` (`quiz_id`),
+                                 KEY `FKpj4a9hw0iv1mo1ut6rppg594u` (`user_id`),
+                                 CONSTRAINT `FKfwipvfipnnwsoacoyv5k7fbxc` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
+                                 CONSTRAINT `FKpj4a9hw0iv1mo1ut6rppg594u` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -762,12 +763,12 @@ DROP TABLE IF EXISTS `quiz_question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quiz_question` (
-  `quiz_id` bigint NOT NULL,
-  `question_id` bigint NOT NULL,
-  PRIMARY KEY (`quiz_id`,`question_id`),
-  KEY `FKqeltu3y1r2onimmphk1s8eirs` (`question_id`),
-  CONSTRAINT `FKkf4iskp1r4oogyx3cikwdj0i0` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
-  CONSTRAINT `FKqeltu3y1r2onimmphk1s8eirs` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+                                 `quiz_id` bigint NOT NULL,
+                                 `question_id` bigint NOT NULL,
+                                 PRIMARY KEY (`quiz_id`,`question_id`),
+                                 KEY `FKqeltu3y1r2onimmphk1s8eirs` (`question_id`),
+                                 CONSTRAINT `FKkf4iskp1r4oogyx3cikwdj0i0` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
+                                 CONSTRAINT `FKqeltu3y1r2onimmphk1s8eirs` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -789,22 +790,22 @@ DROP TABLE IF EXISTS `quizzes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quizzes` (
-  `quiz_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `ended_at` datetime(6) DEFAULT NULL,
-  `max_attempts` int DEFAULT NULL,
-  `published` bit(1) DEFAULT NULL,
-  `started_at` datetime(6) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `chapter_id` bigint DEFAULT NULL,
-  `expert_id` bigint DEFAULT NULL,
-  `allow_see_answers` bit(1) DEFAULT NULL,
-  PRIMARY KEY (`quiz_id`),
-  KEY `FKbfcxv33pl1gl32wie5nobns7r` (`chapter_id`),
-  KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
-  CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
-  CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+                           `quiz_id` bigint NOT NULL AUTO_INCREMENT,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `ended_at` datetime(6) DEFAULT NULL,
+                           `max_attempts` int DEFAULT NULL,
+                           `published` bit(1) DEFAULT NULL,
+                           `started_at` datetime(6) DEFAULT NULL,
+                           `title` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `chapter_id` bigint DEFAULT NULL,
+                           `expert_id` bigint DEFAULT NULL,
+                           `allow_see_answers` bit(1) DEFAULT NULL,
+                           PRIMARY KEY (`quiz_id`),
+                           KEY `FKbfcxv33pl1gl32wie5nobns7r` (`chapter_id`),
+                           KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
+                           CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
+                           CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -826,18 +827,18 @@ DROP TABLE IF EXISTS `rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rates` (
-  `rate_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `stars` int DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`rate_id`),
-  KEY `FKt5wuc6askynohbdaqeaj5wjeq` (`course_id`),
-  KEY `FKanlgavwqngljux10mtly8qr6f` (`user_id`),
-  CONSTRAINT `FKanlgavwqngljux10mtly8qr6f` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKt5wuc6askynohbdaqeaj5wjeq` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                         `rate_id` bigint NOT NULL AUTO_INCREMENT,
+                         `content` varchar(255) DEFAULT NULL,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `stars` int DEFAULT NULL,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `course_id` bigint DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`rate_id`),
+                         KEY `FKt5wuc6askynohbdaqeaj5wjeq` (`course_id`),
+                         KEY `FKanlgavwqngljux10mtly8qr6f` (`user_id`),
+                         CONSTRAINT `FKanlgavwqngljux10mtly8qr6f` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                         CONSTRAINT `FKt5wuc6askynohbdaqeaj5wjeq` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -859,12 +860,12 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_permission` (
-  `role_id` bigint NOT NULL,
-  `permission_id` bigint NOT NULL,
-  KEY `FK2xn8qv4vw30i04xdxrpvn3bdi` (`permission_id`),
-  KEY `FKtfgq8q9blrp0pt1pvggyli3v9` (`role_id`),
-  CONSTRAINT `FK2xn8qv4vw30i04xdxrpvn3bdi` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`),
-  CONSTRAINT `FKtfgq8q9blrp0pt1pvggyli3v9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
+                                   `role_id` bigint NOT NULL,
+                                   `permission_id` bigint NOT NULL,
+                                   KEY `FK2xn8qv4vw30i04xdxrpvn3bdi` (`permission_id`),
+                                   KEY `FKtfgq8q9blrp0pt1pvggyli3v9` (`role_id`),
+                                   CONSTRAINT `FK2xn8qv4vw30i04xdxrpvn3bdi` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`),
+                                   CONSTRAINT `FKtfgq8q9blrp0pt1pvggyli3v9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -885,9 +886,9 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-  `role_id` bigint NOT NULL AUTO_INCREMENT,
-  `role_name` enum('ADMIN','EXPERT','MARKETING','USER') DEFAULT NULL,
-  PRIMARY KEY (`role_id`)
+                         `role_id` bigint NOT NULL AUTO_INCREMENT,
+                         `role_name` enum('ADMIN','EXPERT','MARKETING','USER') DEFAULT NULL,
+                         PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -909,13 +910,13 @@ DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subjects` (
-  `subject_id` bigint NOT NULL AUTO_INCREMENT,
-  `description` mediumtext,
-  `subject_name` varchar(255) DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`subject_id`)
+                            `subject_id` bigint NOT NULL AUTO_INCREMENT,
+                            `description` mediumtext,
+                            `subject_name` varchar(255) DEFAULT NULL,
+                            `thumbnail` varchar(255) DEFAULT NULL,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `updated_at` datetime(6) DEFAULT NULL,
+                            PRIMARY KEY (`subject_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -937,17 +938,17 @@ DROP TABLE IF EXISTS `user_answers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_answers` (
-  `user_answer_id` bigint NOT NULL AUTO_INCREMENT,
-  `answer_id` bigint DEFAULT NULL,
-  `question_id` bigint DEFAULT NULL,
-  `quiz_attempt_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_answer_id`),
-  KEY `FKq9ubv2ar56hkwxokdbp72b5by` (`answer_id`),
-  KEY `FK6b46l4bb7a6wfxvmn6l7ig8vo` (`question_id`),
-  KEY `FKqy4lhxwoi677jc3u95au6qmxw` (`quiz_attempt_id`),
-  CONSTRAINT `FK6b46l4bb7a6wfxvmn6l7ig8vo` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `FKq9ubv2ar56hkwxokdbp72b5by` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`),
-  CONSTRAINT `FKqy4lhxwoi677jc3u95au6qmxw` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`quiz_attempt_id`)
+                                `user_answer_id` bigint NOT NULL AUTO_INCREMENT,
+                                `answer_id` bigint DEFAULT NULL,
+                                `question_id` bigint DEFAULT NULL,
+                                `quiz_attempt_id` bigint DEFAULT NULL,
+                                PRIMARY KEY (`user_answer_id`),
+                                KEY `FKq9ubv2ar56hkwxokdbp72b5by` (`answer_id`),
+                                KEY `FK6b46l4bb7a6wfxvmn6l7ig8vo` (`question_id`),
+                                KEY `FKqy4lhxwoi677jc3u95au6qmxw` (`quiz_attempt_id`),
+                                CONSTRAINT `FK6b46l4bb7a6wfxvmn6l7ig8vo` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
+                                CONSTRAINT `FKq9ubv2ar56hkwxokdbp72b5by` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`),
+                                CONSTRAINT `FKqy4lhxwoi677jc3u95au6qmxw` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`quiz_attempt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -968,15 +969,15 @@ DROP TABLE IF EXISTS `user_notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_notifications` (
-  `user_notification_id` bigint NOT NULL AUTO_INCREMENT,
-  `is_read` bit(1) DEFAULT NULL,
-  `notification_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_notification_id`),
-  KEY `FKovvx0ab3h8s9lrm6fppuadn7d` (`notification_id`),
-  KEY `FK9f86wonnl11hos1cuf5fibutl` (`user_id`),
-  CONSTRAINT `FK9f86wonnl11hos1cuf5fibutl` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKovvx0ab3h8s9lrm6fppuadn7d` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`notification_id`)
+                                      `user_notification_id` bigint NOT NULL AUTO_INCREMENT,
+                                      `is_read` bit(1) DEFAULT NULL,
+                                      `notification_id` bigint DEFAULT NULL,
+                                      `user_id` bigint DEFAULT NULL,
+                                      PRIMARY KEY (`user_notification_id`),
+                                      KEY `FKovvx0ab3h8s9lrm6fppuadn7d` (`notification_id`),
+                                      KEY `FK9f86wonnl11hos1cuf5fibutl` (`user_id`),
+                                      CONSTRAINT `FK9f86wonnl11hos1cuf5fibutl` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                                      CONSTRAINT `FKovvx0ab3h8s9lrm6fppuadn7d` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`notification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -997,14 +998,14 @@ DROP TABLE IF EXISTS `user_progress`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_progress` (
-  `progress_id` bigint NOT NULL AUTO_INCREMENT,
-  `chapter_id` bigint DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `lesson_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`progress_id`),
-  KEY `FKrt37sneeps21829cuqetjm5ye` (`user_id`),
-  CONSTRAINT `FKrt37sneeps21829cuqetjm5ye` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                 `progress_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `chapter_id` bigint DEFAULT NULL,
+                                 `course_id` bigint DEFAULT NULL,
+                                 `lesson_id` bigint DEFAULT NULL,
+                                 `user_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`progress_id`),
+                                 KEY `FKrt37sneeps21829cuqetjm5ye` (`user_id`),
+                                 CONSTRAINT `FKrt37sneeps21829cuqetjm5ye` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1026,23 +1027,23 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `user_id` bigint NOT NULL AUTO_INCREMENT,
-  `account_type` enum('CREDENTIALS','GITHUB','GOOGLE') DEFAULT NULL,
-  `active` bit(1) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `dob` datetime(6) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `fullname` varchar(255) DEFAULT NULL,
-  `gender` enum('FEMALE','MALE') DEFAULT NULL,
-  `locked` bit(1) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `refresh_token` mediumtext,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `role_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  KEY `FKp56c1712k691lhsyewcssf40f` (`role_id`),
-  CONSTRAINT `FKp56c1712k691lhsyewcssf40f` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
+                         `user_id` bigint NOT NULL AUTO_INCREMENT,
+                         `account_type` enum('CREDENTIALS','GITHUB','GOOGLE') DEFAULT NULL,
+                         `active` bit(1) DEFAULT NULL,
+                         `avatar` varchar(255) DEFAULT NULL,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `dob` datetime(6) DEFAULT NULL,
+                         `email` varchar(255) DEFAULT NULL,
+                         `fullname` varchar(255) DEFAULT NULL,
+                         `gender` enum('FEMALE','MALE') DEFAULT NULL,
+                         `locked` bit(1) DEFAULT NULL,
+                         `password` varchar(255) DEFAULT NULL,
+                         `refresh_token` mediumtext,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `role_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`user_id`),
+                         KEY `FKp56c1712k691lhsyewcssf40f` (`role_id`),
+                         CONSTRAINT `FKp56c1712k691lhsyewcssf40f` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

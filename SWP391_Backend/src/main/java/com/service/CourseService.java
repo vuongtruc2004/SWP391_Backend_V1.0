@@ -170,9 +170,19 @@ public class CourseService {
             Specification<CourseEntity> specification,
             Boolean accepted
     ) {
+        Optional<String> email= JwtService.extractUsernameFromToken();
+        UserEntity userEntity=this.userRepository.findByEmail(email.get());
+        if(userEntity==null){
+            throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
+        }
        if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accepted"), accepted)
+            );
+        }
+        if (userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("expert").get("expertId"), userEntity.getExpert().getExpertId())
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);

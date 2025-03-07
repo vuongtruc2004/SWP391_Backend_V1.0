@@ -31,7 +31,7 @@ public class ChapterEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter",cascade = CascadeType.ALL)
     List<LessonEntity> lessons;
 
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
