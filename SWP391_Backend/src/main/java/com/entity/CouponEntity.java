@@ -34,9 +34,11 @@ public class CouponEntity {
     String couponCode;
 
     @Column(name = "discount_type")
+    @Enumerated(EnumType.STRING)
     DiscountTypeEnum discountType;
 
     @Column(name = "discount_range")
+    @Enumerated(EnumType.STRING)
     DiscountRangeEnum discountRange;
 
     @Column(name = "discount_percent")

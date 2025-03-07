@@ -2,12 +2,15 @@ package com.service;
 
 import com.dto.request.CouponRequest;
 import com.dto.request.CourseRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.CouponResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CouponEntity;
 import com.entity.CourseEntity;
+import com.entity.ExpertEntity;
 import com.entity.UserEntity;
+import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.UserException;
 import com.helper.CouponServiceHelper;
 import com.repository.CouponRepository;
@@ -16,11 +19,13 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.RoleNameEnum;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -67,6 +72,17 @@ public class CouponService {
                 page.getTotalPages(),
                 page.getTotalElements(),
                 listCouponResponse
+        );
+    }
+
+    @Transactional
+    public ApiResponse<String> deleteByCouponId(Long couponId) {
+        this.couponRepository.deleteById(couponId);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành công!",
+                "Bạn đã xóa coupon có Id là " + couponId + " thành công!",
+                null
         );
     }
 }

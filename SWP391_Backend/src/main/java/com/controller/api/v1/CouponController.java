@@ -2,6 +2,7 @@ package com.controller.api.v1;
 
 
 import com.dto.request.CouponRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.CouponResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
@@ -37,5 +38,12 @@ public class CouponController {
     ) {
         return ResponseEntity.ok(couponService.getCouponWithFilterAdmin(pageable, specification));
     }
+
+    @ApiMessage("Xóa khóa học thành công!")
+    @DeleteMapping("/{couponId}")
+    public ResponseEntity<ApiResponse<String>> deleteCoupon(@PathVariable Long couponId) {
+        return ResponseEntity.ok(couponService.deleteByCouponId(couponId));
+    }
+
 
 }
