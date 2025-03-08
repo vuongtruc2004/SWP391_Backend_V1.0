@@ -312,4 +312,9 @@ public class CourseService {
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         return courseDetailsResponse;
     }
+    public List<CourseResponse> getAllCourse(){
+        List<CourseEntity> courseEntities=this.courseRepository.findAll();
+        List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
+        return courseResponses;
+    }
 }

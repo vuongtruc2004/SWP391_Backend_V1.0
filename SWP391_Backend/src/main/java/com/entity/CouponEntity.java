@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "coupons")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CouponEntity {
+public class CouponEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

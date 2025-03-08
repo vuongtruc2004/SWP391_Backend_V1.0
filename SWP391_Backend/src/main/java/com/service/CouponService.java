@@ -18,6 +18,9 @@ import com.repository.CourseRepository;
 import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
+import com.util.DateUtil;
+import com.util.enums.DiscountRangeEnum;
+import com.util.enums.DiscountTypeEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -44,13 +48,29 @@ public class CouponService {
         }
         CouponResponse couponResponse = new CouponResponse();
         CouponEntity couponEntity = new CouponEntity();
+        Instant startDay= DateUtil.parseToInstant(couponRequest.getStartTime());
+        Instant endDay=DateUtil.parseToInstant(couponRequest.getEndTime());
+        couponEntity.setStartTime(startDay);
+        couponEntity.setEndTime(endDay);
+        if(couponRequest.getDiscountType().equals(DiscountTypeEnum.FIXED)){
+            couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
+        }else{
+            couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
+        }
         modelMapper.map(couponRequest, couponEntity);
         Set<CourseEntity> courseEntities = new HashSet<>();
         List<String> courseName=new ArrayList<>();
-        for(CourseEntity courseEntity:couponRequest.getCourses()){
-            CourseEntity currentCourse=this.courseRepository.findById(courseEntity.getCourseId()).get();
-            courseEntities.add(currentCourse);
-            courseName.add(currentCourse.getCourseName());
+        if(couponRequest.getDiscountRange().equals(DiscountRangeEnum.COURSES)){
+            for(String courseEntity:couponRequest.getCourses()){
+                CourseEntity currentCourse=this.courseRepository.findByCourseName(courseEntity);
+                courseEntities.add(currentCourse);
+                courseName.add(currentCourse.getCourseName());
+            }
+        }else{
+            for(CourseEntity courseEntity:this.courseRepository.findAll()){
+                courseEntities.add(courseEntity);
+                courseName.add(courseEntity.getCourseName());
+            }
         }
         couponEntity.setCourses(courseEntities);
         this.couponRepository.save(couponEntity);

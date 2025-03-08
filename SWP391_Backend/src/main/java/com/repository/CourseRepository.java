@@ -71,4 +71,5 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
             countQuery = "SELECT COUNT(*) FROM courses",
             nativeQuery = true)
     Page<CourseEntity> findAllCoursesSorted(Specification<CourseEntity> specification, Pageable pageable);
+    CourseEntity findByCourseName(String name);
 }

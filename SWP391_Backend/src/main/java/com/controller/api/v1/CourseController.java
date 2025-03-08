@@ -121,4 +121,11 @@ public class CourseController {
         return ResponseEntity.ok().body(this.courseService.getCourseDetailsAdmin(courseId));
     }
 
+    @ApiMessage("Lấy các khóa học thành công!")
+    @GetMapping("/all-inpagination")
+    public ResponseEntity<List<CourseResponse>> getAllCoursesAdmin(
+    ) {
+        return ResponseEntity.ok(courseService.getAllCourse());
+    }
+
 }

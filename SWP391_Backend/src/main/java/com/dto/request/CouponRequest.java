@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -23,13 +24,11 @@ public class CouponRequest {
 
     String couponCode;
 
-    DiscountTypeEnum discountType;
+    String discountType;
 
-    DiscountRangeEnum discountRange;
+    String discountRange;
 
-    Double discountPercent;
-
-    Double discountAmount;
+    Double discountValue;
 
     Double maxDiscountAmount;
 
@@ -39,9 +38,9 @@ public class CouponRequest {
 
     Long usedCount;
 
-    Instant startTime;
+    String startTime;
 
-    Instant endTime;
+    String endTime;
 
-    Set<CourseEntity> courses;
+    List<String> courses;
 }
