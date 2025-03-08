@@ -1,10 +1,12 @@
 package com.controller.api.v1;
 
 import com.dto.request.CreateMessageRequest;
+import com.dto.response.ChatHistoryResponse;
 import com.dto.response.ChatResponse;
 import com.service.ChatService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,12 @@ public class ChatController {
     @GetMapping("/latest")
     public ResponseEntity<ChatResponse> getLatestChatOfUser() {
         return ResponseEntity.ok(chatService.getLatestChatOfUser());
+    }
+
+    @ApiMessage("Lấy lịch sử chat trong vòng 7 ngày của người dùng thành công!")
+    @GetMapping("/history")
+    public ResponseEntity<ChatHistoryResponse> getHistoryChatsOfUserWithin7Days(Pageable pageable) {
+        return ResponseEntity.ok(chatService.getHistoryChatsOfUserWithin7Days(pageable));
     }
 
     @ApiMessage("Thêm các message vào đoạn chat thành công!")

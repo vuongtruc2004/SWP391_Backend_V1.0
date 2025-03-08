@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.request.CreateMessageRequest;
+import com.dto.response.ChatHistoryResponse;
 import com.dto.response.ChatResponse;
 import com.entity.ChatEntity;
 import com.entity.MessageEntity;
@@ -12,8 +13,14 @@ import com.repository.ChatRepository;
 import com.util.enums.MessageSenderEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +41,44 @@ public class ChatService {
         return chatEntity == null ? null : modelMapper.map(chatEntity, ChatResponse.class);
     }
 
+    public ChatHistoryResponse getHistoryChatsOfUserWithin7Days(Pageable pageable) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+
+        Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
+        Page<ChatEntity> page = chatRepository.findAllByUser_UserIdAndCreatedAtIsGreaterThanEqualOrderByCreatedAtDesc(userEntity.getUserId(), oneWeekAgo, pageable);
+
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDate today = LocalDate.now();
+        Instant startOfToday = today.atStartOfDay(zoneId).toInstant();
+
+        LocalDate yesterday = today.minusDays(1);
+        Instant startOfYesterday = yesterday.atStartOfDay(zoneId).toInstant();
+
+        List<ChatHistoryResponse.ChatInfoResponse> todayChats = page.getContent().stream()
+                .filter(chatEntity -> !chatEntity.getCreatedAt().isBefore(startOfToday))
+                .map(chatEntity -> modelMapper.map(chatEntity, ChatHistoryResponse.ChatInfoResponse.class))
+                .toList();
+
+        List<ChatHistoryResponse.ChatInfoResponse> yesterdayChats = page.getContent().stream()
+                .filter(chatEntity -> !chatEntity.getCreatedAt().isBefore(startOfYesterday) && chatEntity.getCreatedAt().isBefore(startOfToday))
+                .map(chatEntity -> modelMapper.map(chatEntity, ChatHistoryResponse.ChatInfoResponse.class))
+                .toList();
+
+        List<ChatHistoryResponse.ChatInfoResponse> weekAgoChats = page.getContent().stream()
+                .filter(chatEntity -> chatEntity.getCreatedAt().isBefore(startOfYesterday))
+                .map(chatEntity -> modelMapper.map(chatEntity, ChatHistoryResponse.ChatInfoResponse.class))
+                .toList();
+
+        return ChatHistoryResponse.builder()
+                .todayChats(todayChats)
+                .yesterdayChats(yesterdayChats)
+                .weekAgoChats(weekAgoChats)
+                .build();
+    }
+
     public ChatResponse addNewMessages(CreateMessageRequest createMessageRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
@@ -45,7 +90,7 @@ public class ChatService {
 
         List<MessageEntity> inputMessages = new ArrayList<>();
 
-        ChatEntity chatEntity = chatRepository.findById(createMessageRequest.getChatId()).orElse(null);
+        ChatEntity chatEntity = createMessageRequest.getChatId() == null ? null : chatRepository.findById(createMessageRequest.getChatId()).orElse(null);
         if (chatEntity == null) {
             chatEntity = new ChatEntity();
             chatEntity.setMessages(new ArrayList<>());
