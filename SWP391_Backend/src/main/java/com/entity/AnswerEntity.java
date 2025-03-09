@@ -46,10 +46,4 @@ public class AnswerEntity {
     public void handlePreUpdate() {
         this.updatedAt = Instant.now();
     }
-
-    public AnswerEntity(String content, Boolean correct, QuestionEntity question) {
-        this.content = content;
-        this.correct = correct;
-        this.question = question;
-    }
 }

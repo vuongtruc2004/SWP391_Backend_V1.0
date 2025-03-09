@@ -1,6 +1,5 @@
 package com.controller.api.v1;
 
-import com.dto.request.QuestionRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
@@ -49,8 +48,6 @@ public class QuestionController {
     public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
-
-
 
 
 }

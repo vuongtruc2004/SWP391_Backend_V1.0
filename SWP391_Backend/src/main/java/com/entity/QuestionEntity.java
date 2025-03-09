@@ -1,13 +1,10 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -30,8 +27,8 @@ public class QuestionEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     Set<AnswerEntity> answers;
 
-    @ManyToMany(mappedBy = "questions",cascade = CascadeType.ALL)
-    List<QuizEntity> quizzes;
+    @ManyToMany(mappedBy = "questions", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    Set<QuizEntity> quizzes;
 
     @Column(name = "created_at")
     Instant createdAt;

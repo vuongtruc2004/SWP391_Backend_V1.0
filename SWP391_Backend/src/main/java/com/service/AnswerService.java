@@ -1,6 +1,5 @@
 package com.service;
 
-import com.dto.request.AnswerRequest;
 import com.dto.response.AnswerResponse;
 import com.dto.response.ApiResponse;
 import com.entity.AnswerEntity;
@@ -45,7 +44,7 @@ public class AnswerService {
     }
 
     public ApiResponse<AnswerResponse> updateAnswers(Long answerId, AnswerRequest answerRequest) {
-        AnswerEntity answerEntity= answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException("Không tìm thấy Id câu trả lời!"));
+        AnswerEntity answerEntity = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException("Không tìm thấy Id câu trả lời!"));
         answerEntity.setContent(answerRequest.getContent());
         answerEntity.setCorrect(answerRequest.getCorrect());
         answerRepository.save(answerEntity);
@@ -58,8 +57,8 @@ public class AnswerService {
     }
 
     public ApiResponse<String> deleteAnswer(Long answerId) {
-        if(answerRepository.existsById(answerId)) {
-            Optional<AnswerEntity> answerEntity =this.answerRepository.findById(answerId);
+        if (answerRepository.existsById(answerId)) {
+            Optional<AnswerEntity> answerEntity = this.answerRepository.findById(answerId);
             AnswerEntity answer = answerEntity.get();
             answer.setQuestion(null);
             answerRepository.deleteById(answerId);

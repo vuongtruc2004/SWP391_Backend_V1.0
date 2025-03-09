@@ -45,10 +45,16 @@ public class CourseServiceHelper {
         List<ChapterResponse> chapterResponseList = courseEntity.getChapters().stream()
                 .map(chapterEntity -> {
                     ChapterResponse chapterResponse = modelMapper.map(chapterEntity, ChapterResponse.class);
-                    chapterResponse.setQuizInfo(ChapterResponse.QuizInfoResponse.builder()
-                            .quizId(chapterEntity.getQuizz().getQuizId())
-                            .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
-                            .build());
+                    if (chapterEntity.getQuizz() != null) {
+                        chapterResponse.setQuizInfo(ChapterResponse.QuizInfoResponse.builder()
+                                .quizId(chapterEntity.getQuizz().getQuizId())
+                                .title(chapterEntity.getQuizz().getTitle())
+                                .duration(chapterEntity.getQuizz().getDuration())
+                                .published(chapterEntity.getQuizz().getPublished())
+                                .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
+                                .build());
+                    }
+                    return chapterResponse;
                 }).toList();
 
         Set<RateEntity> rates = courseEntity.getRates();

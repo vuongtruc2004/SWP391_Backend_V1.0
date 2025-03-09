@@ -1,6 +1,5 @@
 package com.controller.api.v1;
 
-import com.dto.request.AnswerRequest;
 import com.dto.response.AnswerResponse;
 import com.dto.response.ApiResponse;
 import com.service.AnswerService;
@@ -23,7 +22,7 @@ public class AnswerController {
 
     @ApiMessage("Cập nhật câu trả lời thành công!")
     @PatchMapping("/update/{answerId}")
-    public ResponseEntity<ApiResponse<AnswerResponse>> createSubject(@PathVariable Long answerId,@RequestBody AnswerRequest answerRequest) {
+    public ResponseEntity<ApiResponse<AnswerResponse>> createSubject(@PathVariable Long answerId, @RequestBody AnswerRequest answerRequest) {
         return ResponseEntity.ok(answerService.updateAnswers(answerId, answerRequest));
     }
 

@@ -1,11 +1,9 @@
 package com.controller.api.v1;
 
-import com.dto.request.AnswerRequest;
 import com.dto.request.QuizRequest;
-import com.dto.response.*;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.QuizResponse;
 import com.entity.QuizEntity;
-import com.entity.UserEntity;
-import com.service.AnswerService;
 import com.service.QuizService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
@@ -43,6 +41,7 @@ public class QuizController {
     public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest quizRequest) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(quizRequest));
     }
+
     @ApiMessage("Lấy bài kiểm tra thanhf công")
     @GetMapping("/{title}")
     public ResponseEntity<QuizResponse> getQuiz(@PathVariable String title) {

@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,13 +24,12 @@ public class QuizEntity {
 
     String title;
 
-    @Column(name = "max_attempts")
-    Integer maxAttempts;
-
     Boolean published;
 
     @Column(name = "allow_see_answers")
     Boolean allowSeeAnswers;
+
+    Integer duration;
 
     @Column(name = "created_at")
     Instant createdAt;
@@ -39,22 +37,11 @@ public class QuizEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @Column(name = "started_at")
-    Instant startedAt;
-
-    @Column(name = "ended_at")
-    Instant endedAt;
-
     @OneToOne
     @JoinColumn(name = "chapter_id")
     ChapterEntity chapter;
 
-    @ManyToOne
-    @JoinColumn(name = "expert_id")
-    ExpertEntity expert;
-
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("quizzes")
     Set<QuizAttemptEntity> quizAttempts;
 
     @ManyToMany

@@ -1,7 +1,6 @@
 package com.service;
 
 
-import com.dto.request.QuestionRequest;
 import com.dto.request.QuizRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
@@ -17,7 +16,6 @@ import com.repository.QuizRepository;
 import com.util.BuildResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -73,11 +71,10 @@ public class QuestionService {
     }
 
 
-
     public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
         QuestionEntity questionEntityOptional = new QuestionEntity();
         boolean existTitle = questionRepository.existsByTitle(request.getTitle().trim());
-        if(existTitle) {
+        if (existTitle) {
             throw new QuestionException("Câu hỏi đã tồn tại!");
         }
         questionEntityOptional.setTitle(request.getTitle());
@@ -115,9 +112,9 @@ public class QuestionService {
     }
 
     public ApiResponse<QuestionResponse> updateQuestion(Long questionId, QuestionRequest questionRequest) {
-        Optional<QuestionEntity> questionEntityOptional=this.questionRepository.findById(questionId);
+        Optional<QuestionEntity> questionEntityOptional = this.questionRepository.findById(questionId);
         QuestionEntity questionEntity = null;
-        if(questionEntityOptional.isPresent()) {
+        if (questionEntityOptional.isPresent()) {
             questionEntity = questionEntityOptional.get();
             questionEntity.setTitle(questionRequest.getTitle());
             questionRepository.save(questionEntity);

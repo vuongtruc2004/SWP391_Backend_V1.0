@@ -19,25 +19,17 @@ public class QuizResponse {
 
     String title;
 
-    Integer maxAttempts;
-
     Boolean published;
+
+    Boolean allowSeeAnswers;
+
+    Integer duration;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-    Instant startedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-    Instant endedAt;
-
-    ChapterResponse chapter;
-
-    ExpertResponse expert;
 
     Set<QuestionResponse> questions;
 }
