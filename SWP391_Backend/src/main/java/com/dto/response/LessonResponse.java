@@ -19,7 +19,7 @@ public class LessonResponse {
     String title;
 
     String description;
-    
+
     Long duration;
 
     @Enumerated(EnumType.STRING)
@@ -28,4 +28,6 @@ public class LessonResponse {
     String videoUrl;
 
     String documentContent;
+
+    Long chapterId;
 }

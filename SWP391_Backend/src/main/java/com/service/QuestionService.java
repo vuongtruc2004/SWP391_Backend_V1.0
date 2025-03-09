@@ -1,14 +1,10 @@
 package com.service;
 
 
-import com.dto.request.QuizRequest;
-import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
 import com.entity.AnswerEntity;
 import com.entity.QuestionEntity;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.QuestionException;
 import com.helper.QuestionServiceHelper;
 import com.repository.AnswerRepository;
 import com.repository.QuestionRepository;
@@ -19,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -71,77 +66,77 @@ public class QuestionService {
     }
 
 
-    public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
-        QuestionEntity questionEntityOptional = new QuestionEntity();
-        boolean existTitle = questionRepository.existsByTitle(request.getTitle().trim());
-        if (existTitle) {
-            throw new QuestionException("Câu hỏi đã tồn tại!");
-        }
-        questionEntityOptional.setTitle(request.getTitle());
-        Set<AnswerEntity> answerEntities = request.getAnswersId().stream()
-                .map(answerId -> answerRepository.findById(answerId)
-                        .orElseThrow(() -> new NotFoundException("Không tìm thấy đáp án với ID: " + answerId)))
-                .collect(Collectors.toSet());
-
-        questionEntityOptional.setAnswers(answerEntities);
-
-        for (AnswerEntity answer : answerEntities) {
-            answer.setQuestion(questionEntityOptional);
-        }
-
-        questionEntityOptional = questionRepository.save(questionEntityOptional);
-
-        // Xử lý danh sách đáp án đúng ngay trong createQuestion
-        List<String> correctAnswers = answerEntities.stream()
-                .filter(AnswerEntity::getCorrect) // Lọc ra đáp án đúng
-                .map(AnswerEntity::getContent)   // Lấy nội dung của đáp án
-                .collect(Collectors.toList());
-
-        // Tạo QuestionResponse mà không cần constructor đặc biệt
-        QuestionResponse questionResponse = new QuestionResponse();
-        questionResponse.setQuestionId(questionEntityOptional.getQuestionId());
-        questionResponse.setTitle(questionEntityOptional.getTitle());
-        questionResponse.setCorrectAnswer(correctAnswers);
-
-        return BuildResponse.buildApiResponse(
-                HttpStatus.CREATED.value(),
-                "Tạo câu hỏi thành công",
-                null,
-                questionResponse
-        );
-    }
-
-    public ApiResponse<QuestionResponse> updateQuestion(Long questionId, QuestionRequest questionRequest) {
-        Optional<QuestionEntity> questionEntityOptional = this.questionRepository.findById(questionId);
-        QuestionEntity questionEntity = null;
-        if (questionEntityOptional.isPresent()) {
-            questionEntity = questionEntityOptional.get();
-            questionEntity.setTitle(questionRequest.getTitle());
-            questionRepository.save(questionEntity);
-        } else {
-            throw new NotFoundException("Không tìm thấy Id câu hỏi!");
-        }
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thay đổi thông tin môn học",
-                null,
-                modelMapper.map(questionEntity, QuestionResponse.class)
-        );
-    }
-
-    public Set<QuestionEntity> saveQuestionWithQuiz(QuizRequest quizRequest) throws Exception {
-        Set<QuestionEntity> questionEntitySet = new HashSet<>();
-        for (String question : quizRequest.getQuestions()) {
-            boolean checkExistsQuestion = questionRepository.existsByTitle(question.trim());
-            if (checkExistsQuestion) {
-                QuestionEntity questionEntity = questionRepository.findByTitle(question.trim());
-                questionEntitySet.add(questionEntity);
-            } else {
-                throw new NotFoundException("Câu hỏi chưa tồn tại");
-            }
-        }
-        return questionEntitySet;
-    }
+//    public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
+//        QuestionEntity questionEntityOptional = new QuestionEntity();
+//        boolean existTitle = questionRepository.existsByTitle(request.getTitle().trim());
+//        if (existTitle) {
+//            throw new QuestionException("Câu hỏi đã tồn tại!");
+//        }
+//        questionEntityOptional.setTitle(request.getTitle());
+//        Set<AnswerEntity> answerEntities = request.getAnswersId().stream()
+//                .map(answerId -> answerRepository.findById(answerId)
+//                        .orElseThrow(() -> new NotFoundException("Không tìm thấy đáp án với ID: " + answerId)))
+//                .collect(Collectors.toSet());
+//
+//        questionEntityOptional.setAnswers(answerEntities);
+//
+//        for (AnswerEntity answer : answerEntities) {
+//            answer.setQuestion(questionEntityOptional);
+//        }
+//
+//        questionEntityOptional = questionRepository.save(questionEntityOptional);
+//
+//        // Xử lý danh sách đáp án đúng ngay trong createQuestion
+//        List<String> correctAnswers = answerEntities.stream()
+//                .filter(AnswerEntity::getCorrect) // Lọc ra đáp án đúng
+//                .map(AnswerEntity::getContent)   // Lấy nội dung của đáp án
+//                .collect(Collectors.toList());
+//
+//        // Tạo QuestionResponse mà không cần constructor đặc biệt
+//        QuestionResponse questionResponse = new QuestionResponse();
+//        questionResponse.setQuestionId(questionEntityOptional.getQuestionId());
+//        questionResponse.setTitle(questionEntityOptional.getTitle());
+//        questionResponse.setCorrectAnswer(correctAnswers);
+//
+//        return BuildResponse.buildApiResponse(
+//                HttpStatus.CREATED.value(),
+//                "Tạo câu hỏi thành công",
+//                null,
+//                questionResponse
+//        );
+//    }
+//
+//    public ApiResponse<QuestionResponse> updateQuestion(Long questionId, QuestionRequest questionRequest) {
+//        Optional<QuestionEntity> questionEntityOptional = this.questionRepository.findById(questionId);
+//        QuestionEntity questionEntity = null;
+//        if (questionEntityOptional.isPresent()) {
+//            questionEntity = questionEntityOptional.get();
+//            questionEntity.setTitle(questionRequest.getTitle());
+//            questionRepository.save(questionEntity);
+//        } else {
+//            throw new NotFoundException("Không tìm thấy Id câu hỏi!");
+//        }
+//        return BuildResponse.buildApiResponse(
+//                HttpStatus.OK.value(),
+//                "Thay đổi thông tin môn học",
+//                null,
+//                modelMapper.map(questionEntity, QuestionResponse.class)
+//        );
+//    }
+//
+//    public Set<QuestionEntity> saveQuestionWithQuiz(QuizRequest quizRequest) throws Exception {
+//        Set<QuestionEntity> questionEntitySet = new HashSet<>();
+//        for (String question : quizRequest.getQuestions()) {
+//            boolean checkExistsQuestion = questionRepository.existsByTitle(question.trim());
+//            if (checkExistsQuestion) {
+//                QuestionEntity questionEntity = questionRepository.findByTitle(question.trim());
+//                questionEntitySet.add(questionEntity);
+//            } else {
+//                throw new NotFoundException("Câu hỏi chưa tồn tại");
+//            }
+//        }
+//        return questionEntitySet;
+//    }
 
     public List<QuestionResponse> getAllQuestions() {
         List<QuestionEntity> questionEntityList = this.questionRepository.findAll();

@@ -52,6 +52,7 @@ public class CourseServiceHelper {
                                 .duration(chapterEntity.getQuizz().getDuration())
                                 .published(chapterEntity.getQuizz().getPublished())
                                 .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
+                                .chapterId(chapterEntity.getChapterId())
                                 .build());
                     }
                     return chapterResponse;

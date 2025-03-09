@@ -35,9 +35,11 @@ public class ChapterResponse {
         String title;
 
         Boolean published;
-        
+
         Integer duration;
 
         Integer totalQuestions;
+
+        Long chapterId;
     }
 }

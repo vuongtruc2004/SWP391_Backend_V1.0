@@ -1,39 +1,30 @@
 package com.service;
 
-import com.dto.request.QuizRequest;
-import com.dto.response.*;
+import com.dto.response.PageDetailsResponse;
+import com.dto.response.QuestionResponse;
+import com.dto.response.QuizResponse;
 import com.entity.AnswerEntity;
-import com.entity.QuestionEntity;
 import com.entity.QuizEntity;
-import com.entity.UserEntity;
-import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.repository.QuizRepository;
 import com.util.BuildResponse;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
     private final ModelMapper modelMapper;
     private final QuestionService questionService;
-
-    public QuizService(QuizRepository quizRepository, ModelMapper modelMapper, QuestionService questionService) {
-        this.quizRepository = quizRepository;
-        this.modelMapper = modelMapper;
-        this.questionService = questionService;
-    }
 
     public PageDetailsResponse<List<QuizResponse>> getQuizWithFilter(
             Pageable pageable, Specification<QuizEntity> specification) {
@@ -76,54 +67,54 @@ public class QuizService {
     public boolean published(Long id) {
         QuizEntity quizEntity = quizRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Không tìm thấy bài kiểm tra"));
-        if(quizEntity.getPublished()) {
+        if (quizEntity.getPublished()) {
             quizEntity.setPublished(false);
-        }else{
+        } else {
             quizEntity.setPublished(true);
         }
         return quizRepository.save(quizEntity).getPublished();
     }
 
-    public QuizResponse createQuiz(QuizRequest quizRequest) throws Exception {
-        boolean check = quizRepository.existsByTitle(quizRequest.getTitle().trim());
-        if(!check) {
-            QuizEntity quizEntity = new QuizEntity();
-            quizEntity.setTitle(quizRequest.getTitle());
-            quizEntity.setPublished(quizRequest.getPublished());
-            if(quizRequest.getStartedAt() != null && quizRequest.getEndedAt() != null) {
-                quizEntity.setStartedAt(quizRequest.getStartedAt());
-                quizEntity.setEndedAt(quizRequest.getEndedAt());
-            }
-            quizEntity.setMaxAttempts(quizRequest.getMaxAttempts());
-            quizEntity.setCreatedAt(Instant.now());
-            Set<QuestionEntity> setQuestions = questionService.saveQuestionWithQuiz(quizRequest);
-            quizEntity.setQuestions(setQuestions);
-            return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
-        }else{
-            throw new InvalidRequestInput("Tiêu đề bài kiểm tra đã tồn tại");
-        }
-    }
-
-    public QuizResponse getQuiz(String title) {
-        QuizEntity quizEntity = quizRepository.findByTitle(title)
-                .orElseThrow(() ->  new NotFoundException("Không tìm thấy bài kiểm tra"));
-        return modelMapper.map(quizEntity, QuizResponse.class);
-    }
-
-    public QuizResponse updateQuiz(QuizRequest quizRequest) throws Exception {
-        QuizEntity quizEntity = quizRepository.findById(quizRequest.getQuizId())
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy bài kiểm tra"));
-        quizEntity.setTitle(quizRequest.getTitle());
-        quizEntity.setPublished(quizRequest.getPublished());
-        if(quizRequest.getStartedAt() != null && quizRequest.getEndedAt() != null) {
-            quizEntity.setStartedAt(quizRequest.getStartedAt());
-            quizEntity.setEndedAt(quizRequest.getEndedAt());
-        }
-        quizEntity.setMaxAttempts(quizRequest.getMaxAttempts());
-        quizEntity.setUpdatedAt(Instant.now());
-        Set<QuestionEntity> setQuestions = questionService.saveQuestionWithQuiz(quizRequest);
-        quizEntity.setQuestions(setQuestions);
-        return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
-    }
+//    public QuizResponse createQuiz(QuizRequest quizRequest) throws Exception {
+//        boolean check = quizRepository.existsByTitle(quizRequest.getTitle().trim());
+//        if(!check) {
+//            QuizEntity quizEntity = new QuizEntity();
+//            quizEntity.setTitle(quizRequest.getTitle());
+//            quizEntity.setPublished(quizRequest.getPublished());
+//            if(quizRequest.getStartedAt() != null && quizRequest.getEndedAt() != null) {
+//                quizEntity.setStartedAt(quizRequest.getStartedAt());
+//                quizEntity.setEndedAt(quizRequest.getEndedAt());
+//            }
+//            quizEntity.setMaxAttempts(quizRequest.getMaxAttempts());
+//            quizEntity.setCreatedAt(Instant.now());
+//            Set<QuestionEntity> setQuestions = questionService.saveQuestionWithQuiz(quizRequest);
+//            quizEntity.setQuestions(setQuestions);
+//            return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
+//        }else{
+//            throw new InvalidRequestInput("Tiêu đề bài kiểm tra đã tồn tại");
+//        }
+//    }
+//
+//    public QuizResponse getQuiz(String title) {
+//        QuizEntity quizEntity = quizRepository.findByTitle(title)
+//                .orElseThrow(() ->  new NotFoundException("Không tìm thấy bài kiểm tra"));
+//        return modelMapper.map(quizEntity, QuizResponse.class);
+//    }
+//
+//    public QuizResponse updateQuiz(QuizRequest quizRequest) throws Exception {
+//        QuizEntity quizEntity = quizRepository.findById(quizRequest.getQuizId())
+//                .orElseThrow(() -> new NotFoundException("Không tìm thấy bài kiểm tra"));
+//        quizEntity.setTitle(quizRequest.getTitle());
+//        quizEntity.setPublished(quizRequest.getPublished());
+//        if(quizRequest.getStartedAt() != null && quizRequest.getEndedAt() != null) {
+//            quizEntity.setStartedAt(quizRequest.getStartedAt());
+//            quizEntity.setEndedAt(quizRequest.getEndedAt());
+//        }
+//        quizEntity.setMaxAttempts(quizRequest.getMaxAttempts());
+//        quizEntity.setUpdatedAt(Instant.now());
+//        Set<QuestionEntity> setQuestions = questionService.saveQuestionWithQuiz(quizRequest);
+//        quizEntity.setQuestions(setQuestions);
+//        return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
+//    }
 
 }
