@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class ChapterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chapter_id")
     Long chapterId;
-    
+
     String title;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -34,6 +33,6 @@ public class ChapterEntity {
     @OneToMany(mappedBy = "chapter")
     List<LessonEntity> lessons;
 
-    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
-    Set<QuizEntity> quizzes;
+    @OneToOne(mappedBy = "chapter", cascade = CascadeType.ALL)
+    QuizEntity quizz;
 }

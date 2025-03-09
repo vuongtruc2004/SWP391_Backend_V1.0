@@ -1,5 +1,6 @@
 package com.helper;
 
+import com.dto.response.ChapterResponse;
 import com.dto.response.CourseResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
@@ -41,6 +42,15 @@ public class CourseServiceHelper {
     }
 
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {
+        List<ChapterResponse> chapterResponseList = courseEntity.getChapters().stream()
+                .map(chapterEntity -> {
+                    ChapterResponse chapterResponse = modelMapper.map(chapterEntity, ChapterResponse.class);
+                    chapterResponse.setQuizInfo(ChapterResponse.QuizInfoResponse.builder()
+                            .quizId(chapterEntity.getQuizz().getQuizId())
+                            .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
+                            .build());
+                }).toList();
+
         Set<RateEntity> rates = courseEntity.getRates();
         double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);
 
@@ -55,6 +65,7 @@ public class CourseServiceHelper {
         );
         courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
+        courseDetailsResponse.setChapters(chapterResponseList);
         return courseDetailsResponse;
     }
 

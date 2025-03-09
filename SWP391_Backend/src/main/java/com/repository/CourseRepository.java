@@ -5,7 +5,6 @@ import com.entity.ExpertEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -56,19 +55,6 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
 
     @Query("select c from UserEntity u " +
             "join u.courses c " +
-            "where c.courseId = :courseId and u.userId = :userId")
+            "where c.courseId = :courseId and u.userId = :userId and c.accepted = true")
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
-
-    @Query(value = """
-    SELECT * FROM courses
-    ORDER BY 
-        CASE 
-            WHEN updated_at IS NOT NULL THEN updated_at
-            ELSE created_at
-        END DESC,
-        created_at DESC
-    """,
-            countQuery = "SELECT COUNT(*) FROM courses",
-            nativeQuery = true)
-    Page<CourseEntity> findAllCoursesSorted(Specification<CourseEntity> specification, Pageable pageable);
 }

@@ -17,7 +17,9 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
 import com.helper.CourseServiceHelper;
 import com.helper.UserServiceHelper;
-import com.repository.*;
+import com.repository.ChapterRepository;
+import com.repository.CourseRepository;
+import com.repository.ExpertRepository;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
 import jakarta.transaction.Transactional;
@@ -38,11 +40,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
     private final CourseServiceHelper courseServiceHelper;
     private final ChapterRepository chapterRepository;
     private final ExpertRepository expertRepository;
-    private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
     private final SubjectService subjectService;
@@ -246,7 +246,7 @@ public class CourseService {
         if (user == null) {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(),courseRequest.getDescription());
+        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(), courseRequest.getDescription());
         String[] courseName = courseRequest.getCourseName().trim().split("\\s+");
         String courseNameReplace = String.join(" ", courseName);
         CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace, user.getExpert());
@@ -278,7 +278,7 @@ public class CourseService {
         if (user == null) {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
-        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(),courseRequest.getDescription());
+        CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(), courseRequest.getDescription());
         CourseEntity newCourse = courseRepository.findById(courseRequest.getCourseId()).orElse(null);
         newCourse.setExpert(user.getExpert());
         newCourse.setCourseName(courseRequest.getCourseName());
@@ -298,7 +298,7 @@ public class CourseService {
         return courseResponse;
     }
 
-    public CourseDetailsResponse getCourseDetailsAdmin(Long courseId){
+    public CourseDetailsResponse getCourseDetailsAdmin(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         return courseDetailsResponse;

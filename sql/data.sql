@@ -790,6 +790,7 @@ DROP TABLE IF EXISTS `quizzes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quizzes` (
   `quiz_id` bigint NOT NULL AUTO_INCREMENT,
+  `allow_see_answers` bit(1) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `ended_at` datetime(6) DEFAULT NULL,
   `max_attempts` int DEFAULT NULL,
@@ -799,13 +800,12 @@ CREATE TABLE `quizzes` (
   `updated_at` datetime(6) DEFAULT NULL,
   `chapter_id` bigint DEFAULT NULL,
   `expert_id` bigint DEFAULT NULL,
-  `allow_see_answers` bit(1) DEFAULT NULL,
   PRIMARY KEY (`quiz_id`),
-  KEY `FKbfcxv33pl1gl32wie5nobns7r` (`chapter_id`),
+  UNIQUE KEY `UK8t7yvf83h97wti5y48pouog65` (`chapter_id`),
   KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
   CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
   CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -7,6 +7,7 @@ import com.entity.ChatEntity;
 import com.entity.MessageEntity;
 import com.entity.UserEntity;
 import com.exception.custom.ChatException;
+import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
 import com.helper.UserServiceHelper;
 import com.repository.ChatRepository;
@@ -32,13 +33,35 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final ModelMapper modelMapper;
 
-    public ChatResponse getLatestChatOfUser() {
+    public void deleteChatOfUserByChatId(Long chatId) {
+        if (chatId == null) {
+            throw new ChatException("ChatID không được null!");
+        }
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        ChatEntity chatEntity = chatRepository.findTopByUser_UserIdOrderByCreatedAtDesc(userEntity.getUserId()).orElse(null);
-        return chatEntity == null ? null : modelMapper.map(chatEntity, ChatResponse.class);
+        ChatEntity chatEntity = chatRepository.findByUser_UserIdAndChatId(userEntity.getUserId(), chatId)
+                .orElseThrow(() -> new NotFoundException("ChatID không tồn tại!"));
+        chatRepository.delete(chatEntity);
+    }
+
+    public void deleteAllChatsOfUser() {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        chatRepository.deleteAll(userEntity.getChats());
+    }
+
+    public ChatResponse getChatOfUserByChatId(Long chatId) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        ChatEntity chatEntity = chatRepository.findByUser_UserIdAndChatId(userEntity.getUserId(), chatId)
+                .orElseThrow(() -> new NotFoundException("ChatID không tồn tại!"));
+        return modelMapper.map(chatEntity, ChatResponse.class);
     }
 
     public ChatHistoryResponse getHistoryChatsOfUserWithin7Days(Pageable pageable) {

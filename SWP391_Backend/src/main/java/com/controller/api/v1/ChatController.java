@@ -18,10 +18,20 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @ApiMessage("Lấy đoạn chat gần nhất thành công!")
-    @GetMapping("/latest")
-    public ResponseEntity<ChatResponse> getLatestChatOfUser() {
-        return ResponseEntity.ok(chatService.getLatestChatOfUser());
+    @ApiMessage("Lấy đoạn chat theo ID thành công!")
+    @GetMapping("/{chatId}")
+    public ResponseEntity<ChatResponse> getChatOfUserByChatId(@PathVariable Long chatId) {
+        return ResponseEntity.ok(chatService.getChatOfUserByChatId(chatId));
+    }
+
+    @DeleteMapping("/{chatId}")
+    public void deleteChatOfUserByChatId(@PathVariable Long chatId) {
+        chatService.deleteChatOfUserByChatId(chatId);
+    }
+
+    @DeleteMapping("/all")
+    public void deleteAllChatsOfUser() {
+        chatService.deleteAllChatsOfUser();
     }
 
     @ApiMessage("Lấy lịch sử chat trong vòng 7 ngày của người dùng thành công!")

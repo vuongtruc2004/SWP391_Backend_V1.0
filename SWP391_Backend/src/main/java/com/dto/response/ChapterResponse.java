@@ -20,4 +20,20 @@ public class ChapterResponse {
     String description;
 
     List<LessonResponse> lessons;
+
+    QuizInfoResponse quizInfo;
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @Builder
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class QuizInfoResponse {
+        Long quizId;
+
+        String title;
+
+        Integer totalQuestions;
+    }
 }
