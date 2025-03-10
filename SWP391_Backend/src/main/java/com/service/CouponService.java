@@ -52,7 +52,7 @@ public class CouponService {
         Instant endDay=DateUtil.parseToInstant(couponRequest.getEndTime());
         couponEntity.setStartTime(startDay);
         couponEntity.setEndTime(endDay);
-        if(couponRequest.getDiscountType().equals(DiscountTypeEnum.FIXED)){
+        if(couponRequest.getDiscountType().equals("FIXED")){
             couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
         }else{
             couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
@@ -60,7 +60,7 @@ public class CouponService {
         modelMapper.map(couponRequest, couponEntity);
         Set<CourseEntity> courseEntities = new HashSet<>();
         List<String> courseName=new ArrayList<>();
-        if(couponRequest.getDiscountRange().equals(DiscountRangeEnum.COURSES)){
+        if(couponRequest.getDiscountRange().equals("COURSES")){
             for(String courseEntity:couponRequest.getCourses()){
                 CourseEntity currentCourse=this.courseRepository.findByCourseName(courseEntity);
                 courseEntities.add(currentCourse);
