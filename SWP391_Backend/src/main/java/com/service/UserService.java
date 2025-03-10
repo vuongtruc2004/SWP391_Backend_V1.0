@@ -230,12 +230,12 @@ public class UserService {
 
 
             // Nếu là EXPERT, gán thêm thông tin
-            if (savedUser.getExpert() != null) {
-                userResponse.setJob(savedUser.getExpert().getJob());
-                userResponse.setAchievement(savedUser.getExpert().getAchievement());
-                userResponse.setDescription(savedUser.getExpert().getDescription());
-                userResponse.setYearOfExperience(savedUser.getExpert().getYearOfExperience());
-            }
+//            if (savedUser.getExpert() != null) {
+//                userResponse.setJob(savedUser.getExpert().getJob());
+//                userResponse.setAchievement(savedUser.getExpert().getAchievement());
+//                userResponse.setDescription(savedUser.getExpert().getDescription());
+//                userResponse.setYearOfExperience(savedUser.getExpert().getYearOfExperience());
+//            }
 
             return userResponse;
         } catch (Exception e) {

@@ -50,8 +50,4 @@ public class UserResponse {
     
     Set<UserProgressResponse> userProgresses;
 
-    String job;
-    String achievement;
-    String description;
-    Integer yearOfExperience;
 }
