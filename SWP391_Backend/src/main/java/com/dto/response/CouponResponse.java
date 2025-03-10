@@ -31,9 +31,7 @@ public class CouponResponse {
 
     DiscountRangeEnum discountRange;
 
-    Double discountPercent;
-
-    Double discountAmount;
+    Double discountValue;
 
     Double maxDiscountAmount;
 
