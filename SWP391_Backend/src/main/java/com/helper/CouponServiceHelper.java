@@ -19,9 +19,10 @@ public class CouponServiceHelper {
     public List<CouponResponse> convertToCouponResponseList(Collection<CouponEntity> collection) {
         return collection.stream().map(couponEntity -> {
             CouponResponse couponResponse = modelMapper.map(couponEntity, CouponResponse.class);
-            if(couponEntity.getDiscountAmount()!=null){
+            if(couponEntity.getDiscountAmount()!=null && couponEntity.getDiscountPercent()==0) {
                 couponResponse.setDiscountValue(couponEntity.getDiscountAmount());
-            }else{
+            }
+            if(couponEntity.getDiscountPercent()!=null){
                 couponResponse.setDiscountValue(couponEntity.getDiscountPercent());
             }
             List<String> courseNames = couponEntity.getCourses().stream()
