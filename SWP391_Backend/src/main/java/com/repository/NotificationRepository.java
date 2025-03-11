@@ -1,14 +1,18 @@
 package com.repository;
 
 import com.entity.NotificationEntity;
+import com.util.enums.NotificationStatusEnum;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -28,16 +32,14 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     Page<NotificationEntity> findAll(Specification<NotificationEntity> specification, Pageable pageable);
     void deleteNotificationEntityByNotificationId(Long notificationId);
 
-    @Query(value = """
-    SELECT * FROM notifications
-    ORDER BY 
-        CASE 
-            WHEN udpated_at IS NOT NULL THEN udpated_at
-            ELSE created_at
-        END DESC,
-        created_at DESC
-    """,
-            countQuery = "SELECT COUNT(*) FROM notifications",
-            nativeQuery = true)
-    Page<NotificationEntity> findAllNotificationSorted(Specification<NotificationEntity> specification, Pageable pageable);
+    Set<NotificationEntity> getNotificationEntitiesByStatusAndAndCreatedAt(NotificationStatusEnum status, Instant createdAt);
+
+    @Modifying
+    @Query("select n.notificationId from NotificationEntity n where n.status = :status and n.setDate = :setDate")
+    Set<Long> findAllNotificationId(@Param("status") NotificationStatusEnum status, @Param("setDate") Instant setDate);
+
+    @Modifying
+    @Transactional
+    @Query("update NotificationEntity n set n.status = :newStatus where n.notificationId in (:ids)")
+    int updateStatus(@Param("newStatus") NotificationStatusEnum newStatus, @Param("ids") Set<Long> ids);
 }

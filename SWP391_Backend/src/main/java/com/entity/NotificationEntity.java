@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.util.enums.NotificationStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,6 +28,12 @@ public class NotificationEntity {
     @Column(columnDefinition = "LONGTEXT")
     String content;
 
+    @Enumerated(EnumType.STRING)
+    NotificationStatusEnum status;
+
+    @Column(name = "set_date")
+    Instant setDate;
+
     @Column(name = "created_at")
     Instant createdAt;
 
@@ -41,6 +48,7 @@ public class NotificationEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @PreUpdate

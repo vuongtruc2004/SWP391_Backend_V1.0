@@ -1,5 +1,8 @@
 package com.dto.request;
 
+import com.util.enums.NotificationStatusEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,7 +19,12 @@ public class NotificationRequest {
 
     String content;
 
+    @Enumerated(EnumType.STRING)
+    NotificationStatusEnum status;
+
     Boolean global;
     
     List<String> emails;
+
+    String setDate;
 }
