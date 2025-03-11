@@ -27,25 +27,5 @@ public class QuestionResponse {
         Long answerId;
         String content;
         Boolean correct;
-
-
     }
-    //    Long questionId;
-//    String title;
-//    List<AnswerEntity> answers;
-//    List<String> correctAnswer;
-//    Instant createdAt;
-//    Instant updatedAt;
-//    Instant latestUpdate;
-//    public Instant getLatestUpdate() {
-//        Instant questionUpdatedAt = Optional.ofNullable(updatedAt).orElse(Instant.MIN);
-//        Instant answerUpdatedAt = answers != null
-//                ? answers.stream()
-//                .map(AnswerEntity::getUpdatedAt)
-//                .filter(Objects::nonNull)
-//                .max(Instant::compareTo)
-//                .orElse(Instant.MIN)
-//                : Instant.MIN;
-//        return questionUpdatedAt.isAfter(answerUpdatedAt) ? questionUpdatedAt : answerUpdatedAt;
-//    }
 }

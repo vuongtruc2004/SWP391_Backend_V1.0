@@ -1,8 +1,10 @@
 package com.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
 import java.util.List;
 
 @Builder
@@ -36,9 +38,16 @@ public class ChapterResponse {
 
         Boolean published;
 
+        Boolean allowSeeAnswers;
+
+        String description;
+
         Integer duration;
 
         Integer totalQuestions;
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+        Instant updatedAt;
 
         Long chapterId;
     }

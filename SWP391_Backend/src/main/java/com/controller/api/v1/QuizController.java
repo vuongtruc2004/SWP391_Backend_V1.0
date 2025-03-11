@@ -16,37 +16,21 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
     private final QuizService quizService;
 
-//    @ApiMessage("Lấy tất cả bài quiz thành công")
-//    @GetMapping
-//    public ResponseEntity<PageDetailsResponse<List<QuizResponse>>> getQuizWithFilter(
-//            Pageable pageable,
-//            @Filter Specification<QuizEntity> specification) {
-//        return ResponseEntity.ok(quizService.getQuizWithFilter(pageable, specification));
-//    }
-
-    @ApiMessage("Mở bài quiz thành công")
+    @ApiMessage("Mở bài quiz thành công!")
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> publishedQuiz(@PathVariable Long id) {
         return ResponseEntity.ok(quizService.published(id));
     }
 
-    @ApiMessage("Tạo bài kiểm tra thành công")
+    @ApiMessage("Tạo bài kiểm tra thành công!")
     @PostMapping
     public ResponseEntity<QuizResponse> createQuiz(@RequestBody @Valid QuizRequest quizRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(quizRequest));
     }
 
-    @ApiMessage("Lấy bài kiểm tra thanhf công")
+    @ApiMessage("Lấy bài kiểm tra thành công!")
     @GetMapping("/{quizId}")
-    public ResponseEntity<QuizResponse> getQuiz(@PathVariable Long quizId) {
-        return ResponseEntity.ok(quizService.getQuiz(quizId));
+    public ResponseEntity<QuizResponse> getQuizByQuizId(@PathVariable Long quizId) {
+        return ResponseEntity.ok(quizService.getQuizByQuizId(quizId));
     }
-
-//    @ApiMessage("Cập nhật bài kiểm tra thành công")
-//    @PutMapping
-//    public ResponseEntity<QuizResponse> updateQuiz(@RequestBody QuizRequest quizRequest) throws Exception {
-//        return ResponseEntity.ok(quizService.updateQuiz(quizRequest));
-//    }
-
-
 }

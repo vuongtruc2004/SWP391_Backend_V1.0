@@ -26,8 +26,7 @@ public class CourseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     Long courseId;
-
-
+    
     String courseName;
 
     @Column(columnDefinition = "LONGTEXT")

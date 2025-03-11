@@ -29,6 +29,9 @@ public class QuizEntity {
     @Column(name = "allow_see_answers")
     Boolean allowSeeAnswers;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
+    String description;
+
     Integer duration;
 
     @Column(name = "created_at")
