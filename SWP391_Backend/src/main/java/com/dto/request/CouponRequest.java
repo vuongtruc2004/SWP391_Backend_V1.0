@@ -18,6 +18,8 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CouponRequest {
 
+    Long couponId;
+
     String couponName;
 
     String couponDescription;

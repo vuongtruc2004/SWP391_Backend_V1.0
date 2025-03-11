@@ -115,4 +115,48 @@ public class CouponService {
                 null
         );
     }
+
+    @Transactional
+    public CouponResponse updateCoupon(CouponRequest couponRequest){
+        CouponResponse couponResponse = new CouponResponse();
+        CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId()).get();
+        Instant startDay = DateUtil.parseToInstant(couponRequest.getStartTime());
+        Instant endDay = DateUtil.parseToInstant(couponRequest.getEndTime());
+        couponEntity.setStartTime(startDay);
+        couponEntity.setEndTime(endDay);
+        couponEntity.setCouponCode(couponRequest.getCouponCode().trim());
+        couponEntity.setCouponName(couponRequest.getCouponName().trim());
+        couponEntity.setCouponDescription(couponRequest.getCouponDescription().trim());
+        couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
+        couponEntity.setMaxUses(couponRequest.getMaxUses());
+        couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
+        Set<CourseEntity> courseEntities = new HashSet<>();
+        List<String> courseName = new ArrayList<>();
+        if(couponRequest.getDiscountRange().equals("COURSES")){
+            couponEntity.setDiscountRange(DiscountRangeEnum.COURSES);
+            for(String courseEntity:couponRequest.getCourses()){
+                CourseEntity currentCourse=this.courseRepository.findByCourseName(courseEntity);
+                courseEntities.add(currentCourse);
+                courseName.add(currentCourse.getCourseName());
+            }
+        }else{
+            couponEntity.setDiscountRange(DiscountRangeEnum.ALL);
+            for(CourseEntity courseEntity:this.courseRepository.findAll()){
+                courseEntities.add(courseEntity);
+                courseName.add(courseEntity.getCourseName());
+            }
+        }
+        if(couponRequest.getDiscountType().equals("FIXED")){
+            couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
+            couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
+        }else{
+            couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
+            couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
+        }
+        couponEntity.setCourses(courseEntities);
+        this.couponRepository.save(couponEntity);
+        couponResponse.setCourseName(courseName);
+        modelMapper.map(couponEntity, couponResponse);
+        return couponResponse;
+    }
 }

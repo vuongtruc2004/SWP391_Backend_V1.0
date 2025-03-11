@@ -2,8 +2,10 @@ package com.controller.api.v1;
 
 
 import com.dto.request.CouponRequest;
+import com.dto.request.CourseRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.CouponResponse;
+import com.dto.response.CourseResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CouponEntity;
@@ -43,6 +45,12 @@ public class CouponController {
     @DeleteMapping("/{couponId}")
     public ResponseEntity<ApiResponse<String>> deleteCoupon(@PathVariable Long couponId) {
         return ResponseEntity.ok(couponService.deleteByCouponId(couponId));
+    }
+
+    @ApiMessage("Cập nhật một coupon")
+    @PutMapping
+    public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest courseRequest) throws Exception {
+        return ResponseEntity.ok().body(this.couponService.updateCoupon(courseRequest));
     }
 
 
