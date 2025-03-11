@@ -20,12 +20,14 @@ public class CouponConfig {
     public void removeExpiredCoupons() {
         Instant now = Instant.now();
         List<CouponEntity> expiredCoupons = this.couponRepository.findByEndTimeBefore(now);
-        List<CouponEntity> endCoupons=this.couponRepository.findExpiredCoupons();
+        List<CouponEntity> endCoupons=this.couponRepository.findAll();
         if (!expiredCoupons.isEmpty()) {
             couponRepository.deleteAll(expiredCoupons);
         }
-        if(!endCoupons.isEmpty()) {
-            couponRepository.deleteAll(endCoupons);
+        for(CouponEntity coupon : endCoupons) {
+            if(coupon.getMaxUses() == coupon.getUsedCount()){
+                this.couponRepository.deleteById(coupon.getCouponId());
+            }
         }
     }
 

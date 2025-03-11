@@ -13,8 +13,7 @@ import java.util.List;
 public interface CouponRepository extends JpaSpecificationRepository<CouponEntity, Long> {
     Boolean existsByCouponCode(String code);
     List<CouponEntity> findByEndTimeBefore(Instant instant);
-    @Query("SELECT c FROM CouponEntity c WHERE c.maxUses = c.usedCount")
-    List<CouponEntity> findExpiredCoupons();
+
 
 
 }
