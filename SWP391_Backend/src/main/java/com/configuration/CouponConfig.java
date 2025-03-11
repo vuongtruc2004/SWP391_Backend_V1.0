@@ -1,5 +1,4 @@
 package com.configuration;
-
 import com.entity.CouponEntity;
 import com.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +15,19 @@ public class CouponConfig {
     private final CouponRepository couponRepository;
 
     @Async
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 60000)
     @Transactional
     public void removeExpiredCoupons() {
         Instant now = Instant.now();
-        List<CouponEntity> expiredCoupons = couponRepository.findByEndTimeBefore(now);
+        List<CouponEntity> expiredCoupons = this.couponRepository.findByEndTimeBefore(now);
+        List<CouponEntity> endCoupons=this.couponRepository.findExpiredCoupons();
         if (!expiredCoupons.isEmpty()) {
             couponRepository.deleteAll(expiredCoupons);
         }
+        if(!endCoupons.isEmpty()) {
+            couponRepository.deleteAll(endCoupons);
+        }
     }
+
+
 }
