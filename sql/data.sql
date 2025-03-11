@@ -269,10 +269,11 @@ CREATE TABLE `coupons` (
   `coupon_description` varchar(255) DEFAULT NULL,
   `coupon_name` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `discount_amount` double DEFAULT NULL,
   `discount_percent` double DEFAULT NULL,
-  `discount_range` tinyint DEFAULT NULL,
-  `discount_type` tinyint DEFAULT NULL,
+  `discount_range` enum('ALL','COURSES') DEFAULT NULL,
+  `discount_type` enum('FIXED','PERCENTAGE') DEFAULT NULL,
   `end_time` datetime(6) DEFAULT NULL,
   `max_discount_amount` double DEFAULT NULL,
   `max_uses` bigint DEFAULT NULL,
@@ -280,7 +281,7 @@ CREATE TABLE `coupons` (
   `start_time` datetime(6) DEFAULT NULL,
   `used_count` bigint DEFAULT NULL,
   PRIMARY KEY (`coupon_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,6 +290,7 @@ CREATE TABLE `coupons` (
 
 LOCK TABLES `coupons` WRITE;
 /*!40000 ALTER TABLE `coupons` DISABLE KEYS */;
+INSERT INTO `coupons` VALUES (1,'CP001','Miễn phí vận chuyển cho đơn hàng trên 100.000','Miễn phí vận chuyển','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',1000,0,'ALL','FIXED','2025-03-31 23:59:59.000000',50000,100,100000,'2025-03-01 00:00:00.000000',10),(2,'CP002','Giảm giá 20% cho đơn hàng trên 200.000','Giảm giá 20%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,20,'ALL','PERCENTAGE','2025-04-30 23:59:59.000000',100000,50,200000,'2025-03-01 00:00:00.000000',5),(3,'CP003','Giảm giá 10.000 cho khóa học Java','Giảm giá khóa học Java','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',10000,0,'COURSES','FIXED','2025-05-31 23:59:59.000000',10000,30,50000,'2025-03-10 00:00:00.000000',0),(4,'CP004','Giảm giá 5% cho đơn hàng trên 500.000','Giảm giá 5%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,5,'ALL','PERCENTAGE','2025-06-30 23:59:59.000000',250000,40,500000,'2025-03-15 00:00:00.000000',2),(5,'CP005','Giảm giá 50.000 cho đơn hàng trên 300.000','Giảm giá 50.000','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',50000,0,'ALL','FIXED','2025-07-31 23:59:59.000000',50000,60,300000,'2025-03-20 00:00:00.000000',8),(6,'CP006','Giảm giá 15% cho khóa học Python','Giảm giá Python','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,15,'COURSES','PERCENTAGE','2025-08-31 23:59:59.000000',100000,25,150000,'2025-03-25 00:00:00.000000',3),(7,'CP007','Giảm giá 100.000 cho đơn hàng trên 1.000.000','Giảm giá 100.000','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',100000,0,'ALL','FIXED','2025-09-30 23:59:59.000000',100000,20,1000000,'2025-03-30 00:00:00.000000',12),(8,'CP008','Giảm giá 25% cho khóa học AI','Giảm giá AI','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,25,'COURSES','PERCENTAGE','2025-10-31 23:59:59.000000',150000,10,200000,'2025-04-01 00:00:00.000000',0),(9,'CP009','Miễn phí giao hàng cho đơn hàng trên 500.000','Miễn phí giao hàng','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',1000,0,'ALL','FIXED','2025-11-30 23:59:59.000000',50000,50,500000,'2025-04-05 00:00:00.000000',4),(10,'CP010','Giảm giá 10% cho đơn hàng trên 150.000','Giảm giá 10%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,10,'ALL','PERCENTAGE','2025-12-31 23:59:59.000000',150000,80,150000,'2025-04-10 00:00:00.000000',15),(11,'CP011','Giảm giá 50000 cho khóa học React','Giảm giá React','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',50000,0,'COURSES','FIXED','2025-01-31 23:59:59.000000',50000,60,300000,'2025-04-15 00:00:00.000000',10),(12,'CP012','Giảm giá 10% cho các khóa học JavaScript','Giảm giá JavaScript','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,10,'COURSES','PERCENTAGE','2025-02-28 23:59:59.000000',50000,70,400000,'2025-04-20 00:00:00.000000',20),(13,'CP013','Giảm giá 10000 cho khóa học HTML','Giảm giá HTML','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',10000,0,'COURSES','FIXED','2025-03-31 23:59:59.000000',10000,100,250000,'2025-04-25 00:00:00.000000',25),(14,'CP014','Giảm giá 20% cho đơn hàng trên 200.000','Giảm giá 20%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,20,'ALL','PERCENTAGE','2025-04-15 23:59:59.000000',50000,90,200000,'2025-05-01 00:00:00.000000',12),(15,'CP015','Giảm giá 30% cho đơn hàng trên 150.000','Giảm giá 30%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,30,'ALL','PERCENTAGE','2025-05-15 23:59:59.000000',60000,110,150000,'2025-05-05 00:00:00.000000',14),(16,'CP016','Giảm giá 20000 cho đơn hàng trên 200.000','Giảm giá 20000','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',20000,0,'ALL','FIXED','2025-06-15 23:59:59.000000',20000,120,200000,'2025-06-01 00:00:00.000000',16),(17,'CP017','Giảm giá 50% cho khóa học Machine Learning','Giảm giá ML','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,50,'COURSES','PERCENTAGE','2025-07-31 23:59:59.000000',100000,130,300000,'2025-06-05 00:00:00.000000',17),(18,'CP018','Giảm giá 15% cho đơn hàng trên 100.000','Giảm giá 15%','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,15,'ALL','PERCENTAGE','2025-08-31 23:59:59.000000',70000,140,100000,'2025-07-10 00:00:00.000000',18),(19,'CP019','Giảm giá 50.000 cho đơn hàng trên 500.000','Giảm giá 50.000','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',50000,0,'ALL','FIXED','2025-09-30 23:59:59.000000',50000,150,500000,'2025-08-20 00:00:00.000000',19),(20,'CP020','Giảm giá 25% cho khóa học Data Science','Giảm giá DS','2025-03-11 09:19:30.000000','2025-03-11 09:19:30.000000',0,25,'COURSES','PERCENTAGE','2025-10-31 23:59:59.000000',150000,160,250000,'2025-09-01 00:00:00.000000',20);
 /*!40000 ALTER TABLE `coupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -568,6 +570,7 @@ DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
   `notification_id` bigint NOT NULL AUTO_INCREMENT,
   `content` longtext,
+  `status` enum('PENDING', 'SENT') DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `global` bit(1) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
@@ -791,19 +794,15 @@ CREATE TABLE `quizzes` (
   `quiz_id` bigint NOT NULL AUTO_INCREMENT,
   `allow_see_answers` bit(1) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
-  `ended_at` datetime(6) DEFAULT NULL,
-  `max_attempts` int DEFAULT NULL,
+  `description` mediumtext,
+  `duration` int DEFAULT NULL,
   `published` bit(1) DEFAULT NULL,
-  `started_at` datetime(6) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `chapter_id` bigint DEFAULT NULL,
-  `expert_id` bigint DEFAULT NULL,
   PRIMARY KEY (`quiz_id`),
   UNIQUE KEY `UK8t7yvf83h97wti5y48pouog65` (`chapter_id`),
-  KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
-  CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
-  CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+  CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
