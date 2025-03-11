@@ -17,6 +17,7 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -150,11 +151,20 @@ public class BlogService {
         return blogResponse;
     }
 
-
+    //admin
     public PageDetailsResponse<List<BlogDetailsResponse>> getBlogWithFilterPageAdmin(
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
+        Optional<String> email= JwtService.extractUsernameFromToken();
+        UserEntity userEntity=this.userRepository.findByEmail(email.get());
+        if(userEntity==null){
+            throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
+        }
+        if(userEntity.getRole().getRoleName().equals(RoleNameEnum.MARKETING)){
+            specification=specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId()));
+        }
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);

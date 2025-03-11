@@ -22,8 +22,6 @@ public class CourseDetailsResponse extends CourseResponse {
 
     Boolean accepted;
 
-    ExpertDetailsResponse expert;
-
     Set<SubjectResponse> subjects;
 
     List<ChapterResponse> chapters;

@@ -20,8 +20,11 @@ import com.helper.UserServiceHelper;
 import com.repository.ChapterRepository;
 import com.repository.CourseRepository;
 import com.repository.ExpertRepository;
+import com.repository.UserRepository;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
+import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,10 +34,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +46,7 @@ public class CourseService {
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
     private final SubjectService subjectService;
+    private final UserRepository userRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -165,14 +166,22 @@ public class CourseService {
         return purchasedCourseIds;
     }
 
+    //admin
     public PageDetailsResponse<List<CourseDetailsResponse>> getCoursesWithFilterByAdmin(
             Pageable pageable,
             Specification<CourseEntity> specification,
             Boolean accepted
     ) {
+        Optional<String> email= JwtService.extractUsernameFromToken();
+        UserEntity userEntity=this.userRepository.findByEmail(email.get());
         if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accepted"), accepted)
+            );
+        }
+        if (userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("expert").get("expertId"), userEntity.getExpert().getExpertId())
             );
         }
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
