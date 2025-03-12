@@ -57,4 +57,7 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
             "join u.courses c " +
             "where c.courseId = :courseId and u.userId = :userId and c.accepted = true")
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
+
+    Optional<CourseEntity> findByCourseId(Long courseId);
+
 }

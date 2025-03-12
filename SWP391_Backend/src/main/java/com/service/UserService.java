@@ -3,24 +3,20 @@ package com.service;
 import com.dto.request.RegisterRequest;
 import com.dto.request.UpdateUserRequest;
 import com.dto.request.UserRequest;
-import com.dto.response.ApiResponse;
-import com.dto.response.GenderCountResponse;
-import com.dto.response.PageDetailsResponse;
-import com.dto.response.UserResponse;
+import com.dto.response.*;
 import com.entity.*;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
+import com.helper.OrderServiceHelper;
 import com.helper.UserServiceHelper;
-import com.repository.ExpertRepository;
-import com.repository.OTPRepository;
-import com.repository.RoleRepository;
-import com.repository.UserRepository;
+import com.repository.*;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
+import com.util.enums.OrderStatusEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.criteria.Join;
 import org.modelmapper.ModelMapper;
@@ -51,8 +47,10 @@ public class UserService {
     private final FileService fileService;
     private final UserServiceHelper userServiceHelper;
     private final ExpertRepository expertRepository;
+    private final OrderRepository orderRepository;
+    private final OrderServiceHelper orderServiceHelper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository, OrderRepository orderRepository, OrderServiceHelper orderServiceHelper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
@@ -62,6 +60,8 @@ public class UserService {
         this.fileService = fileService;
         this.userServiceHelper = userServiceHelper;
         this.expertRepository = expertRepository;
+        this.orderRepository = orderRepository;
+        this.orderServiceHelper = orderServiceHelper;
     }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
@@ -374,5 +374,21 @@ public class UserService {
     public List<UserResponse> getAllUsers() {
         List<UserResponse> list = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
         return list;
+    }
+
+
+    public PageDetailsResponse<List<OrderResponse>> getAllHistoryPurchased(String status, Pageable pageable) {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        OrderStatusEnum statusEnum = null;
+        Page<OrderEntity> page = null;
+        if (!status.equalsIgnoreCase("ALL")) {
+            statusEnum = OrderStatusEnum.valueOf(status);
+        }
+        if(status.equalsIgnoreCase("ALL")) {
+            page = orderRepository.findAllByUser_UserId(user.getUserId(), pageable);
+        } else {
+            page = orderRepository.findAllByUser_UserIdAndOrderStatus(user.getUserId(), statusEnum, pageable);
+        }
+        return orderServiceHelper.convertToPageOrderResponse(page);
     }
 }

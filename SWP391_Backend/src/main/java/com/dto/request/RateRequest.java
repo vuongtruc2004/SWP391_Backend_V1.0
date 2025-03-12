@@ -1,4 +1,4 @@
-package com.dto.response;
+package com.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,11 +9,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailsResponse {
+public class RateRequest {
 
-    Long orderDetailsId;
-
+    String content;
+    Integer stars;
     Long courseId;
 
-    CourseResponse course;
 }

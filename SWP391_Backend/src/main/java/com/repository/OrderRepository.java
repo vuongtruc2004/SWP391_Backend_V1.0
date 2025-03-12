@@ -3,6 +3,8 @@ package com.repository;
 import com.entity.OrderEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.OrderStatusEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -158,4 +160,10 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     Double findMaxTotalAmount();
 
     Optional<OrderEntity> findByOrderIdAndOrderStatusNot(Long orderId, OrderStatusEnum orderStatus);
+
+
+    Page<OrderEntity> findAllByUser_UserId(Long userId, Pageable pageable);
+    Page<OrderEntity> findAllByUser_UserIdAndOrderStatus(Long userId, OrderStatusEnum status, Pageable pageable);
+    List<OrderEntity> findByUser_UserId(Long userId);
+
 }

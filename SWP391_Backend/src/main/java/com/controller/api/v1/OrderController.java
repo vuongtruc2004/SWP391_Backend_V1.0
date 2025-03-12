@@ -64,13 +64,8 @@ public class OrderController {
     public ResponseEntity<DashboardStatisticsResponse> getDashboardStatistics(@PathVariable String type) {
         return ResponseEntity.ok(orderService.getDashboardStatistics(type));
     }
-//
-//    @ApiMessage("Lấy các khóa học muốn mua thành công!")
-//    @GetMapping("/course")
-//    public ResponseEntity<List<CourseResponse>> getCoursesByIds(@RequestParam List<Long> courseIds) {
-//        return ResponseEntity.ok(orderService.getCoursesByIds(courseIds));
-//    }
 
+    @ApiMessage("Lấy tát cả các khóa học đã bán theo thứ tự thành công!")
     @GetMapping("/count")
     public List<Map.Entry<String, Long>> count() {
         return this.orderDetailService.count();

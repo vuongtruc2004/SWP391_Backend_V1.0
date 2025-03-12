@@ -1,5 +1,7 @@
 package com.controller.api.v1;
 
+import com.dto.request.RateRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.RateResponse;
 import com.entity.RateEntity;
@@ -10,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -39,4 +38,31 @@ public class RateController {
     public ResponseEntity<Map<Integer, Integer>> getNumberOfCoursesOfEachRate(@RequestParam(name = "courseId") Long courseId) {
         return ResponseEntity.ok(rateService.getNumberOfCoursesOfEachRate(courseId));
     }
+
+
+    @ApiMessage("Lấy đánh giá của bản thân về khóa học thành công!")
+    @GetMapping("/my-rate/{courseId}")
+    public ResponseEntity<ApiResponse<RateResponse>> getMyRate(@PathVariable Long courseId) {
+        return ResponseEntity.ok(rateService.getMyCourseRating(courseId));
+    }
+
+    @ApiMessage("Đánh giá khóa học thành công!")
+    @PostMapping
+    public ResponseEntity<ApiResponse<RateResponse>> rateCourse(@RequestBody RateRequest rateRequest ) {
+        return ResponseEntity.ok(rateService.rateCourse(rateRequest));
+    }
+
+    @ApiMessage("Xóa đánh giá khóa học thành công!")
+    @DeleteMapping("/delete/{rateId}")
+    public ResponseEntity<ApiResponse<String>> deleteRating(@PathVariable Long rateId) {
+        return ResponseEntity.ok(rateService.deleteRating(rateId));
+    }
+
+    @ApiMessage("Chỉnh sửa đánh giá thành công!")
+    @PatchMapping("/{rateId}")
+    public ResponseEntity<ApiResponse<RateResponse>> updateRating(@PathVariable Long rateId, @RequestBody RateRequest rateRequest) {
+        return ResponseEntity.ok(rateService.updateRating(rateId, rateRequest));
+    }
+
+
 }

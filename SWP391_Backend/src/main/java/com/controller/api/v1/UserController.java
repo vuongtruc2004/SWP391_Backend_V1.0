@@ -1,10 +1,7 @@
 package com.controller.api.v1;
 
 import com.dto.request.*;
-import com.dto.response.ApiResponse;
-import com.dto.response.GenderCountResponse;
-import com.dto.response.PageDetailsResponse;
-import com.dto.response.UserResponse;
+import com.dto.response.*;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.service.OTPService;
@@ -142,5 +139,13 @@ public class UserController {
     @GetMapping("/get-all")
     public ResponseEntity<List<UserResponse>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+
+    @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")
+    @GetMapping("/all_history_purchased/{status}")
+    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getAllHistoryPurchased (@PathVariable
+                                                                                            String status, Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllHistoryPurchased(status, pageable));
     }
 }

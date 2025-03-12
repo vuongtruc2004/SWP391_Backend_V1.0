@@ -122,7 +122,7 @@ public class SubjectService {
                 return BuildResponse.buildApiResponse(
                         HttpStatus.BAD_REQUEST.value(),
                         "Thất bại",
-                        "Không thể xóa môn học này do đang có khóa học!",
+                        "Không thể lĩnh vực học này do đang có khóa học!",
                         null
                 );
             }
@@ -132,7 +132,7 @@ public class SubjectService {
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
                 "Thành công!",
-                "Bạn đã xóa môn học có Id là " + subjectId + " thành công!",
+                "Bạn đã lĩnh vực học có Id là " + subjectId + " thành công!",
                 null
         );
     }
