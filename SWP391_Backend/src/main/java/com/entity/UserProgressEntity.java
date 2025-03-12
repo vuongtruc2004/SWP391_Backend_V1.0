@@ -31,4 +31,7 @@ public class UserProgressEntity {
 
     @Column(name = "lesson_id")
     Long lessonId;
+
+    @Column(name = "quiz_id")
+    Long quizId;
 }

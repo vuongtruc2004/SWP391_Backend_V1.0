@@ -36,6 +36,11 @@ public class CourseServiceHelper {
                                     .mapToInt(chapter -> chapter.getLessons().size())
                                     .sum()
                     );
+                    courseResponse.setTotalQuizzes(
+                            courseEntity.getChapters().stream()
+                                    .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
+                                    .sum()
+                    );
                     return courseResponse;
                 })
                 .toList();
@@ -71,6 +76,11 @@ public class CourseServiceHelper {
         courseDetailsResponse.setTotalLessons(
                 courseEntity.getChapters().stream()
                         .mapToInt(chapter -> chapter.getLessons().size())
+                        .sum()
+        );
+        courseDetailsResponse.setTotalQuizzes(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
                         .sum()
         );
         courseDetailsResponse.setTotalRating(rates.size());

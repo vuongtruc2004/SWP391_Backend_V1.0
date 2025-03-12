@@ -20,4 +20,6 @@ public class UserProgressResponse {
     Long chapterId;
 
     Long lessonId;
+
+    Long quizId;
 }

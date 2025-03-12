@@ -8,9 +8,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProgressRequest {
-    Long courseId;
 
-    Long chapterId;
+    Long courseId;
     
+    Long chapterId;
+
     Long lessonId;
+
+    Long quizId;
 }

@@ -21,7 +21,6 @@ public class UserProgressService {
 
     private final UserProgressRepository userProgressRepository;
     private final UserServiceHelper userServiceHelper;
-    private final NotificationService notificationService;
     private final ModelMapper modelMapper;
 
     public Set<UserProgressResponse> getUserProgresses() {
@@ -43,22 +42,37 @@ public class UserProgressService {
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập!");
         }
-        if (userProgressRepository.existsByUser_UserIdAndChapterIdAndLessonId(
-                userEntity.getUserId(),
-                userProgressRequest.getChapterId(),
-                userProgressRequest.getLessonId()
-        )) {
-            throw new InvalidRequestInput("Bài học này đã hoàn thành!");
+
+        UserProgressEntity userProgressEntity = new UserProgressEntity();
+        userProgressEntity.setUser(userEntity);
+        userProgressEntity.setCourseId(userProgressRequest.getCourseId());
+        userProgressEntity.setChapterId(userProgressRequest.getChapterId());
+
+        if ((userProgressRequest.getLessonId() == null && userProgressRequest.getQuizId() == null) ||
+                (userProgressRequest.getLessonId() != null && userProgressRequest.getQuizId() != null)) {
+            throw new InvalidRequestInput("Bạn chỉ được truyền 1 trong hai tham số lessonId hoặc quizId!");
+        } else if (userProgressRequest.getQuizId() != null) {
+            if (userProgressRepository.existsByUser_UserIdAndCourseIdAndChapterIdAndQuizId(
+                    userEntity.getUserId(),
+                    userProgressRequest.getCourseId(),
+                    userProgressRequest.getChapterId(),
+                    userProgressRequest.getQuizId())
+            ) {
+                throw new InvalidRequestInput("Bài quiz này đã được người dùng hoàn thành!");
+            }
+            userProgressEntity.setQuizId(userProgressRequest.getQuizId());
+        } else {
+            if (userProgressRepository.existsByUser_UserIdAndCourseIdAndChapterIdAndLessonId(
+                    userEntity.getUserId(),
+                    userProgressRequest.getCourseId(),
+                    userProgressRequest.getChapterId(),
+                    userProgressRequest.getLessonId())
+            ) {
+                throw new InvalidRequestInput("Bài giảng này đã được người dùng hoàn thành!");
+            }
+            userProgressEntity.setLessonId(userProgressRequest.getLessonId());
         }
 
-        UserProgressEntity newUserProgressEntity = UserProgressEntity.builder()
-                .user(userEntity)
-                .courseId(userProgressRequest.getCourseId())
-                .chapterId(userProgressRequest.getChapterId())
-                .lessonId(userProgressRequest.getLessonId())
-                .build();
-
-        notificationService.purchaseSuccessNotification();
-        return modelMapper.map(userProgressRepository.save(newUserProgressEntity), UserProgressResponse.class);
+        return modelMapper.map(userProgressRepository.save(userProgressEntity), UserProgressResponse.class);
     }
 }

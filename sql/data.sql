@@ -269,7 +269,6 @@ CREATE TABLE `coupons` (
   `coupon_description` varchar(255) DEFAULT NULL,
   `coupon_name` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
   `discount_amount` double DEFAULT NULL,
   `discount_percent` double DEFAULT NULL,
   `discount_range` enum('ALL','COURSES') DEFAULT NULL,
@@ -279,6 +278,7 @@ CREATE TABLE `coupons` (
   `max_uses` bigint DEFAULT NULL,
   `min_order_value` double DEFAULT NULL,
   `start_time` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `used_count` bigint DEFAULT NULL,
   PRIMARY KEY (`coupon_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -995,10 +995,11 @@ DROP TABLE IF EXISTS `user_progress`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_progress` (
   `progress_id` bigint NOT NULL AUTO_INCREMENT,
+  `lesson_id` bigint DEFAULT NULL,
+  `quiz_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
   `chapter_id` bigint DEFAULT NULL,
   `course_id` bigint DEFAULT NULL,
-  `lesson_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`progress_id`),
   KEY `FKrt37sneeps21829cuqetjm5ye` (`user_id`),
   CONSTRAINT `FKrt37sneeps21829cuqetjm5ye` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
@@ -1011,7 +1012,6 @@ CREATE TABLE `user_progress` (
 
 LOCK TABLES `user_progress` WRITE;
 /*!40000 ALTER TABLE `user_progress` DISABLE KEYS */;
-INSERT INTO `user_progress` VALUES (1,58,20,218,1),(2,58,20,158,1),(3,55,19,155,1),(4,55,19,215,1),(5,56,19,156,1),(6,56,19,216,1),(7,57,19,157,1),(8,57,19,217,1);
 /*!40000 ALTER TABLE `user_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
