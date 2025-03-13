@@ -59,5 +59,6 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
 
     Optional<CourseEntity> findByCourseId(Long courseId);
+    CourseEntity findByCourseName(String name);
 
 }
