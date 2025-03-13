@@ -40,7 +40,6 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
     private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
     private final CouponServiceHelper couponServiceHelper;
 
     public CouponResponse createCoupon(CouponRequest couponRequest) {
@@ -103,6 +102,21 @@ public class CouponService {
                 page.getTotalElements(),
                 listCouponResponse
         );
+    }
+
+    public List<CouponResponse> getAllCouponUser(){
+        List<CouponResponse> listCouponResponse = new ArrayList<>();
+        List<CouponEntity> listValidCoupon=this.couponRepository.findByEndTimeAfter(Instant.now());
+        for(CouponEntity couponEntity:listValidCoupon){
+            if(couponEntity.getUsedCount()<couponEntity.getMaxUses()){
+                CouponResponse couponResponse = new CouponResponse();
+                modelMapper.map(couponEntity, couponResponse);
+                listCouponResponse.add(couponResponse);
+            }
+        }
+        return listCouponResponse;
+
+
     }
 
     @Transactional

@@ -52,6 +52,12 @@ public class CouponController {
     public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest courseRequest) throws Exception {
         return ResponseEntity.ok().body(this.couponService.updateCoupon(courseRequest));
     }
+    @GetMapping("/all-inpagination")
+    @ApiMessage("Lấy tất cả coupon thành công!")
+    public ResponseEntity<List<CouponResponse>> getAllCouponUser(
+    ) {
+        return ResponseEntity.ok(this.couponService.getAllCouponUser());
+    }
 
 
 }
