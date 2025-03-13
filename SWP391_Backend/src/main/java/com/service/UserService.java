@@ -376,15 +376,17 @@ public class UserService {
         return list;
     }
 
-
-    public PageDetailsResponse<List<OrderResponse>> getAllHistoryPurchased(String status, Pageable pageable) {
+    public PageDetailsResponse<List<OrderResponse>> getUserHistoryPurchased(String status, Pageable pageable) {
         UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
         OrderStatusEnum statusEnum = null;
-        Page<OrderEntity> page = null;
+        Page<OrderEntity> page;
         if (!status.equalsIgnoreCase("ALL")) {
             statusEnum = OrderStatusEnum.valueOf(status);
         }
-        if(status.equalsIgnoreCase("ALL")) {
+        if (status.equalsIgnoreCase("ALL")) {
             page = orderRepository.findAllByUser_UserId(user.getUserId(), pageable);
         } else {
             page = orderRepository.findAllByUser_UserIdAndOrderStatus(user.getUserId(), statusEnum, pageable);

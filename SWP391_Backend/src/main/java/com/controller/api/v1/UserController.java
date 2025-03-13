@@ -137,15 +137,13 @@ public class UserController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<UserResponse>> getAllUsers(){
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-
     @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")
-    @GetMapping("/all_history_purchased/{status}")
-    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getAllHistoryPurchased (@PathVariable
-                                                                                            String status, Pageable pageable) {
-        return ResponseEntity.ok(userService.getAllHistoryPurchased(status, pageable));
+    @GetMapping("/my-history-purchased/{status}")
+    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getUserHistoryPurchased(@PathVariable String status, Pageable pageable) {
+        return ResponseEntity.ok(userService.getUserHistoryPurchased(status, pageable));
     }
 }

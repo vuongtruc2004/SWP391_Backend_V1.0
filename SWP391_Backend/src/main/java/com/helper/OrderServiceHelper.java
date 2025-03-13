@@ -2,17 +2,12 @@ package com.helper;
 
 import com.dto.response.*;
 import com.entity.CourseEntity;
-import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
-import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.repository.CourseRepository;
 import com.util.BuildResponse;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -54,9 +49,10 @@ public class OrderServiceHelper {
 
                     orderResponse.setOrderDetails(orderDetailsResponses);
                     return orderResponse;
-                })                .toList();
+                }).toList();
+        
         return BuildResponse.buildPageDetailsResponse(
-                page.getNumber()+1,
+                page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
