@@ -2,6 +2,7 @@ package com.controller.api.v1;
 
 import com.dto.request.*;
 import com.dto.response.*;
+import com.dto.response.details.ExpertDetailsResponse;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.service.OTPService;
@@ -145,5 +146,11 @@ public class UserController {
     @GetMapping("/my-history-purchased/{status}")
     public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getUserHistoryPurchased(@PathVariable String status, Pageable pageable) {
         return ResponseEntity.ok(userService.getUserHistoryPurchased(status, pageable));
+    }
+
+    @ApiMessage("Lấy tất cả chuyên gia theo dõi thành công!")
+    @GetMapping("/following-experts")
+    public ResponseEntity<List<ExpertDetailsResponse>> getMyFollowingExperts() {
+        return ResponseEntity.ok(userService.getMyFollowingExperts());
     }
 }

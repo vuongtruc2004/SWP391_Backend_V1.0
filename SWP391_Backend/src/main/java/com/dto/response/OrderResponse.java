@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,5 +39,5 @@ public class OrderResponse {
 
     UserResponse user;
 
-    Set<OrderDetailsResponse> orderDetails;
+    List<OrderDetailsResponse> orderDetails;
 }

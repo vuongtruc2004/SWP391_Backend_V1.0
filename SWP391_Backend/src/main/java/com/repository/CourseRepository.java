@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -58,7 +59,8 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
             "where c.courseId = :courseId and u.userId = :userId and c.accepted = true")
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
 
-    Optional<CourseEntity> findByCourseId(Long courseId);
     CourseEntity findByCourseName(String name);
+
+    List<CourseEntity> findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(Collection<ExpertEntity> experts);
 
 }

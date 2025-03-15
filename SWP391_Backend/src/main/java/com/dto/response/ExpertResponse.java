@@ -15,5 +15,9 @@ public class ExpertResponse {
     
     Integer totalCourses;
 
+    Integer yearOfExperience;
+
+    String achievement;
+
     UserResponse user;
 }

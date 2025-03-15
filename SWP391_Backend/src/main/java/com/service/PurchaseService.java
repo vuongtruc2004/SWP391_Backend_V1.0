@@ -144,7 +144,7 @@ public class PurchaseService {
         }
 
         OrderEntity orderEntity = new OrderEntity();
-        Set<OrderDetailsEntity> orderDetailsEntitySet = new HashSet<>();
+        List<OrderDetailsEntity> orderDetailsEntitySet = new ArrayList<>();
         orderEntity.setUser(userEntity);
         orderEntity.setOrderCode(txnRef);
         orderEntity.setTotalAmount(purchaseRequest.getTotalPrice());

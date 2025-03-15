@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -89,7 +90,7 @@ public class UserEntity {
     Set<ChatEntity> chats;
 
     @ManyToMany(mappedBy = "users") // cac tac gia ma nguoi dung follow
-    Set<ExpertEntity> experts;
+    List<ExpertEntity> experts;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

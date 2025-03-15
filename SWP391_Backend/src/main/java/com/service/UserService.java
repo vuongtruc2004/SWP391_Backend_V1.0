@@ -4,11 +4,13 @@ import com.dto.request.RegisterRequest;
 import com.dto.request.UpdateUserRequest;
 import com.dto.request.UserRequest;
 import com.dto.response.*;
+import com.dto.response.details.ExpertDetailsResponse;
 import com.entity.*;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
+import com.helper.ExpertServiceHelper;
 import com.helper.OrderServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.*;
@@ -49,8 +51,9 @@ public class UserService {
     private final ExpertRepository expertRepository;
     private final OrderRepository orderRepository;
     private final OrderServiceHelper orderServiceHelper;
+    private final ExpertServiceHelper expertServiceHelper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository, OrderRepository orderRepository, OrderServiceHelper orderServiceHelper) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository, OrderRepository orderRepository, OrderServiceHelper orderServiceHelper, ExpertServiceHelper expertServiceHelper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleRepository = roleRepository;
@@ -62,6 +65,7 @@ public class UserService {
         this.expertRepository = expertRepository;
         this.orderRepository = orderRepository;
         this.orderServiceHelper = orderServiceHelper;
+        this.expertServiceHelper = expertServiceHelper;
     }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
@@ -392,5 +396,16 @@ public class UserService {
             page = orderRepository.findAllByUser_UserIdAndOrderStatus(user.getUserId(), statusEnum, pageable);
         }
         return orderServiceHelper.convertToPageOrderResponse(page);
+    }
+
+
+    public List<ExpertDetailsResponse> getMyFollowingExperts() {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if(userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        return userEntity.getExperts().stream()
+                .map(expertServiceHelper::convertToExpertDetailsResponse)
+                .toList();
     }
 }

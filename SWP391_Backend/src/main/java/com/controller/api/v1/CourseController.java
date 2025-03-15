@@ -121,4 +121,11 @@ public class CourseController {
         return ResponseEntity.ok().body(this.courseService.getCourseDetailsAdmin(courseId));
     }
 
+    @ApiMessage("Lấy các khóa học mới nhất của chuyên gia người dùng theo dõi thành công!")
+    @GetMapping("/latest-courses")
+    public ResponseEntity<List<CourseDetailsResponse>> getLatestCoursesOfFollowingExperts() {
+        return ResponseEntity.ok(courseService.getLatestCoursesOfFollowingExperts());
+    }
+
+
 }

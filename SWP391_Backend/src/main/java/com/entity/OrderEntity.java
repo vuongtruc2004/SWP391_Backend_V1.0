@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,7 +48,7 @@ public class OrderEntity {
     UserEntity user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    Set<OrderDetailsEntity> orderDetails;
+    List<OrderDetailsEntity> orderDetails;
 
     @PrePersist
     public void handlePrePersist() {

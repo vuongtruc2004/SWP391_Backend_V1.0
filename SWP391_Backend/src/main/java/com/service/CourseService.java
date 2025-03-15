@@ -303,4 +303,14 @@ public class CourseService {
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
         return courseDetailsResponse;
     }
+
+    public List<CourseDetailsResponse> getLatestCoursesOfFollowingExperts() {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        return courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()).stream()
+                .map(courseEntity -> modelMapper.map(courseEntity, CourseDetailsResponse.class))
+                .toList();
+    }
 }

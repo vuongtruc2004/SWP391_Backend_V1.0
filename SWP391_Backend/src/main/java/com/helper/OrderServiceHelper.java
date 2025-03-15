@@ -36,7 +36,7 @@ public class OrderServiceHelper {
         List<OrderResponse> orderResponsesList = page.getContent().stream()
                 .map(orderEntity -> {
                     OrderResponse orderResponse = modelMapper.map(orderEntity, OrderResponse.class);
-                    Set<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
+                    List<OrderDetailsResponse> orderDetailsResponses = orderEntity.getOrderDetails().stream()
                             .map(orderDetailsEntity -> {
                                 OrderDetailsResponse orderDetailsResponse = modelMapper.map(orderDetailsEntity, OrderDetailsResponse.class);
                                 CourseEntity course = courseRepository.findById(orderDetailsEntity.getCourseId())
@@ -45,12 +45,12 @@ public class OrderServiceHelper {
                                 orderDetailsResponse.setCourse(courseResponse);
                                 return orderDetailsResponse;
                             })
-                            .collect(Collectors.toSet());
+                            .collect(Collectors.toList());
 
                     orderResponse.setOrderDetails(orderDetailsResponses);
                     return orderResponse;
                 }).toList();
-        
+
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),

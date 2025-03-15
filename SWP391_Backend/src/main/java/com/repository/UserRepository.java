@@ -7,6 +7,7 @@ import com.util.enums.GenderEnum;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -24,4 +25,7 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
     Long countByDobBetween(Instant startDate, Instant endDate);
 
     UserEntity findByEmail(String email);
+
+    List<UserEntity> findAllByExpertsIsNotEmptyAndUserId(Long userId);
+
 }
