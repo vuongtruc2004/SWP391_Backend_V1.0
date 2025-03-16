@@ -45,7 +45,7 @@ public class OrderService {
 
         if (orderEntity.getOrderStatus().equals(OrderStatusEnum.PENDING)) {
             for (OrderDetailsEntity orderDetailsEntity : orderEntity.getOrderDetails()) {
-                CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourseId())
+                CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourse().getCourseId())
                         .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
                 Set<UserEntity> currentRegister = courseEntity.getUsers();
                 currentRegister.add(orderEntity.getUser());
@@ -158,12 +158,6 @@ public class OrderService {
         return response;
     }
 
-    //
-//    public List<CourseResponse> getCoursesByIds(List<Long> courseIds) {
-//        List<CourseEntity> courseEntityList = courseRepository.findAllById(courseIds);
-//        return courseEntityList.stream().map(courseEntity -> modelMapper.map(courseEntity, CourseResponse.class)).toList();
-//    }
-//
     private boolean isInSelectedWeek(LocalDate calculatedAt, LocalDate startOfWeek, LocalDate endOfWeek) {
         return !calculatedAt.isBefore(startOfWeek) && !calculatedAt.isAfter(endOfWeek);
     }

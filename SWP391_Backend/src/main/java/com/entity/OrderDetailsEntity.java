@@ -18,8 +18,10 @@ public class OrderDetailsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_details_id")
     Long orderDetailsId;
-    
-    Long courseId;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    CourseEntity course;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

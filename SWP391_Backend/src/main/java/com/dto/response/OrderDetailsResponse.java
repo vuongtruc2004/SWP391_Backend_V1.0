@@ -13,7 +13,5 @@ public class OrderDetailsResponse {
 
     Long orderDetailsId;
 
-    Long courseId;
-
     CourseResponse course;
 }

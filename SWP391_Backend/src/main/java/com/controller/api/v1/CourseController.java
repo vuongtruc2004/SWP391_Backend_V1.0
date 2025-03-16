@@ -123,9 +123,8 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học mới nhất của chuyên gia người dùng theo dõi thành công!")
     @GetMapping("/latest-courses")
-    public ResponseEntity<List<CourseDetailsResponse>> getLatestCoursesOfFollowingExperts() {
+    public ResponseEntity<List<CourseResponse>> getLatestCoursesOfFollowingExperts() {
         return ResponseEntity.ok(courseService.getLatestCoursesOfFollowingExperts());
     }
-
 
 }

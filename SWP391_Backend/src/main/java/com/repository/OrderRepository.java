@@ -3,8 +3,6 @@ package com.repository;
 import com.entity.OrderEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.OrderStatusEnum;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,7 +17,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             FROM OrderEntity o 
             JOIN o.orderDetails od 
             WHERE o.user.userId = :userId 
-            AND od.courseId in (:courseIds)
+            AND od.course.courseId in (:courseIds)
             AND o.orderStatus = 'COMPLETED'
             """)
     boolean existsCompletedOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
@@ -161,9 +159,9 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
     Optional<OrderEntity> findByOrderIdAndOrderStatusNot(Long orderId, OrderStatusEnum orderStatus);
 
-
-    Page<OrderEntity> findAllByUser_UserId(Long userId, Pageable pageable);
-    Page<OrderEntity> findAllByUser_UserIdAndOrderStatus(Long userId, OrderStatusEnum status, Pageable pageable);
     List<OrderEntity> findByUser_UserId(Long userId);
 
+    List<OrderEntity> findByUser_UserIdOrderByCreatedAtDesc(Long userId);
+
+    List<OrderEntity> findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(Long userUserId, OrderStatusEnum orderStatus);
 }

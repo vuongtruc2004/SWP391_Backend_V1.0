@@ -304,13 +304,11 @@ public class CourseService {
         return courseDetailsResponse;
     }
 
-    public List<CourseDetailsResponse> getLatestCoursesOfFollowingExperts() {
+    public List<CourseResponse> getLatestCoursesOfFollowingExperts() {
         UserEntity user = userServiceHelper.extractUserFromToken();
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        return courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()).stream()
-                .map(courseEntity -> modelMapper.map(courseEntity, CourseDetailsResponse.class))
-                .toList();
+        return courseServiceHelper.convertToCourseResponseList(courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()));
     }
 }

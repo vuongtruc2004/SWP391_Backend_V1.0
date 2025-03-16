@@ -28,22 +28,23 @@ public class CourseServiceHelper {
     private final ExpertServiceHelper expertServiceHelper;
 
     public List<CourseResponse> convertToCourseResponseList(Collection<CourseEntity> collection) {
-        return collection.stream().map(courseEntity -> {
-                    CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-                    courseResponse.setTotalPurchased(courseEntity.getUsers().size());
-                    courseResponse.setTotalLessons(
-                            courseEntity.getChapters().stream()
-                                    .mapToInt(chapter -> chapter.getLessons().size())
-                                    .sum()
-                    );
-                    courseResponse.setTotalQuizzes(
-                            courseEntity.getChapters().stream()
-                                    .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
-                                    .sum()
-                    );
-                    return courseResponse;
-                })
-                .toList();
+        return collection.stream().map(this::convertToCourseResponse).toList();
+    }
+
+    public CourseResponse convertToCourseResponse(CourseEntity courseEntity) {
+        CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
+        courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseResponse.setTotalLessons(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getLessons().size())
+                        .sum()
+        );
+        courseResponse.setTotalQuizzes(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
+                        .sum()
+        );
+        return courseResponse;
     }
 
     public CourseDetailsResponse convertToCourseDetailsResponse(CourseEntity courseEntity) {

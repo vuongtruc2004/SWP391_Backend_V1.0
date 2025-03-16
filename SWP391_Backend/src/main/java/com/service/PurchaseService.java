@@ -103,7 +103,7 @@ public class PurchaseService {
         orderEntityList.get(0).setOrderStatus(OrderStatusEnum.COMPLETED);
 
         for (OrderDetailsEntity orderDetailsEntity : orderEntityList.get(0).getOrderDetails()) {
-            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourseId())
+            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourse().getCourseId())
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
             Set<UserEntity> currentRegister = courseEntity.getUsers();
             currentRegister.add(orderEntityList.get(0).getUser());
@@ -152,12 +152,11 @@ public class PurchaseService {
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 
         for (Long courseId : purchaseRequest.getCourseIds()) {
-            if (!courseRepository.existsById(courseId)) {
-                throw new NotFoundException("Khóa học không tồn tại!");
-            }
+            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+                    .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
             orderDetailsEntitySet.add(OrderDetailsEntity.builder()
                     .order(orderEntity)
-                    .courseId(courseId)
+                    .course(course)
                     .build());
         }
         orderEntity.setOrderDetails(orderDetailsEntitySet);

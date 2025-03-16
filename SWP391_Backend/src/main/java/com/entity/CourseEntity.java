@@ -26,7 +26,7 @@ public class CourseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     Long courseId;
-    
+
     String courseName;
 
     @Column(columnDefinition = "LONGTEXT")
@@ -70,6 +70,9 @@ public class CourseEntity implements Serializable {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<RateEntity> rates;
+
+    @OneToMany(mappedBy = "course")
+    Set<OrderDetailsEntity> orderDetailsEntityList;
 
     @ManyToMany(mappedBy = "courses")
     Set<CouponEntity> coupons;

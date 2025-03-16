@@ -597,13 +597,15 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
-  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
-  `course_id` bigint DEFAULT NULL,
-  `order_id` bigint DEFAULT NULL,
+  `order_details_id` BIGINT NOT NULL AUTO_INCREMENT,
+  `course_id` BIGINT DEFAULT NULL,
+  `order_id` BIGINT DEFAULT NULL,
   PRIMARY KEY (`order_details_id`),
-  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
-  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_order_details_order` (`order_id`),
+  KEY `FK_order_details_course` (`course_id`),
+  CONSTRAINT `FK_order_details_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `FK_order_details_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

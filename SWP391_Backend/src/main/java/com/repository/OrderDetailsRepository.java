@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderDetailsRepository extends JpaSpecificationRepository<OrderDetailsEntity, Long> {
-    Long countByOrder_OrderStatus(OrderStatusEnum orderStatus);
-    @Query("SELECT od.courseId FROM OrderDetailsEntity od")
+
+    @Query("SELECT od.course.courseId FROM OrderDetailsEntity od")
     List<Long> findAllCourseId();
-    Long countByCourseIdAndOrder_OrderStatus(Long courseId, OrderStatusEnum orderStatus);
-    Optional<OrderDetailsEntity> findByOrder_OrderIdAndCourseId(Long orderId, Long courseId);
+
+    Long countByCourse_CourseIdAndOrder_OrderStatus(Long courseId, OrderStatusEnum orderStatus);
+
+    Optional<OrderDetailsEntity> findByOrder_OrderIdAndCourse_CourseId(Long orderId, Long courseId);
 
 }

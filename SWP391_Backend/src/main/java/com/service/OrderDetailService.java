@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-    public class OrderDetailService {
+public class OrderDetailService {
     private final OrderDetailsRepository orderDetailsRepository;
     private final CourseRepository courseRepository;
     private final UserServiceHelper userServiceHelper;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
         // Lặp qua danh sách course đã bán để tính tổng số lượng
         for (Long courseId : soldCourseIds) {
             String courseName = courseMap.get(courseId);
-            Long countSold = this.orderDetailsRepository.countByCourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
+            Long countSold = this.orderDetailsRepository.countByCourse_CourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
             courseSold.put(courseName, countSold);
         }
 
@@ -63,16 +63,15 @@ import java.util.stream.Collectors;
                 .collect(Collectors.toList());
     }
 
-
     public ApiResponse<OrderDetailsResponse> getCoursePurchased(Long courseId) {
         UserEntity user = userServiceHelper.extractUserFromToken();
         List<OrderEntity> orderList = orderRepository.findByUser_UserId(user.getUserId());
         if (orderList.size() != 0) {
-            for(OrderEntity orderEntity : orderList) {
-                Optional<OrderDetailsEntity> orderDetailOptional = orderDetailsRepository.findByOrder_OrderIdAndCourseId(orderEntity.getOrderId(), courseId);
-                if(orderDetailOptional.isPresent()) {
+            for (OrderEntity orderEntity : orderList) {
+                Optional<OrderDetailsEntity> orderDetailOptional = orderDetailsRepository.findByOrder_OrderIdAndCourse_CourseId(orderEntity.getOrderId(), courseId);
+                if (orderDetailOptional.isPresent()) {
                     OrderDetailsEntity orderDetails = orderDetailOptional.get();
-                    return  BuildResponse.buildApiResponse(
+                    return BuildResponse.buildApiResponse(
                             HttpStatus.OK.value(),
                             "Thành công!",
                             null,

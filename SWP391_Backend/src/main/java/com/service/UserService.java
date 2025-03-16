@@ -380,28 +380,25 @@ public class UserService {
         return list;
     }
 
-    public PageDetailsResponse<List<OrderResponse>> getUserHistoryPurchased(String status, Pageable pageable) {
+    public List<OrderResponse> getUserHistoryPurchased(String status) {
         UserEntity user = userServiceHelper.extractUserFromToken();
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        OrderStatusEnum statusEnum = null;
-        Page<OrderEntity> page;
-        if (!status.equalsIgnoreCase("ALL")) {
-            statusEnum = OrderStatusEnum.valueOf(status);
-        }
         if (status.equalsIgnoreCase("ALL")) {
-            page = orderRepository.findAllByUser_UserId(user.getUserId(), pageable);
+            return orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId()).stream()
+                    .map((orderServiceHelper::convertToOrderResponse))
+                    .toList();
         } else {
-            page = orderRepository.findAllByUser_UserIdAndOrderStatus(user.getUserId(), statusEnum, pageable);
+            return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.valueOf(status)).stream()
+                    .map((orderServiceHelper::convertToOrderResponse))
+                    .toList();
         }
-        return orderServiceHelper.convertToPageOrderResponse(page);
     }
-
 
     public List<ExpertDetailsResponse> getMyFollowingExperts() {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
         return userEntity.getExperts().stream()

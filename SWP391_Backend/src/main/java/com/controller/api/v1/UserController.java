@@ -144,8 +144,8 @@ public class UserController {
 
     @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")
     @GetMapping("/my-history-purchased/{status}")
-    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getUserHistoryPurchased(@PathVariable String status, Pageable pageable) {
-        return ResponseEntity.ok(userService.getUserHistoryPurchased(status, pageable));
+    public ResponseEntity<List<OrderResponse>> getUserHistoryPurchased(@PathVariable String status) {
+        return ResponseEntity.ok(userService.getUserHistoryPurchased(status));
     }
 
     @ApiMessage("Lấy tất cả chuyên gia theo dõi thành công!")

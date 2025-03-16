@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -52,6 +51,7 @@ public class OrderEntity {
 
     @PrePersist
     public void handlePrePersist() {
+        this.createdAt = Instant.now();
         if (this.orderStatus == null) {
             this.orderStatus = OrderStatusEnum.PENDING;
         }
