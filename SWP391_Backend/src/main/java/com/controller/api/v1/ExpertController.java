@@ -2,6 +2,7 @@ package com.controller.api.v1;
 
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.dto.response.details.ExpertDetailsResponse;
 import com.service.ExpertService;
 import com.util.annotation.ApiMessage;
@@ -34,5 +35,11 @@ public class ExpertController {
     @PostMapping("/follow/{expertId}")
     public ResponseEntity<ExpertDetailsResponse> followExpert(@PathVariable Long expertId) {
         return ResponseEntity.ok(this.expertService.followExpert(expertId));
+    }
+
+    @ApiMessage("Lấy khóa học của chuyên gia thành công")
+    @GetMapping("/courses/all")
+    public ResponseEntity<List<CourseDetailsResponse>> getAllCoursesByExpert() {
+        return ResponseEntity.ok(expertService.getAllCoursesByExpert());
     }
 }

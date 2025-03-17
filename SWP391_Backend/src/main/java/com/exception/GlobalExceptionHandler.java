@@ -82,4 +82,39 @@ public class GlobalExceptionHandler {
         apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
     }
+
+
+
+    @ExceptionHandler(value = TitleQuizException.class)
+    public ResponseEntity<ApiResponse<Void>> handleTitleQuizException(Exception e) {
+        ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                "Title_Quiz_Exception",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
+
+    @ExceptionHandler(value = TitleQuestionException.class)
+    public ResponseEntity<ApiResponse<Void>> handleTitleQuestionException(Exception e) {
+        ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                "Title_Question_Exception",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
+
+    @ExceptionHandler(value = ChapterException.class)
+    public ResponseEntity<ApiResponse<Void>> handleChapterException(Exception e) {
+        ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                "Chapter_Exception",
+                null
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
 }

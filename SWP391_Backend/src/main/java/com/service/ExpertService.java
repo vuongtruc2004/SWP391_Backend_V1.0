@@ -2,11 +2,13 @@ package com.service;
 
 import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.dto.response.details.ExpertDetailsResponse;
 import com.entity.ExpertEntity;
 import com.entity.UserEntity;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
+import com.helper.CourseServiceHelper;
 import com.helper.ExpertServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.ExpertRepository;
@@ -28,6 +30,7 @@ public class ExpertService {
     private final ModelMapper modelMapper;
     private final ExpertServiceHelper expertServiceHelper;
     private final UserServiceHelper userServiceHelper;
+    private final CourseServiceHelper courseServiceHelper;
 
     public PageDetailsResponse<List<ExpertResponse>> getExpertsHaveCourses(Pageable pageable) {
         Page<ExpertEntity> page = expertRepository.findAllByCoursesIsNotEmpty(pageable);
@@ -74,6 +77,15 @@ public class ExpertService {
         ExpertEntity newExpertEntity = expertRepository.save(expert);
         return expertServiceHelper.convertToExpertDetailsResponse(newExpertEntity);
 
+    }
+
+    public List<CourseDetailsResponse> getAllCoursesByExpert() {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null || userEntity.getExpert() == null) {
+            throw new UserException("Vui lòng đăng nhập bằng tài khoản Expert");
+        }
+        return userEntity.getExpert().getCourses().stream()
+                .map(courseServiceHelper::convertToCourseDetailsResponse).toList();
     }
 
 }

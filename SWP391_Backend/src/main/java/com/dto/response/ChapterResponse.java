@@ -25,6 +25,8 @@ public class ChapterResponse {
 
     QuizInfoResponse quizInfo;
 
+    CourseResponse course;
+
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter

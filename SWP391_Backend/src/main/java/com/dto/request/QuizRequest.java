@@ -21,6 +21,8 @@ public class QuizRequest {
 
     Boolean allowSeeAnswers;
 
+    String description;
+
     Integer duration;
 
     Long chapterId;

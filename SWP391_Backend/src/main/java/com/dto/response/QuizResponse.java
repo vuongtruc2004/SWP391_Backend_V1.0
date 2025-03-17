@@ -1,6 +1,9 @@
 package com.dto.response;
 
+import com.entity.ChapterEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,16 +22,21 @@ public class QuizResponse {
 
     String title;
 
+    String description;
+
     Boolean published;
 
     Boolean allowSeeAnswers;
 
     Integer duration;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    ChapterResponse chapter;
+
+    @JsonSerialize(using = InstantSerializer.class)
     Instant createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    //    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = InstantSerializer.class)
     Instant updatedAt;
 
     Set<QuestionResponse> questions;
