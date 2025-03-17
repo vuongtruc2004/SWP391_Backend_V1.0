@@ -43,5 +43,4 @@ public class CouponResponse {
     Instant endTime;
 
     List<String> courseName;
-
 }

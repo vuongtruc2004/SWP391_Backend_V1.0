@@ -75,7 +75,7 @@ public class CourseEntity implements Serializable {
     Set<OrderDetailsEntity> orderDetailsEntityList;
 
     @ManyToMany(mappedBy = "courses")
-    Set<CouponEntity> coupons;
+    List<CouponEntity> coupons;
 
     @ManyToOne
     @JoinColumn(name = "campaign_id")

@@ -22,11 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CouponController {
     private final CouponService couponService;
+
     @PostMapping
     @ApiMessage("Tạo coupon thành công!")
     public ResponseEntity<CouponResponse> createCoupon(@RequestBody CouponRequest couponRequest) {
         return ResponseEntity.ok().body(this.couponService.createCoupon(couponRequest));
     }
+
     @GetMapping("/all")
     @ApiMessage("Lấy tất cả coupon thành công!")
     public ResponseEntity<PageDetailsResponse<List<CouponResponse>>> getCouponWithFilterAdmin(
@@ -35,22 +37,22 @@ public class CouponController {
     ) {
         return ResponseEntity.ok(couponService.getCouponWithFilterAdmin(pageable, specification));
     }
-    @ApiMessage("Xóa khóa học thành công!")
+
+    @ApiMessage("Xóa coupon thành công!")
     @DeleteMapping("/{couponId}")
     public ResponseEntity<ApiResponse<String>> deleteCoupon(@PathVariable Long couponId) {
         return ResponseEntity.ok(couponService.deleteByCouponId(couponId));
     }
+
     @ApiMessage("Cập nhật một coupon")
     @PutMapping
     public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest courseRequest) throws Exception {
         return ResponseEntity.ok().body(this.couponService.updateCoupon(courseRequest));
     }
-    @GetMapping("/all-inpagination")
-    @ApiMessage("Lấy tất cả coupon thành công!")
-    public ResponseEntity<List<CouponResponse>> getAllCouponUser(
-    ) {
-        return ResponseEntity.ok(this.couponService.getAllCouponUser());
+
+    @ApiMessage("Lấy các coupon hợp lệ của 1 khóa học thành công!")
+    @GetMapping("/available")
+    public ResponseEntity<List<CouponResponse>> getAllCouponsAvailableInACourses(@RequestParam List<Long> courseIds) {
+        return ResponseEntity.ok().body(this.couponService.getAllCouponsAvailableInACourses(courseIds));
     }
-
-
 }
