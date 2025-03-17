@@ -4,10 +4,13 @@ import com.dto.response.ExpertResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.dto.response.details.ExpertDetailsResponse;
+import com.entity.ExpertEntity;
 import com.service.ExpertService;
+import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +44,15 @@ public class ExpertController {
     @GetMapping("/courses/all")
     public ResponseEntity<List<CourseDetailsResponse>> getAllCoursesByExpert() {
         return ResponseEntity.ok(expertService.getAllCoursesByExpert());
+    }
+
+
+    @ApiMessage("Lấy tất cả chuyên gia thành công!")
+    @GetMapping
+    public ResponseEntity<PageDetailsResponse<List<ExpertDetailsResponse>>> getAllExperts(
+            Pageable pageable,
+            @Filter Specification<ExpertEntity> specification
+    ) {
+        return ResponseEntity.ok(expertService.getAllExperts(pageable, specification));
     }
 }

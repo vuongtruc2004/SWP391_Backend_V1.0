@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -86,6 +87,26 @@ public class ExpertService {
         }
         return userEntity.getExpert().getCourses().stream()
                 .map(courseServiceHelper::convertToCourseDetailsResponse).toList();
+    }
+
+
+    public PageDetailsResponse<List<ExpertDetailsResponse>> getAllExperts(
+            Pageable pageable,
+            Specification<ExpertEntity> specification
+    ) {
+        Page<ExpertEntity> page = expertRepository.findAll(specification, pageable);
+        List<ExpertDetailsResponse> expertDetailResponses = page.getContent()
+                .stream()
+                .map(expertServiceHelper::convertToExpertDetailsResponse)
+                .toList();
+
+        return BuildResponse.buildPageDetailsResponse(
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                expertDetailResponses
+        );
     }
 
 }

@@ -66,7 +66,12 @@ public class RateService {
         if(rateOptional.isPresent()) {
             rateEntity = rateOptional.get();
         } else {
-            throw new NotFoundException("Không tìm  thấy đánh giá nào của bạn!");
+            return BuildResponse.buildApiResponse(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Không tìm thấy đánh giá!",
+                    null,
+                    null
+            );
         }
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
