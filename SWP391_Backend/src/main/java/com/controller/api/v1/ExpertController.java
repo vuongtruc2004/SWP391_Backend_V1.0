@@ -8,10 +8,7 @@ import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,11 @@ public class ExpertController {
     @GetMapping("{userId}")
     public ResponseEntity<ExpertDetailsResponse> getExpertById(@PathVariable Long userId) {
         return ResponseEntity.ok(expertService.getExpertById(userId));
+    }
+    @ApiMessage("Theo dõi chuyên gia thành công!")
+    @PostMapping("/follow/{expertId}")
+    public ResponseEntity<Void> followExpert(@PathVariable Long expertId) {
+        this.expertService.followExpert(expertId);
+        return ResponseEntity.ok().build();
     }
 }
