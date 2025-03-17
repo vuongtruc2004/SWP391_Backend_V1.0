@@ -77,7 +77,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByCourse(pageable, specification, courseId));
     }
 
-
     @ApiMessage("Khóa người dùng thành công")
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> lockUser(@PathVariable Long id) {
@@ -124,7 +123,6 @@ public class UserController {
         return ResponseEntity.ok(userService.updateAvatarByAdmin(file, folder));
     }
 
-
     @ApiMessage("Đếm giới tính thành công!")
     @GetMapping("/gender_count")
     public ResponseEntity<GenderCountResponse> genderCount() throws NotFoundException {
@@ -143,9 +141,9 @@ public class UserController {
     }
 
     @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")
-    @GetMapping("/my-history-purchased/{status}")
-    public ResponseEntity<List<OrderResponse>> getUserHistoryPurchased(@PathVariable String status) {
-        return ResponseEntity.ok(userService.getUserHistoryPurchased(status));
+    @GetMapping("/purchase-history")
+    public ResponseEntity<List<OrderResponse>> getUserPurchaseHistory() {
+        return ResponseEntity.ok(userService.getUserPurchaseHistory());
     }
 
     @ApiMessage("Lấy tất cả chuyên gia theo dõi thành công!")

@@ -140,7 +140,7 @@ public class PurchaseService {
 
     private OrderResponse createOrder(PurchaseRequest purchaseRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
         if (orderRepository.existsCompletedOrder(userEntity.getUserId(), purchaseRequest.getCourseIds())) {
-            throw new PurchaseException("Bạn đã mua khóa học này rồi!");
+            throw new PurchaseException("Bạn đã có đơn hàng chứa khóa học này rồi!");
         }
 
         OrderEntity orderEntity = new OrderEntity();

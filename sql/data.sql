@@ -630,7 +630,7 @@ CREATE TABLE `orders` (
   `created_at` datetime(6) DEFAULT NULL,
   `expired_at` datetime(6) DEFAULT NULL,
   `order_code` varchar(255) DEFAULT NULL,
-  `order_status` enum('CANCELLED','COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
+  `order_status` enum('COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
   `total_amount` int DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,

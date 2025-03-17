@@ -21,6 +21,7 @@ import com.util.enums.GenderEnum;
 import com.util.enums.OrderStatusEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.criteria.Join;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -52,21 +54,6 @@ public class UserService {
     private final OrderRepository orderRepository;
     private final OrderServiceHelper orderServiceHelper;
     private final ExpertServiceHelper expertServiceHelper;
-
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, OTPService otpService, OTPRepository otpRepository, FileService fileService, UserServiceHelper userServiceHelper, ExpertRepository expertRepository, OrderRepository orderRepository, OrderServiceHelper orderServiceHelper, ExpertServiceHelper expertServiceHelper) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.otpService = otpService;
-        this.otpRepository = otpRepository;
-        this.fileService = fileService;
-        this.userServiceHelper = userServiceHelper;
-        this.expertRepository = expertRepository;
-        this.orderRepository = orderRepository;
-        this.orderServiceHelper = orderServiceHelper;
-        this.expertServiceHelper = expertServiceHelper;
-    }
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByEmailAndAccountType(registerRequest.getEmail(), AccountTypeEnum.CREDENTIALS);
@@ -380,20 +367,14 @@ public class UserService {
         return list;
     }
 
-    public List<OrderResponse> getUserHistoryPurchased(String status) {
+    public List<OrderResponse> getUserPurchaseHistory() {
         UserEntity user = userServiceHelper.extractUserFromToken();
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        if (status.equalsIgnoreCase("ALL")) {
-            return orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId()).stream()
-                    .map((orderServiceHelper::convertToOrderResponse))
-                    .toList();
-        } else {
-            return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.valueOf(status)).stream()
-                    .map((orderServiceHelper::convertToOrderResponse))
-                    .toList();
-        }
+        return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.COMPLETED).stream()
+                .map((orderServiceHelper::convertToOrderResponse))
+                .toList();
     }
 
     public List<ExpertDetailsResponse> getMyFollowingExperts() {
