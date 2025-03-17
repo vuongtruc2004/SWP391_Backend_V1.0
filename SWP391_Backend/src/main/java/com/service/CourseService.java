@@ -311,4 +311,9 @@ public class CourseService {
         }
         return courseServiceHelper.convertToCourseResponseList(courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()));
     }
+    public List<CourseResponse> getAllCourse(){
+        List<CourseEntity> courseEntities=this.courseRepository.findAll();
+        List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
+        return courseResponses;
+    }
 }

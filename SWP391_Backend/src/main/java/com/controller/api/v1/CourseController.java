@@ -126,5 +126,11 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> getLatestCoursesOfFollowingExperts() {
         return ResponseEntity.ok(courseService.getLatestCoursesOfFollowingExperts());
     }
+    @ApiMessage("Lấy các khóa học thành công!")
+    @GetMapping("/all-inpagination")
+    public ResponseEntity<List<CourseResponse>> getAllCoursesAdmin(
+    ) {
+        return ResponseEntity.ok(courseService.getAllCourse());
+    }
 
 }
