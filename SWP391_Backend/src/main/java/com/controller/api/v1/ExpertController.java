@@ -32,8 +32,7 @@ public class ExpertController {
     }
     @ApiMessage("Theo dõi chuyên gia thành công!")
     @PostMapping("/follow/{expertId}")
-    public ResponseEntity<Void> followExpert(@PathVariable Long expertId) {
-        this.expertService.followExpert(expertId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ExpertDetailsResponse> followExpert(@PathVariable Long expertId) {
+        return ResponseEntity.ok(this.expertService.followExpert(expertId));
     }
 }

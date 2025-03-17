@@ -11,6 +11,7 @@ import com.helper.ExpertServiceHelper;
 import com.helper.UserServiceHelper;
 import com.repository.ExpertRepository;
 import com.util.BuildResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -53,7 +54,9 @@ public class ExpertService {
         return expertServiceHelper.convertToExpertDetailsResponse(expertEntity);
 
     }
-    public void followExpert(Long expertId){
+
+    @Transactional
+    public ExpertDetailsResponse followExpert(Long expertId){
         UserEntity follower=userServiceHelper.extractUserFromToken();
         if(follower==null){
             throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
@@ -61,10 +64,16 @@ public class ExpertService {
         ExpertEntity expert=this.expertRepository.findById(expertId).orElseThrow(()->new NotFoundException("Không tìm thấy chuyên gia!"));
         Set<UserEntity> currentFollowers=expert.getUsers();
         if(currentFollowers.contains(follower)){
-            throw new UserException("Bạn đã theo dõi chuyên gia này!");
+            currentFollowers.remove(follower);
+            expert.setUsers(currentFollowers);
+        }else{
+            currentFollowers.add(follower);
+            expert.setUsers(currentFollowers);
+
         }
-        currentFollowers.add(follower);
-        expert.setUsers(currentFollowers);
-        expertRepository.save(expert);
+        ExpertEntity newExpertEntity = expertRepository.save(expert);
+        return expertServiceHelper.convertToExpertDetailsResponse(newExpertEntity);
+
     }
+
 }
