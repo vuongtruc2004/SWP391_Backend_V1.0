@@ -76,7 +76,6 @@ public class CouponService {
         );
     }
 
-
     @Transactional
     public ApiResponse<String> deleteByCouponId(Long couponId) {
         this.couponRepository.deleteById(couponId);
@@ -114,7 +113,7 @@ public class CouponService {
         return couponResponse;
     }
 
-    public List<CouponResponse> getAllCouponsAvailable() {
-        return couponServiceHelper.convertToCouponResponseList(couponRepository.getAllCouponsAvailable(Instant.now()));
+    public List<CouponResponse> getAllCouponsAvailable(String searchCode) {
+        return couponServiceHelper.convertToCouponResponseList(couponRepository.getAllCouponsAvailable(Instant.now(), searchCode));
     }
 }

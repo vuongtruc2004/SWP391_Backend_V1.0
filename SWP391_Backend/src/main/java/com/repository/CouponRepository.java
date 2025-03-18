@@ -13,10 +13,11 @@ import java.util.List;
 public interface CouponRepository extends JpaSpecificationRepository<CouponEntity, Long> {
     Boolean existsByCouponCode(String code);
 
-    @Query("select c from CouponEntity c " +
-            "where c.endTime >= :now " +
-            "and (c.maxUses is null or c.maxUses > c.usedCount)")
-    List<CouponEntity> getAllCouponsAvailable(@Param("now") Instant now);
+    @Query("SELECT c FROM CouponEntity c " +
+            "WHERE c.endTime >= :now " +
+            "AND (c.maxUses IS NULL OR c.maxUses > c.usedCount) " +
+            "AND c.couponCode LIKE CONCAT('%', :searchCode, '%')")
+    List<CouponEntity> getAllCouponsAvailable(@Param("now") Instant now, @Param("searchCode") String searchCode);
 
     List<CouponEntity> findByEndTimeBefore(Instant instant);
 }

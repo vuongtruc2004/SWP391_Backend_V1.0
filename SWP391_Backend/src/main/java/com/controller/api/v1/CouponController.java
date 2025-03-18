@@ -52,7 +52,7 @@ public class CouponController {
 
     @ApiMessage("Lấy các coupon hợp lệ của 1 khóa học thành công!")
     @GetMapping("/available")
-    public ResponseEntity<List<CouponResponse>> getAllCouponsAvailable() {
-        return ResponseEntity.ok().body(this.couponService.getAllCouponsAvailable());
+    public ResponseEntity<List<CouponResponse>> getAllCouponsAvailable(@RequestParam String searchCode) {
+        return ResponseEntity.ok().body(this.couponService.getAllCouponsAvailable(searchCode));
     }
 }
