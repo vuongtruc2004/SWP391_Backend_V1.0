@@ -48,9 +48,6 @@ public class CommentEntity {
     @JoinColumn(name = "blog_id")
     BlogEntity blog;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    CourseEntity course;
 
     @PrePersist
     public void handlePrePersist() {

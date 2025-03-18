@@ -43,6 +43,8 @@ public class SecurityConfig {
             "/api/v1/purchase/**",
             "/api/v1/hashtags/**",
             "/api/v1/coupons/**",
+            "/api/v1/likes/**",
+            "/api/v1/comments/**"
     };
 
     private final SecurityUtil securityUtil;

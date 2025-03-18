@@ -15,6 +15,7 @@ import com.repository.NotificationRepository;
 import com.repository.UserNotificationRepository;
 import com.util.BuildResponse;
 import com.util.enums.MessageStatusNotificationEnum;
+import com.util.enums.NotificationStatusEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,7 +26,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -96,6 +100,7 @@ public class NotificationService {
     @Transactional
     public ApiResponse<String> createNotification(NotificationRequest notificationRequest) {
         NotificationEntity newNotificationEntity = modelMapper.map(notificationRequest, NotificationEntity.class);
+        newNotificationEntity.setSetDate(notificationRequest.getSetDate());
         notificationRepository.save(newNotificationEntity);
         if (Boolean.TRUE.equals(notificationRequest.getGlobal())) {
             userNotificationRepository.insertUserNotification(newNotificationEntity.getNotificationId());
@@ -115,7 +120,7 @@ public class NotificationService {
             Pageable pageable,
             Specification<NotificationEntity> specification
     ) {
-        Page<NotificationEntity> page = notificationRepository.findAllNotificationSorted(specification, pageable);
+        Page<NotificationEntity> page = notificationRepository.findAll(specification, pageable);
         List<NotificationResponse> userNotificationResponses = page.getContent().stream().map(NotificationEntity -> {
             NotificationResponse userNotificationResponse = modelMapper.map(NotificationEntity, NotificationResponse.class);
             return userNotificationResponse;
@@ -171,5 +176,16 @@ public class NotificationService {
                 "Bạn đã xóa người nhận thông báo thất bại!",
                 userNotificationResponse
         );
+    }
+
+    //automatic notification
+    public void updateStatusOfNotification() {
+        Set<Long> listIds = notificationRepository.findAllNotificationId(NotificationStatusEnum.PENDING, Instant.now().truncatedTo(ChronoUnit.MINUTES));
+        if (listIds.isEmpty()){
+            System.out.println("Không có thông báo nào tới hạn!");
+            return;
+        }
+        notificationRepository.updateStatus(NotificationStatusEnum.SENT, listIds);
+        readSuccessNotification();
     }
 }

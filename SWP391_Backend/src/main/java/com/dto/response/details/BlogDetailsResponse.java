@@ -17,5 +17,6 @@ import java.util.Set;
 public class BlogDetailsResponse extends BlogResponse {
     @JsonIgnoreProperties("blog")
     Set<CommentResponse> comments;
+    @JsonIgnoreProperties("blog")
     Set<LikeResponse> likes;
 }

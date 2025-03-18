@@ -28,7 +28,4 @@ public class CommentResponse {
     @JsonIgnoreProperties({"blog", "parentComment"})
     Set<CommentResponse> replies;
     Set<LikeResponse> likes;
-    @JsonIgnoreProperties("comments")
-    BlogResponse blog;
-    CourseResponse course;
 }

@@ -4,6 +4,7 @@ import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserNotificationResponse;
 import com.entity.UserNotificationEntity;
 import com.util.BuildResponse;
+import com.util.enums.NotificationStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -19,14 +20,15 @@ public class NotificationServiceHelper {
 
     public PageDetailsResponse<List<UserNotificationResponse>> convertToPageDetailsResponse(Page<UserNotificationEntity> page) {
         List<UserNotificationResponse>notificationResponseList = page.getContent().stream()
+                .filter(userNotificationEntity -> !userNotificationEntity.getNotification().getStatus().equals(NotificationStatusEnum.PENDING))
                 .map(userNotificationEntity -> modelMapper.map(userNotificationEntity, UserNotificationResponse.class))
                 .toList();
-         return BuildResponse.buildPageDetailsResponse(
+        return BuildResponse.buildPageDetailsResponse(
                 page.getNumber()+1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
-                 notificationResponseList
-                );
+                notificationResponseList
+        );
     }
 }

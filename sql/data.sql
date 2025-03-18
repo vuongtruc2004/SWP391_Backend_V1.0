@@ -207,7 +207,6 @@ CREATE TABLE `comments` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `blog_id` bigint DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
   `parent_comment_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
@@ -216,7 +215,6 @@ CREATE TABLE `comments` (
   KEY `FK7h839m3lkvhbyv3bcdv7sm4fj` (`parent_comment_id`),
   KEY `FK8omq0tc18jd43bu5tjh6jvraq` (`user_id`),
   CONSTRAINT `FK7h839m3lkvhbyv3bcdv7sm4fj` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `FK7ktrfqv6fgfuw6fvwludvibu4` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
   CONSTRAINT `FK8omq0tc18jd43bu5tjh6jvraq` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `FK9aakob3a7aghrm94k9kmbrjqd` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -546,7 +544,8 @@ DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
   `notification_id` bigint NOT NULL AUTO_INCREMENT,
   `content` longtext,
-  `status` enum('PENDING','SENT') DEFAULT NULL,
+  `status` enum('PENDING', 'SENT') DEFAULT NULL,
+  `set_date` datetime(6) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `global` bit(1) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,

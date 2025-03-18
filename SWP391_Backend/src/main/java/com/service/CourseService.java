@@ -300,8 +300,7 @@ public class CourseService {
 
     public CourseDetailsResponse getCourseDetailsAdmin(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
-        CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
-        return courseDetailsResponse;
+        return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
     public List<CourseResponse> getLatestCoursesOfFollowingExperts() {
