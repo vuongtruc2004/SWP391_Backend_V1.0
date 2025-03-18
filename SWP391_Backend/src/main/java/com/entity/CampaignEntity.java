@@ -33,9 +33,11 @@ public class CampaignEntity {
     @Column(name = "discount_percentage")
     Double discountPercentage;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "discount_type")
     DiscountTypeEnum discountType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "discount_range")
     DiscountRangeEnum discountRange;
 
@@ -48,7 +50,7 @@ public class CampaignEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
-    @Column(name="thumbnail_url")
+    @Column(name = "thumbnail_url")
     String thumbnailUrl;
 
     @OneToMany(mappedBy = "campaign")

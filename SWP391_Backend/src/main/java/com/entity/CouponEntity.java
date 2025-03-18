@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.util.enums.DiscountRangeEnum;
 import com.util.enums.DiscountTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -55,9 +53,6 @@ public class CouponEntity implements Serializable {
 
     @Column(name = "used_count")
     Long usedCount;
-
-    @Column(name = "max_per_user")
-    Long maxPerUser;
 
     @Column(name = "start_time")
     Instant startTime;

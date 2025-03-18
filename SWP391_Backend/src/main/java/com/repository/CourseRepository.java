@@ -59,8 +59,6 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
             "where c.courseId = :courseId and u.userId = :userId and c.accepted = true")
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
 
-    CourseEntity findByCourseName(String name);
-
     List<CourseEntity> findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(Collection<ExpertEntity> experts);
 
 }
