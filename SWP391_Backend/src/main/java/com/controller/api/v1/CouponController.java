@@ -50,9 +50,9 @@ public class CouponController {
         return ResponseEntity.ok().body(this.couponService.updateCoupon(courseRequest));
     }
 
-    @ApiMessage("Lấy các coupon hợp lệ của 1 khóa học thành công!")
-    @GetMapping("/available")
-    public ResponseEntity<List<CouponResponse>> getAllCouponsAvailableInACourses(@RequestParam List<Long> courseIds) {
-        return ResponseEntity.ok().body(this.couponService.getAllCouponsAvailableInACourses(courseIds));
-    }
+//    @ApiMessage("Lấy các coupon hợp lệ của 1 khóa học thành công!")
+//    @GetMapping("/available")
+//    public ResponseEntity<List<CouponResponse>> getAllCouponsAvailableInACourses(@RequestParam List<Long> courseIds) {
+//        return ResponseEntity.ok().body(this.couponService.getAllCouponsAvailableInACourses(courseIds));
+//    }
 }

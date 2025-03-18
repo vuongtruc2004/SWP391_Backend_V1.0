@@ -1,9 +1,14 @@
 package com.dto.request;
 
+import com.entity.CourseEntity;
+import com.util.enums.DiscountRangeEnum;
+import com.util.enums.DiscountTypeEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +30,8 @@ public class CouponRequest {
 
     String discountRange;
 
+    Long maxPerUser;
+
     Double discountValue;
 
     Double maxDiscountAmount;
@@ -38,6 +45,4 @@ public class CouponRequest {
     String startTime;
 
     String endTime;
-
-    List<String> courses;
 }

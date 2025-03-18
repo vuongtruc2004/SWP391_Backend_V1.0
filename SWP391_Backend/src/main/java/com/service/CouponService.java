@@ -1,20 +1,27 @@
 package com.service;
 
 import com.dto.request.CouponRequest;
+import com.dto.request.CourseRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.CouponResponse;
 import com.dto.response.PageDetailsResponse;
+import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CouponEntity;
 import com.entity.CourseEntity;
+import com.entity.ExpertEntity;
+import com.entity.UserEntity;
+import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.UserException;
 import com.helper.CouponServiceHelper;
-import com.helper.UserServiceHelper;
 import com.repository.CouponRepository;
 import com.repository.CourseRepository;
+import com.repository.UserRepository;
+import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.DateUtil;
 import com.util.enums.DiscountRangeEnum;
 import com.util.enums.DiscountTypeEnum;
+import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,10 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +41,6 @@ public class CouponService {
     private final ModelMapper modelMapper;
     private final CourseRepository courseRepository;
     private final CouponServiceHelper couponServiceHelper;
-    private final UserServiceHelper userServiceHelper;
 
     public CouponResponse createCoupon(CouponRequest couponRequest) {
         if (this.couponRepository.existsByCouponCode(couponRequest.getCouponCode().trim())) {
@@ -49,38 +52,21 @@ public class CouponService {
         Instant endDay = DateUtil.parseToInstant(couponRequest.getEndTime());
         couponEntity.setStartTime(startDay);
         couponEntity.setEndTime(endDay);
+        couponEntity.setMaxPerUser(couponRequest.getMaxPerUser());
         couponEntity.setCouponCode(couponRequest.getCouponCode().trim());
         couponEntity.setCouponName(couponRequest.getCouponName().trim());
         couponEntity.setCouponDescription(couponRequest.getCouponDescription().trim());
         couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
         couponEntity.setMaxUses(couponRequest.getMaxUses());
         couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
-        Set<CourseEntity> courseEntities = new HashSet<>();
-        List<String> courseName = new ArrayList<>();
-        if (couponRequest.getDiscountRange().equals("COURSES")) {
-            couponEntity.setDiscountRange(DiscountRangeEnum.COURSES);
-            for (String courseEntity : couponRequest.getCourses()) {
-                CourseEntity currentCourse = this.courseRepository.findByCourseName(courseEntity);
-                courseEntities.add(currentCourse);
-                courseName.add(currentCourse.getCourseName());
-            }
-        } else {
-            couponEntity.setDiscountRange(DiscountRangeEnum.ALL);
-            for (CourseEntity courseEntity : this.courseRepository.findAll()) {
-                courseEntities.add(courseEntity);
-                courseName.add(courseEntity.getCourseName());
-            }
-        }
-        if (couponRequest.getDiscountType().equals("FIXED")) {
+        if(couponRequest.getDiscountType().equals("FIXED")){
             couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
             couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
-        } else {
+        }else{
             couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
             couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
         }
-        couponEntity.setCourses(courseEntities);
         this.couponRepository.save(couponEntity);
-        couponResponse.setCourseName(courseName);
         modelMapper.map(couponEntity, couponResponse);
         return couponResponse;
 
@@ -101,6 +87,21 @@ public class CouponService {
         );
     }
 
+    public List<CouponResponse> getAllCouponUser(){
+        List<CouponResponse> listCouponResponse = new ArrayList<>();
+        List<CouponEntity> listValidCoupon=this.couponRepository.findByEndTimeAfter(Instant.now());
+        for(CouponEntity couponEntity:listValidCoupon){
+            if(couponEntity.getUsedCount()<couponEntity.getMaxUses()){
+                CouponResponse couponResponse = new CouponResponse();
+                modelMapper.map(couponEntity, couponResponse);
+                listCouponResponse.add(couponResponse);
+            }
+        }
+        return listCouponResponse;
+
+
+    }
+
     @Transactional
     public ApiResponse<String> deleteByCouponId(Long couponId) {
         this.couponRepository.deleteById(couponId);
@@ -113,51 +114,29 @@ public class CouponService {
     }
 
     @Transactional
-    public CouponResponse updateCoupon(CouponRequest couponRequest) {
+    public CouponResponse updateCoupon(CouponRequest couponRequest){
         CouponResponse couponResponse = new CouponResponse();
         CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId()).get();
         Instant startDay = DateUtil.parseToInstant(couponRequest.getStartTime());
         Instant endDay = DateUtil.parseToInstant(couponRequest.getEndTime());
         couponEntity.setStartTime(startDay);
         couponEntity.setEndTime(endDay);
+        couponEntity.setMaxPerUser(couponRequest.getMaxPerUser());
         couponEntity.setCouponCode(couponRequest.getCouponCode().trim());
         couponEntity.setCouponName(couponRequest.getCouponName().trim());
         couponEntity.setCouponDescription(couponRequest.getCouponDescription().trim());
         couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
         couponEntity.setMaxUses(couponRequest.getMaxUses());
         couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
-        Set<CourseEntity> courseEntities = new HashSet<>();
-        List<String> courseName = new ArrayList<>();
-        if (couponRequest.getDiscountRange().equals("COURSES")) {
-            couponEntity.setDiscountRange(DiscountRangeEnum.COURSES);
-            for (String courseEntity : couponRequest.getCourses()) {
-                CourseEntity currentCourse = this.courseRepository.findByCourseName(courseEntity);
-                courseEntities.add(currentCourse);
-                courseName.add(currentCourse.getCourseName());
-            }
-        } else {
-            couponEntity.setDiscountRange(DiscountRangeEnum.ALL);
-            for (CourseEntity courseEntity : this.courseRepository.findAll()) {
-                courseEntities.add(courseEntity);
-                courseName.add(courseEntity.getCourseName());
-            }
-        }
-        if (couponRequest.getDiscountType().equals("FIXED")) {
+        if(couponRequest.getDiscountType().equals("FIXED")){
             couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
             couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
-        } else {
+        }else{
             couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
             couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
         }
-        couponEntity.setCourses(courseEntities);
         this.couponRepository.save(couponEntity);
-        couponResponse.setCourseName(courseName);
         modelMapper.map(couponEntity, couponResponse);
         return couponResponse;
-    }
-
-    public List<CouponResponse> getAllCouponsAvailableInACourses(List<Long> courseIds) {
-        List<CouponEntity> couponEntityList = couponRepository.findAllCouponsAvailableInACourses(courseIds, Instant.now());
-        return couponEntityList.stream().map(couponEntity -> modelMapper.map(couponEntity, CouponResponse.class)).toList();
     }
 }

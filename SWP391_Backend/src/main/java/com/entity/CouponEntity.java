@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "coupons")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CouponEntity {
+public class CouponEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +34,9 @@ public class CouponEntity {
     @Column(name = "coupon_code")
     String couponCode;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "discount_type")
-    DiscountTypeEnum discountType;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "discount_range")
-    DiscountRangeEnum discountRange;
+    DiscountTypeEnum discountType;
 
     @Column(name = "discount_percent")
     Double discountPercent;
@@ -59,6 +56,9 @@ public class CouponEntity {
     @Column(name = "used_count")
     Long usedCount;
 
+    @Column(name = "max_per_user")
+    Long maxPerUser;
+
     @Column(name = "start_time")
     Instant startTime;
 
@@ -71,18 +71,9 @@ public class CouponEntity {
     @Column(name = "updated_at")
     Instant updatedAt;
 
-    @ManyToMany
-    @JoinTable(name = "coupon_course", joinColumns = @JoinColumn(name = "coupon_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
-    Set<CourseEntity> courses;
-
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
-    }
-
-    @PreUpdate
-    public void handlePreUpdate() {
         this.updatedAt = Instant.now();
     }
 }

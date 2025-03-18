@@ -74,9 +74,6 @@ public class CourseEntity implements Serializable {
     @OneToMany(mappedBy = "course")
     Set<OrderDetailsEntity> orderDetailsEntityList;
 
-    @ManyToMany(mappedBy = "courses")
-    List<CouponEntity> coupons;
-
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     CampaignEntity campaign;

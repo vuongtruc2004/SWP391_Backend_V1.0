@@ -14,11 +14,11 @@ public interface CouponRepository extends JpaSpecificationRepository<CouponEntit
     Boolean existsByCouponCode(String code);
 
     List<CouponEntity> findByEndTimeBefore(Instant instant);
-
-    @Query("select distinct c from CouponEntity c " +
-            "left join c.courses crs " +
-            "where (crs.courseId in(:courseIds) or c.discountRange = 'ALL') " +
-            "and c.endTime >= :now and c.startTime <= :now " +
-            "and (c.maxUses is null or c.maxUses > c.usedCount)")
-    List<CouponEntity> findAllCouponsAvailableInACourses(@Param("courseIds") List<Long> courseIds, @Param("now") Instant now);
+    List<CouponEntity> findByEndTimeAfter(Instant instant);
+//    @Query("select distinct c from CouponEntity c " +
+//            "left join c.courses crs " +
+//            "where (crs.courseId in(:courseIds) or c.discountRange = 'ALL') " +
+//            "and c.endTime >= :now and c.startTime <= :now " +
+//            "and (c.maxUses is null or c.maxUses > c.usedCount)")
+//    List<CouponEntity> findAllCouponsAvailableInACourses(@Param("courseIds") List<Long> courseIds, @Param("now") Instant now);
 }

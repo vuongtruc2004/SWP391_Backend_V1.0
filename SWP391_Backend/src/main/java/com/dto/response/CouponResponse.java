@@ -1,12 +1,15 @@
 package com.dto.response;
 
+import com.entity.CourseEntity;
 import com.util.enums.DiscountRangeEnum;
 import com.util.enums.DiscountTypeEnum;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,6 +35,8 @@ public class CouponResponse {
 
     Double maxDiscountAmount;
 
+    Long maxPerUser;
+
     Double minOrderValue;
 
     Long maxUses;
@@ -42,5 +47,5 @@ public class CouponResponse {
 
     Instant endTime;
 
-    List<String> courseName;
+
 }

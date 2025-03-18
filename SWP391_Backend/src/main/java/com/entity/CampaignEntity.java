@@ -48,6 +48,9 @@ public class CampaignEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
+    @Column(name="thumbnail_url")
+    String thumbnailUrl;
+
     @OneToMany(mappedBy = "campaign")
     Set<CourseEntity> courses;
 

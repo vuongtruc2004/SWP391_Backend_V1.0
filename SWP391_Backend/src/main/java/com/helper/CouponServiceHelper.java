@@ -1,6 +1,7 @@
 package com.helper;
 
 import com.dto.response.CouponResponse;
+import com.dto.response.CourseResponse;
 import com.entity.CouponEntity;
 import com.entity.CourseEntity;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,6 @@ public class CouponServiceHelper {
             if(couponEntity.getDiscountPercent()==null || couponEntity.getDiscountPercent()==0){
                 couponResponse.setDiscountValue(couponEntity.getDiscountAmount());
             }
-            List<String> courseNames = couponEntity.getCourses().stream()
-                    .map(CourseEntity::getCourseName)
-                    .collect(Collectors.toList());
-            couponResponse.setCourseName(courseNames);
             return couponResponse;
         }).toList();
     }
