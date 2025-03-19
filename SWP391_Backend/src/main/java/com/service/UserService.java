@@ -367,12 +367,17 @@ public class UserService {
         return list;
     }
 
-    public List<OrderResponse> getUserPurchaseHistory() {
+    public List<OrderResponse> getUserPurchaseHistory(String orderStatus) {
         UserEntity user = userServiceHelper.extractUserFromToken();
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.COMPLETED).stream()
+        if (orderStatus.equalsIgnoreCase("ALL")) {
+            return orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId()).stream()
+                    .map(orderServiceHelper::convertToOrderResponse)
+                    .toList();
+        }
+        return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.valueOf(orderStatus)).stream()
                 .map((orderServiceHelper::convertToOrderResponse))
                 .toList();
     }

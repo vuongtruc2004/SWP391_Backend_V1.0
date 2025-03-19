@@ -141,9 +141,9 @@ public class UserController {
     }
 
     @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")
-    @GetMapping("/purchase-history")
-    public ResponseEntity<List<OrderResponse>> getUserPurchaseHistory() {
-        return ResponseEntity.ok(userService.getUserPurchaseHistory());
+    @GetMapping("/purchase-history/{orderStatus}")
+    public ResponseEntity<List<OrderResponse>> getUserPurchaseHistory(@PathVariable String orderStatus) {
+        return ResponseEntity.ok(userService.getUserPurchaseHistory(orderStatus));
     }
 
     @ApiMessage("Lấy tất cả chuyên gia theo dõi thành công!")
