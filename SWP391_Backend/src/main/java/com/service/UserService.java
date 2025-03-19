@@ -10,6 +10,7 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.RoleException;
 import com.exception.custom.StorageException;
 import com.exception.custom.UserException;
+import com.helper.CourseServiceHelper;
 import com.helper.ExpertServiceHelper;
 import com.helper.OrderServiceHelper;
 import com.helper.UserServiceHelper;
@@ -54,6 +55,11 @@ public class UserService {
     private final OrderRepository orderRepository;
     private final OrderServiceHelper orderServiceHelper;
     private final ExpertServiceHelper expertServiceHelper;
+    private final CourseServiceHelper courseServiceHelper;
+    private final UserProgressRepository userProgressRepository;
+    private final ChapterRepository chapterRepository;
+    private final QuizRepository quizRepository;
+    private final LessonRepository lessonRepository;
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByEmailAndAccountType(registerRequest.getEmail(), AccountTypeEnum.CREDENTIALS);
@@ -390,5 +396,34 @@ public class UserService {
         return userEntity.getExperts().stream()
                 .map(expertServiceHelper::convertToExpertDetailsResponse)
                 .toList();
+    }
+
+    private Double checkStatusCourse(Long courseId, UserEntity user){
+        Long progress = userProgressRepository.countByCourseIdAndUser(courseId, user);
+        Long totalOfCourse = (quizRepository.countByCourseId(courseId) != null ? quizRepository.countByCourseId(courseId) : 0) + (lessonRepository.countLessonsByCourse(courseId) != null ? lessonRepository.countLessonsByCourse(courseId) : 0);
+        return (double) progress / totalOfCourse;
+    }
+
+    public List<CourseResponse> getAllCoursesRegister(String selectedTab){
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new NotFoundException("Không tìm thấy người dùng!");
+        }
+        List<CourseResponse> listCourseRegister = courseServiceHelper.convertToCourseResponseList(userEntity.getCourses()).stream().toList();
+        if(selectedTab.equalsIgnoreCase("ALL")){
+            return listCourseRegister;
+        } else if(selectedTab.equalsIgnoreCase("PROGRESS")){
+            return listCourseRegister.stream().filter(course -> {
+                boolean percent = false;
+                percent = checkStatusCourse(course.getCourseId(), userEntity) * 100 < 100;
+                return percent;
+            }).toList();
+        } else {
+            return listCourseRegister.stream().filter(course -> {
+                boolean percent = false;
+                percent = checkStatusCourse(course.getCourseId(), userEntity) * 100 == 100;
+                return percent;
+            }).toList();
+        }
     }
 }

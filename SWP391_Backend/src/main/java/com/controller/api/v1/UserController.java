@@ -151,4 +151,9 @@ public class UserController {
     public ResponseEntity<List<ExpertDetailsResponse>> getMyFollowingExperts() {
         return ResponseEntity.ok(userService.getMyFollowingExperts());
     }
+
+    @GetMapping("/courses-register/{selectedTab}")
+    public ResponseEntity<List<CourseResponse>> getCoursesRegister(@PathVariable String selectedTab) {
+        return ResponseEntity.ok(userService.getAllCoursesRegister(selectedTab));
+    }
 }
