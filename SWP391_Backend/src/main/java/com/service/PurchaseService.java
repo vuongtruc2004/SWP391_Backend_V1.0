@@ -3,16 +3,14 @@ package com.service;
 import com.dto.request.PurchaseRequest;
 import com.dto.response.OrderResponse;
 import com.dto.response.PurchaseResponse;
-import com.entity.CourseEntity;
-import com.entity.OrderDetailsEntity;
-import com.entity.OrderEntity;
-import com.entity.UserEntity;
+import com.entity.*;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.PurchaseException;
 import com.exception.custom.UserException;
 import com.helper.OrderServiceHelper;
 import com.helper.PurchaseServiceHelper;
 import com.helper.UserServiceHelper;
+import com.repository.CouponRepository;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.util.VnPayUtil;
@@ -39,6 +37,7 @@ public class PurchaseService {
     private final PurchaseServiceHelper purchaseServiceHelper;
     private final OrderServiceHelper orderServiceHelper;
     private final CourseRepository courseRepository;
+    private final CouponRepository couponRepository;
 
     @Value("${vnpay.tmn.code}")
     private String tmnCode;
@@ -143,11 +142,17 @@ public class PurchaseService {
             throw new PurchaseException("Bạn đã có đơn hàng chứa những khóa học này rồi!");
         }
 
+        CouponEntity coupon = null;
+        if (purchaseRequest.getCouponId() != null) {
+            coupon = couponRepository.findById(purchaseRequest.getCouponId())
+                    .orElseThrow(() -> new NotFoundException("Mã giảm giá không tồn tại!"));
+        }
+
         OrderEntity orderEntity = new OrderEntity();
         List<OrderDetailsEntity> orderDetailsEntitySet = new ArrayList<>();
         orderEntity.setUser(userEntity);
         orderEntity.setOrderCode(txnRef);
-        orderEntity.setTotalAmount(purchaseServiceHelper.applyCoupon(purchaseRequest.getCouponId(), purchaseRequest.getTotalPrice()));
+        orderEntity.setTotalAmount(purchaseServiceHelper.applyCoupon(coupon, purchaseRequest.getTotalPrice()));
         orderEntity.setCreatedAt(purchaseServiceHelper.parseVnTime(createDate));
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 
@@ -160,6 +165,9 @@ public class PurchaseService {
                     .build());
         }
         orderEntity.setOrderDetails(orderDetailsEntitySet);
+        if (coupon != null) {
+            orderEntity.setCoupon(coupon);
+        }
         OrderEntity newOrderEntity = orderRepository.save(orderEntity);
         return orderServiceHelper.convertToOrderResponse(newOrderEntity);
     }

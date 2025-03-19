@@ -49,6 +49,10 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderDetailsEntity> orderDetails;
 
+    @ManyToOne
+    @JoinColumn(name = "coupon_id")
+    CouponEntity coupon;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

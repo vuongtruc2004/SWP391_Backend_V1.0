@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class OrderResponse {
     Long orderId;
 
     String orderCode;
-    
+
     @Enumerated(EnumType.STRING)
     OrderStatusEnum orderStatus;
 
@@ -40,4 +39,6 @@ public class OrderResponse {
     UserResponse user;
 
     List<OrderDetailsResponse> orderDetails;
+
+    CouponResponse couponResponse;
 }

@@ -3,7 +3,6 @@ package com.helper;
 import com.dto.request.PurchaseRequest;
 import com.entity.CouponEntity;
 import com.exception.custom.InvalidRequestInput;
-import com.exception.custom.NotFoundException;
 import com.exception.custom.PurchaseException;
 import com.repository.CouponRepository;
 import com.util.VnPayUtil;
@@ -160,12 +159,10 @@ public class PurchaseServiceHelper {
         return sb.toString();
     }
 
-    public Double applyCoupon(Long couponId, Double totalPrice) {
-        if (couponId == null) {
+    public Double applyCoupon(CouponEntity coupon, Double totalPrice) {
+        if (coupon == null) {
             return totalPrice;
         }
-        CouponEntity coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new NotFoundException("Mã giảm giá không tồn tại!"));
 
         Instant now = Instant.now();
         if (coupon.getEndTime().isBefore(now)) throw new PurchaseException("Mã giảm giá đã hết hạn!");

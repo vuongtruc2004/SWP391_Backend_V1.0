@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -65,6 +66,9 @@ public class CouponEntity implements Serializable {
 
     @Column(name = "updated_at")
     Instant updatedAt;
+
+    @OneToMany(mappedBy = "coupon")
+    Set<OrderEntity> orders;
 
     @PrePersist
     public void handlePrePersist() {

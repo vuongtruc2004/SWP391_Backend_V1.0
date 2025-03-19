@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             JOIN o.orderDetails od 
             WHERE o.user.userId = :userId 
             AND od.course.courseId in (:courseIds)
-            AND o.orderStatus = 'COMPLETED' or o.orderStatus = 'PENDING'
+            AND o.orderStatus = 'COMPLETED'
             """)
     boolean existsCompletedAndPendingOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
 
