@@ -71,7 +71,7 @@ public class ChatService {
         }
 
         Instant oneWeekAgo = Instant.now().minus(7, ChronoUnit.DAYS);
-        Page<ChatEntity> page = chatRepository.findAllByUser_UserIdAndCreatedAtIsGreaterThanEqualOrderByCreatedAtDesc(userEntity.getUserId(), oneWeekAgo, pageable);
+        Page<ChatEntity> page = chatRepository.findAllByUser_UserIdAndUpdatedAtIsGreaterThanEqualOrderByUpdatedAtDesc(userEntity.getUserId(), oneWeekAgo, pageable);
 
         ZoneId zoneId = ZoneId.systemDefault();
         LocalDate today = LocalDate.now();
@@ -138,8 +138,8 @@ public class ChatService {
             throw new ChatException("Message không hợp lệ! Không có prompt của người dùng!");
         }
 
-        String content = userLastPrompt.getContent();
-        chatEntity.setTitle(content.length() > 100 ? content.substring(0, 100) + "..." : content);
+        String title = userLastPrompt.getContent();
+        chatEntity.setTitle(title.length() > 100 ? title.substring(0, 100) + "..." : title);
         chatEntity.setUser(userEntity);
         chatEntity.getMessages().addAll(inputMessages);
 

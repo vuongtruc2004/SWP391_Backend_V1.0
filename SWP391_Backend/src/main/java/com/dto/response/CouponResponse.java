@@ -1,5 +1,6 @@
 package com.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.util.enums.DiscountTypeEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +27,7 @@ public class CouponResponse {
 
     Double discountPercent;
 
-    Double discountValue;
+    Double discountAmount;
 
     Double maxDiscountAmount;
 
@@ -38,7 +39,9 @@ public class CouponResponse {
 
     Long usedCount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant startTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant endTime;
 }

@@ -18,10 +18,10 @@ public class CouponServiceHelper {
         return collection.stream().map(couponEntity -> {
             CouponResponse couponResponse = modelMapper.map(couponEntity, CouponResponse.class);
             if (couponEntity.getDiscountAmount() == null || couponEntity.getDiscountAmount() == 0) {
-                couponResponse.setDiscountValue(couponEntity.getDiscountPercent());
+                couponResponse.setDiscountPercent(couponEntity.getDiscountPercent());
             }
             if (couponEntity.getDiscountPercent() == null || couponEntity.getDiscountPercent() == 0) {
-                couponResponse.setDiscountValue(couponEntity.getDiscountAmount());
+                couponResponse.setDiscountAmount(couponEntity.getDiscountAmount());
             }
             return couponResponse;
         }).toList();

@@ -27,6 +27,9 @@ public class ChatEntity {
     @Column(name = "created_at")
     Instant createdAt;
 
+    @Column(name = "updated_at")
+    Instant updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     UserEntity user;
@@ -38,5 +41,11 @@ public class ChatEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
     }
 }
