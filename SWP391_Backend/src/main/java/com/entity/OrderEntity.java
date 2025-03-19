@@ -40,7 +40,7 @@ public class OrderEntity {
     Instant expiredAt;
 
     @Column(name = "total_amount")
-    Integer totalAmount;
+    Double totalAmount;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

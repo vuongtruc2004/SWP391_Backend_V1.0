@@ -15,7 +15,7 @@ public class PurchaseRequest {
 
     List<Long> courseIds;
 
-    Integer totalPrice;
+    Double totalPrice;
 
-    String couponCode;
+    Long couponId;
 }

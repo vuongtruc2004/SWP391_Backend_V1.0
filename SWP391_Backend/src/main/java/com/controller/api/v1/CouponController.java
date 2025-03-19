@@ -46,7 +46,7 @@ public class CouponController {
 
     @ApiMessage("Cập nhật một coupon")
     @PutMapping
-    public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest courseRequest) throws Exception {
+    public ResponseEntity<CouponResponse> updateCoupon(@RequestBody CouponRequest courseRequest) {
         return ResponseEntity.ok().body(this.couponService.updateCoupon(courseRequest));
     }
 

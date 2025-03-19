@@ -64,7 +64,7 @@ public class PurchaseService {
 
         OrderResponse orderResponse = createOrder(purchaseRequest, userEntity, txnRef, createDate, expireDate);
 
-        long amount = purchaseRequest.getTotalPrice() * DEFAULT_MULTIPLIER;
+        long amount = orderResponse.getTotalAmount() * DEFAULT_MULTIPLIER;
         String orderInfo = paymentServiceHelper.getOrderInfo(purchaseRequest);
 
         Map<String, String> params = new HashMap<>();
@@ -139,15 +139,15 @@ public class PurchaseService {
     }
 
     private OrderResponse createOrder(PurchaseRequest purchaseRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
-        if (orderRepository.existsCompletedOrder(userEntity.getUserId(), purchaseRequest.getCourseIds())) {
-            throw new PurchaseException("Bạn đã có đơn hàng chứa khóa học này rồi!");
+        if (orderRepository.existsCompletedAndPendingOrder(userEntity.getUserId(), purchaseRequest.getCourseIds())) {
+            throw new PurchaseException("Bạn đã có đơn hàng chứa những khóa học này rồi!");
         }
 
         OrderEntity orderEntity = new OrderEntity();
         List<OrderDetailsEntity> orderDetailsEntitySet = new ArrayList<>();
         orderEntity.setUser(userEntity);
         orderEntity.setOrderCode(txnRef);
-        orderEntity.setTotalAmount(purchaseRequest.getTotalPrice());
+        orderEntity.setTotalAmount(purchaseServiceHelper.applyCoupon(purchaseRequest.getCouponId(), purchaseRequest.getTotalPrice()));
         orderEntity.setCreatedAt(purchaseServiceHelper.parseVnTime(createDate));
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 

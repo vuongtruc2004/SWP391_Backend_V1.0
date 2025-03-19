@@ -18,9 +18,9 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
             JOIN o.orderDetails od 
             WHERE o.user.userId = :userId 
             AND od.course.courseId in (:courseIds)
-            AND o.orderStatus = 'COMPLETED'
+            AND o.orderStatus = 'COMPLETED' or o.orderStatus = 'PENDING'
             """)
-    boolean existsCompletedOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
+    boolean existsCompletedAndPendingOrder(@Param("userId") Long userId, @Param("courseIds") List<Long> courseIds);
 
     List<OrderEntity> findAllByOrderStatusNotAndExpiredAtLessThan(OrderStatusEnum orderStatus, Instant expiredAtIsLessThan);
 

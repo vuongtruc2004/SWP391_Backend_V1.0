@@ -1,14 +1,22 @@
 package com.helper;
 
 import com.dto.request.PurchaseRequest;
+import com.entity.CouponEntity;
 import com.exception.custom.InvalidRequestInput;
+import com.exception.custom.NotFoundException;
+import com.exception.custom.PurchaseException;
+import com.repository.CouponRepository;
 import com.util.VnPayUtil;
+import com.util.enums.DiscountTypeEnum;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -23,10 +31,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class PurchaseServiceHelper {
 
     private final String FORMAT_PATTERN = "yyyyMMddHHmmss";
     private final SimpleDateFormat VN_PAY_DATE_FORMAT = new SimpleDateFormat(FORMAT_PATTERN);
+    private final CouponRepository couponRepository;
 
     @Value("${vnpay.hash.secret}")
     private String secretKey;
@@ -150,4 +160,34 @@ public class PurchaseServiceHelper {
         return sb.toString();
     }
 
+    public Double applyCoupon(Long couponId, Double totalPrice) {
+        if (couponId == null) {
+            return totalPrice;
+        }
+        CouponEntity coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new NotFoundException("Mã giảm giá không tồn tại!"));
+
+        Instant now = Instant.now();
+        if (coupon.getEndTime().isBefore(now)) throw new PurchaseException("Mã giảm giá đã hết hạn!");
+
+        if (coupon.getMaxUses() != null && coupon.getMaxUses() <= coupon.getUsedCount())
+            throw new PurchaseException("Mã giảm giá đã hết lượt sử dụng!");
+
+        if (coupon.getStartTime().isAfter(now)) throw new PurchaseException("Mã giảm giá chưa đến ngày hiệu lực!");
+
+        if (coupon.getMinOrderValue() != null && coupon.getMinOrderValue() > totalPrice)
+            throw new PurchaseException("Đơn hàng không đạt mức tối thiểu để dùng mã giảm giá này!");
+
+        if (coupon.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
+            totalPrice -= coupon.getDiscountAmount();
+        } else {
+            totalPrice -= (coupon.getDiscountPercent() * totalPrice / 100);
+        }
+
+        coupon.setUsedCount(coupon.getUsedCount() + 1);
+        couponRepository.save(coupon);
+
+        BigDecimal roundedTotalPrice = BigDecimal.valueOf(Math.max(0, totalPrice)).setScale(3, RoundingMode.HALF_UP);
+        return roundedTotalPrice.doubleValue();
+    }
 }
