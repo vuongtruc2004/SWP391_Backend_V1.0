@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -39,5 +40,5 @@ public class QuizResponse {
     @JsonSerialize(using = InstantSerializer.class)
     Instant updatedAt;
 
-    Set<QuestionResponse> questions;
+    List<QuestionResponse> questions;
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,7 +26,7 @@ public class QuestionEntity {
     String title;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    Set<AnswerEntity> answers;
+    List<AnswerEntity> answers;
 
     @ManyToMany(mappedBy = "questions", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     Set<QuizEntity> quizzes;

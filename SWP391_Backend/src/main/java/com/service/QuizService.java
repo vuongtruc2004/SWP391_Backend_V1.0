@@ -68,7 +68,7 @@ public class QuizService {
             throw new ChapterException("Chương này đã có bài kiểm tra");
         }
 
-        Set<QuestionEntity> questionEntityList = new HashSet<>();
+        List<QuestionEntity> questionEntityList = new ArrayList<>();
 
         for (Long id : quizRequest.getBankQuestionIds()) {
             QuestionEntity questionEntity = questionRepository.findById(id)
@@ -81,7 +81,7 @@ public class QuizService {
 //                throw new TitleQuestionException("Câu hỏi đã tồn tại");
 //            }
             QuestionEntity questionEntity = new QuestionEntity();
-            Set<AnswerEntity> set = new HashSet<>();
+            List<AnswerEntity> set = new ArrayList<>();
             for (QuestionRequest.AnswerRequest answerRequest : questionRequest.getAnswers()) {
                 AnswerEntity answerEntity = AnswerEntity.builder()
                         .content(answerRequest.getContent())
@@ -124,7 +124,7 @@ public class QuizService {
         ChapterEntity chapterEntity = chapterRepository.findByExpertIdAndChapterId(userEntity.getExpert().getExpertId(), quizRequest.getChapterId())
                 .orElseThrow(() -> new NotFoundException("ChapterId không tồn tại"));
 
-        Set<QuestionEntity> questionEntityList = new HashSet<>();
+        List<QuestionEntity> questionEntityList = new ArrayList<>();
 
         for (Long id : quizRequest.getBankQuestionIds()) {
             QuestionEntity questionEntity = questionRepository.findById(id)
@@ -135,7 +135,7 @@ public class QuizService {
         for (QuestionRequest questionRequest : quizRequest.getNewQuestions()) {
 
             QuestionEntity questionEntity = new QuestionEntity();
-            Set<AnswerEntity> set = new HashSet<>();
+            List<AnswerEntity> set = new ArrayList<>();
             for (QuestionRequest.AnswerRequest answerRequest : questionRequest.getAnswers()) {
                 AnswerEntity answerEntity = AnswerEntity.builder()
                         .content(answerRequest.getContent())

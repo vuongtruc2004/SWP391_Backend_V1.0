@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -53,7 +54,7 @@ public class QuizEntity {
             joinColumns = @JoinColumn(name = "quiz_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
-    Set<QuestionEntity> questions;
+    List<QuestionEntity> questions;
 
     @PrePersist
     public void handlePrePersist() {
