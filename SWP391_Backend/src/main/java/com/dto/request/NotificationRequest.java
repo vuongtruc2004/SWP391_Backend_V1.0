@@ -23,7 +23,6 @@ public class NotificationRequest {
     @Enumerated(EnumType.STRING)
     NotificationStatusEnum status;
 
-
     Boolean global;
     
     List<String> emails;
