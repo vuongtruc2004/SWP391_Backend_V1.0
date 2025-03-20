@@ -130,4 +130,10 @@ public class CourseController {
         return ResponseEntity.ok(courseService.getAllCourse());
     }
 
+    @ApiMessage("Lấy các khóa học không có trong chiến dịch thành công!")
+    @GetMapping("/all-notin-campaign")
+    public ResponseEntity<List<CourseResponse>> getAllCoursesNotInCampaign() {
+        return ResponseEntity.ok(courseService.getAllCoursesNotInCampaign());
+    }
+
 }

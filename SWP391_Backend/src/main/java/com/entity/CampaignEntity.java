@@ -49,6 +49,8 @@ public class CampaignEntity {
 
     @Column(name = "created_at")
     Instant createdAt;
+    @Column(name = "updated_at")
+    Instant updatedAt;
 
     @Column(name = "thumbnail_url")
     String thumbnailUrl;
@@ -59,5 +61,11 @@ public class CampaignEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handlePreUpdate() {
+        this.updatedAt = Instant.now();
     }
 }

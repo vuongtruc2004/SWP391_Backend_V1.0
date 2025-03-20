@@ -36,7 +36,8 @@ public class GlobalExceptionHandler {
             CourseException.class,
             OrderException.class,
             QuestionException.class,
-            PurchaseException.class
+            PurchaseException.class,
+            CampaignException.class
     })
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
         ApiResponse<Void> apiResponse = BuildResponse.buildApiResponse(

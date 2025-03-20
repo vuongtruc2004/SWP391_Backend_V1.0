@@ -326,4 +326,10 @@ public class CourseService {
         List<CourseResponse> courseResponses = this.courseServiceHelper.convertToCourseResponseList(courseEntities);
         return courseResponses;
     }
+
+    public List<CourseResponse> getAllCoursesNotInCampaign() {
+        Set<CourseEntity> courseEntities = courseRepository.findByCampaignIsNull();
+        List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
+        return courseResponses;
+    }
 }
