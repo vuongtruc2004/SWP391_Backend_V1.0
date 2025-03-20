@@ -369,8 +369,7 @@ public class UserService {
     }
 
     public List<UserResponse> getAllUsers() {
-        List<UserResponse> list = userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
-        return list;
+        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
     }
 
     public List<OrderResponse> getUserPurchaseHistory(String orderStatus) {
@@ -398,31 +397,25 @@ public class UserService {
                 .toList();
     }
 
-    private Double checkStatusCourse(Long courseId, UserEntity user){
-        Long progress = userProgressRepository.countByCourseIdAndUser(courseId, user);
-        Long totalOfCourse = (quizRepository.countByCourseId(courseId) != null ? quizRepository.countByCourseId(courseId) : 0) + (lessonRepository.countLessonsByCourse(courseId) != null ? lessonRepository.countLessonsByCourse(courseId) : 0);
-        return (double) progress / totalOfCourse;
-    }
 
-    public List<CourseResponse> getAllCoursesRegister(String selectedTab){
+    public List<CourseResponse> getAllCoursesRegister(String selectedTab) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
             throw new NotFoundException("Không tìm thấy người dùng!");
         }
-        List<CourseResponse> listCourseRegister = courseServiceHelper.convertToCourseResponseList(userEntity.getCourses()).stream().toList();
-        if(selectedTab.equalsIgnoreCase("ALL")){
+
+        List<CourseResponse> listCourseRegister = courseServiceHelper.convertToCourseResponseList(userEntity.getCourses());
+
+        if (selectedTab.equalsIgnoreCase("ALL")) {
             return listCourseRegister;
-        } else if(selectedTab.equalsIgnoreCase("PROGRESS")){
-            return listCourseRegister.stream().filter(course -> {
-                boolean percent = false;
-                percent = checkStatusCourse(course.getCourseId(), userEntity) * 100 < 100;
-                return percent;
-            }).toList();
+        } else if (selectedTab.equalsIgnoreCase("START")) {
+            return listCourseRegister.stream().filter(course -> userServiceHelper.checkStatusCourse(course.getCourseId(), userEntity) * 100 == 0).toList();
+        } else if (selectedTab.equalsIgnoreCase("COMPLETED")) {
+            return listCourseRegister.stream().filter(course -> userServiceHelper.checkStatusCourse(course.getCourseId(), userEntity) * 100 == 100).toList();
         } else {
             return listCourseRegister.stream().filter(course -> {
-                boolean percent = false;
-                percent = checkStatusCourse(course.getCourseId(), userEntity) * 100 == 100;
-                return percent;
+                double percent = userServiceHelper.checkStatusCourse(course.getCourseId(), userEntity) * 100;
+                return percent > 0 && percent < 100;
             }).toList();
         }
     }

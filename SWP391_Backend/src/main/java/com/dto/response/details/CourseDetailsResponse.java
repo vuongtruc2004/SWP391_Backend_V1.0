@@ -17,9 +17,7 @@ import java.util.Set;
 public class CourseDetailsResponse extends CourseResponse {
 
     String introduction;
-
-    List<String> objectives;
-
+    
     Boolean accepted;
 
     Set<SubjectResponse> subjects;

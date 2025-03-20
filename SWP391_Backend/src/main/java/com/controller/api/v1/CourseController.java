@@ -27,9 +27,7 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/purchased")
-    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(
-            Pageable pageable
-    ) {
+    public ResponseEntity<PageDetailsResponse<List<CourseResponse>>> getCoursesAndSortByPurchased(Pageable pageable) {
         return ResponseEntity.ok(courseService.getCoursesAndSortByPurchased(pageable));
     }
 
@@ -66,9 +64,7 @@ public class CourseController {
 
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/suggestion")
-    public ResponseEntity<List<CourseDetailsResponse>> getSuggestedCourses(
-            @RequestParam(name = "courseIds") List<Long> courseIds
-    ) {
+    public ResponseEntity<List<CourseResponse>> getSuggestedCourses(@RequestParam(name = "courseIds") List<Long> courseIds) {
         return ResponseEntity.ok(courseService.getSuggestedCourses(courseIds));
     }
 
@@ -126,6 +122,7 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> getLatestCoursesOfFollowingExperts() {
         return ResponseEntity.ok(courseService.getLatestCoursesOfFollowingExperts());
     }
+
     @ApiMessage("Lấy các khóa học thành công!")
     @GetMapping("/all-inpagination")
     public ResponseEntity<List<CourseResponse>> getAllCoursesAdmin(

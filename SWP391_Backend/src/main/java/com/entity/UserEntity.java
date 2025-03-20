@@ -63,7 +63,7 @@ public class UserEntity {
     ExpertEntity expert;
 
     @ManyToMany(mappedBy = "users")
-    Set<CourseEntity> courses;
+    List<CourseEntity> courses;
 
     @OneToMany(mappedBy = "user")
     Set<LikeEntity> likes;

@@ -56,6 +56,10 @@ public class QuizEntity {
     )
     List<QuestionEntity> questions;
 
+    @ManyToOne
+    @JoinColumn(name = "expert_id")
+    ExpertEntity expert;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();

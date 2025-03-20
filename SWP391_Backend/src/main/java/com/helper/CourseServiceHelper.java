@@ -34,6 +34,7 @@ public class CourseServiceHelper {
     public CourseResponse convertToCourseResponse(CourseEntity courseEntity) {
         CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
         courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseResponse.setObjectives(courseEntity.getObjectiveList());
         courseResponse.setTotalLessons(
                 courseEntity.getChapters().stream()
                         .mapToInt(chapter -> chapter.getLessons().size())
@@ -71,7 +72,6 @@ public class CourseServiceHelper {
         double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);
 
         CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
-        courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
         courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
         courseDetailsResponse.setAverageRating(averageRating);
         courseDetailsResponse.setTotalLessons(
@@ -87,6 +87,7 @@ public class CourseServiceHelper {
         courseDetailsResponse.setTotalRating(rates.size());
         courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
         courseDetailsResponse.setChapters(chapterResponseList);
+        courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
         return courseDetailsResponse;
     }
 

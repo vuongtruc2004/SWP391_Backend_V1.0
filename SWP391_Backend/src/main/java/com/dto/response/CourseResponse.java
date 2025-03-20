@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class CourseResponse {
     String description;
 
     String thumbnail;
+
+    List<String> objectives;
 
     Double price;
 

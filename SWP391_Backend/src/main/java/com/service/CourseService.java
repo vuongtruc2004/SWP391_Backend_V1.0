@@ -82,6 +82,16 @@ public class CourseService {
             }
         }
 
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user != null && user.getCourses() != null && !user.getCourses().isEmpty()) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.not(root.get("courseId").in(
+                            user.getCourses().stream()
+                                    .map(CourseEntity::getCourseId)
+                                    .toList()
+                    )));
+        }
+
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseResponse> courseResponses = courseServiceHelper.convertToCourseResponseList(page.getContent());
         return BuildResponse.buildPageDetailsResponse(
@@ -118,7 +128,7 @@ public class CourseService {
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
-    public List<CourseDetailsResponse> getSuggestedCourses(List<Long> courseIds) {
+    public List<CourseResponse> getSuggestedCourses(List<Long> courseIds) {
         List<Long> notCourseIds = new ArrayList<>(courseIds);
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity != null) {
@@ -131,7 +141,7 @@ public class CourseService {
             if (courseEntity == null) {
                 return null;
             }
-            return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+            return courseServiceHelper.convertToCourseResponse(courseEntity);
         }).toList();
     }
 
@@ -310,9 +320,10 @@ public class CourseService {
         }
         return courseServiceHelper.convertToCourseResponseList(courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()));
     }
-    public List<CourseResponse> getAllCourse(){
-        List<CourseEntity> courseEntities=this.courseRepository.findAll();
-        List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
+
+    public List<CourseResponse> getAllCourse() {
+        List<CourseEntity> courseEntities = this.courseRepository.findAll();
+        List<CourseResponse> courseResponses = this.courseServiceHelper.convertToCourseResponseList(courseEntities);
         return courseResponses;
     }
 }

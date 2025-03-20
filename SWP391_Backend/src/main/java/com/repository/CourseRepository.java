@@ -42,7 +42,7 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
                 where c.course_id not in (:notCourseIds)
                 group by c.course_id
                 order by MAX(temp.numOfCourses) desc
-                limit 10
+                limit 12
             """, nativeQuery = true)
     Set<Long> findSuggestedCourseIds(@Param("courseIds") List<Long> courseIds, @Param("notCourseIds") List<Long> notCourseIds);
 
