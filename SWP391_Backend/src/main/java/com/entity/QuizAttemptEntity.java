@@ -30,17 +30,24 @@ public class QuizAttemptEntity {
     @JoinColumn(name = "quiz_id")
     QuizEntity quiz;
 
-    @OneToMany(mappedBy = "quizAttempt")
+    @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL)
     Set<UserAnswerEntity> userAnswers;
 
     @Column(name = "attempt_number")
     Integer attemptNumber;
 
-    Double score;
+    @Column(name = "number_of_corrects")
+    Integer numberOfCorrects;
 
     @Column(name = "start_time")
     Instant startTime;
 
     @Column(name = "end_time")
     Instant endTime;
+
+    @PrePersist
+    public void handlePrePersist() {
+        startTime = Instant.now();
+        numberOfCorrects = 0;
+    }
 }

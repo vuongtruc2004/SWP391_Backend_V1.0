@@ -2,6 +2,7 @@ package com.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.util.List;
 
 @Data
@@ -11,10 +12,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuizAttemptRequest {
     Long quizAttemptId;
-    Long userId;
-    Long quizId;
-    Integer attemptNumber;
-    Double score;
+
     List<UserAnswerRequest> userAnswers;
 
     @Data

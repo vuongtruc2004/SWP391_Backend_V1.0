@@ -62,6 +62,7 @@ public class QuizEntity {
 
     @PrePersist
     public void handlePrePersist() {
+        this.duration = duration * 60;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }

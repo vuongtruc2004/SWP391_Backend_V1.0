@@ -5,31 +5,31 @@ import com.dto.response.QuizAttemptResponse;
 import com.service.QuizAttemptService;
 import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/quizzes-attempt")
+@RequestMapping("/api/v1/quiz-attempts")
 @RequiredArgsConstructor
 public class QuizAttemptController {
     private final QuizAttemptService quizAttemptService;
 
-    @ApiMessage("Lưu câu trả lời thành công")
-    @PostMapping("/save")
-    public ResponseEntity<QuizAttemptResponse> saveQuizAttempt(
-            @RequestBody QuizAttemptRequest quizAttemptRequest,
-            @RequestParam(required = false, defaultValue = "false") boolean isSubmit) {
-
-        QuizAttemptResponse response = quizAttemptService.saveQuizAttempt(quizAttemptRequest, isSubmit);
-        return ResponseEntity.ok(response);
+    @ApiMessage("Tạo quizAttempt thành công")
+    @PostMapping("/{quizId}")
+    public ResponseEntity<QuizAttemptResponse> createQuizAttempt(@PathVariable Long quizId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizAttemptService.createNewQuizAttempt(quizId));
     }
 
+    @ApiMessage("Lưu bài làm thành công")
+    @PostMapping("/save")
+    public ResponseEntity<QuizAttemptResponse> saveQuizAttempt(@RequestBody QuizAttemptRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizAttemptService.saveQuizAttempt(request));
+    }
 
-    @GetMapping("/{userId}/{quizId}")
-    public ResponseEntity<QuizAttemptResponse> getQuizAttempt(
-            @PathVariable Long userId,
-            @PathVariable Long quizId) {
-        QuizAttemptResponse response = quizAttemptService.getQuizAttemptByUserAndQuiz(userId, quizId);
-        return ResponseEntity.ok(response);
+    @ApiMessage("Nộp bài kiểm tra thành công")
+    @PostMapping("/submit")
+    public ResponseEntity<QuizAttemptResponse> submitQuizAttempt(@RequestBody QuizAttemptRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(quizAttemptService.submitQuizAttempt(request));
     }
 }

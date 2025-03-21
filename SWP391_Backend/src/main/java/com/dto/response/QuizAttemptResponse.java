@@ -15,13 +15,19 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuizAttemptResponse {
     Long quizAttemptId;
+
     Long userId;
+
     Integer attemptNumber;
-    Double score;
+
+    Integer numberOfCorrects;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant startTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant endTime;
+
     List<UserAnswerResponse> userAnswers;
 
     @Builder
@@ -32,6 +38,7 @@ public class QuizAttemptResponse {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class UserAnswerResponse {
         Long questionId;
+
         List<Long> answerIds;
     }
 }

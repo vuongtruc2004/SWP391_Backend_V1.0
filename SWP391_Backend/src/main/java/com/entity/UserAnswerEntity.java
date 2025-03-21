@@ -3,6 +3,10 @@ package com.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,7 +31,10 @@ public class UserAnswerEntity {
     @JoinColumn(name = "question_id")
     QuestionEntity question;
 
-    @ManyToOne
-    @JoinColumn(name = "answer_id")
-    AnswerEntity answer;
+    @ManyToMany
+    @JoinTable(name = "user_answers_answer",
+            joinColumns = @JoinColumn(name = "user_answer_id"),
+            inverseJoinColumns = @JoinColumn(name = "answer_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    Set<AnswerEntity> answers;
 }

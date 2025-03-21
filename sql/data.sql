@@ -120,6 +120,7 @@ CREATE TABLE `campaigns` (
   `campaign_description` varchar(255) DEFAULT NULL,
   `campaign_name` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `discount_percentage` double DEFAULT NULL,
   `end_time` datetime(6) DEFAULT NULL,
   `start_time` datetime(6) DEFAULT NULL,
@@ -177,7 +178,7 @@ DROP TABLE IF EXISTS `chats`;
 CREATE TABLE `chats` (
   `chat_id` bigint NOT NULL AUTO_INCREMENT,
   `created_at` datetime(6) DEFAULT NULL,
-    `updated_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`chat_id`),
@@ -253,7 +254,7 @@ CREATE TABLE `coupons` (
   `updated_at` datetime(6) DEFAULT NULL,
   `used_count` bigint DEFAULT NULL,
   PRIMARY KEY (`coupon_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -716,7 +717,7 @@ CREATE TABLE `quiz_attempts` (
   `quiz_attempt_id` bigint NOT NULL AUTO_INCREMENT,
   `attempt_number` int DEFAULT NULL,
   `end_time` datetime(6) DEFAULT NULL,
-  `score` double DEFAULT NULL,
+  `number_of_corrects` int DEFAULT NULL,
   `start_time` datetime(6) DEFAULT NULL,
   `quiz_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
@@ -918,15 +919,12 @@ DROP TABLE IF EXISTS `user_answers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_answers` (
   `user_answer_id` bigint NOT NULL AUTO_INCREMENT,
-  `answer_id` bigint DEFAULT NULL,
   `question_id` bigint DEFAULT NULL,
   `quiz_attempt_id` bigint DEFAULT NULL,
   PRIMARY KEY (`user_answer_id`),
-  KEY `FKq9ubv2ar56hkwxokdbp72b5by` (`answer_id`),
   KEY `FK6b46l4bb7a6wfxvmn6l7ig8vo` (`question_id`),
   KEY `FKqy4lhxwoi677jc3u95au6qmxw` (`quiz_attempt_id`),
   CONSTRAINT `FK6b46l4bb7a6wfxvmn6l7ig8vo` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `FKq9ubv2ar56hkwxokdbp72b5by` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`),
   CONSTRAINT `FKqy4lhxwoi677jc3u95au6qmxw` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`quiz_attempt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -938,6 +936,32 @@ CREATE TABLE `user_answers` (
 LOCK TABLES `user_answers` WRITE;
 /*!40000 ALTER TABLE `user_answers` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_answers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_answers_answer`
+--
+
+DROP TABLE IF EXISTS `user_answers_answer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_answers_answer` (
+  `user_answer_id` bigint NOT NULL,
+  `answer_id` bigint NOT NULL,
+  PRIMARY KEY (`user_answer_id`,`answer_id`),
+  KEY `FKtn33w5vhip5arxeo92e2uag8p` (`answer_id`),
+  CONSTRAINT `FK1udyf788y6qi8qy7yj4ht8p1i` FOREIGN KEY (`user_answer_id`) REFERENCES `user_answers` (`user_answer_id`) ON DELETE CASCADE,
+  CONSTRAINT `FKtn33w5vhip5arxeo92e2uag8p` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_answers_answer`
+--
+
+LOCK TABLES `user_answers_answer` WRITE;
+/*!40000 ALTER TABLE `user_answers_answer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_answers_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1045,4 +1069,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-19 18:18:44
+-- Dump completed on 2025-03-21 18:59:27
