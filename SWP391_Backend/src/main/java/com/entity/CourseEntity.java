@@ -2,6 +2,7 @@ package com.entity;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.util.enums.CourseStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -38,6 +39,10 @@ public class CourseEntity implements Serializable {
     String thumbnail;
 
     String introduction;
+
+    @Column(name="course_status")
+    @Enumerated(EnumType.STRING)
+    CourseStatusEnum courseStatusEnum;
 
     Double price;
 

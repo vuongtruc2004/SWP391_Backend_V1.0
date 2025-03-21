@@ -111,6 +111,19 @@ public class CourseController {
     public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception {
         return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
     }
+    @ApiMessage("Yêu cầu duyệt khoá học thành công!")
+    @PostMapping("/request-processing/{id}")
+    public ResponseEntity<Void> requestCourseProcessing(@PathVariable Long id){
+        this.courseService.changeDraftToProcessingCourse(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiMessage("Từ chối duyệt khoá học thành công!")
+    @PostMapping("/request-reject/{id}")
+    public ResponseEntity<Void> requestCourseReject(@PathVariable Long id){
+        this.courseService.rejectCourse(id);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/get-course/{courseId}")
     public ResponseEntity<CourseDetailsResponse> getCourseDetailsAdmin(@PathVariable Long courseId) {

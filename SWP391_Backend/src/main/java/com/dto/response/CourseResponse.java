@@ -1,6 +1,7 @@
 package com.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.util.enums.CourseStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -33,6 +34,8 @@ public class CourseResponse {
     Integer totalLessons;
 
     Integer totalQuizzes;
+
+    CourseStatusEnum courseStatus;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;

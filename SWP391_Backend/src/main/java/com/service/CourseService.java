@@ -22,6 +22,8 @@ import com.repository.CourseRepository;
 import com.repository.ExpertRepository;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
+import com.util.enums.CourseStatusEnum;
+import com.util.enums.RoleNameEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -180,6 +182,15 @@ public class CourseService {
             Specification<CourseEntity> specification,
             Boolean accepted
     ) {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (!user.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    root.get("courseStatusEnum").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.SUCCESS)
+            );
+        }
+
+
+
         if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accepted"), accepted)
@@ -236,12 +247,28 @@ public class CourseService {
 
         String message = "ẩn";
         if (Boolean.TRUE.equals(courseEntity.getAccepted())) {
+            courseEntity.setCourseStatusEnum(CourseStatusEnum.REJECT);
             courseEntity.setAccepted(false);
         } else {
             message = "chấp nhận";
+            courseEntity.setCourseStatusEnum(CourseStatusEnum.SUCCESS);
             courseEntity.setAccepted(true);
         }
 
+        courseRepository.save(courseEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành công!",
+                "Khóa học " + courseEntity.getCourseName() + " đã được " + message,
+                null
+        );
+    }
+
+    public ApiResponse<String> rejectCourse(Long courseId) {
+        CourseEntity courseEntity = courseRepository.findById(courseId)
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
+        String message = "từ chối duyệt!";
+        courseEntity.setCourseStatusEnum(CourseStatusEnum.REJECT);
         courseRepository.save(courseEntity);
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
@@ -266,6 +293,7 @@ public class CourseService {
 
         CourseEntity newCourse = new CourseEntity();
         newCourse.setExpert(user.getExpert());
+        newCourse.setCourseStatusEnum(CourseStatusEnum.DRAFT);
         newCourse.setCourseName(courseNameReplace);
         newCourse.setDescription(courseRequest.getDescription());
         newCourse.setObjectiveList(courseRequest.getObjectives());
@@ -301,6 +329,7 @@ public class CourseService {
         Set<SubjectEntity> subjectEntitySet = subjectService.saveSubjectWithCourse(courseRequest);
         newCourse.setSubjects(subjectEntitySet);
         newCourse.setAccepted(false);
+        newCourse.setCourseStatusEnum(CourseStatusEnum.DRAFT);
         courseRepository.save(newCourse);
         CourseResponse courseResponse = new CourseResponse();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
@@ -331,5 +360,10 @@ public class CourseService {
         Set<CourseEntity> courseEntities = courseRepository.findByCampaignIsNull();
         List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
         return courseResponses;
+    }
+    public void changeDraftToProcessingCourse(Long id){
+        CourseEntity courseEntity=this.courseRepository.findById(id).get();
+        courseEntity.setCourseStatusEnum(CourseStatusEnum.PROCESSING);
+        this.courseRepository.save(courseEntity);
     }
 }
