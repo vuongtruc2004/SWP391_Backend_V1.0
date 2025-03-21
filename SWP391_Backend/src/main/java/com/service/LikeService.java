@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.request.LikeRequest;
+import com.dto.response.CommentResponse;
 import com.dto.response.LikeResponse;
 import com.entity.BlogEntity;
 import com.entity.CommentEntity;
@@ -36,11 +37,16 @@ public class LikeService {
         this.modelMapper = modelMapper;
     }
 
-    public void newLike(){
-        messagingTemplate.convertAndSend("/topic/like", "new like");
+    public void likeComment(LikeResponse likeResponse, Long commentId){
+        messagingTemplate.convertAndSend("/topic/likes/"+commentId, likeResponse);
     }
 
-    public LikeResponse likeABlogOrComment(LikeRequest likeRequest) {
+    public void newLike(){
+        messagingTemplate.convertAndSend("/topic/likes", "newLike");
+    }
+
+
+    public void likeABlogOrComment(LikeRequest likeRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if(userEntity == null) {
             throw new NotFoundException("Lỗi đăng nhập!");
@@ -49,12 +55,12 @@ public class LikeService {
         likeEntity.setUser(userEntity);
 
         if(likeRequest.getBlogId()!= null){
-           BlogEntity blogEntity = blogRepository.findById(likeRequest.getBlogId()).get();
-           if(blogEntity != null) {
-               likeEntity.setBlog(blogEntity);
-           } else {
-               throw new NotFoundException("Không tìm thấy bài viết hoặc bài viết đã bị xóa!");
-           }
+            BlogEntity blogEntity = blogRepository.findById(likeRequest.getBlogId()).get();
+            if(blogEntity != null) {
+                likeEntity.setBlog(blogEntity);
+            } else {
+                throw new NotFoundException("Không tìm thấy bài viết hoặc bài viết đã bị xóa!");
+            }
         }
 
 
@@ -69,8 +75,11 @@ public class LikeService {
 
         likeRepository.save(likeEntity);
         LikeResponse likeResponse = modelMapper.map(likeEntity, LikeResponse.class);
-        newLike();
-        return likeResponse;
+        if(likeRequest.getCommentId() != null){
+            likeComment(likeResponse, likeRequest.getCommentId());
+        } else{
+            newLike();
+        }
     }
 
     //dislike 1 blog
@@ -88,9 +97,14 @@ public class LikeService {
         newLike();
     }
 
+    private CommentResponse getCommentAfterDislike(Long commentId) {
+        CommentEntity commentEntity = commentRepository.findById(commentId).get();
+        return modelMapper.map(commentEntity, CommentResponse.class);
+    }
+
     //dislike a comment
     @Transactional
-    public void dislikeAComment(Long commentId) {
+    void deleteAComment(Long commentId) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if(userEntity == null) {
             throw new NotFoundException("Không thể lấy thông tin người dùng!");
@@ -100,6 +114,12 @@ public class LikeService {
         if(exist != null){
             likeRepository.delete(exist);
         }
+
+    }
+
+    public void dislikeAComment(Long commentId){
+        deleteAComment(commentId);
+        messagingTemplate.convertAndSend("/topic/likes/dislike/"+commentId, getCommentAfterDislike(commentId));
     }
 
     //check user da like hay chua

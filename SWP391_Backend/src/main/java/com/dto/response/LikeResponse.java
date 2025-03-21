@@ -17,9 +17,6 @@ public class LikeResponse {
     UserResponse user;
     @JsonIgnoreProperties({"user", "comment", "likes"})
     BlogResponse blog;
-    @JsonIgnoreProperties({"likes"})
+    @JsonIgnoreProperties({"blog", "user"})
     CommentResponse comment;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-    Instant createdAt;
 }

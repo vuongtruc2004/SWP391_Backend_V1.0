@@ -17,8 +17,9 @@ public class LikeController {
     }
 
     @PostMapping
-    public ResponseEntity<LikeResponse> addLike(@RequestBody LikeRequest likeRequest) {
-        return ResponseEntity.ok(likeService.likeABlogOrComment(likeRequest));
+    public ResponseEntity<Void> addLike(@RequestBody LikeRequest likeRequest) {
+        likeService.likeABlogOrComment(likeRequest);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/dislike-blog/{blogId}")

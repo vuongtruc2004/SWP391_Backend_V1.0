@@ -23,9 +23,10 @@ public class CommentResponse {
     Instant updatedAt;
     @JsonIgnoreProperties("comments")
     UserResponse user;
-    @JsonIgnoreProperties({"blog", "replies"})
+    @JsonIgnoreProperties({"blog", "replies", "likes"})
     CommentResponse parentComment;
     @JsonIgnoreProperties({"blog", "parentComment"})
     Set<CommentResponse> replies;
+    @JsonIgnoreProperties({"comment"})
     Set<LikeResponse> likes;
 }
