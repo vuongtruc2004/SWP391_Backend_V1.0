@@ -27,7 +27,7 @@ public class CampaignEntity {
     @Column(name = "campaign_name")
     String campaignName;
 
-    @Column(name = "campaign_description")
+    @Column(name = "campaign_description", columnDefinition = "MEDIUMTEXT")
     String campaignDescription;
 
     @Column(name = "discount_percentage")
@@ -49,7 +49,6 @@ public class CampaignEntity {
 
     @Column(name = "created_at")
     Instant createdAt;
-
     @Column(name = "updated_at")
     Instant updatedAt;
 

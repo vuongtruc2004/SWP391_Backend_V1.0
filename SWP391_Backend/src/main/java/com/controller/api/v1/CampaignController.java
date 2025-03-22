@@ -3,6 +3,7 @@ package com.controller.api.v1;
 import com.dto.request.CampaignRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.CampaignResponse;
+import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.CampaignEntity;
 import com.service.CampaignService;
@@ -54,6 +55,12 @@ public class CampaignController {
     @GetMapping("/all")
     public ResponseEntity<List<CampaignResponse>> getAllCampaignsWithOutFilter() {
         return ResponseEntity.ok(campaignService.getAllCampaigns());
+    }
+
+    @ApiMessage("Lấy khoảng giá chiến dịch thành công!")
+    @GetMapping("/price-range")
+    public ResponseEntity<MinMaxPriceResponse> getRangePrice() {
+        return ResponseEntity.ok(campaignService.getMaxMinPriceOfCourses());
     }
 
 }

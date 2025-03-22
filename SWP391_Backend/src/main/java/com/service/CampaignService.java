@@ -3,6 +3,7 @@ package com.service;
 import com.dto.request.CampaignRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.CampaignResponse;
+import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.CampaignEntity;
 import com.entity.CourseEntity;
@@ -21,12 +22,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,7 +97,7 @@ public class CampaignService {
                         return course;
                     })
                     .collect(Collectors.toSet());
-            if(setCourse.isEmpty()) {
+            if (setCourse.isEmpty()) {
                 throw new CampaignException("Không còn khóa học nào chưa được áp dụng chiến dịch. Vui lòng chờ hết chiến dịch. Hoặc hủy bỏ khóa học bạn cần ở những chiến dịch khác!");
             }
             campaignEntity.setCourses(setCourse);
@@ -107,7 +106,6 @@ public class CampaignService {
 
         campaignEntity.setThumbnailUrl(request.getThumbnail());
         campaignEntity = campaignRepository.save(campaignEntity);
-        System.out.println("Courses in campaign: " + campaignEntity.getCourses()); // Debug
 
         return modelMapper.map(campaignEntity, CampaignResponse.class);
     }
@@ -143,66 +141,81 @@ public class CampaignService {
         }
     }
 
+    @Transactional
     public CampaignResponse updateCampaign(CampaignRequest request) {
-        CampaignEntity campaignEntity = campaignRepository.findById(request.getCampaignId()).orElseThrow(() -> new NotFoundException("Không tìm thấy chiến dịch!"));
+        CampaignEntity campaignEntity = campaignRepository.findById(request.getCampaignId())
+                .orElseThrow(() -> new NotFoundException("Không tìm thấy chiến dịch!"));
+
         if (campaignRepository.existsByCampaignNameAndCampaignIdNot(request.getCampaignName(), request.getCampaignId())) {
             throw new CampaignException("Tên chiến dịch đã tồn tại!");
         }
-        if (campaignEntity.getStartTime().isBefore(Instant.now()) && campaignEntity.getEndTime().isAfter(Instant.now())) {
 
-            campaignEntity.getCourses().forEach(course -> {
+        boolean isCampaignActive = campaignEntity.getStartTime().isBefore(Instant.now())
+                && campaignEntity.getEndTime().isAfter(Instant.now());
+
+        // Danh sách các khóa học hiện tại đang thuộc chiến dịch này
+        Set<CourseEntity> oldCourses = new HashSet<>(campaignEntity.getCourses());
+
+        // Nếu chiến dịch đang diễn ra, hoàn trả giá gốc cho khóa học cũ trước khi cập nhật chiến dịch
+        if (isCampaignActive) {
+            for (CourseEntity course : oldCourses) {
                 if (campaignEntity.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
-                    Double oldPrice = course.getPrice() + campaignEntity.getDiscountPercentage();
-                    course.setPrice(oldPrice);
-                    courseRepository.save(course);
+                    course.setPrice(course.getPrice() + campaignEntity.getDiscountPercentage());
+                } else if (campaignEntity.getDiscountType().equals(DiscountTypeEnum.PERCENTAGE)) {
+                    course.setPrice(course.getPrice() / (1 - (campaignEntity.getDiscountPercentage() / 100.0)));
                 }
-                if (campaignEntity.getDiscountType().equals(DiscountTypeEnum.PERCENTAGE)) {
-                    Double oldPrice = course.getPrice() / (1 - (campaignEntity.getDiscountPercentage() / 100.0));
-                    course.setPrice(oldPrice);
-                    courseRepository.save(course);
-                }
-                if (request.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
-
-                    if (course.getPrice() - campaignEntity.getDiscountPercentage() < 0) {
-                        course.setPrice(1000.0);
-                    } else {
-                        Double salePrice = course.getPrice() - request.getDiscountPercentage();
-                        course.setPrice(salePrice);
-                    }
-
-                    courseRepository.save(course);
-                }
-                if (request.getDiscountType().equals(DiscountTypeEnum.PERCENTAGE)) {
-                    Double salePrice = course.getPrice() - ((course.getPrice() * request.getDiscountPercentage()) / 100);
-                    course.setPrice(salePrice);
-                    courseRepository.save(course);
-                }
-            });
+                courseRepository.save(course);
+            }
         }
 
+        // Cập nhật thông tin chiến dịch
         modelMapper.map(request, campaignEntity);
+        campaignEntity.setDiscountRange(request.getDiscountRange());
+        campaignEntity.setThumbnailUrl(request.getThumbnail());
+        campaignEntity.setStartTime(DateUtil.parseToInstant(request.getStartTime()));
+        campaignEntity.setEndTime(DateUtil.parseToInstant(request.getEndTime()));
 
-        List<CourseEntity> allCourses = courseRepository.findAll();
+        // Danh sách khóa học mới từ request
+        Set<Long> newCourseIds = request.getCourseIds() != null ? new HashSet<>(request.getCourseIds()) : Collections.emptySet();
 
-        if (request.getDiscountType().equals(DiscountRangeEnum.COURSES)) {
-            Set<Long> selectedCourseIds = new HashSet<>(request.getCourseIds());
-
+        // Cập nhật chiến dịch cho khóa học mới
+        if (!newCourseIds.isEmpty()) {
+            List<CourseEntity> allCourses = courseRepository.findAll();
             for (CourseEntity course : allCourses) {
-                if (selectedCourseIds.contains(course.getCourseId())) {
+                if (newCourseIds.contains(course.getCourseId())) {
                     course.setCampaign(campaignEntity);
-                } else {
+
+                    if (isCampaignActive) {
+                        double newPrice;
+                        if (campaignEntity.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
+                            newPrice = course.getPrice() - request.getDiscountPercentage();
+
+                            if (newPrice < course.getPrice() * 0.01) {
+                                newPrice = course.getPrice() * 0.01;
+                            }
+                        } else {
+                            newPrice = course.getPrice() * (1 - (request.getDiscountPercentage() / 100.0));
+                        }
+
+                        course.setPrice(Math.max(newPrice, 1000.0));
+                    }
+
+                } else if (oldCourses.contains(course)) {
                     course.setCampaign(null);
                 }
             }
             courseRepository.saveAll(allCourses);
         }
 
-        campaignEntity.setDiscountRange(request.getDiscountRange());
-        campaignEntity.setThumbnailUrl(request.getThumbnail());
-        campaignEntity.setStartTime(DateUtil.parseToInstant(request.getStartTime()));
-        campaignEntity.setEndTime(DateUtil.parseToInstant(request.getEndTime()));
         campaignRepository.save(campaignEntity);
         return modelMapper.map(campaignEntity, CampaignResponse.class);
     }
+
+    public MinMaxPriceResponse getMaxMinPriceOfCourses() {
+        Double minPrice = campaignRepository.findMinPrice();
+        Double maxPrice = campaignRepository.findMaxPrice();
+        return new MinMaxPriceResponse(minPrice, maxPrice);
+    }
+
 
 }

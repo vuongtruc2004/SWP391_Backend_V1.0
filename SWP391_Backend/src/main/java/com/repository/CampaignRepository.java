@@ -2,6 +2,7 @@ package com.repository;
 
 import com.entity.CampaignEntity;
 import com.repository.custom.JpaSpecificationRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -13,4 +14,10 @@ public interface CampaignRepository extends JpaSpecificationRepository<CampaignE
     boolean existsByCampaignNameAndCampaignIdNot(String campaignName, Long campaignId);
     List<CampaignEntity> findByStartTimeBeforeAndEndTimeAfter(Instant start,Instant end);
     List<CampaignEntity> findByEndTimeBefore(Instant end);
+
+    @Query("select MIN(c.discountPercentage) FROM CampaignEntity c")
+    Double findMinPrice();
+
+    @Query("select MAX(c.discountPercentage) FROM CampaignEntity c")
+    Double findMaxPrice();
 }

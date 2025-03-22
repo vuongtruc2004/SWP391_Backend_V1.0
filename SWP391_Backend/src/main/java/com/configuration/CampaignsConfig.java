@@ -11,7 +11,9 @@ import com.util.BuildResponse;
 import com.util.enums.DiscountTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +27,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CampaignsConfig {
 
+    private final SimpMessagingTemplate messagingTemplate;
     private final CampaignRepository campaignRepository;
     private final CourseRepository courseRepository;
-    private final CampaignService campaignService;
     private final Set<Long> processedCampaigns = new HashSet<>();
 
     @Async
-//    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 3000)
     @Transactional
     public void saleChangePrice() {
         Instant now = Instant.now();
@@ -45,7 +47,7 @@ public class CampaignsConfig {
     }
 
     @Async
-//    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 3000)
     @Transactional
     public void recoverChangePrice() {
         Instant now = Instant.now();
@@ -68,6 +70,7 @@ public class CampaignsConfig {
                 }
             }
             this.deleteCampaignNoRecoveryPrice(campaign.getCampaignId());
+            this.messagingTemplate.convertAndSend("/topic/campaigns", "Deleted");
         }
     }
 

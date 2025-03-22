@@ -33,8 +33,6 @@ public class CampaignRequest {
 
     String endTime;
 
-    Instant createdAt;
-
     Set<Long> courseIds;
 
 }
