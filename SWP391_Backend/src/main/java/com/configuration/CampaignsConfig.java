@@ -6,14 +6,12 @@ import com.entity.CourseEntity;
 import com.exception.custom.CampaignException;
 import com.repository.CampaignRepository;
 import com.repository.CourseRepository;
-import com.service.CampaignService;
 import com.util.BuildResponse;
 import com.util.enums.DiscountTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +31,7 @@ public class CampaignsConfig {
     private final Set<Long> processedCampaigns = new HashSet<>();
 
     @Async
-    @Scheduled(fixedRate = 3000)
+//    @Scheduled(fixedRate = 3000)
     @Transactional
     public void saleChangePrice() {
         Instant now = Instant.now();
@@ -47,7 +45,7 @@ public class CampaignsConfig {
     }
 
     @Async
-    @Scheduled(fixedRate = 3000)
+//    @Scheduled(fixedRate = 3000)
     @Transactional
     public void recoverChangePrice() {
         Instant now = Instant.now();

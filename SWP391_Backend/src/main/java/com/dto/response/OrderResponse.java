@@ -1,9 +1,6 @@
 package com.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.util.enums.OrderStatusEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,23 +19,22 @@ public class OrderResponse {
 
     String orderCode;
 
-    @Enumerated(EnumType.STRING)
-    OrderStatusEnum orderStatus;
+    String paymentUrl;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
-    Instant updatedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant expiredAt;
 
-    Integer totalAmount;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    Instant paidAt;
+
+    Double totalPrice;
 
     UserResponse user;
 
     List<OrderDetailsResponse> orderDetails;
 
-    CouponResponse couponResponse;
+    CouponResponse coupon;
 }

@@ -14,4 +14,6 @@ public class OrderDetailsResponse {
     Long orderDetailsId;
 
     CourseResponse course;
+
+    Double priceAtTimeOfPurchase;
 }

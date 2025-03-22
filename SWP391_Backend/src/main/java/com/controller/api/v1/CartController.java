@@ -36,4 +36,11 @@ public class CartController {
         cartService.deleteCoursesFromUserCart(courseIds);
         return ResponseEntity.ok().build();
     }
+
+    @ApiMessage("Đổi trạng thái của khóa học trong giỏ hàng thành công!")
+    @PatchMapping("/{courseId}")
+    public ResponseEntity<Void> changeStatusOfCartCourse(@PathVariable Long courseId) {
+        cartService.changeStatusOfCartCourse(courseId);
+        return ResponseEntity.ok().build();
+    }
 }

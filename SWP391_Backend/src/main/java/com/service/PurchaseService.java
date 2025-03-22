@@ -1,26 +1,26 @@
 package com.service;
 
-import com.dto.request.PurchaseRequest;
-import com.dto.response.OrderResponse;
-import com.dto.response.PurchaseResponse;
+import com.dto.request.OrderRequest;
+import com.dto.response.ApiResponse;
 import com.entity.*;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.PurchaseException;
-import com.exception.custom.UserException;
+import com.exception.custom.*;
+import com.helper.CartServiceHelper;
 import com.helper.OrderServiceHelper;
 import com.helper.PurchaseServiceHelper;
 import com.helper.UserServiceHelper;
+import com.repository.CartCourseRepository;
 import com.repository.CouponRepository;
 import com.repository.CourseRepository;
 import com.repository.OrderRepository;
+import com.util.BuildResponse;
 import com.util.VnPayUtil;
 import com.util.enums.CurrencyCodeEnum;
 import com.util.enums.LocaleCodeEnum;
-import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -38,6 +38,8 @@ public class PurchaseService {
     private final OrderServiceHelper orderServiceHelper;
     private final CourseRepository courseRepository;
     private final CouponRepository couponRepository;
+    private final CartServiceHelper cartServiceHelper;
+    private final CartCourseRepository cartCourseRepository;
 
     @Value("${vnpay.tmn.code}")
     private String tmnCode;
@@ -48,7 +50,7 @@ public class PurchaseService {
     @Value("${vnpay.timeout}")
     private Integer paymentTimeout;
 
-    public PurchaseResponse createPurchaseRequest(PurchaseRequest purchaseRequest, String ipAddress) {
+    public ApiResponse<String> createPaymentURL(OrderRequest orderRequest, String ipAddress) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
             throw new UserException("Vui lòng đăng nhập!");
@@ -59,12 +61,12 @@ public class PurchaseService {
         vnCalendar.add(Calendar.MINUTE, paymentTimeout);
         String expireDate = paymentServiceHelper.formatVnTime(vnCalendar);
 
-        String txnRef = paymentServiceHelper.getTxnRef(purchaseRequest, userEntity.getUserId());
+        String txnRef = paymentServiceHelper.getTxnRef(orderRequest, userEntity.getUserId());
 
-        OrderResponse orderResponse = createOrder(purchaseRequest, userEntity, txnRef, createDate, expireDate);
+        OrderEntity order = createOrder(orderRequest, userEntity, txnRef, createDate, expireDate);
 
-        long amount = orderResponse.getTotalAmount() * DEFAULT_MULTIPLIER;
-        String orderInfo = paymentServiceHelper.getOrderInfo(purchaseRequest);
+        long amount = (long) (order.getTotalPrice() * DEFAULT_MULTIPLIER);
+        String orderInfo = "Thanh toan don hang " + txnRef;
 
         Map<String, String> params = new HashMap<>();
         params.put(VnPayUtil.VERSION, VERSION);
@@ -86,45 +88,57 @@ public class PurchaseService {
         params.put(VnPayUtil.VNP_ORDER_INFO, orderInfo);
         params.put(VnPayUtil.VNP_ORDER_TYPE, ORDER_TYPE);
 
-        String paymentUrl = paymentServiceHelper.buildPaymentUrl(params);
-        return PurchaseResponse.builder()
-                .order(orderResponse)
-                .redirectUrl(paymentUrl)
-                .build();
+        return BuildResponse.buildApiResponse(
+                201,
+                "Tạo phiếu mua hàng thành công!",
+                null,
+                paymentServiceHelper.buildPaymentUrl(order, params)
+        );
     }
 
-    public OrderResponse activeOrder(String orderCode) {
-        List<OrderEntity> orderEntityList = orderRepository.findAllByOrderCode(orderCode);
-        if (orderEntityList.size() != 1 || !orderEntityList.get(0).getOrderStatus().equals(OrderStatusEnum.PENDING)) {
-            throw new PurchaseException("Đơn hàng không hợp lệ!");
-        }
+    public void activeOrder(String orderCode) {
+        OrderEntity order = orderRepository.findByOrderCodeAndPaidAtIsNull(orderCode)
+                .orElseThrow(() -> new OrderException("Bạn đã thanh toán hóa đơn này rồi hoặc hóa đơn không tồn tại!"));
 
-        orderEntityList.get(0).setOrderStatus(OrderStatusEnum.COMPLETED);
-
-        for (OrderDetailsEntity orderDetailsEntity : orderEntityList.get(0).getOrderDetails()) {
+        Set<CourseEntity> purchaseCourses = new HashSet<>();
+        for (OrderDetailsEntity orderDetailsEntity : order.getOrderDetails()) {
             CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourse().getCourseId())
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+
+            purchaseCourses.add(courseEntity);
+
             Set<UserEntity> currentRegister = courseEntity.getUsers();
-            currentRegister.add(orderEntityList.get(0).getUser());
+            currentRegister.add(order.getUser());
             courseEntity.setUsers(currentRegister);
             courseRepository.save(courseEntity);
         }
 
-        OrderEntity newOrderEntity = orderRepository.save(orderEntityList.get(0));
-        return orderServiceHelper.convertToOrderResponse(newOrderEntity);
+        order.setPaidAt(Instant.now());
+        order.setPaymentUrl(null);
+        orderRepository.save(order);
+
+        CartEntity cart = order.getUser().getCart();
+        if (cart != null && cart.getCartCourses() != null) {
+            for (CourseEntity courseEntity : purchaseCourses) {
+                CartCourseEntity cartCourseEntity = cartCourseRepository.findByCartAndCourse(cart, courseEntity).orElse(null);
+                if (cartCourseEntity != null) {
+                    cartCourseRepository.delete(cartCourseEntity);
+                }
+            }
+        }
     }
 
-    public OrderResponse deleteOrder(Long orderId) {
+    public void deleteOrder(Long orderId) {
         if (orderId == null) {
             throw new PurchaseException("OrderId không được null!");
         }
-        OrderEntity orderEntity = orderRepository.findByOrderIdAndOrderStatusNot(orderId, OrderStatusEnum.COMPLETED)
+        OrderEntity orderEntity = orderRepository.findByOrderIdAndPaidAtIsNull(orderId)
                 .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại hoặc đã được thanh toán!"));
-        orderRepository.delete(orderEntity);
-        return orderServiceHelper.convertToOrderResponse(orderEntity);
+
+        orderServiceHelper.returnCouponBeforeOrderDeleted(orderEntity);
     }
 
-    public OrderResponse processIpn(Map<String, String> params) {
+    public void processIpn(Map<String, String> params) {
         if (!paymentServiceHelper.verifyIpn(params)) {
             throw new PurchaseException("Thông tin không hợp lệ!");
         }
@@ -134,17 +148,13 @@ public class PurchaseService {
         if (!responseCode.equals(VnPayUtil.VNP_SUCCESS_CODE)) {
             throw new PurchaseException("Thanh toán không thành công, vui lòng liên hệ với FanPage LearnGo để được hỗ trợ!");
         }
-        return activeOrder(txnRef);
+        activeOrder(txnRef);
     }
 
-    private OrderResponse createOrder(PurchaseRequest purchaseRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
-        if (orderRepository.existsCompletedAndPendingOrder(userEntity.getUserId(), purchaseRequest.getCourseIds())) {
-            throw new PurchaseException("Bạn đã có đơn hàng chứa những khóa học này rồi!");
-        }
-
+    private OrderEntity createOrder(OrderRequest orderRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
         CouponEntity coupon = null;
-        if (purchaseRequest.getCouponId() != null) {
-            coupon = couponRepository.findById(purchaseRequest.getCouponId())
+        if (orderRequest.getCouponId() != null) {
+            coupon = couponRepository.findById(orderRequest.getCouponId())
                     .orElseThrow(() -> new NotFoundException("Mã giảm giá không tồn tại!"));
         }
 
@@ -152,23 +162,30 @@ public class PurchaseService {
         List<OrderDetailsEntity> orderDetailsEntitySet = new ArrayList<>();
         orderEntity.setUser(userEntity);
         orderEntity.setOrderCode(txnRef);
-        orderEntity.setTotalAmount(purchaseServiceHelper.applyCoupon(coupon, purchaseRequest.getTotalPrice()));
         orderEntity.setCreatedAt(purchaseServiceHelper.parseVnTime(createDate));
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 
-        for (Long courseId : purchaseRequest.getCourseIds()) {
-            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+        List<CourseEntity> purchasedCourses = userEntity.getCourses();
+        for (OrderRequest.OrderDetailsRequest orderDetailsRequest : orderRequest.getOrderDetails()) {
+            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsRequest.getCourseId())
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+
+            if (purchasedCourses != null && purchasedCourses.contains(course)) {
+                throw new CourseException("Bạn đã mua khóa học " + course.getCourseName() + " rồi!");
+            }
             orderDetailsEntitySet.add(OrderDetailsEntity.builder()
                     .order(orderEntity)
                     .course(course)
+                    .priceAtTimeOfPurchase(orderDetailsRequest.getPriceAtTimeOfPurchase())
                     .build());
         }
+
         orderEntity.setOrderDetails(orderDetailsEntitySet);
+        orderEntity.setTotalPrice(purchaseServiceHelper.countOrderTotalPrice(coupon, orderRequest));
+
         if (coupon != null) {
             orderEntity.setCoupon(coupon);
         }
-        OrderEntity newOrderEntity = orderRepository.save(orderEntity);
-        return orderServiceHelper.convertToOrderResponse(newOrderEntity);
+        return orderRepository.save(orderEntity);
     }
 }

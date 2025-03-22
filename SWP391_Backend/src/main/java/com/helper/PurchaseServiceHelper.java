@@ -1,10 +1,12 @@
 package com.helper;
 
-import com.dto.request.PurchaseRequest;
+import com.dto.request.OrderRequest;
 import com.entity.CouponEntity;
+import com.entity.OrderEntity;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.PurchaseException;
 import com.repository.CouponRepository;
+import com.repository.OrderRepository;
 import com.util.VnPayUtil;
 import com.util.enums.DiscountTypeEnum;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +29,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class PurchaseServiceHelper {
     private final String FORMAT_PATTERN = "yyyyMMddHHmmss";
     private final SimpleDateFormat VN_PAY_DATE_FORMAT = new SimpleDateFormat(FORMAT_PATTERN);
     private final CouponRepository couponRepository;
+    private final OrderRepository orderRepository;
 
     @Value("${vnpay.hash.secret}")
     private String secretKey;
@@ -53,17 +55,9 @@ public class PurchaseServiceHelper {
         return ZonedDateTime.parse(timeString, formatter).toInstant();
     }
 
-    public String getOrderInfo(PurchaseRequest purchaseRequest) {
-        return "Thanh toan don hang " + purchaseRequest.getCourseIds().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(" "));
-    }
-
-    public String getTxnRef(PurchaseRequest purchaseRequest, Long userId) {
+    public String getTxnRef(OrderRequest orderRequest, Long userId) {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(FORMAT_PATTERN));
-        return timestamp + userId + purchaseRequest.getCourseIds().stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(""));
+        return timestamp + userId + orderRequest.getOrderDetails().get(0).getCourseId();
     }
 
     public String encodeWithHmacSHA512(String data) {
@@ -78,7 +72,7 @@ public class PurchaseServiceHelper {
         }
     }
 
-    public String buildPaymentUrl(Map<String, String> params) {
+    public String buildPaymentUrl(OrderEntity order, Map<String, String> params) {
         StringBuilder hashPayload = new StringBuilder();
         StringBuilder query = new StringBuilder();
         List<String> fieldNames = new ArrayList<>(params.keySet());
@@ -108,7 +102,11 @@ public class PurchaseServiceHelper {
         }
         String secureHash = encodeWithHmacSHA512(hashPayload.toString());
         query.append("&vnp_SecureHash=").append(secureHash);
-        return initPaymentPrefixUrl + "?" + query;
+
+        String paymentUrl = initPaymentPrefixUrl + "?" + query;
+        order.setPaymentUrl(paymentUrl);
+        orderRepository.save(order);
+        return paymentUrl;
     }
 
     public boolean verifyIpn(Map<String, String> params) {
@@ -159,32 +157,32 @@ public class PurchaseServiceHelper {
         return sb.toString();
     }
 
-    public Double applyCoupon(CouponEntity coupon, Double totalPrice) {
-        if (coupon == null) {
-            return totalPrice;
+    public double countOrderTotalPrice(CouponEntity coupon, OrderRequest orderRequest) {
+        Double price = orderRequest.getOrderDetails().stream().mapToDouble(OrderRequest.OrderDetailsRequest::getPriceAtTimeOfPurchase).sum();
+
+        if (coupon != null) {
+            Instant now = Instant.now();
+            if (!coupon.getEndTime().isAfter(now)) throw new PurchaseException("Mã giảm giá đã hết hạn!");
+
+            if (coupon.getMaxUses() != null && coupon.getMaxUses() <= coupon.getUsedCount())
+                throw new PurchaseException("Mã giảm giá đã hết lượt sử dụng!");
+
+            if (coupon.getStartTime().isAfter(now)) throw new PurchaseException("Mã giảm giá chưa đến ngày hiệu lực!");
+
+            if (coupon.getMinOrderValue() != null && coupon.getMinOrderValue() > price)
+                throw new PurchaseException("Đơn hàng không đạt mức tối thiểu để dùng mã giảm giá này!");
+
+            if (coupon.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
+                price -= coupon.getDiscountAmount();
+            } else {
+                price -= (coupon.getDiscountPercent() * price / 100);
+            }
+
+            coupon.setUsedCount(coupon.getUsedCount() + 1);
+            couponRepository.save(coupon);
         }
 
-        Instant now = Instant.now();
-        if (coupon.getEndTime().isBefore(now)) throw new PurchaseException("Mã giảm giá đã hết hạn!");
-
-        if (coupon.getMaxUses() != null && coupon.getMaxUses() <= coupon.getUsedCount())
-            throw new PurchaseException("Mã giảm giá đã hết lượt sử dụng!");
-
-        if (coupon.getStartTime().isAfter(now)) throw new PurchaseException("Mã giảm giá chưa đến ngày hiệu lực!");
-
-        if (coupon.getMinOrderValue() != null && coupon.getMinOrderValue() > totalPrice)
-            throw new PurchaseException("Đơn hàng không đạt mức tối thiểu để dùng mã giảm giá này!");
-
-        if (coupon.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
-            totalPrice -= coupon.getDiscountAmount();
-        } else {
-            totalPrice -= (coupon.getDiscountPercent() * totalPrice / 100);
-        }
-
-        coupon.setUsedCount(coupon.getUsedCount() + 1);
-        couponRepository.save(coupon);
-
-        BigDecimal roundedTotalPrice = BigDecimal.valueOf(Math.max(0, totalPrice)).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal roundedTotalPrice = BigDecimal.valueOf(Math.max(0, price)).setScale(3, RoundingMode.HALF_UP);
         return roundedTotalPrice.doubleValue();
     }
 }

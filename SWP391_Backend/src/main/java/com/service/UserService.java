@@ -6,10 +6,7 @@ import com.dto.request.UserRequest;
 import com.dto.response.*;
 import com.dto.response.details.ExpertDetailsResponse;
 import com.entity.*;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.RoleException;
-import com.exception.custom.StorageException;
-import com.exception.custom.UserException;
+import com.exception.custom.*;
 import com.helper.CourseServiceHelper;
 import com.helper.ExpertServiceHelper;
 import com.helper.OrderServiceHelper;
@@ -19,7 +16,6 @@ import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
-import com.util.enums.OrderStatusEnum;
 import com.util.enums.RoleNameEnum;
 import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
@@ -377,14 +373,27 @@ public class UserService {
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        if (orderStatus.equalsIgnoreCase("ALL")) {
-            return orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId()).stream()
+        if (orderStatus == null) {
+            throw new OrderException("Trạng thái đơn hàng không hợp lệ!");
+        } else if (orderStatus.equalsIgnoreCase("ALL")) {
+            return orderRepository.findAllByUserAndExpiredAtAfterOrPaidAtIsNotNullOrderByCreatedAtDesc(user, Instant.now()).stream()
                     .map(orderServiceHelper::convertToOrderResponse)
                     .toList();
+        } else if (orderStatus.equalsIgnoreCase("COMPLETED")) {
+            return orderRepository.findAllByUserAndPaidAtIsNotNullOrderByCreatedAtDesc(user).stream()
+                    .map(orderServiceHelper::convertToOrderResponse)
+                    .toList();
+        } else if (orderStatus.equalsIgnoreCase("PENDING")) {
+            return orderRepository.findAllByUserAndPaidAtIsNullAndExpiredAtAfterOrderByCreatedAtDesc(user, Instant.now()).stream()
+                    .map(orderServiceHelper::convertToOrderResponse)
+                    .toList();
+        } else if (orderStatus.equalsIgnoreCase("EXPIRED")) {
+            return orderRepository.findAllByUserAndPaidAtIsNullAndExpiredAtLessThanEqualOrderByCreatedAtDesc(user, Instant.now()).stream()
+                    .map(orderServiceHelper::convertToOrderResponse)
+                    .toList();
+        } else {
+            throw new OrderException("Trạng thái đơn hàng không hợp lệ!");
         }
-        return orderRepository.findAllByUser_UserIdAndOrderStatusOrderByCreatedAtDesc(user.getUserId(), OrderStatusEnum.valueOf(orderStatus)).stream()
-                .map((orderServiceHelper::convertToOrderResponse))
-                .toList();
     }
 
     public List<ExpertDetailsResponse> getMyFollowingExperts() {
@@ -396,7 +405,6 @@ public class UserService {
                 .map(expertServiceHelper::convertToExpertDetailsResponse)
                 .toList();
     }
-
 
     public List<CourseResponse> getAllCoursesRegister(String selectedTab) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();

@@ -12,7 +12,6 @@ import com.repository.CourseRepository;
 import com.repository.OrderDetailsRepository;
 import com.repository.OrderRepository;
 import com.util.BuildResponse;
-import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -45,8 +44,8 @@ public class OrderDetailService {
         // Lặp qua danh sách course đã bán để tính tổng số lượng
         for (Long courseId : soldCourseIds) {
             String courseName = courseMap.get(courseId);
-            Long countSold = this.orderDetailsRepository.countByCourse_CourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
-            courseSold.put(courseName, countSold);
+//            Long countSold = this.orderDetailsRepository.countByCourse_CourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
+//            courseSold.put(courseName, countSold);
         }
 
         // Xử lý các khóa học chưa bán

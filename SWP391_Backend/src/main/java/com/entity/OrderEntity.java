@@ -1,6 +1,5 @@
 package com.entity;
 
-import com.util.enums.OrderStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -26,21 +25,20 @@ public class OrderEntity {
     @Column(name = "order_code")
     String orderCode;
 
-    @Column(name = "order_status")
-    @Enumerated(EnumType.STRING)
-    OrderStatusEnum orderStatus;
+    @Column(name = "payment_url", columnDefinition = "MEDIUMTEXT")
+    String paymentUrl;
 
     @Column(name = "created_at")
     Instant createdAt;
 
-    @Column(name = "updated_at")
-    Instant updatedAt;
-
     @Column(name = "expired_at")
     Instant expiredAt;
 
-    @Column(name = "total_amount")
-    Double totalAmount;
+    @Column(name = "paid_at")
+    Instant paidAt;
+
+    @Column(name = "total_price")
+    Double totalPrice;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -56,13 +54,5 @@ public class OrderEntity {
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
-        if (this.orderStatus == null) {
-            this.orderStatus = OrderStatusEnum.PENDING;
-        }
-    }
-
-    @PreUpdate
-    public void handlePreUpdate() {
-        this.updatedAt = Instant.now();
     }
 }

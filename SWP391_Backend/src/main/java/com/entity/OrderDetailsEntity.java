@@ -26,4 +26,7 @@ public class OrderDetailsEntity {
     @ManyToOne
     @JoinColumn(name = "order_id")
     OrderEntity order;
+
+    @Column(name = "price_at_time_purchase")
+    Double priceAtTimeOfPurchase;
 }

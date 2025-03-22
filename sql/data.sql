@@ -632,14 +632,15 @@ DROP TABLE IF EXISTS `order_details`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
   `order_details_id` bigint NOT NULL AUTO_INCREMENT,
+  `price_at_time_purchase` double DEFAULT NULL,
   `course_id` bigint DEFAULT NULL,
   `order_id` bigint DEFAULT NULL,
   PRIMARY KEY (`order_details_id`),
-  KEY `FK_order_details_order` (`order_id`),
-  KEY `FK_order_details_course` (`course_id`),
-  CONSTRAINT `FK_order_details_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FK_order_details_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
+  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -648,7 +649,6 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (1,20,1),(2,18,1),(3,17,1),(4,19,1),(5,13,2),(6,5,3),(7,1,4),(8,4,4),(9,3,4),(10,2,4),(11,14,4),(12,15,4);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -664,17 +664,17 @@ CREATE TABLE `orders` (
   `created_at` datetime(6) DEFAULT NULL,
   `expired_at` datetime(6) DEFAULT NULL,
   `order_code` varchar(255) DEFAULT NULL,
-  `order_status` enum('COMPLETED','EXPIRED','PENDING') DEFAULT NULL,
-  `total_amount` double DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
+  `paid_at` datetime(6) DEFAULT NULL,
+  `payment_url` mediumtext,
+  `total_price` double DEFAULT NULL,
   `coupon_id` bigint DEFAULT NULL,
+  `user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`order_id`),
-  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
   KEY `FKn1d1gkxckw648m2n2d5gx0yx5` (`coupon_id`),
+  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
   CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `FKn1d1gkxckw648m2n2d5gx0yx5` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -683,7 +683,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'2025-03-02 15:38:59.000000','2025-03-02 15:53:59.000000','20250302223859120191817','COMPLETED',3440000,'2025-03-02 15:39:59.925925',1,NULL),(2,'2025-03-02 16:04:33.000000','2025-03-02 16:19:33.000000','20250302230433113','COMPLETED',850000,'2025-03-02 16:04:40.571223',1,NULL),(3,'2025-03-02 16:20:21.000000','2025-03-02 16:35:21.000000','2025030223202195','COMPLETED',320000,'2025-03-02 16:20:57.134234',9,NULL),(4,'2025-03-03 01:47:55.000000','2025-03-03 02:02:55.000000','20250303084755615141234','COMPLETED',3150000,'2025-03-03 01:48:04.520245',6,NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1128,5 +1127,6 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-22 12:52:13
+-- Dump completed on 2025-03-23  0:23:02
+
 

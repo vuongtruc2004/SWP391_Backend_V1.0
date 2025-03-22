@@ -74,5 +74,6 @@ public class CouponEntity implements Serializable {
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
+        this.usedCount = 0L;
     }
 }

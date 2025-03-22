@@ -25,6 +25,6 @@ public class CartEntity {
     @JoinColumn(name = "user_id")
     UserEntity user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     List<CartCourseEntity> cartCourses;
 }

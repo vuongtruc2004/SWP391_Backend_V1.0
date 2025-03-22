@@ -1,16 +1,9 @@
 package com.service;
 
 import com.dto.response.*;
-import com.entity.CourseEntity;
-import com.entity.OrderDetailsEntity;
 import com.entity.OrderEntity;
 import com.entity.UserEntity;
-import com.exception.custom.InvalidRequestInput;
-import com.exception.custom.NotFoundException;
-import com.helper.OrderServiceHelper;
-import com.repository.CourseRepository;
 import com.repository.OrderRepository;
-import com.repository.UserRepository;
 import com.util.BuildResponse;
 import com.util.enums.OrderStatusEnum;
 import lombok.RequiredArgsConstructor;
@@ -26,40 +19,13 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
-    private final NotificationService notificationService;
-    private final OrderServiceHelper orderServiceHelper;
-
-    public OrderResponse activeCoursesForUser(Long orderId) {
-        OrderEntity orderEntity = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại!"));
-
-        if (orderEntity.getOrderStatus().equals(OrderStatusEnum.PENDING)) {
-            for (OrderDetailsEntity orderDetailsEntity : orderEntity.getOrderDetails()) {
-                CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourse().getCourseId())
-                        .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
-                Set<UserEntity> currentRegister = courseEntity.getUsers();
-                currentRegister.add(orderEntity.getUser());
-                courseEntity.setUsers(currentRegister);
-                courseRepository.save(courseEntity);
-            }
-            orderEntity.setOrderStatus(OrderStatusEnum.COMPLETED);
-            OrderEntity updatedOrder = orderRepository.save(orderEntity);
-            notificationService.purchaseSuccessNotification();
-            return modelMapper.map(updatedOrder, OrderResponse.class);
-        } else {
-            throw new InvalidRequestInput("Bạn đã thanh toán hóa đơn này rồi!");
-        }
-    }
 
     public PageDetailsResponse<List<OrderResponse>> getOrdersWithFilters(
             Pageable pageable,
@@ -97,7 +63,7 @@ public class OrderService {
 
         // Lọc danh sách Order có trạng thái COMPLETED và nằm trong tuần
         List<OrderEntity> completedOrders = orderRepository.findAll().stream()
-                .filter(order -> order.getOrderStatus() == OrderStatusEnum.COMPLETED) // Chỉ lấy order có trạng thái COMPLETED
+//                .filter(order -> order.getOrderStatus() == OrderStatusEnum.COMPLETED) // Chỉ lấy order có trạng thái COMPLETED
                 .filter(order -> isInSelectedWeek(
                         order.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate(), // Lấy ngày tạo của Order
                         startOfWeek,

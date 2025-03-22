@@ -27,12 +27,6 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderDetailService orderDetailService;
 
-    @ApiMessage("Đã thanh toán hóa đơn thành công!")
-    @GetMapping("/active/{orderId}")
-    public ResponseEntity<OrderResponse> activeCoursesForUser(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.activeCoursesForUser(orderId));
-    }
-
     @ApiMessage("Lấy tất cả hóa đơn thành công")
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getOrdersWithFilter(

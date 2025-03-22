@@ -10,6 +10,7 @@ import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
 import com.helper.CartServiceHelper;
 import com.helper.UserServiceHelper;
+import com.repository.CartCourseRepository;
 import com.repository.CartRepository;
 import com.repository.CourseRepository;
 import com.repository.UserRepository;
@@ -33,6 +34,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final CartServiceHelper cartServiceHelper;
+    private final CartCourseRepository cartCourseRepository;
 
     public CartResponse saveAndGetUserCart(Set<StorageCourseRequest> storageCourses) {
         UserEntity user = userServiceHelper.extractUserFromToken();
@@ -45,7 +47,7 @@ public class CartService {
             cart = CartEntity.builder().user(user).cartCourses(new ArrayList<>()).build();
         }
 
-        Set<CartCourseEntity> currentCoursesInCart = new HashSet<>(cart.getCartCourses());
+        List<CartCourseEntity> currentCoursesInCart = new ArrayList<>(cart.getCartCourses());
         Set<CourseEntity> purchasedCourses = user.getCourses() == null ? new HashSet<>() : new HashSet<>(user.getCourses());
 
         for (StorageCourseRequest storageCourseRequest : storageCourses) {
@@ -62,14 +64,13 @@ public class CartService {
             }
         }
 
-        cart.setCartCourses(new ArrayList<>(currentCoursesInCart));
+        cart.setCartCourses(currentCoursesInCart);
         CartEntity newCart = cartRepository.save(cart);
         user.setCart(newCart);
         userRepository.save(user);
 
         return modelMapper.map(newCart, CartResponse.class);
     }
-
 
     public void addCourseToUserCart(StorageCourseRequest storageCourseRequest) {
         UserEntity user = userServiceHelper.extractUserFromToken();
@@ -104,14 +105,37 @@ public class CartService {
         }
         CartEntity cart = user.getCart();
         if (cart != null && cart.getCartCourses() != null) {
-            List<CartCourseEntity> newCartCourses = new ArrayList<>(cart.getCartCourses().stream()
-                    .filter(cartCourseEntity -> !courseIds.contains(cartCourseEntity.getCourse().getCourseId()))
-                    .toList());
+            for (Long courseId : courseIds) {
+                CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+                        .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
-            cart.setCartCourses(newCartCourses);
-            CartEntity newCart = cartRepository.save(cart);
-            user.setCart(newCart);
-            userRepository.save(user);
+                CartCourseEntity cartCourseEntity = cartCourseRepository.findByCartAndCourse(cart, course)
+                        .orElseThrow(() -> new NotFoundException("CartCourse không tồn tại!"));
+
+                cartCourseRepository.delete(cartCourseEntity);
+            }
+        }
+    }
+
+    public void changeStatusOfCartCourse(Long courseId) {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        CartEntity cart = user.getCart();
+        if (cart != null && cart.getCartCourses() != null) {
+            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+                    .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+
+            CartCourseEntity cartCourseEntity = cartCourseRepository.findByCartAndCourse(cart, course)
+                    .orElseThrow(() -> new NotFoundException("CartCourse không tồn tại!"));
+
+            if (cartCourseEntity.getStatus().equals(CartCourseStatus.NOW)) {
+                cartCourseEntity.setStatus(CartCourseStatus.LATER);
+            } else {
+                cartCourseEntity.setStatus(CartCourseStatus.NOW);
+            }
+            cartCourseRepository.save(cartCourseEntity);
         }
     }
 }

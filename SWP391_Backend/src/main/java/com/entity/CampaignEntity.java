@@ -49,6 +49,7 @@ public class CampaignEntity {
 
     @Column(name = "created_at")
     Instant createdAt;
+    
     @Column(name = "updated_at")
     Instant updatedAt;
 
