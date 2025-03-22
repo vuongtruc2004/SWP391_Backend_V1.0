@@ -50,6 +50,9 @@ public class AuthService {
         if (Boolean.FALSE.equals(userEntity.getActive())) {
             throw new UserException("Tài khoản không tồn tại!");
         }
+        if (!userEntity.getRole().getRoleName().equals(RoleNameEnum.USER)) {
+            throw new UserException("Tài khoản của bạn không có quyền truy cập hệ thống!");
+        }
         return authServiceHelper.createLoginResponse(userEntity, email);
     }
 

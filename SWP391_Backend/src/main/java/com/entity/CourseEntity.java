@@ -40,7 +40,7 @@ public class CourseEntity implements Serializable {
 
     String introduction;
 
-    @Column(name="course_status")
+    @Column(name = "course_status")
     @Enumerated(EnumType.STRING)
     CourseStatusEnum courseStatusEnum;
 
@@ -82,6 +82,10 @@ public class CourseEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     CampaignEntity campaign;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    CartEntity cart;
 
     @PrePersist
     public void handlePrePersist() {

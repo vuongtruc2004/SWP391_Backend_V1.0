@@ -99,6 +99,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     Set<OrderEntity> orders;
 
+    @OneToOne(mappedBy = "user")
+    CartEntity cart;
+
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
