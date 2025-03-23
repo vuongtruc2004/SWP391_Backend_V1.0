@@ -190,7 +190,6 @@ public class CourseService {
         }
 
 
-
         if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("accepted"), accepted)
@@ -352,17 +351,16 @@ public class CourseService {
 
     public List<CourseResponse> getAllCourse() {
         List<CourseEntity> courseEntities = this.courseRepository.findAll();
-        List<CourseResponse> courseResponses = this.courseServiceHelper.convertToCourseResponseList(courseEntities);
-        return courseResponses;
+        return this.courseServiceHelper.convertToCourseResponseList(courseEntities);
     }
 
     public List<CourseResponse> getAllCoursesNotInCampaign() {
-        Set<CourseEntity> courseEntities = courseRepository.findByCampaignIsNull();
-        List<CourseResponse> courseResponses=this.courseServiceHelper.convertToCourseResponseList(courseEntities);
-        return courseResponses;
+        Set<CourseEntity> courseEntities = courseRepository.findAllByCampaignIsNull();
+        return this.courseServiceHelper.convertToCourseResponseList(courseEntities);
     }
-    public void changeDraftToProcessingCourse(Long id){
-        CourseEntity courseEntity=this.courseRepository.findById(id).get();
+
+    public void changeDraftToProcessingCourse(Long id) {
+        CourseEntity courseEntity = this.courseRepository.findById(id).get();
         courseEntity.setCourseStatusEnum(CourseStatusEnum.PROCESSING);
         this.courseRepository.save(courseEntity);
     }

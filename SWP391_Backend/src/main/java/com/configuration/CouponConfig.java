@@ -17,27 +17,27 @@ import java.util.List;
 public class CouponConfig {
     private final CouponRepository couponRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    public void deleteCouponSuccess(){
-        simpMessagingTemplate.convertAndSend("/topic/coupon","Delete Success!");
+
+    public void deleteCouponSuccess() {
+        simpMessagingTemplate.convertAndSend("/topic/coupon", "Delete Success!");
     }
+
     @Async
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void removeExpiredCoupons() {
         Instant now = Instant.now();
         List<CouponEntity> expiredCoupons = this.couponRepository.findByEndTimeBefore(now);
-        List<CouponEntity> endCoupons=this.couponRepository.findAll();
+        List<CouponEntity> endCoupons = this.couponRepository.findAll();
         if (!expiredCoupons.isEmpty()) {
             couponRepository.deleteAll(expiredCoupons);
             deleteCouponSuccess();
         }
-        for(CouponEntity coupon : endCoupons) {
-            if(coupon.getMaxUses() == coupon.getUsedCount()){
+        for (CouponEntity coupon : endCoupons) {
+            if (coupon.getMaxUses() == coupon.getUsedCount()) {
                 this.couponRepository.deleteById(coupon.getCouponId());
                 deleteCouponSuccess();
             }
         }
     }
-
-
 }

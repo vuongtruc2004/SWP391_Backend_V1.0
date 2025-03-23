@@ -34,10 +34,6 @@ public class CampaignEntity {
     Double discountPercentage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "discount_type")
-    DiscountTypeEnum discountType;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "discount_range")
     DiscountRangeEnum discountRange;
 

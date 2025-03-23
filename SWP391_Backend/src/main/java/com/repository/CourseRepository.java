@@ -61,5 +61,7 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
 
     List<CourseEntity> findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(Collection<ExpertEntity> experts);
 
-    Set<CourseEntity> findByCampaignIsNull();
+    Set<CourseEntity> findAllByCampaignIsNull();
+
+    Set<CourseEntity> findAllByCampaignIsNullAndCourseIdIn(Set<Long> courseIds);
 }

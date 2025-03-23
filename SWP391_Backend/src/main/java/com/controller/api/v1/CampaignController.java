@@ -1,7 +1,6 @@
 package com.controller.api.v1;
 
 import com.dto.request.CampaignRequest;
-import com.dto.response.ApiResponse;
 import com.dto.response.CampaignResponse;
 import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.PageDetailsResponse;
@@ -41,8 +40,9 @@ public class CampaignController {
 
     @ApiMessage("Xóa chiến dịch thành công!")
     @DeleteMapping("/{campaignId}")
-    public ResponseEntity<ApiResponse<String>> deleteCampaign(@PathVariable Long campaignId) {
-        return ResponseEntity.ok(campaignService.deleteCampaign(campaignId));
+    public ResponseEntity<Void> deleteCampaign(@PathVariable Long campaignId) {
+        campaignService.deleteCampaign(campaignId);
+        return ResponseEntity.ok().build();
     }
 
     @ApiMessage("Cập nhật chiến dịch thành công!")
@@ -53,7 +53,7 @@ public class CampaignController {
 
     @ApiMessage("Lấy tất cả chiến dịch không phân trang thành công!")
     @GetMapping("/all")
-    public ResponseEntity<List<CampaignResponse>> getAllCampaignsWithOutFilter() {
+    public ResponseEntity<List<CampaignResponse>> getAllCampaigns() {
         return ResponseEntity.ok(campaignService.getAllCampaigns());
     }
 

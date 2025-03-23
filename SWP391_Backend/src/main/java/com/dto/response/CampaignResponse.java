@@ -25,8 +25,6 @@ public class CampaignResponse {
 
     Double discountPercentage;
 
-    DiscountTypeEnum discountType;
-
     DiscountRangeEnum discountRange;
 
     Instant startTime;
@@ -36,7 +34,5 @@ public class CampaignResponse {
     Instant createdAt;
 
     Instant updatedAt;
-
-    Set<CourseResponse> courses;
 
 }

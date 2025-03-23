@@ -37,6 +37,8 @@ public class CourseResponse {
 
     CourseStatusEnum courseStatus;
 
+    CampaignResponse campaign;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant createdAt;
 
