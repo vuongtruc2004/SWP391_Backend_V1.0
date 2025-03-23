@@ -29,5 +29,4 @@ public class CampaignsConfig {
         }
         log.info("Deleted " + campaigns.size() + " expired campaigns");
     }
-
 }

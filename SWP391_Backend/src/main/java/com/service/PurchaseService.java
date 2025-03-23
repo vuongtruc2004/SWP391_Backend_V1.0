@@ -4,7 +4,6 @@ import com.dto.request.OrderRequest;
 import com.dto.response.ApiResponse;
 import com.entity.*;
 import com.exception.custom.*;
-import com.helper.CartServiceHelper;
 import com.helper.OrderServiceHelper;
 import com.helper.PurchaseServiceHelper;
 import com.helper.UserServiceHelper;
@@ -38,7 +37,6 @@ public class PurchaseService {
     private final OrderServiceHelper orderServiceHelper;
     private final CourseRepository courseRepository;
     private final CouponRepository couponRepository;
-    private final CartServiceHelper cartServiceHelper;
     private final CartCourseRepository cartCourseRepository;
 
     @Value("${vnpay.tmn.code}")
@@ -166,22 +164,33 @@ public class PurchaseService {
         orderEntity.setExpiredAt(purchaseServiceHelper.parseVnTime(expireDate));
 
         List<CourseEntity> purchasedCourses = userEntity.getCourses();
-        for (OrderRequest.OrderDetailsRequest orderDetailsRequest : orderRequest.getOrderDetails()) {
-            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsRequest.getCourseId())
+        double totalPrice = 0.0;
+
+        for (Long courseId : orderRequest.getCourseIds()) {
+            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
             if (purchasedCourses != null && purchasedCourses.contains(course)) {
                 throw new CourseException("Bạn đã mua khóa học " + course.getCourseName() + " rồi!");
             }
+
+            CampaignEntity campaign = course.getCampaign();
+            double priceOfCourseAtThisTime = course.getPrice();
+
+            if (campaign != null && !campaign.getStartTime().isAfter(Instant.now()) && campaign.getEndTime().isAfter(Instant.now())) {
+                priceOfCourseAtThisTime -= course.getPrice() * campaign.getDiscountPercentage() / 100;
+            }
+            totalPrice += priceOfCourseAtThisTime;
+
             orderDetailsEntitySet.add(OrderDetailsEntity.builder()
                     .order(orderEntity)
                     .course(course)
-                    .priceAtTimeOfPurchase(orderDetailsRequest.getPriceAtTimeOfPurchase())
+                    .priceAtTimeOfPurchase(priceOfCourseAtThisTime)
                     .build());
         }
 
         orderEntity.setOrderDetails(orderDetailsEntitySet);
-        orderEntity.setTotalPrice(purchaseServiceHelper.countOrderTotalPrice(coupon, orderRequest));
+        orderEntity.setTotalPrice(purchaseServiceHelper.applyCouponForOrder(coupon, totalPrice));
 
         if (coupon != null) {
             orderEntity.setCoupon(coupon);

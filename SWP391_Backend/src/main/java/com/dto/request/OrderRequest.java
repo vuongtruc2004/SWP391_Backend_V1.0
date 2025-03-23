@@ -13,19 +13,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderRequest {
 
-    List<OrderDetailsRequest> orderDetails;
+    List<Long> courseIds;
 
     Long couponId;
-
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class OrderDetailsRequest {
-        Long courseId;
-
-        Double priceAtTimeOfPurchase;
-    }
 }

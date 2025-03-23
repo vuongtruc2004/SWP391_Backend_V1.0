@@ -5,10 +5,10 @@ import com.dto.response.ApiResponse;
 import com.dto.response.CouponResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.CouponEntity;
+import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
 import com.helper.CouponServiceHelper;
 import com.repository.CouponRepository;
-import com.repository.CourseRepository;
 import com.util.BuildResponse;
 import com.util.DateUtil;
 import com.util.enums.DiscountTypeEnum;
@@ -27,17 +27,38 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CouponService {
+
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
-    private final CourseRepository courseRepository;
     private final CouponServiceHelper couponServiceHelper;
+    private final RedisService redisService;
 
     public CouponResponse createCoupon(CouponRequest couponRequest) {
-        if (this.couponRepository.existsByCouponCode(couponRequest.getCouponCode().trim())) {
+        if (Boolean.TRUE.equals(this.couponRepository.existsByCouponCode(couponRequest.getCouponCode().trim()))) {
             throw new UserException("Coupon này đã tồn tại!");
         }
-        CouponResponse couponResponse = new CouponResponse();
+
         CouponEntity couponEntity = new CouponEntity();
+
+        setCouponValue(couponRequest, couponEntity);
+        CouponEntity newCoupon = couponRepository.save(couponEntity);
+        redisService.saveCouponToRedis(newCoupon);
+        return modelMapper.map(newCoupon, CouponResponse.class);
+    }
+
+    @Transactional
+    public CouponResponse updateCoupon(CouponRequest couponRequest) {
+        CouponResponse couponResponse = new CouponResponse();
+        CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId())
+                .orElseThrow(() -> new NotFoundException("Coupon không tồn tại!"));
+
+        setCouponValue(couponRequest, couponEntity);
+        CouponEntity coupon = couponRepository.save(couponEntity);
+        modelMapper.map(couponEntity, couponResponse);
+        return couponResponse;
+    }
+
+    private void setCouponValue(CouponRequest couponRequest, CouponEntity couponEntity) {
         Instant startDay = DateUtil.parseToInstant(couponRequest.getStartTime());
         Instant endDay = DateUtil.parseToInstant(couponRequest.getEndTime());
         couponEntity.setStartTime(startDay);
@@ -48,6 +69,7 @@ public class CouponService {
         couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
         couponEntity.setMaxUses(couponRequest.getMaxUses());
         couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
+
         if (couponRequest.getDiscountType().equals("FIXED")) {
             couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
             couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
@@ -55,10 +77,6 @@ public class CouponService {
             couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
             couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
         }
-        this.couponRepository.save(couponEntity);
-        modelMapper.map(couponEntity, couponResponse);
-        return couponResponse;
-
     }
 
     public PageDetailsResponse<List<CouponResponse>> getCouponWithFilterAdmin(
@@ -85,32 +103,6 @@ public class CouponService {
                 "Bạn đã xóa coupon có Id là " + couponId + " thành công!",
                 null
         );
-    }
-
-    @Transactional
-    public CouponResponse updateCoupon(CouponRequest couponRequest) {
-        CouponResponse couponResponse = new CouponResponse();
-        CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId()).get();
-        Instant startDay = DateUtil.parseToInstant(couponRequest.getStartTime());
-        Instant endDay = DateUtil.parseToInstant(couponRequest.getEndTime());
-        couponEntity.setStartTime(startDay);
-        couponEntity.setEndTime(endDay);
-        couponEntity.setCouponCode(couponRequest.getCouponCode().trim());
-        couponEntity.setCouponName(couponRequest.getCouponName().trim());
-        couponEntity.setCouponDescription(couponRequest.getCouponDescription().trim());
-        couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
-        couponEntity.setMaxUses(couponRequest.getMaxUses());
-        couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
-        if (couponRequest.getDiscountType().equals("FIXED")) {
-            couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
-            couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
-        } else {
-            couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
-            couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
-        }
-        this.couponRepository.save(couponEntity);
-        modelMapper.map(couponEntity, couponResponse);
-        return couponResponse;
     }
 
     public List<CouponResponse> getAllCouponsAvailable(String searchCode) {

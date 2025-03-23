@@ -57,7 +57,7 @@ public class PurchaseServiceHelper {
 
     public String getTxnRef(OrderRequest orderRequest, Long userId) {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(FORMAT_PATTERN));
-        return timestamp + userId + orderRequest.getOrderDetails().get(0).getCourseId();
+        return timestamp + userId + orderRequest.getCourseIds().get(0);
     }
 
     public String encodeWithHmacSHA512(String data) {
@@ -157,9 +157,7 @@ public class PurchaseServiceHelper {
         return sb.toString();
     }
 
-    public double countOrderTotalPrice(CouponEntity coupon, OrderRequest orderRequest) {
-        Double price = orderRequest.getOrderDetails().stream().mapToDouble(OrderRequest.OrderDetailsRequest::getPriceAtTimeOfPurchase).sum();
-
+    public double applyCouponForOrder(CouponEntity coupon, double totalPrice) {
         if (coupon != null) {
             Instant now = Instant.now();
             if (!coupon.getEndTime().isAfter(now)) throw new PurchaseException("Mã giảm giá đã hết hạn!");
@@ -169,20 +167,20 @@ public class PurchaseServiceHelper {
 
             if (coupon.getStartTime().isAfter(now)) throw new PurchaseException("Mã giảm giá chưa đến ngày hiệu lực!");
 
-            if (coupon.getMinOrderValue() != null && coupon.getMinOrderValue() > price)
+            if (coupon.getMinOrderValue() != null && coupon.getMinOrderValue() > totalPrice)
                 throw new PurchaseException("Đơn hàng không đạt mức tối thiểu để dùng mã giảm giá này!");
 
             if (coupon.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
-                price -= coupon.getDiscountAmount();
+                totalPrice -= coupon.getDiscountAmount();
             } else {
-                price -= (coupon.getDiscountPercent() * price / 100);
+                totalPrice -= (coupon.getDiscountPercent() * totalPrice / 100);
             }
 
             coupon.setUsedCount(coupon.getUsedCount() + 1);
             couponRepository.save(coupon);
         }
 
-        BigDecimal roundedTotalPrice = BigDecimal.valueOf(Math.max(0, price)).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal roundedTotalPrice = BigDecimal.valueOf(Math.max(0, totalPrice)).setScale(3, RoundingMode.HALF_UP);
         return roundedTotalPrice.doubleValue();
     }
 }
