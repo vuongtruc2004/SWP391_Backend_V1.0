@@ -52,7 +52,7 @@ public class CourseServiceHelper {
         List<ChapterResponse> chapterResponseList = courseEntity.getChapters().stream()
                 .map(chapterEntity -> {
                     ChapterResponse chapterResponse = modelMapper.map(chapterEntity, ChapterResponse.class);
-                    if (chapterEntity.getQuizz() != null) {
+                    if (chapterEntity.getQuizz() != null && chapterEntity.getQuizz().getPublished()) {
                         chapterResponse.setQuizInfo(ChapterResponse.QuizInfoResponse.builder()
                                 .quizId(chapterEntity.getQuizz().getQuizId())
                                 .title(chapterEntity.getQuizz().getTitle())
@@ -60,7 +60,6 @@ public class CourseServiceHelper {
                                 .allowSeeAnswers(chapterEntity.getQuizz().getAllowSeeAnswers())
                                 .description(chapterEntity.getQuizz().getDescription())
                                 .updatedAt(chapterEntity.getQuizz().getUpdatedAt())
-                                .published(chapterEntity.getQuizz().getPublished())
                                 .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
                                 .chapterId(chapterEntity.getChapterId())
                                 .build());
@@ -81,7 +80,7 @@ public class CourseServiceHelper {
         );
         courseDetailsResponse.setTotalQuizzes(
                 courseEntity.getChapters().stream()
-                        .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
+                        .mapToInt(chapter -> chapter.getQuizz() != null && chapter.getQuizz().getPublished() ? 1 : 0)
                         .sum()
         );
         courseDetailsResponse.setTotalRating(rates.size());

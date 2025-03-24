@@ -5,7 +5,10 @@ import com.dto.request.QuizRequest;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuizResponse;
 import com.entity.*;
-import com.exception.custom.*;
+import com.exception.custom.ChapterException;
+import com.exception.custom.InvalidRequestInput;
+import com.exception.custom.NotFoundException;
+import com.exception.custom.TitleQuizException;
 import com.helper.UserServiceHelper;
 import com.repository.AnswerRepository;
 import com.repository.ChapterRepository;
@@ -21,9 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +94,6 @@ public class QuizService {
             questionEntity.setTitle(questionRequest.getTitle());
             questionEntity.setAnswers(set);
             questionEntityList.add(questionRepository.save(questionEntity));
-
         }
 
         QuizEntity quizEntity = modelMapper.map(quizRequest, QuizEntity.class);
@@ -101,7 +101,6 @@ public class QuizService {
         quizEntity.setQuestions(questionEntityList);
 
         return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
-
     }
 
     public QuizResponse updateQuiz(QuizRequest quizRequest) {
@@ -133,7 +132,6 @@ public class QuizService {
         }
 
         for (QuestionRequest questionRequest : quizRequest.getNewQuestions()) {
-
             QuestionEntity questionEntity = new QuestionEntity();
             List<AnswerEntity> set = new ArrayList<>();
             for (QuestionRequest.AnswerRequest answerRequest : questionRequest.getAnswers()) {
@@ -157,7 +155,6 @@ public class QuizService {
         quizEntity.setQuestions(questionEntityList);
         quizEntity.setUpdatedAt(Instant.now());
         return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
-
     }
 
     public QuizResponse getQuizByQuizId(Long quizId) {

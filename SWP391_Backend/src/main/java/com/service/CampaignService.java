@@ -13,11 +13,13 @@ import com.repository.CourseRepository;
 import com.util.BuildResponse;
 import com.util.DateUtil;
 import com.util.enums.DiscountRangeEnum;
+import com.util.enums.MessageStatusNotificationEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class CampaignService {
     private final ModelMapper modelMapper;
     private final CourseRepository courseRepository;
     private final RedisService redisService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     public PageDetailsResponse<List<CampaignResponse>> getAllCampaignsWithFilter(Pageable pageable, Specification<CampaignEntity> specification) {
         Page<CampaignEntity> page = campaignRepository.findAll(specification, pageable);
@@ -71,6 +74,7 @@ public class CampaignService {
 
         setCampaignToCourses(savedCampaignEntity, request);
         redisService.saveCampaignToRedis(savedCampaignEntity);
+        simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
         return modelMapper.map(campaignEntity, CampaignResponse.class);
     }
 
@@ -79,11 +83,10 @@ public class CampaignService {
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy chiến dịch!"));
         for (CourseEntity course : campaign.getCourses()) {
             course.setCampaign(null);
-            course.setSalePrice(null);
-            course.setSalePriceExpiredAt(null);
             courseRepository.save(course);
         }
         campaignRepository.delete(campaign);
+        simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
         redisService.removeCampaignFromRedis(campaign);
     }
 
@@ -122,6 +125,7 @@ public class CampaignService {
 
         setCampaignToCourses(savedCampaignEntity, request);
         redisService.saveCampaignToRedis(savedCampaignEntity);
+        simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
         return modelMapper.map(savedCampaignEntity, CampaignResponse.class);
     }
 
@@ -138,8 +142,6 @@ public class CampaignService {
         }
         for (CourseEntity course : courses) {
             course.setCampaign(savedCampaignEntity);
-            course.setSalePriceExpiredAt(savedCampaignEntity.getEndTime());
-            course.setSalePrice(course.getPrice() - savedCampaignEntity.getDiscountPercentage() * course.getPrice() / 100);
             courseRepository.save(course);
         }
     }

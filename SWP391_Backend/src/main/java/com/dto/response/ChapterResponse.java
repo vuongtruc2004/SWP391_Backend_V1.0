@@ -37,9 +37,7 @@ public class ChapterResponse {
         Long quizId;
 
         String title;
-
-        Boolean published;
-
+        
         Boolean allowSeeAnswers;
 
         String description;

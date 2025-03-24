@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/quiz-attempts")
 @RequiredArgsConstructor
@@ -31,5 +33,11 @@ public class QuizAttemptController {
     @PostMapping("/submit")
     public ResponseEntity<QuizAttemptResponse> submitQuizAttempt(@RequestBody QuizAttemptRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(quizAttemptService.submitQuizAttempt(request));
+    }
+
+    @ApiMessage("Lấy các lần làm bài thi của người dùng thành công!")
+    @GetMapping("/{quizId}")
+    public ResponseEntity<List<QuizAttemptResponse>> getAllQuizAttemptsByUserAndQuiz(@PathVariable Long quizId) {
+        return ResponseEntity.ok(quizAttemptService.getAllQuizAttemptsByUserAndQuiz(quizId));
     }
 }

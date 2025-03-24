@@ -13,10 +13,12 @@ import com.repository.QuizAttemptRepository;
 import com.repository.QuizRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class QuizAttemptService {
     private final QuizRepository quizRepository;
     private final UserServiceHelper userServiceHelper;
     private final QuizServiceHelper quizServiceHelper;
+    private final ModelMapper modelMapper;
 
     public QuizAttemptResponse createNewQuizAttempt(Long quizId) {
         UserEntity user = userServiceHelper.extractUserFromToken();
@@ -59,5 +62,17 @@ public class QuizAttemptService {
         newQuizAttempt.setEndTime(Instant.now());
         newQuizAttempt.setNumberOfCorrects(quizServiceHelper.calculateNumberOfCorrects(newQuizAttempt));
         return quizServiceHelper.convertToQuizAttemptResponse(quizAttemptRepository.save(newQuizAttempt));
+    }
+
+    public List<QuizAttemptResponse> getAllQuizAttemptsByUserAndQuiz(Long quizId) {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user == null) {
+            throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
+        }
+        QuizEntity quiz = quizRepository.findByQuizIdAndPublishedTrue(quizId)
+                .orElseThrow(() -> new NotFoundException("Bài kiểm tra không tồn tại!"));
+        return quizAttemptRepository.findAllByUserAndQuiz(user, quiz).stream()
+                .map(quizServiceHelper::convertToQuizAttemptResponse)
+                .toList();
     }
 }

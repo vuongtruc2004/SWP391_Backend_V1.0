@@ -31,6 +31,7 @@ public class RedisExpirationEventListener implements MessageListener {
         } else if (redisKey.startsWith("campaign:")) {
             Long campaignId = Long.valueOf(redisKey.split(":")[1]);
             campaignService.deleteCampaign(campaignId);
+            simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN_EXPIRED.toString());
         }
     }
 }
