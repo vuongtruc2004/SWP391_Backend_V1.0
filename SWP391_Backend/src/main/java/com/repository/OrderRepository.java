@@ -125,15 +125,16 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
 
     List<OrderEntity> findByUser_UserId(Long userId);
 
-    List<OrderEntity> findAllByUserAndExpiredAtAfterOrPaidAtIsNotNullOrderByCreatedAtDesc(UserEntity user, Instant expiredAtAfter);
+    @Query("select o from OrderEntity o " +
+            "where o.user = :user and (o.expiredAt > :now or o.paidAt is not null) " +
+            "order by o.createdAt desc")
+    List<OrderEntity> findAllByUserAndExpiredAtAfterOrPaidAtIsNotNullOrderByCreatedAtDesc(@Param("user") UserEntity user, @Param("now") Instant now);
 
     List<OrderEntity> findAllByUserAndPaidAtIsNullAndExpiredAtAfterOrderByCreatedAtDesc(UserEntity user, Instant expiredAtAfter);
 
     List<OrderEntity> findAllByUserAndPaidAtIsNullAndExpiredAtLessThanEqualOrderByCreatedAtDesc(UserEntity user, Instant expiredAt);
 
     List<OrderEntity> findAllByUserAndPaidAtIsNotNullOrderByCreatedAtDesc(UserEntity user);
-
-    List<OrderEntity> findAllByPaidAtIsNullAndExpiredAtLessThanEqual(Instant expiredAt);
 
     Optional<OrderEntity> findByOrderCodeAndPaidAtIsNull(String orderCode);
 
