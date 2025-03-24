@@ -101,7 +101,7 @@ public class NotificationService {
         if (Boolean.TRUE.equals(notificationRequest.getGlobal())) {
             userNotificationRepository.insertUserNotification(newNotificationEntity.getNotificationId());
         } else {
-            userNotificationRepository.insertUserSpecificationNotifications(newNotificationEntity.getNotificationId(), notificationRequest.getEmails());
+            userNotificationRepository.insertUserSpecificationNotifications(newNotificationEntity.getNotificationId(), notificationRequest.getUserIds());
         }
         readSuccessNotification();
         return BuildResponse.buildApiResponse(

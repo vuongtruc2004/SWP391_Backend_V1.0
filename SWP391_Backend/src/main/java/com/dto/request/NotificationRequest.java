@@ -24,8 +24,8 @@ public class NotificationRequest {
     NotificationStatusEnum status;
 
     Boolean global;
-    
-    List<String> emails;
+
+    List<Long> userIds;
 
     Instant setDate;
 }

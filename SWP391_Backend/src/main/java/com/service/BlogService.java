@@ -17,6 +17,7 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import com.util.enums.RoleNameEnum;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -155,6 +156,14 @@ public class BlogService {
             Specification<BlogEntity> specification,
             Pageable pageable
     ){
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if(userEntity==null){
+            throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
+        }
+        if(userEntity.getRole().getRoleName().equals(RoleNameEnum.MARKETING) || userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)){
+            specification=specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId()));
+        }
         Page<BlogEntity> page = blogRepository.findAll(specification, pageable);
         List<BlogDetailsResponse> listResponse = page.getContent().stream().map(blogEntity -> {
             BlogDetailsResponse blogResponse = modelMapper.map(blogEntity, BlogDetailsResponse.class);

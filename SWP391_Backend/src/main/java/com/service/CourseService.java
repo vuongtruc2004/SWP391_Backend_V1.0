@@ -182,8 +182,19 @@ public class CourseService {
             Specification<CourseEntity> specification,
             Boolean accepted
     ) {
-        UserEntity user = userServiceHelper.extractUserFromToken();
-        if (!user.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if(userEntity==null){
+            throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
+        }
+
+        if (userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("expert").get("expertId"), userEntity.getExpert().getExpertId())
+            );
+        }
+
+
+        if (!userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     root.get("courseStatusEnum").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.SUCCESS)
             );

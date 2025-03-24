@@ -58,24 +58,6 @@ public class CommentService {
         return commentResponse;
     }
 
-    //User
-//    public PageDetailsResponse<List<CommentResponse>> getAllComments(
-//            Specification<CommentEntity> specification,
-//            Pageable pageable
-//    ){
-//        Page<CommentEntity> page = commentRepository.findAllByParentCommentIsNull(specification, pageable);
-//        List<CommentResponse> commentResponseList = page.stream().map(commentEntity -> modelMapper.map(commentEntity, CommentResponse.class)).toList();
-//
-////        createCommentSuccess();
-//        return BuildResponse.buildPageDetailsResponse(
-//                page.getNumber() + 1,
-//                page.getSize(),
-//                page.getTotalPages(),
-//                page.getTotalElements(),
-//                commentResponseList
-//        );
-//    }
-
     public PageDetailsResponse<List<CommentResponse>> getAllCommentsOfBlogWithFilter(
             Specification<CommentEntity> specification,
             Pageable pageable

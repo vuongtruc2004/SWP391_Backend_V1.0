@@ -22,5 +22,7 @@ public class BlogRequest {
     @NotBlank(message = "Cần có ít nhất một thumbnail!")
     String thumbnail;
 
+    Boolean pinned;
+
     List<String> hashtags;
 }

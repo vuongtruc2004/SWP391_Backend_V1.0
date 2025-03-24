@@ -32,8 +32,8 @@ public interface UserNotificationRepository extends JpaRepository<UserNotificati
 
     @Modifying
     @Query(value = "insert into user_notifications (user_id, notification_id, is_read) " +
-            "select user_id, :notificationId, false from users where email in :emails", nativeQuery = true)
-    void insertUserSpecificationNotifications(@Param("notificationId") Long notificationId, @Param("emails") List<String> emails);
+            "select user_id, :notificationId, false from users where user_id in :userIds", nativeQuery = true)
+    void insertUserSpecificationNotifications(@Param("notificationId") Long notificationId, @Param("emails") List<Long> userIds);
 
     Page<UserNotificationEntity> findByNotification_NotificationId(Long notificationId, Pageable pageable);
     void deleteAllByNotification_NotificationId(Long notificationId);
