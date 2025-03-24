@@ -48,7 +48,6 @@ public class CouponService {
     public CouponResponse updateCoupon(CouponRequest couponRequest) {
         CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId())
                 .orElseThrow(() -> new NotFoundException("Coupon không tồn tại!"));
-
         setCouponValue(couponRequest, couponEntity);
         CouponEntity newCoupon = couponRepository.save(couponEntity);
         return modelMapper.map(couponEntity, CouponResponse.class);
@@ -65,8 +64,7 @@ public class CouponService {
         couponEntity.setMaxDiscountAmount(couponRequest.getMaxDiscountAmount());
         couponEntity.setMaxUses(couponRequest.getMaxUses());
         couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
-
-        if (couponRequest.getDiscountType().equals("FIXED")) {
+        if (couponRequest.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
             couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
             couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
         } else {

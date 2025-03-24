@@ -29,6 +29,8 @@ public class CouponResponse {
 
     Double discountAmount;
 
+    Double discountValue;
+
     Double maxDiscountAmount;
 
     Long maxPerUser;
