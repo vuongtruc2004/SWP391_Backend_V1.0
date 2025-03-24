@@ -61,11 +61,10 @@ public class OrderService {
         Map<String, Long> dayOfWeekCounts = new HashMap<>();
         LocalDate today = LocalDate.now();
 
-        // Lọc danh sách Order có trạng thái COMPLETED và nằm trong tuần
         List<OrderEntity> completedOrders = orderRepository.findAll().stream()
-//                .filter(order -> order.getOrderStatus() == OrderStatusEnum.COMPLETED) // Chỉ lấy order có trạng thái COMPLETED
+                .filter(order -> order.getPaidAt() != null)
                 .filter(order -> isInSelectedWeek(
-                        order.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate(), // Lấy ngày tạo của Order
+                        order.getPaidAt().atZone(ZoneId.systemDefault()).toLocalDate(),
                         startOfWeek,
                         endOfWeek
                 ))
@@ -78,9 +77,8 @@ public class OrderService {
             if (currentDay.isAfter(today)) {
                 dayOfWeekCounts.put(dayName, 0L);
             } else {
-                // Đếm tổng số OrderDetails thuộc các Order có trạng thái COMPLETED theo từng ngày
                 long count = completedOrders.stream()
-                        .filter(order -> order.getCreatedAt()
+                        .filter(order -> order.getPaidAt()
                                 .atZone(ZoneId.systemDefault()) // Chuyển Instant → ZonedDateTime
                                 .toLocalDate()
                                 .getDayOfWeek() == day // So sánh ngày trong tuần
@@ -98,31 +96,32 @@ public class OrderService {
         LocalDate yesterday = LocalDate.now().minusDays(1);
         DashboardStatisticsResponse response = new DashboardStatisticsResponse();
         if (type.equals("week")) {
-            response.setRevenue(orderRepository.getCurrentWeekRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.getCurrentWeekStudents(OrderStatusEnum.COMPLETED));
-            response.setOrders(orderRepository.getCurrentWeekOrders(OrderStatusEnum.COMPLETED));
+            response.setRevenue(orderRepository.getCurrentWeekRevenue());
+            response.setStudents(orderRepository.getCurrentWeekStudents());
+            response.setOrders(orderRepository.getCurrentWeekOrders());
         } else if (type.equals("month")) {
-            response.setRevenue(orderRepository.getCurrentMonthRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.getCurrentMonthStudents(OrderStatusEnum.COMPLETED));
-            response.setOrders(orderRepository.getCurrentMonthOrders(OrderStatusEnum.COMPLETED));
+            response.setRevenue(orderRepository.getCurrentMonthRevenue());
+            response.setStudents(orderRepository.getCurrentMonthStudents());
+            response.setOrders(orderRepository.getCurrentMonthOrders());
         } else if (type.equals("quarter")) {
-            response.setRevenue(orderRepository.getCurrentQuarterRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.getCurrentQuarterStudents(OrderStatusEnum.COMPLETED));
-            response.setOrders(orderRepository.getCurrentQuarterOrders(OrderStatusEnum.COMPLETED));
+            response.setRevenue(orderRepository.getCurrentQuarterRevenue());
+            response.setStudents(orderRepository.getCurrentQuarterStudents());
+            response.setOrders(orderRepository.getCurrentQuarterOrders());
         } else {
-            response.setRevenue(orderRepository.getCurrentYearRevenue(OrderStatusEnum.COMPLETED));
-            response.setStudents(orderRepository.getCurrentYearStudents(OrderStatusEnum.COMPLETED));
-            response.setOrders(orderRepository.getCurrentYearOrders(OrderStatusEnum.COMPLETED));
+            response.setRevenue(orderRepository.getCurrentYearRevenue());
+            response.setStudents(orderRepository.getCurrentYearStudents());
+            response.setOrders(orderRepository.getCurrentYearOrders());
         }
-        response.setTodayRevenue(orderRepository.getTodayRevenue(OrderStatusEnum.COMPLETED));
-        response.setTodayOrders(orderRepository.getTodayOrders(OrderStatusEnum.COMPLETED));
-        response.setTodayStudents(orderRepository.getTodayStudents(OrderStatusEnum.COMPLETED));
-        response.setYesterdayRevenue(orderRepository.getYesterdayRevenue(yesterday, OrderStatusEnum.COMPLETED));
-        response.setYesterdayStudents(orderRepository.getYesterdayStudents(yesterday, OrderStatusEnum.COMPLETED));
-        response.setYesterdayOrders(orderRepository.getYesterdayOrders(yesterday, OrderStatusEnum.COMPLETED));
+        response.setTodayRevenue(orderRepository.getTodayRevenue());
+        response.setTodayOrders(orderRepository.getTodayOrders());
+        response.setTodayStudents(orderRepository.getTodayStudents());
+        response.setYesterdayRevenue(orderRepository.getYesterdayRevenue(yesterday));
+        response.setYesterdayStudents(orderRepository.getYesterdayStudents(yesterday));
+        response.setYesterdayOrders(orderRepository.getYesterdayOrders(yesterday));
 
         return response;
     }
+
 
     private boolean isInSelectedWeek(LocalDate calculatedAt, LocalDate startOfWeek, LocalDate endOfWeek) {
         return !calculatedAt.isBefore(startOfWeek) && !calculatedAt.isAfter(endOfWeek);

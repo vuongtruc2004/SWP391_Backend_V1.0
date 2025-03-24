@@ -29,37 +29,17 @@ public class OrderDetailService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
 
-    public List<Map.Entry<String, Long>> count() {
-        // Lấy danh sách tất cả courseId đã được bán
-        List<Long> soldCourseIds = this.orderDetailsRepository.findAllCourseId();
+    public List<Map<String, Long>> getCourseSalesCount() {
+        List<Object[]> results = orderDetailsRepository.getCourseSalesCount();
+        List<Map<String, Long>> courseSalesList = new ArrayList<>();
 
-        // Lấy toàn bộ khóa học
-        Map<Long, String> courseMap = this.courseRepository.findAll()
-                .stream()
-                .collect(Collectors.toMap(CourseEntity::getCourseId, CourseEntity::getCourseName));
-
-        // Dùng LinkedHashMap để giữ thứ tự nhập vào
-        Map<String, Long> courseSold = new LinkedHashMap<>();
-
-        // Lặp qua danh sách course đã bán để tính tổng số lượng
-        for (Long courseId : soldCourseIds) {
-            String courseName = courseMap.get(courseId);
-//            Long countSold = this.orderDetailsRepository.countByCourse_CourseIdAndOrder_OrderStatus(courseId, OrderStatusEnum.COMPLETED);
-//            courseSold.put(courseName, countSold);
+        for (Object[] result : results) {
+            Map<String, Long> courseSalesMap = new HashMap<>();
+            courseSalesMap.put((String) result[0], (Long) result[1]);
+            courseSalesList.add(courseSalesMap);
         }
 
-        // Xử lý các khóa học chưa bán
-        for (Map.Entry<Long, String> entry : courseMap.entrySet()) {
-            if (!courseSold.containsKey(entry.getValue())) {
-                courseSold.put(entry.getValue(), 0L);
-            }
-        }
-
-        // Sắp xếp danh sách theo số lượng bán giảm dần
-        return courseSold.entrySet()
-                .stream()
-                .sorted(Comparator.comparingLong(Map.Entry<String, Long>::getValue).reversed())
-                .collect(Collectors.toList());
+        return courseSalesList;
     }
 
     public ApiResponse<OrderDetailsResponse> getCoursePurchased(Long courseId) {

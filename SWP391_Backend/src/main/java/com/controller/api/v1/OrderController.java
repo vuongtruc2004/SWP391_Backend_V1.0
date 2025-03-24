@@ -59,9 +59,4 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getDashboardStatistics(type));
     }
 
-    @ApiMessage("Lấy tất cả các khóa học đã bán theo thứ tự thành công!")
-    @GetMapping("/count")
-    public List<Map.Entry<String, Long>> count() {
-        return this.orderDetailService.count();
-    }
 }

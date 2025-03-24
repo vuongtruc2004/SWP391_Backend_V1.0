@@ -13,4 +13,11 @@ public interface OrderDetailsRepository extends JpaSpecificationRepository<Order
     List<Long> findAllCourseId();
 
     Optional<OrderDetailsEntity> findByOrder_OrderIdAndCourse_CourseId(Long orderId, Long courseId);
+
+    @Query("SELECT c.courseName, COUNT(o) " +
+            "FROM CourseEntity c " +
+            "LEFT JOIN OrderDetailsEntity o ON c.courseId = o.course.courseId " +
+            "GROUP BY c.courseName " +
+            "ORDER BY COUNT(o) DESC")
+    List<Object[]> getCourseSalesCount();
 }

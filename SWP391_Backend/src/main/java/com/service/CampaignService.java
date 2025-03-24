@@ -104,6 +104,7 @@ public class CampaignService {
         
         existedCampaign.setCampaignName(request.getCampaignName());
         existedCampaign.setThumbnailUrl(request.getThumbnailUrl());
+        existedCampaign.setDiscountRange(request.getDiscountRange());
         existedCampaign.setDiscountPercentage(request.getDiscountPercentage());
         existedCampaign.setCampaignDescription(request.getCampaignDescription());
 

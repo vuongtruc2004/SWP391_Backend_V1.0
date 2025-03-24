@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/orderDetails")
 @RequiredArgsConstructor
@@ -22,5 +25,11 @@ public class OrderDetailController {
     @GetMapping("/order_purchased/{courseId}")
     public ResponseEntity<ApiResponse<OrderDetailsResponse>> getCoursePurchased(@PathVariable Long courseId) {
         return ResponseEntity.ok(orderDetailService.getCoursePurchased(courseId));
+    }
+
+    @ApiMessage("Lấy tất cả các khóa học đã bán theo thứ tự thành công!")
+    @GetMapping("/top-sale")
+    public ResponseEntity<List<Map<String, Long>>> getCourseSalesCount() {
+        return ResponseEntity.ok(orderDetailService.getCourseSalesCount());
     }
 }

@@ -1,5 +1,7 @@
 package com.controller.api.v1;
 
+import com.dto.request.QuestionRequest;
+import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
 import com.entity.QuestionEntity;
@@ -10,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,27 +22,34 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
 
-//    @ApiMessage("Lấy các câu hỏi thành công")
-//    @GetMapping
-//    public ResponseEntity<PageDetailsResponse<List<QuestionResponse>>> getQuestionsWithFilter(
-//            @Filter Specification<QuestionEntity> specification,
-//            Pageable pageable,
-//            @RequestParam(name = "title", required = false) String title
-//    ) {
-//        return ResponseEntity.ok(this.questionService.getQuestionWithFilter(specification, pageable, title));
-//    }
 
-//    @ApiMessage("Tạo câu hỏi thành công!")
-//    @PostMapping
-//    public ResponseEntity<ApiResponse<QuestionResponse>> createQuestion(@RequestBody QuestionRequest questionRequest) {
-//        return ResponseEntity.ok(questionService.createQuestion(questionRequest));
-//    }
-//
-//    @ApiMessage("Thay đổi câu hỏi thành công!")
-//    @PatchMapping("/update/{questionId}")
-//    public ResponseEntity<ApiResponse<QuestionResponse>> updateQuestion(@PathVariable Long questionId, @RequestBody QuestionRequest questionRequest) {
-//        return ResponseEntity.ok(questionService.updateQuestion(questionId, questionRequest));
-//    }
+    @ApiMessage("Lấy tất cả câu hỏi thành công!")
+    @GetMapping
+    public ResponseEntity<PageDetailsResponse<List<QuestionResponse>>> getAllQuestionWithFilter(
+            Pageable pageable,
+            @Filter Specification<QuestionEntity> specification
+    ) {
+        return ResponseEntity.ok(questionService.getAllQuestionWithFilter(pageable, specification));
+    }
+
+    @ApiMessage("Tạo câu hỏi thành công!")
+    @PostMapping
+    public ResponseEntity<ApiResponse<QuestionResponse>> createQuestion(@RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.ok(questionService.createQuestion(questionRequest));
+    }
+
+    @ApiMessage("Thay đổi câu hỏi thành công!")
+    @PatchMapping("/update/{questionId}")
+    public ResponseEntity<ApiResponse<QuestionResponse>> updateQuestion(@PathVariable Long questionId, @RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.ok(questionService.updateQuestion(questionId, questionRequest));
+    }
+
+    @ApiMessage("Xóa câu hỏi thành công!")
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId) {
+        questionService.deleteQuestion(questionId);
+        return ResponseEntity.ok().build();
+    }
 
     @ApiMessage("Lấy tất cả câu hỏi thành công")
     @GetMapping("/pagination")
