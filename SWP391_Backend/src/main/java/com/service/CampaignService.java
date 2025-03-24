@@ -32,6 +32,7 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final ModelMapper modelMapper;
     private final CourseRepository courseRepository;
+    private final RedisService redisService;
 
     public PageDetailsResponse<List<CampaignResponse>> getAllCampaignsWithFilter(Pageable pageable, Specification<CampaignEntity> specification) {
         Page<CampaignEntity> page = campaignRepository.findAll(specification, pageable);
@@ -68,7 +69,8 @@ public class CampaignService {
 
         CampaignEntity savedCampaignEntity = campaignRepository.save(campaignEntity);
 
-        this.setCampaignToCourses(savedCampaignEntity, request);
+        setCampaignToCourses(savedCampaignEntity, request);
+        redisService.saveCampaignToRedis(savedCampaignEntity);
         return modelMapper.map(campaignEntity, CampaignResponse.class);
     }
 
@@ -77,9 +79,12 @@ public class CampaignService {
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy chiến dịch!"));
         for (CourseEntity course : campaign.getCourses()) {
             course.setCampaign(null);
+            course.setSalePrice(null);
+            course.setSalePriceExpiredAt(null);
             courseRepository.save(course);
         }
         campaignRepository.delete(campaign);
+        redisService.removeCampaignFromRedis(campaign);
     }
 
     @Transactional
@@ -101,7 +106,7 @@ public class CampaignService {
             existedCampaign.setStartTime(startTime);
             existedCampaign.setEndTime(endTime);
         }
-        
+
         existedCampaign.setCampaignName(request.getCampaignName());
         existedCampaign.setThumbnailUrl(request.getThumbnailUrl());
         existedCampaign.setDiscountRange(request.getDiscountRange());
@@ -115,7 +120,8 @@ public class CampaignService {
             courseRepository.save(course);
         }
 
-        this.setCampaignToCourses(savedCampaignEntity, request);
+        setCampaignToCourses(savedCampaignEntity, request);
+        redisService.saveCampaignToRedis(savedCampaignEntity);
         return modelMapper.map(savedCampaignEntity, CampaignResponse.class);
     }
 
@@ -132,6 +138,8 @@ public class CampaignService {
         }
         for (CourseEntity course : courses) {
             course.setCampaign(savedCampaignEntity);
+            course.setSalePriceExpiredAt(savedCampaignEntity.getEndTime());
+            course.setSalePrice(course.getPrice() - savedCampaignEntity.getDiscountPercentage() * course.getPrice() / 100);
             courseRepository.save(course);
         }
     }

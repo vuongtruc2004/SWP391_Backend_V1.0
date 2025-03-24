@@ -27,6 +27,11 @@ public class CourseResponse {
 
     Double price;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
+    Double salePrice;
+
+    Instant salePriceExpiredAt;
+
     ExpertResponse expert;
 
     Integer totalPurchased;

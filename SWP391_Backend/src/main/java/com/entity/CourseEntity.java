@@ -46,7 +46,13 @@ public class CourseEntity implements Serializable {
 
     Double price;
 
+    @Column(name = "sale_price")
+    Double salePrice;
+
     Boolean accepted;
+
+    @Column(name = "sale_price_expired_at")
+    Instant salePriceExpiredAt;
 
     @Column(name = "created_at")
     Instant createdAt;
