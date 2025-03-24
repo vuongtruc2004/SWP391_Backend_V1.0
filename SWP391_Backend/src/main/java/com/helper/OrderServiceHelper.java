@@ -25,7 +25,7 @@ public class OrderServiceHelper {
         return orderResponse;
     }
 
-    public void returnCouponBeforeOrderDeleted(OrderEntity orderEntity) {
+    public void returnCouponThenDeleteOrder(OrderEntity orderEntity) {
         CouponEntity usingCoupon = orderEntity.getCoupon();
         if (usingCoupon != null && usingCoupon.getEndTime().isAfter(Instant.now())) {
             usingCoupon.setUsedCount(usingCoupon.getUsedCount() - 1);

@@ -31,7 +31,6 @@ public class CouponService {
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
     private final CouponServiceHelper couponServiceHelper;
-    private final RedisService redisService;
 
     public CouponResponse createCoupon(CouponRequest couponRequest) {
         if (Boolean.TRUE.equals(this.couponRepository.existsByCouponCode(couponRequest.getCouponCode().trim()))) {
@@ -42,20 +41,17 @@ public class CouponService {
 
         setCouponValue(couponRequest, couponEntity);
         CouponEntity newCoupon = couponRepository.save(couponEntity);
-        redisService.saveCouponToRedis(newCoupon);
         return modelMapper.map(newCoupon, CouponResponse.class);
     }
 
     @Transactional
     public CouponResponse updateCoupon(CouponRequest couponRequest) {
-        CouponResponse couponResponse = new CouponResponse();
         CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId())
                 .orElseThrow(() -> new NotFoundException("Coupon không tồn tại!"));
 
         setCouponValue(couponRequest, couponEntity);
-        CouponEntity coupon = couponRepository.save(couponEntity);
-        modelMapper.map(couponEntity, couponResponse);
-        return couponResponse;
+        CouponEntity newCoupon = couponRepository.save(couponEntity);
+        return modelMapper.map(couponEntity, CouponResponse.class);
     }
 
     private void setCouponValue(CouponRequest couponRequest, CouponEntity couponEntity) {

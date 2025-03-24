@@ -51,16 +51,15 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Thanh toán thất bại!</h1>
-        <p th:text="${errorMessage}">Có lỗi xảy ra, vui lòng thử lại.</p>
-        <div class="content">
-            <p>Vui lòng thử lại hoặc liên hệ FanPage</p>
-            <a href="https://www.facebook.com/profile.php?id=61573093011541" target="_blank">LearnGo</a>
-            <p>để được hỗ trợ</p>
-        </div>
-        <a href="http://localhost:3000/home">⬅ Quay về trang chủ</a>
+<div class="container">
+    <h1>Thanh toán thất bại!</h1>
+    <h2 th:text="${errorMessage}"></h2>
+    <div class="content">
+        <p>FanPage</p>
+        <a href="https://www.facebook.com/profile.php?id=61573093011541" target="_blank">LearnGo</a>
     </div>
+    <a href="http://localhost:3000/home">⬅ Quay về trang chủ</a>
+</div>
 </body>
 
 </html>

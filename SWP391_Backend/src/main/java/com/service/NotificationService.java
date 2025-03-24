@@ -42,10 +42,6 @@ public class NotificationService {
     private final UserNotificationRepository userNotificationRepository;
     private final NotificationServiceHelper notificationServiceHelper;
 
-    public void purchaseSuccessNotification() {
-        messagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.PURCHASED.toString());
-    }
-
     public void readSuccessNotification() {
         messagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.READ.toString());
     }
@@ -165,7 +161,7 @@ public class NotificationService {
 
     @Transactional
     public ApiResponse<UserNotificationResponse> deleteUserNotification(Long userNotificationId) {
-        UserNotificationEntity userNotificationEntity =  userNotificationRepository.findById(userNotificationId)
+        UserNotificationEntity userNotificationEntity = userNotificationRepository.findById(userNotificationId)
                 .orElseThrow(() -> new NotFoundException("Tìm kiếm thất bại!"));
         UserNotificationResponse userNotificationResponse = modelMapper.map(userNotificationEntity, UserNotificationResponse.class);
         userNotificationRepository.delete(userNotificationEntity);
@@ -181,7 +177,7 @@ public class NotificationService {
     //automatic notification
     public void updateStatusOfNotification() {
         Set<Long> listIds = notificationRepository.findAllNotificationId(NotificationStatusEnum.PENDING, Instant.now().truncatedTo(ChronoUnit.MINUTES));
-        if (listIds.isEmpty()){
+        if (listIds.isEmpty()) {
             System.out.println("Không có thông báo nào tới hạn!");
             return;
         }

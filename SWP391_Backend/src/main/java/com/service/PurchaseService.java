@@ -38,6 +38,7 @@ public class PurchaseService {
     private final CourseRepository courseRepository;
     private final CouponRepository couponRepository;
     private final CartCourseRepository cartCourseRepository;
+    private final RedisService redisService;
 
     @Value("${vnpay.tmn.code}")
     private String tmnCode;
@@ -124,6 +125,33 @@ public class PurchaseService {
                 }
             }
         }
+        redisService.removeOrderInRedis(order);
+    }
+
+    public void processIpn(Map<String, String> params) {
+        if (!paymentServiceHelper.verifyIpn(params)) {
+            throw new PurchaseException("Thông tin không hợp lệ!");
+        }
+        String txnRef = params.get(VnPayUtil.VNP_TXN_REF);
+
+        OrderEntity order = orderRepository.findByOrderCode(txnRef)
+                .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại!"));
+
+        String responseCode = params.get(VnPayUtil.VNP_RESPONSE_CODE);
+
+        if (responseCode.equals(VnPayUtil.VNP_SUCCESS_CODE)) {
+            activeOrder(txnRef);
+            return;
+        }
+
+        if (responseCode.equals(VnPayUtil.VNP_OTHER_ERROR_CODE)) {
+            throw new PurchaseException("Thanh toán không thành công, vui lòng liên hệ với FanPage LearnGo để được hỗ trợ!");
+        } else if (responseCode.equals(VnPayUtil.VNP_CANCELLED_CODE)) {
+            deleteOrder(order.getOrderId());
+            throw new PurchaseException("Đã hủy thanh toán!");
+        } else if (responseCode.equals(VnPayUtil.VNP_EXPIRED_CODE)) {
+            throw new PurchaseException("Giao dịch đã hết hạn!");
+        }
     }
 
     public void deleteOrder(Long orderId) {
@@ -132,21 +160,8 @@ public class PurchaseService {
         }
         OrderEntity orderEntity = orderRepository.findByOrderIdAndPaidAtIsNull(orderId)
                 .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại hoặc đã được thanh toán!"));
-
-        orderServiceHelper.returnCouponBeforeOrderDeleted(orderEntity);
-    }
-
-    public void processIpn(Map<String, String> params) {
-        if (!paymentServiceHelper.verifyIpn(params)) {
-            throw new PurchaseException("Thông tin không hợp lệ!");
-        }
-        String txnRef = params.get(VnPayUtil.VNP_TXN_REF);
-        String responseCode = params.get(VnPayUtil.VNP_RESPONSE_CODE);
-
-        if (!responseCode.equals(VnPayUtil.VNP_SUCCESS_CODE)) {
-            throw new PurchaseException("Thanh toán không thành công, vui lòng liên hệ với FanPage LearnGo để được hỗ trợ!");
-        }
-        activeOrder(txnRef);
+        redisService.removeOrderInRedis(orderEntity);
+        orderServiceHelper.returnCouponThenDeleteOrder(orderEntity);
     }
 
     private OrderEntity createOrder(OrderRequest orderRequest, UserEntity userEntity, String txnRef, String createDate, String expireDate) {
@@ -154,6 +169,9 @@ public class PurchaseService {
         if (orderRequest.getCouponId() != null) {
             coupon = couponRepository.findById(orderRequest.getCouponId())
                     .orElseThrow(() -> new NotFoundException("Mã giảm giá không tồn tại!"));
+            if (orderRepository.findByCouponAndPaidAtIsNull(coupon).isPresent()) {
+                throw new PurchaseException("Bạn đang có hóa đơn chưa thanh toán | hết hạn sử dụng coupon này, vui lòng kiểm tra lại ở mục Hóa đơn của tôi!");
+            }
         }
 
         OrderEntity orderEntity = new OrderEntity();
@@ -172,6 +190,10 @@ public class PurchaseService {
 
             if (purchasedCourses != null && purchasedCourses.contains(course)) {
                 throw new CourseException("Bạn đã mua khóa học " + course.getCourseName() + " rồi!");
+            }
+
+            if (orderRepository.existsByCourseAndUser(course, userEntity)) {
+                throw new PurchaseException("Bạn đã có 1 đơn hàng chứa khóa học này rồi, vui lòng kiểm tra lại ở mục Hóa đơn của tôi!");
             }
 
             CampaignEntity campaign = course.getCampaign();
@@ -195,6 +217,8 @@ public class PurchaseService {
         if (coupon != null) {
             orderEntity.setCoupon(coupon);
         }
-        return orderRepository.save(orderEntity);
+        OrderEntity newOrder = orderRepository.save(orderEntity);
+        redisService.saveOrderToRedis(newOrder);
+        return newOrder;
     }
 }

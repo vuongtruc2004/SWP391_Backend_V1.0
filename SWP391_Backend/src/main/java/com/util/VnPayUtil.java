@@ -19,4 +19,7 @@ public class VnPayUtil {
     public static String VNP_RESPONSE_CODE = "vnp_ResponseCode";
 
     public static String VNP_SUCCESS_CODE = "00";
+    public static String VNP_EXPIRED_CODE = "11";
+    public static String VNP_CANCELLED_CODE = "24";
+    public static String VNP_OTHER_ERROR_CODE = "99";
 }

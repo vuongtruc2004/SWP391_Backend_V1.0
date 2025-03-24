@@ -1,5 +1,7 @@
 package com.repository;
 
+import com.entity.CouponEntity;
+import com.entity.CourseEntity;
 import com.entity.OrderEntity;
 import com.entity.UserEntity;
 import com.repository.custom.JpaSpecificationRepository;
@@ -133,8 +135,17 @@ public interface OrderRepository extends JpaSpecificationRepository<OrderEntity,
     List<OrderEntity> findAllByUserAndPaidAtIsNotNullOrderByCreatedAtDesc(UserEntity user);
 
     List<OrderEntity> findAllByPaidAtIsNullAndExpiredAtLessThanEqual(Instant expiredAt);
-    
+
     Optional<OrderEntity> findByOrderCodeAndPaidAtIsNull(String orderCode);
 
     Optional<OrderEntity> findByOrderIdAndPaidAtIsNull(Long orderId);
+
+    Optional<OrderEntity> findByCouponAndPaidAtIsNull(CouponEntity coupon);
+
+    @Query("SELECT COUNT(o) > 0 FROM OrderEntity o " +
+            "JOIN o.orderDetails od " +
+            "WHERE od.course = :course AND o.user = :user")
+    boolean existsByCourseAndUser(@Param("course") CourseEntity course, @Param("user") UserEntity user);
+
+    Optional<OrderEntity> findByOrderCode(String orderCode);
 }

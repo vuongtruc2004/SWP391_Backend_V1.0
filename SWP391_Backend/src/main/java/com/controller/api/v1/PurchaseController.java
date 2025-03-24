@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -45,12 +46,13 @@ public class PurchaseController {
 
     @ApiMessage("Thanh toán đơn hàng thành công!")
     @GetMapping("/vnpay-ipn")
-    public String processIpn(@RequestParam Map<String, String> params) {
+    public String processIpn(@RequestParam Map<String, String> params, Model model) {
         try {
             paymentService.processIpn(params);
-            return "redirect:http://localhost:3000/user/my-course";
+            return "payment-success";
         } catch (PurchaseException ex) {
-            return "redirect:http://localhost:3000/user/my-course";
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "payment-fail";
         }
     }
 }

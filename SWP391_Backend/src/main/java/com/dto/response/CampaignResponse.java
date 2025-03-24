@@ -1,7 +1,6 @@
 package com.dto.response;
 
 import com.util.enums.DiscountRangeEnum;
-import com.util.enums.DiscountTypeEnum;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,4 +34,5 @@ public class CampaignResponse {
 
     Instant updatedAt;
 
+    Set<CourseResponse> courses;
 }
