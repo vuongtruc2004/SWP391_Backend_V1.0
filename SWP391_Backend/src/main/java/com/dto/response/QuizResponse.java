@@ -1,7 +1,5 @@
 package com.dto.response;
 
-import com.entity.ChapterEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import lombok.*;
@@ -9,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -36,7 +33,6 @@ public class QuizResponse {
     @JsonSerialize(using = InstantSerializer.class)
     Instant createdAt;
 
-    //    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonSerialize(using = InstantSerializer.class)
     Instant updatedAt;
 

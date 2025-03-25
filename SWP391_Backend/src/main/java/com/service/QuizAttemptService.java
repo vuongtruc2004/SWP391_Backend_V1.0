@@ -71,7 +71,7 @@ public class QuizAttemptService {
         }
         QuizEntity quiz = quizRepository.findByQuizIdAndPublishedTrue(quizId)
                 .orElseThrow(() -> new NotFoundException("Bài kiểm tra không tồn tại!"));
-        return quizAttemptRepository.findAllByUserAndQuiz(user, quiz).stream()
+        return quizAttemptRepository.findAllByUserAndQuizOrderByStartTimeDesc(user, quiz).stream()
                 .map(quizServiceHelper::convertToQuizAttemptResponse)
                 .toList();
     }

@@ -37,14 +37,14 @@ public class ChapterResponse {
         Long quizId;
 
         String title;
-        
+
         Boolean allowSeeAnswers;
 
         String description;
 
         Integer duration;
 
-        Integer totalQuestions;
+        List<QuestionResponse> questions;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
         Instant updatedAt;

@@ -13,5 +13,5 @@ public interface QuizAttemptRepository extends JpaSpecificationRepository<QuizAt
 
     Integer countByUserAndQuiz(UserEntity user, QuizEntity quiz);
 
-    List<QuizAttemptEntity> findAllByUserAndQuiz(UserEntity user, QuizEntity quiz);
+    List<QuizAttemptEntity> findAllByUserAndQuizOrderByStartTimeDesc(UserEntity user, QuizEntity quiz);
 }

@@ -2,6 +2,7 @@ package com.helper;
 
 import com.dto.response.ChapterResponse;
 import com.dto.response.CourseResponse;
+import com.dto.response.QuestionResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.RateEntity;
@@ -60,7 +61,7 @@ public class CourseServiceHelper {
                                 .allowSeeAnswers(chapterEntity.getQuizz().getAllowSeeAnswers())
                                 .description(chapterEntity.getQuizz().getDescription())
                                 .updatedAt(chapterEntity.getQuizz().getUpdatedAt())
-                                .totalQuestions(chapterEntity.getQuizz().getQuestions().size())
+                                .questions(chapterEntity.getQuizz().getQuestions().stream().map(questionEntity -> modelMapper.map(questionEntity, QuestionResponse.class)).toList())
                                 .chapterId(chapterEntity.getChapterId())
                                 .build());
                     }
