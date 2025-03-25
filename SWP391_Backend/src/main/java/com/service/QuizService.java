@@ -5,16 +5,14 @@ import com.dto.request.QuizRequest;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuizResponse;
 import com.entity.*;
-import com.exception.custom.ChapterException;
-import com.exception.custom.InvalidRequestInput;
-import com.exception.custom.NotFoundException;
-import com.exception.custom.TitleQuizException;
+import com.exception.custom.*;
 import com.helper.UserServiceHelper;
 import com.repository.AnswerRepository;
 import com.repository.ChapterRepository;
 import com.repository.QuestionRepository;
 import com.repository.QuizRepository;
 import com.util.BuildResponse;
+import com.util.enums.RoleNameEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +50,8 @@ public class QuizService {
 
     public QuizResponse createQuiz(QuizRequest quizRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        if (userEntity == null || userEntity.getExpert() == null) {
+        if (userEntity == null || userEntity.getExpert() == null || userEntity.getRole().getRoleName() != RoleNameEnum.EXPERT) {
             throw new NotFoundException("Người dùng không hợp lệ");
-
         }
 
         if (quizRequest.getQuizId() != null) {
@@ -63,7 +62,7 @@ public class QuizService {
         if (checked) {
             throw new TitleQuizException("Tiêu đề bài kiểm tra đã tồn tại!");
         }
-        ChapterEntity chapterEntity = chapterRepository.findByExpertIdAndChapterId(userEntity.getExpert().getExpertId(), quizRequest.getChapterId())
+        ChapterEntity chapterEntity = chapterRepository.findById(quizRequest.getChapterId())
                 .orElseThrow(() -> new NotFoundException("ChapterId không tồn tại"));
         if (chapterEntity.getQuizz() != null) {
             throw new ChapterException("Chương này đã có bài kiểm tra");
@@ -94,18 +93,20 @@ public class QuizService {
             questionEntity.setTitle(questionRequest.getTitle());
             questionEntity.setAnswers(set);
             questionEntityList.add(questionRepository.save(questionEntity));
+
         }
 
         QuizEntity quizEntity = modelMapper.map(quizRequest, QuizEntity.class);
         quizEntity.setChapter(chapterEntity);
         quizEntity.setQuestions(questionEntityList);
+        quizEntity.setExpert(userEntity.getExpert());
 
         return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
     }
 
     public QuizResponse updateQuiz(QuizRequest quizRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        if (userEntity == null || userEntity.getExpert() == null) {
+        if (userEntity == null || userEntity.getExpert() == null || userEntity.getRole().getRoleName() != RoleNameEnum.EXPERT ) {
             throw new NotFoundException("Người dùng không hợp lệ");
 
         }
@@ -120,7 +121,7 @@ public class QuizService {
         if (!quizEntity.getTitle().equals(quizRequest.getTitle()) && quizRepository.existsByTitle(quizRequest.getTitle())) {
             throw new TitleQuizException("Tiêu đề bài kiểm tra đã tồn tại!");
         }
-        ChapterEntity chapterEntity = chapterRepository.findByExpertIdAndChapterId(userEntity.getExpert().getExpertId(), quizRequest.getChapterId())
+        ChapterEntity chapterEntity = chapterRepository.findById(quizRequest.getChapterId())
                 .orElseThrow(() -> new NotFoundException("ChapterId không tồn tại"));
 
         List<QuestionEntity> questionEntityList = new ArrayList<>();
@@ -132,6 +133,7 @@ public class QuizService {
         }
 
         for (QuestionRequest questionRequest : quizRequest.getNewQuestions()) {
+
             QuestionEntity questionEntity = new QuestionEntity();
             List<AnswerEntity> set = new ArrayList<>();
             for (QuestionRequest.AnswerRequest answerRequest : questionRequest.getAnswers()) {
@@ -155,6 +157,7 @@ public class QuizService {
         quizEntity.setQuestions(questionEntityList);
         quizEntity.setUpdatedAt(Instant.now());
         return modelMapper.map(quizRepository.save(quizEntity), QuizResponse.class);
+
     }
 
     public QuizResponse getQuizByQuizId(Long quizId) {
@@ -164,18 +167,33 @@ public class QuizService {
     }
 
     public PageDetailsResponse<List<QuizResponse>> getQuizzesWithFilter(Pageable pageable, Specification<QuizEntity> specification) {
-        Page<QuizEntity> page = quizRepository.findAll(specification, pageable);
-        List<QuizResponse> quizzList = page.getContent().stream()
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new UserException("Vui lòng đăng nhập!");
+        }
+        Page<QuizEntity> page;
+        if (userEntity.getRole().getRoleName() == RoleNameEnum.EXPERT) {
+            if (userEntity.getExpert() == null) {
+                throw new UserException("Tài khoản không phải Exert");
+            }
+
+            specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("expert"), userEntity.getExpert())));
+            page = quizRepository.findAll(specification, pageable);
+        }else if(userEntity.getRole().getRoleName() == RoleNameEnum.ADMIN) {
+            page = quizRepository.findAll(specification, pageable);
+        }else{
+            throw new UserException("Tài khoản không được truy cập");
+        }
+        List<QuizResponse> quizResponseList = page.getContent().stream()
                 .map(quizEntity -> {
-                    QuizResponse quizResponse = modelMapper.map(quizEntity, QuizResponse.class);
-                    return quizResponse;
+                    return modelMapper.map(quizEntity, QuizResponse.class);
                 }).toList();
         return BuildResponse.buildPageDetailsResponse(
                 page.getNumber() + 1,
                 page.getSize(),
                 page.getTotalPages(),
                 page.getTotalElements(),
-                quizzList
+                quizResponseList
         );
     }
 
