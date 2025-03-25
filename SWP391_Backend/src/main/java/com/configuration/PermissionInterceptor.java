@@ -27,21 +27,17 @@ public class PermissionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         String httpMethod = request.getMethod();
-
         System.out.println(">>> RUN preHandle");
         System.out.println(">>> path= " + path);
         System.out.println(">>> httpMethod= " + httpMethod);
-
         UserEntity user = userServiceHelper.extractUserFromToken();
         if (user == null) {
             throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
         }
-
         RoleEntity role = user.getRole();
         if (role == null) {
             throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
         }
-
         List<PermissionEntity> permissions = role.getPermissions();
         boolean isAllowed = permissions.stream()
                 .anyMatch(permission -> Objects.equals(permission.getApiPath(), path)
