@@ -26,13 +26,11 @@ public class CouponRequest {
 
     String couponCode;
 
-    String discountType;
-
-    String discountRange;
+    DiscountTypeEnum discountType;
 
     Long maxPerUser;
 
-    Double discountValue;
+    Double discountAmount;
 
     Double maxDiscountAmount;
 

@@ -36,7 +36,6 @@ public class CouponService {
         if (Boolean.TRUE.equals(this.couponRepository.existsByCouponCode(couponRequest.getCouponCode().trim()))) {
             throw new UserException("Coupon này đã tồn tại!");
         }
-
         CouponEntity couponEntity = new CouponEntity();
 
         setCouponValue(couponRequest, couponEntity);
@@ -51,7 +50,7 @@ public class CouponService {
 
         setCouponValue(couponRequest, couponEntity);
         CouponEntity newCoupon = couponRepository.save(couponEntity);
-        return modelMapper.map(couponEntity, CouponResponse.class);
+        return modelMapper.map(newCoupon, CouponResponse.class);
     }
 
     private void setCouponValue(CouponRequest couponRequest, CouponEntity couponEntity) {
@@ -66,12 +65,14 @@ public class CouponService {
         couponEntity.setMaxUses(couponRequest.getMaxUses());
         couponEntity.setMinOrderValue(couponRequest.getMinOrderValue());
 
-        if (couponRequest.getDiscountType().equals("FIXED")) {
+        if (couponRequest.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
             couponEntity.setDiscountType(DiscountTypeEnum.FIXED);
-            couponEntity.setDiscountAmount(couponRequest.getDiscountValue());
+            couponEntity.setDiscountAmount(couponRequest.getDiscountAmount());
+            couponEntity.setDiscountPercent(null);
         } else {
             couponEntity.setDiscountType(DiscountTypeEnum.PERCENTAGE);
-            couponEntity.setDiscountPercent(couponRequest.getDiscountValue());
+            couponEntity.setDiscountPercent(couponRequest.getDiscountAmount());
+            couponEntity.setDiscountAmount(null);
         }
     }
 
