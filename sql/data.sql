@@ -1,10 +1,10 @@
--- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `online-learning-uat` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `online-learning-uat`;
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: online-learning-uat
 -- ------------------------------------------------------
--- Server version	8.4.2
-create database `online-learning-uat`;
-use `online-learning-uat`;
+-- Server version	8.0.34
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,15 +25,15 @@ DROP TABLE IF EXISTS `answers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `answers` (
-  `answer_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `correct` bit(1) DEFAULT NULL,
-  `question_id` bigint DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`answer_id`),
-  KEY `FK3erw1a3t0r78st8ty27x6v3g1` (`question_id`),
-  CONSTRAINT `FK3erw1a3t0r78st8ty27x6v3g1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+                           `answer_id` bigint NOT NULL AUTO_INCREMENT,
+                           `content` varchar(255) DEFAULT NULL,
+                           `correct` bit(1) DEFAULT NULL,
+                           `question_id` bigint DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           PRIMARY KEY (`answer_id`),
+                           KEY `FK3erw1a3t0r78st8ty27x6v3g1` (`question_id`),
+                           CONSTRAINT `FK3erw1a3t0r78st8ty27x6v3g1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,12 +55,12 @@ DROP TABLE IF EXISTS `blog_tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blog_tag` (
-  `blog_id` bigint NOT NULL,
-  `tag_id` bigint NOT NULL,
-  PRIMARY KEY (`blog_id`,`tag_id`),
-  KEY `FK3c6t9f1bjwx4qic9vwi0kbqos` (`tag_id`),
-  CONSTRAINT `FK3c6t9f1bjwx4qic9vwi0kbqos` FOREIGN KEY (`tag_id`) REFERENCES `hashtags` (`tag_id`),
-  CONSTRAINT `FKdl2hedc2u6i0kw0q5lg31ipmw` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
+                            `blog_id` bigint NOT NULL,
+                            `tag_id` bigint NOT NULL,
+                            PRIMARY KEY (`blog_id`,`tag_id`),
+                            KEY `FK3c6t9f1bjwx4qic9vwi0kbqos` (`tag_id`),
+                            CONSTRAINT `FK3c6t9f1bjwx4qic9vwi0kbqos` FOREIGN KEY (`tag_id`) REFERENCES `hashtags` (`tag_id`),
+                            CONSTRAINT `FKdl2hedc2u6i0kw0q5lg31ipmw` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,19 +82,19 @@ DROP TABLE IF EXISTS `blogs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blogs` (
-  `blog_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` longtext,
-  `created_at` datetime(6) DEFAULT NULL,
-  `pinned` bit(1) DEFAULT NULL,
-  `plain_content` longtext,
-  `published` bit(1) DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`blog_id`),
-  KEY `FKpg4damav6db6a6fh5peylcni5` (`user_id`),
-  CONSTRAINT `FKpg4damav6db6a6fh5peylcni5` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `blog_id` bigint NOT NULL AUTO_INCREMENT,
+                         `content` longtext,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `pinned` bit(1) DEFAULT NULL,
+                         `plain_content` longtext,
+                         `published` bit(1) DEFAULT NULL,
+                         `thumbnail` varchar(255) DEFAULT NULL,
+                         `title` varchar(255) DEFAULT NULL,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`blog_id`),
+                         KEY `FKpg4damav6db6a6fh5peylcni5` (`user_id`),
+                         CONSTRAINT `FKpg4damav6db6a6fh5peylcni5` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,17 +116,17 @@ DROP TABLE IF EXISTS `campaigns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `campaigns` (
-  `campaign_id` bigint NOT NULL AUTO_INCREMENT,
-  `campaign_description` varchar(255) DEFAULT NULL,
-  `campaign_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `discount_percentage` double DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  `thumbnail_url` varchar(255) DEFAULT NULL,
-  `discount_range` enum('ALL','COURSES') DEFAULT NULL,
-  PRIMARY KEY (`campaign_id`)
+                             `campaign_id` bigint NOT NULL AUTO_INCREMENT,
+                             `campaign_description` varchar(255) DEFAULT NULL,
+                             `campaign_name` varchar(255) DEFAULT NULL,
+                             `created_at` datetime(6) DEFAULT NULL,
+                             `updated_at` datetime(6) DEFAULT NULL,
+                             `discount_percentage` double DEFAULT NULL,
+                             `end_time` datetime(6) DEFAULT NULL,
+                             `start_time` datetime(6) DEFAULT NULL,
+                             `thumbnail_url` varchar(255) DEFAULT NULL,
+                             `discount_range` enum('ALL','COURSES') DEFAULT NULL,
+                             PRIMARY KEY (`campaign_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -147,15 +147,15 @@ DROP TABLE IF EXISTS `cart_courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart_courses` (
-  `cart_course_id` bigint NOT NULL AUTO_INCREMENT,
-  `status` enum('LATER','NOW') DEFAULT NULL,
-  `cart_id` bigint DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`cart_course_id`),
-  KEY `FK5ungrehmiuancpo0t49d1w0ln` (`cart_id`),
-  KEY `FKsqi9btt9o3wa75exnrxgergyf` (`course_id`),
-  CONSTRAINT `FK5ungrehmiuancpo0t49d1w0ln` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`),
-  CONSTRAINT `FKsqi9btt9o3wa75exnrxgergyf` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                                `cart_course_id` bigint NOT NULL AUTO_INCREMENT,
+                                `status` enum('LATER','NOW') DEFAULT NULL,
+                                `cart_id` bigint DEFAULT NULL,
+                                `course_id` bigint DEFAULT NULL,
+                                PRIMARY KEY (`cart_course_id`),
+                                KEY `FK5ungrehmiuancpo0t49d1w0ln` (`cart_id`),
+                                KEY `FKsqi9btt9o3wa75exnrxgergyf` (`course_id`),
+                                CONSTRAINT `FK5ungrehmiuancpo0t49d1w0ln` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`),
+                                CONSTRAINT `FKsqi9btt9o3wa75exnrxgergyf` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -176,11 +176,11 @@ DROP TABLE IF EXISTS `carts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carts` (
-  `cart_id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`cart_id`),
-  UNIQUE KEY `UK64t7ox312pqal3p7fg9o503c2` (`user_id`),
-  CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `cart_id` bigint NOT NULL AUTO_INCREMENT,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`cart_id`),
+                         UNIQUE KEY `UK64t7ox312pqal3p7fg9o503c2` (`user_id`),
+                         CONSTRAINT `FKb5o626f86h46m4s7ms6ginnop` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -202,13 +202,13 @@ DROP TABLE IF EXISTS `chapters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chapters` (
-  `chapter_id` bigint NOT NULL AUTO_INCREMENT,
-  `description` longtext,
-  `title` varchar(255) DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`chapter_id`),
-  KEY `FK6h1m0nrtdwj37570c0sp2tdcs` (`course_id`),
-  CONSTRAINT `FK6h1m0nrtdwj37570c0sp2tdcs` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                            `chapter_id` bigint NOT NULL AUTO_INCREMENT,
+                            `description` longtext,
+                            `title` varchar(255) DEFAULT NULL,
+                            `course_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`chapter_id`),
+                            KEY `FK6h1m0nrtdwj37570c0sp2tdcs` (`course_id`),
+                            CONSTRAINT `FK6h1m0nrtdwj37570c0sp2tdcs` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,14 +230,14 @@ DROP TABLE IF EXISTS `chats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chats` (
-  `chat_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`chat_id`),
-  KEY `FKmolqi1xj49bg3jjr33674limy` (`user_id`),
-  CONSTRAINT `FKmolqi1xj49bg3jjr33674limy` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `chat_id` bigint NOT NULL AUTO_INCREMENT,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `title` varchar(255) DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`chat_id`),
+                         KEY `FKmolqi1xj49bg3jjr33674limy` (`user_id`),
+                         CONSTRAINT `FKmolqi1xj49bg3jjr33674limy` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -258,20 +258,20 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `comment_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `blog_id` bigint DEFAULT NULL,
-  `parent_comment_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`comment_id`),
-  KEY `FK9aakob3a7aghrm94k9kmbrjqd` (`blog_id`),
-  KEY `FK7h839m3lkvhbyv3bcdv7sm4fj` (`parent_comment_id`),
-  KEY `FK8omq0tc18jd43bu5tjh6jvraq` (`user_id`),
-  CONSTRAINT `FK7h839m3lkvhbyv3bcdv7sm4fj` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `FK8omq0tc18jd43bu5tjh6jvraq` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FK9aakob3a7aghrm94k9kmbrjqd` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
+                            `comment_id` bigint NOT NULL AUTO_INCREMENT,
+                            `content` varchar(255) DEFAULT NULL,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `updated_at` datetime(6) DEFAULT NULL,
+                            `blog_id` bigint DEFAULT NULL,
+                            `parent_comment_id` bigint DEFAULT NULL,
+                            `user_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`comment_id`),
+                            KEY `FK9aakob3a7aghrm94k9kmbrjqd` (`blog_id`),
+                            KEY `FK7h839m3lkvhbyv3bcdv7sm4fj` (`parent_comment_id`),
+                            KEY `FK8omq0tc18jd43bu5tjh6jvraq` (`user_id`),
+                            CONSTRAINT `FK7h839m3lkvhbyv3bcdv7sm4fj` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`),
+                            CONSTRAINT `FK8omq0tc18jd43bu5tjh6jvraq` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                            CONSTRAINT `FK9aakob3a7aghrm94k9kmbrjqd` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -293,22 +293,22 @@ DROP TABLE IF EXISTS `coupons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coupons` (
-  `coupon_id` bigint NOT NULL AUTO_INCREMENT,
-  `coupon_code` varchar(255) DEFAULT NULL,
-  `coupon_description` varchar(255) DEFAULT NULL,
-  `coupon_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `discount_amount` double DEFAULT NULL,
-  `discount_percent` double DEFAULT NULL,
-  `discount_type` enum('FIXED','PERCENTAGE') DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `max_discount_amount` double DEFAULT NULL,
-  `max_uses` bigint DEFAULT NULL,
-  `min_order_value` double DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `used_count` bigint DEFAULT NULL,
-  PRIMARY KEY (`coupon_id`)
+                           `coupon_id` bigint NOT NULL AUTO_INCREMENT,
+                           `coupon_code` varchar(255) DEFAULT NULL,
+                           `coupon_description` varchar(255) DEFAULT NULL,
+                           `coupon_name` varchar(255) DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `discount_amount` double DEFAULT NULL,
+                           `discount_percent` double DEFAULT NULL,
+                           `discount_type` enum('FIXED','PERCENTAGE') DEFAULT NULL,
+                           `end_time` datetime(6) DEFAULT NULL,
+                           `max_discount_amount` double DEFAULT NULL,
+                           `max_uses` bigint DEFAULT NULL,
+                           `min_order_value` double DEFAULT NULL,
+                           `start_time` datetime(6) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `used_count` bigint DEFAULT NULL,
+                           PRIMARY KEY (`coupon_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -330,12 +330,12 @@ DROP TABLE IF EXISTS `course_subject`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_subject` (
-  `course_id` bigint NOT NULL,
-  `subject_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`subject_id`),
-  KEY `FKdgqvcdk05rc11txucpjrqai5n` (`subject_id`),
-  CONSTRAINT `FKdgqvcdk05rc11txucpjrqai5n` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
-  CONSTRAINT `FKq0h1llihdiqg9ak6xhntlgyk1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                                  `course_id` bigint NOT NULL,
+                                  `subject_id` bigint NOT NULL,
+                                  PRIMARY KEY (`course_id`,`subject_id`),
+                                  KEY `FKdgqvcdk05rc11txucpjrqai5n` (`subject_id`),
+                                  CONSTRAINT `FKdgqvcdk05rc11txucpjrqai5n` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
+                                  CONSTRAINT `FKq0h1llihdiqg9ak6xhntlgyk1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -345,7 +345,7 @@ CREATE TABLE `course_subject` (
 
 LOCK TABLES `course_subject` WRITE;
 /*!40000 ALTER TABLE `course_subject` DISABLE KEYS */;
-INSERT INTO `course_subject` VALUES (1,1),(3,1),(5,1),(13,1),(15,1),(17,1),(19,1),(2,2),(9,2),(10,2),(17,2),(18,2),(19,2),(4,3),(7,3),(8,3),(11,3),(13,3),(16,3),(17,3),(6,4),(4,6),(7,6),(8,6),(13,6),(15,6),(7,7),(8,7),(13,7),(15,7),(20,7),(3,8),(13,8),(15,8),(13,9),(17,10),(1,11),(3,11),(4,11),(7,11),(8,11),(11,11),(13,11),(15,11),(16,11),(4,12),(7,12),(8,12),(13,12),(15,12),(20,12),(1,13),(3,13),(4,13),(7,13),(8,13),(11,13),(13,13),(15,13),(16,13),(1,14),(3,14),(4,14),(7,14),(8,14),(13,14),(15,14),(16,14),(4,15),(5,15),(17,16),(7,17),(13,17),(20,17),(3,18),(5,18),(12,18),(13,18),(14,18),(15,18),(19,18),(7,19),(8,19),(12,19),(13,19),(19,19),(20,19),(7,20),(13,20),(16,20),(3,21),(4,21),(7,21),(8,21),(13,21),(15,21),(16,21),(4,22),(7,22),(8,22),(13,22),(16,22),(4,23),(7,23),(8,23),(13,23),(15,23),(16,23),(4,24),(7,24),(13,24),(15,24),(16,24),(6,25),(8,26),(13,26),(15,26),(20,26),(14,27),(15,28),(20,28);
+INSERT INTO `course_subject` VALUES (1,1),(3,1),(5,1),(13,1),(15,1),(17,1),(19,1),(21,1),(22,1),(23,1),(25,1),(26,1),(2,2),(9,2),(10,2),(17,2),(18,2),(19,2),(25,2),(26,2),(4,3),(7,3),(8,3),(11,3),(13,3),(16,3),(17,3),(6,4),(4,6),(7,6),(8,6),(13,6),(15,6),(7,7),(8,7),(13,7),(15,7),(20,7),(3,8),(13,8),(15,8),(13,9),(17,10),(1,11),(3,11),(4,11),(7,11),(8,11),(11,11),(13,11),(15,11),(16,11),(4,12),(7,12),(8,12),(13,12),(15,12),(20,12),(1,13),(3,13),(4,13),(7,13),(8,13),(11,13),(13,13),(15,13),(16,13),(1,14),(3,14),(4,14),(7,14),(8,14),(13,14),(15,14),(16,14),(4,15),(5,15),(17,16),(7,17),(13,17),(20,17),(3,18),(5,18),(12,18),(13,18),(14,18),(15,18),(19,18),(7,19),(8,19),(12,19),(13,19),(19,19),(20,19),(7,20),(13,20),(16,20),(3,21),(4,21),(7,21),(8,21),(13,21),(15,21),(16,21),(4,22),(7,22),(8,22),(13,22),(16,22),(4,23),(7,23),(8,23),(13,23),(15,23),(16,23),(4,24),(7,24),(13,24),(15,24),(16,24),(6,25),(8,26),(13,26),(15,26),(20,26),(14,27),(15,28),(20,28);
 /*!40000 ALTER TABLE `course_subject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,12 +357,12 @@ DROP TABLE IF EXISTS `course_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course_user` (
-  `course_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`course_id`,`user_id`),
-  KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
-  CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                               `course_id` bigint NOT NULL,
+                               `user_id` bigint NOT NULL,
+                               PRIMARY KEY (`course_id`,`user_id`),
+                               KEY `FKf2f9pdami9tgornv4vld7pfea` (`user_id`),
+                               CONSTRAINT `FK8lwf41pgqkmlkfvklvf22pmcb` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+                               CONSTRAINT `FKf2f9pdami9tgornv4vld7pfea` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -384,28 +384,28 @@ DROP TABLE IF EXISTS `courses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `courses` (
-  `course_id` bigint NOT NULL AUTO_INCREMENT,
-  `accepted` bit(1) DEFAULT NULL,
-  `course_name` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `description` longtext,
-  `introduction` varchar(255) DEFAULT NULL,
-  `objectives` text,
-  `price` double DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `campaign_id` bigint DEFAULT NULL,
-  `expert_id` bigint DEFAULT NULL,
-  `course_status` enum('DRAFT','PROCESSING','REJECT','SUCCESS') DEFAULT NULL,
-  `cart_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`course_id`),
-  KEY `FK7l13d4e1nvy06049rlobu4wq8` (`campaign_id`),
-  KEY `FKaog0x4gdi738saifl8upy44sb` (`expert_id`),
-  KEY `FKb60up8k0778lggpd5ykw21kfi` (`cart_id`),
-  CONSTRAINT `FK7l13d4e1nvy06049rlobu4wq8` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`campaign_id`),
-  CONSTRAINT `FKaog0x4gdi738saifl8upy44sb` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`),
-  CONSTRAINT `FKb60up8k0778lggpd5ykw21kfi` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                           `course_id` bigint NOT NULL AUTO_INCREMENT,
+                           `accepted` bit(1) DEFAULT NULL,
+                           `course_name` varchar(255) DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `description` longtext,
+                           `introduction` varchar(255) DEFAULT NULL,
+                           `objectives` text,
+                           `price` double DEFAULT NULL,
+                           `thumbnail` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `campaign_id` bigint DEFAULT NULL,
+                           `expert_id` bigint DEFAULT NULL,
+                           `course_status` enum('DRAFT','PROCESSING','REJECT','SUCCESS') DEFAULT NULL,
+                           `cart_id` bigint DEFAULT NULL,
+                           PRIMARY KEY (`course_id`),
+                           KEY `FK7l13d4e1nvy06049rlobu4wq8` (`campaign_id`),
+                           KEY `FKaog0x4gdi738saifl8upy44sb` (`expert_id`),
+                           KEY `FKb60up8k0778lggpd5ykw21kfi` (`cart_id`),
+                           CONSTRAINT `FK7l13d4e1nvy06049rlobu4wq8` FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`campaign_id`),
+                           CONSTRAINT `FKaog0x4gdi738saifl8upy44sb` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`),
+                           CONSTRAINT `FKb60up8k0778lggpd5ykw21kfi` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -414,7 +414,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (1,_binary '','Java Cơ Bản','2025-02-14 10:56:52.317864','Học Java từ cơ bản đến nâng cao.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Java Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',300000,'1.jpg','2025-02-25 02:15:15.505993',NULL,1,'SUCCESS',NULL),(2,_binary '','Lập trình Python','2025-02-14 10:56:52.318863','Khóa học giúp bạn làm chủ Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',250000,'2.jpg','2025-02-25 02:15:43.897610',NULL,1,'SUCCESS',NULL),(3,_binary '','Spring Boot Web','2025-02-14 10:56:52.318863','Xây dựng ứng dụng web với Spring Boot.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Spring Boot Web\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,'3.jpg','2025-02-25 02:16:00.729570',NULL,1,'SUCCESS',NULL),(4,_binary '','JavaScript và React','2025-02-14 10:56:52.318863','Lập trình front-end với React.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về JavaScript và React\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',350000,'4.jpg','2025-02-25 02:16:35.317286',NULL,2,'SUCCESS',NULL),(5,_binary '','Lập trình Android','2025-02-14 10:56:52.319864','Học Kotlin và xây dựng ứng dụng Android.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Android\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',320000,'5.jpg','2025-02-25 02:21:52.037595',NULL,2,'SUCCESS',NULL),(6,_binary '','C++ từ cơ bản đến nâng cao','2025-02-14 10:56:52.319864','Lập trình C++ cho người mới bắt đầu.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về C++ từ cơ bản đến nâng cao\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',280000,'6.jpg','2025-02-25 02:17:11.002936',NULL,1,'SUCCESS',NULL),(7,_binary '','Lập trình Node.js','2025-02-14 10:56:52.319864','Phát triển backend với Node.js và Express.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Node.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',360000,'7.jpg','2025-02-25 02:17:30.118941',NULL,2,'SUCCESS',NULL),(8,_binary '','Fullstack với Next.js','2025-02-14 10:56:52.320863','Tạo website fullstack với Next.js.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Fullstack với Next.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,'8.jpg','2025-02-25 02:17:49.397203',NULL,3,'SUCCESS',NULL),(9,_binary '','Data Science với Python','2025-02-14 10:56:52.320863','Phân tích dữ liệu với Python, Pandas.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Data Science với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',420000,'9.jpg','2025-02-25 02:18:00.897062',NULL,1,'SUCCESS',NULL),(10,_binary '','Machine Learning','2025-02-14 10:56:52.320863','Giới thiệu về AI và Machine Learning.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Machine Learning\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',450000,'10.jpg','2025-02-25 02:18:09.401771',NULL,1,'SUCCESS',NULL),(11,_binary '','HTML & CSS Cơ Bản','2025-02-14 10:56:52.321864','Học cách xây dựng giao diện web với HTML và CSS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về HTML & CSS Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,'11.jpg','2025-02-25 02:18:23.314908',NULL,3,'SUCCESS',NULL),(12,_binary '','SQL cho người mới bắt đầu','2025-02-14 10:56:52.321864','Học cách truy vấn và quản lý cơ sở dữ liệu với SQL.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về SQL cho người mới bắt đầu\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',150000,'12.jpg','2025-02-25 02:18:30.651516',NULL,1,'SUCCESS',NULL),(13,_binary '','Kiến trúc Microservices','2025-02-14 10:56:52.321864','Triển khai hệ thống Microservices với Spring Cloud.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kiến trúc Microservices\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,'13.jpg','2025-02-25 02:18:51.843736',NULL,3,'SUCCESS',NULL),(14,_binary '','Lập trình Golang','2025-02-14 10:56:52.321864','Học cách lập trình với ngôn ngữ Golang.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Golang\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,'14.jpg','2025-02-25 02:21:58.883494',NULL,1,'SUCCESS',NULL),(15,_binary '','Kubernetes & Docker','2025-02-14 10:56:52.322863','Triển khai ứng dụng với Docker và Kubernetes.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kubernetes & Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',950000,'15.jpg','2025-02-25 02:24:21.590114',NULL,2,'SUCCESS',NULL),(16,_binary '','Thiết kế UI/UX','2025-02-14 10:56:52.322863','Học cách thiết kế giao diện đẹp và trải nghiệm tốt.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Thiết kế UI/UX\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,'16.jpg','2025-02-25 02:24:43.651671',NULL,2,'SUCCESS',NULL),(17,_binary '','Cấu trúc dữ liệu & Giải thuật','2025-02-14 10:56:52.322863','Học thuật toán và cấu trúc dữ liệu để tối ưu code.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Cấu trúc dữ liệu & Giải thuật\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',190000,'17.jpg','2025-02-25 02:25:04.112248',NULL,1,'SUCCESS',NULL),(18,_binary '','Lập trình AI với Python','2025-02-14 10:56:52.323863','Khóa học AI từ cơ bản đến nâng cao với Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình AI với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,'18.jpg','2025-02-25 02:25:18.276525',NULL,1,'SUCCESS',NULL),(19,_binary '','Blockchain và Smart Contracts','2025-02-14 10:56:52.323863','Xây dựng ứng dụng phi tập trung với Blockchain.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Blockchain và Smart Contracts\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,'19.jpg','2025-02-25 02:25:35.407738',NULL,1,'SUCCESS',NULL),(20,_binary '\0','DevOps với AWS và Docker','2025-02-14 10:56:52.323863','Học DevOps từ cơ bản, triển khai CI/CD với AWS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Tự tin ứng dụng vào công việc\"]',1500000,'20.jpg','2025-03-25 18:21:24.235856',NULL,NULL,'DRAFT',NULL);
+INSERT INTO `courses` VALUES (1,_binary '','Java Cơ Bản','2025-02-14 10:56:52.317864','Học Java từ cơ bản đến nâng cao.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Java Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',300000,'1.jpg','2025-02-25 02:15:15.505993',NULL,1,'SUCCESS',NULL),(2,_binary '','Lập trình Python','2025-02-14 10:56:52.318863','Khóa học giúp bạn làm chủ Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',250000,'2.jpg','2025-02-25 02:15:43.897610',NULL,1,'SUCCESS',NULL),(3,_binary '','Spring Boot Web','2025-02-14 10:56:52.318863','Xây dựng ứng dụng web với Spring Boot.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Spring Boot Web\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,'3.jpg','2025-02-25 02:16:00.729570',NULL,1,'SUCCESS',NULL),(4,_binary '','JavaScript và React','2025-02-14 10:56:52.318863','Lập trình front-end với React.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về JavaScript và React\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',350000,'4.jpg','2025-02-25 02:16:35.317286',NULL,2,'SUCCESS',NULL),(5,_binary '','Lập trình Android','2025-02-14 10:56:52.319864','Học Kotlin và xây dựng ứng dụng Android.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Android\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',320000,'5.jpg','2025-02-25 02:21:52.037595',NULL,2,'SUCCESS',NULL),(6,_binary '','C++ từ cơ bản đến nâng cao','2025-02-14 10:56:52.319864','Lập trình C++ cho người mới bắt đầu.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về C++ từ cơ bản đến nâng cao\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',280000,'6.jpg','2025-02-25 02:17:11.002936',NULL,1,'SUCCESS',NULL),(7,_binary '','Lập trình Node.js','2025-02-14 10:56:52.319864','Phát triển backend với Node.js và Express.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Node.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',360000,'7.jpg','2025-02-25 02:17:30.118941',NULL,2,'SUCCESS',NULL),(8,_binary '','Fullstack với Next.js','2025-02-14 10:56:52.320863','Tạo website fullstack với Next.js.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Fullstack với Next.js\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',400000,'8.jpg','2025-02-25 02:17:49.397203',NULL,3,'SUCCESS',NULL),(9,_binary '','Data Science với Python','2025-02-14 10:56:52.320863','Phân tích dữ liệu với Python, Pandas.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Data Science với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',420000,'9.jpg','2025-02-25 02:18:00.897062',NULL,1,'SUCCESS',NULL),(10,_binary '','Machine Learning','2025-02-14 10:56:52.320863','Giới thiệu về AI và Machine Learning.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Machine Learning\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',450000,'10.jpg','2025-02-25 02:18:09.401771',NULL,1,'SUCCESS',NULL),(11,_binary '','HTML & CSS Cơ Bản','2025-02-14 10:56:52.321864','Học cách xây dựng giao diện web với HTML và CSS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về HTML & CSS Cơ Bản\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,'11.jpg','2025-02-25 02:18:23.314908',NULL,3,'SUCCESS',NULL),(12,_binary '','SQL cho người mới bắt đầu','2025-02-14 10:56:52.321864','Học cách truy vấn và quản lý cơ sở dữ liệu với SQL.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về SQL cho người mới bắt đầu\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',150000,'12.jpg','2025-02-25 02:18:30.651516',NULL,1,'SUCCESS',NULL),(13,_binary '','Kiến trúc Microservices','2025-02-14 10:56:52.321864','Triển khai hệ thống Microservices với Spring Cloud.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kiến trúc Microservices\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,'13.jpg','2025-02-25 02:18:51.843736',NULL,3,'SUCCESS',NULL),(14,_binary '','Lập trình Golang','2025-02-14 10:56:52.321864','Học cách lập trình với ngôn ngữ Golang.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình Golang\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,'14.jpg','2025-02-25 02:21:58.883494',NULL,1,'SUCCESS',NULL),(15,_binary '','Kubernetes & Docker','2025-02-14 10:56:52.322863','Triển khai ứng dụng với Docker và Kubernetes.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Kubernetes & Docker\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',950000,'15.jpg','2025-02-25 02:24:21.590114',NULL,2,'SUCCESS',NULL),(16,_binary '','Thiết kế UI/UX','2025-02-14 10:56:52.322863','Học cách thiết kế giao diện đẹp và trải nghiệm tốt.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Thiết kế UI/UX\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',180000,'16.jpg','2025-02-25 02:24:43.651671',NULL,2,'SUCCESS',NULL),(17,_binary '','Cấu trúc dữ liệu & Giải thuật','2025-02-14 10:56:52.322863','Học thuật toán và cấu trúc dữ liệu để tối ưu code.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Cấu trúc dữ liệu & Giải thuật\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',190000,'17.jpg','2025-02-25 02:25:04.112248',NULL,1,'SUCCESS',NULL),(18,_binary '','Lập trình AI với Python','2025-02-14 10:56:52.323863','Khóa học AI từ cơ bản đến nâng cao với Python.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Lập trình AI với Python\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',850000,'18.jpg','2025-02-25 02:25:18.276525',NULL,1,'SUCCESS',NULL),(19,_binary '\0','Blockchain và Smart Contracts1','2025-02-14 10:56:52.323863','Xây dựng ứng dụng phi tập trung với Blockchain.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Hiểu cơ bản về Blockchain và Smart Contracts\",\"Nắm vững kỹ thuật lập trình liên quan\",\"Xây dựng dự án thực tế\",\"Tự tin ứng dụng vào công việc\"]',900000,'19.jpg','2025-03-25 19:25:09.529663',NULL,1,'DRAFT',NULL),(20,_binary '\0','DevOps với AWS và Docker','2025-02-14 10:56:52.323863','Học DevOps từ cơ bản, triển khai CI/CD với AWS.','https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv','[\"Tự tin ứng dụng vào công việc\"]',1500000,'20.jpg','2025-03-25 18:21:24.235856',NULL,NULL,'DRAFT',NULL),(21,_binary '\0','Java háeesdfsdfsd 1111ds fsd 11111e','2025-03-25 19:21:33.674815','hay','Good','[\"Hello\",\"Hi\"]',99999999,'999.png','2025-03-25 19:21:33.811895',NULL,2,'DRAFT',NULL),(22,_binary '\0','Java háeesdfsdfsd 1111d111s fsd 11111e','2025-03-25 19:24:06.403965','hay','https://youtu.be/77OJUU89TX4?si=mSA1bkZE0LtQ1Mfn','[\"Hello\",\"Hi\"]',99999999,'999.png','2025-03-25 19:24:06.416116',NULL,2,'DRAFT',NULL),(23,_binary '\0','Java háeesdfsdfsd 11111d111s fsd 11111e','2025-03-25 19:29:11.727886','hay','https://youtu.be/77OJUU89TX4?si=mSA1bkZE0LtQ1Mfn','[\"Hello\",\"Hi\"]',99999999,'999.png','2025-03-25 19:35:21.266905',NULL,2,'PROCESSING',NULL),(25,_binary '\0','111','2025-03-25 19:42:17.833441','111','https://youtu.be/Abii5lEfN1M?si=DvB-RMZuzRLwc-7L','[\"111\"]',1111,'1742931735603-daVinCiCode.jpg','2025-03-25 19:42:17.940956',NULL,2,'DRAFT',NULL),(26,_binary '\0','111111xxx','2025-03-25 19:42:53.334388','111','https://youtu.be/Abii5lEfN1M?si=DvB-RMZuzRLwc-7L','[\"11\"]',111,'1742931769615-Fa.jpg','2025-03-25 19:43:00.101813',NULL,2,'DRAFT',NULL);
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -426,12 +426,12 @@ DROP TABLE IF EXISTS `expert_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `expert_user` (
-  `expert_id` bigint NOT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`expert_id`,`user_id`),
-  KEY `FK27s6rcj7h83qrn59yipsmi23k` (`user_id`),
-  CONSTRAINT `FK27s6rcj7h83qrn59yipsmi23k` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKn4dtwbtnefruftss8p21v96aj` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+                               `expert_id` bigint NOT NULL,
+                               `user_id` bigint NOT NULL,
+                               PRIMARY KEY (`expert_id`,`user_id`),
+                               KEY `FK27s6rcj7h83qrn59yipsmi23k` (`user_id`),
+                               CONSTRAINT `FK27s6rcj7h83qrn59yipsmi23k` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                               CONSTRAINT `FKn4dtwbtnefruftss8p21v96aj` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -453,15 +453,15 @@ DROP TABLE IF EXISTS `experts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `experts` (
-  `expert_id` bigint NOT NULL AUTO_INCREMENT,
-  `achievement` mediumtext,
-  `description` mediumtext,
-  `job` varchar(255) DEFAULT NULL,
-  `year_of_experience` int DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`expert_id`),
-  UNIQUE KEY `UK66kp2njuac7qdaov6pocl0896` (`user_id`),
-  CONSTRAINT `FK5os9nnfapw3vwad4yac038kvk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                           `expert_id` bigint NOT NULL AUTO_INCREMENT,
+                           `achievement` mediumtext,
+                           `description` mediumtext,
+                           `job` varchar(255) DEFAULT NULL,
+                           `year_of_experience` int DEFAULT NULL,
+                           `user_id` bigint DEFAULT NULL,
+                           PRIMARY KEY (`expert_id`),
+                           UNIQUE KEY `UK66kp2njuac7qdaov6pocl0896` (`user_id`),
+                           CONSTRAINT `FK5os9nnfapw3vwad4yac038kvk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -483,9 +483,9 @@ DROP TABLE IF EXISTS `hashtags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashtags` (
-  `tag_id` bigint NOT NULL AUTO_INCREMENT,
-  `tag_name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`tag_id`)
+                            `tag_id` bigint NOT NULL AUTO_INCREMENT,
+                            `tag_name` varchar(255) DEFAULT NULL,
+                            PRIMARY KEY (`tag_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -507,19 +507,19 @@ DROP TABLE IF EXISTS `lessons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lessons` (
-  `lesson_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `document_content` longtext,
-  `duration` bigint DEFAULT NULL,
-  `lesson_type` enum('DOCUMENT','VIDEO') DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `video_url` varchar(255) DEFAULT NULL,
-  `chapter_id` bigint DEFAULT NULL,
-  `description` longtext,
-  PRIMARY KEY (`lesson_id`),
-  KEY `FKmb78vk1f2oljr16oj1hpo45ma` (`chapter_id`),
-  CONSTRAINT `FKmb78vk1f2oljr16oj1hpo45ma` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
+                           `lesson_id` bigint NOT NULL AUTO_INCREMENT,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `document_content` longtext,
+                           `duration` bigint DEFAULT NULL,
+                           `lesson_type` enum('DOCUMENT','VIDEO') DEFAULT NULL,
+                           `title` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `video_url` varchar(255) DEFAULT NULL,
+                           `chapter_id` bigint DEFAULT NULL,
+                           `description` longtext,
+                           PRIMARY KEY (`lesson_id`),
+                           KEY `FKmb78vk1f2oljr16oj1hpo45ma` (`chapter_id`),
+                           CONSTRAINT `FKmb78vk1f2oljr16oj1hpo45ma` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=221 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -541,18 +541,18 @@ DROP TABLE IF EXISTS `likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `likes` (
-  `like_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `blog_id` bigint DEFAULT NULL,
-  `comment_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`like_id`),
-  KEY `FKl0jvfq4a7glp0xeuhd8hm05yt` (`blog_id`),
-  KEY `FKe4guax66lb963pf27kvm7ikik` (`comment_id`),
-  KEY `FKnvx9seeqqyy71bij291pwiwrg` (`user_id`),
-  CONSTRAINT `FKe4guax66lb963pf27kvm7ikik` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `FKl0jvfq4a7glp0xeuhd8hm05yt` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`),
-  CONSTRAINT `FKnvx9seeqqyy71bij291pwiwrg` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                         `like_id` bigint NOT NULL AUTO_INCREMENT,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `blog_id` bigint DEFAULT NULL,
+                         `comment_id` bigint DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`like_id`),
+                         KEY `FKl0jvfq4a7glp0xeuhd8hm05yt` (`blog_id`),
+                         KEY `FKe4guax66lb963pf27kvm7ikik` (`comment_id`),
+                         KEY `FKnvx9seeqqyy71bij291pwiwrg` (`user_id`),
+                         CONSTRAINT `FKe4guax66lb963pf27kvm7ikik` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`),
+                         CONSTRAINT `FKl0jvfq4a7glp0xeuhd8hm05yt` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`blog_id`),
+                         CONSTRAINT `FKnvx9seeqqyy71bij291pwiwrg` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -574,16 +574,16 @@ DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `messages` (
-  `message_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` longtext,
-  `created_at` datetime(6) DEFAULT NULL,
-  `role` enum('FUNCTION','MODEL','SYSTEM','USER') DEFAULT NULL,
-  `chat_id` bigint DEFAULT NULL,
-  `answer` varchar(255) DEFAULT NULL,
-  `question` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`message_id`),
-  KEY `FK64w44ngcpqp99ptcb9werdfmb` (`chat_id`),
-  CONSTRAINT `FK64w44ngcpqp99ptcb9werdfmb` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`chat_id`)
+                            `message_id` bigint NOT NULL AUTO_INCREMENT,
+                            `content` longtext,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `role` enum('FUNCTION','MODEL','SYSTEM','USER') DEFAULT NULL,
+                            `chat_id` bigint DEFAULT NULL,
+                            `answer` varchar(255) DEFAULT NULL,
+                            `question` varchar(255) DEFAULT NULL,
+                            PRIMARY KEY (`message_id`),
+                            KEY `FK64w44ngcpqp99ptcb9werdfmb` (`chat_id`),
+                            CONSTRAINT `FK64w44ngcpqp99ptcb9werdfmb` FOREIGN KEY (`chat_id`) REFERENCES `chats` (`chat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -604,15 +604,15 @@ DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notifications` (
-  `notification_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` longtext,
-  `status` enum('PENDING','SENT') DEFAULT NULL,
-  `set_date` datetime(6) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `global` bit(1) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `udpated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`notification_id`)
+                                 `notification_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `content` longtext,
+                                 `status` enum('PENDING','SENT') DEFAULT NULL,
+                                 `set_date` datetime(6) DEFAULT NULL,
+                                 `created_at` datetime(6) DEFAULT NULL,
+                                 `global` bit(1) DEFAULT NULL,
+                                 `title` varchar(255) DEFAULT NULL,
+                                 `udpated_at` datetime(6) DEFAULT NULL,
+                                 PRIMARY KEY (`notification_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -633,15 +633,15 @@ DROP TABLE IF EXISTS `order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_details` (
-  `order_details_id` bigint NOT NULL AUTO_INCREMENT,
-  `price_at_time_purchase` double DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `order_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_details_id`),
-  KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
-  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
-  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
-  CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                                 `order_details_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `price_at_time_purchase` double DEFAULT NULL,
+                                 `course_id` bigint DEFAULT NULL,
+                                 `order_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`order_details_id`),
+                                 KEY `FKtc2uxybe6r9ak6sd66whjd27` (`course_id`),
+                                 KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+                                 CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+                                 CONSTRAINT `FKtc2uxybe6r9ak6sd66whjd27` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -663,20 +663,20 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
-  `order_id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) DEFAULT NULL,
-  `expired_at` datetime(6) DEFAULT NULL,
-  `order_code` varchar(255) DEFAULT NULL,
-  `paid_at` datetime(6) DEFAULT NULL,
-  `payment_url` mediumtext,
-  `total_price` double DEFAULT NULL,
-  `coupon_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`order_id`),
-  KEY `FKn1d1gkxckw648m2n2d5gx0yx5` (`coupon_id`),
-  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
-  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKn1d1gkxckw648m2n2d5gx0yx5` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`)
+                          `order_id` bigint NOT NULL AUTO_INCREMENT,
+                          `created_at` datetime(6) DEFAULT NULL,
+                          `expired_at` datetime(6) DEFAULT NULL,
+                          `order_code` varchar(255) DEFAULT NULL,
+                          `paid_at` datetime(6) DEFAULT NULL,
+                          `payment_url` mediumtext,
+                          `total_price` double DEFAULT NULL,
+                          `coupon_id` bigint DEFAULT NULL,
+                          `user_id` bigint DEFAULT NULL,
+                          PRIMARY KEY (`order_id`),
+                          KEY `FKn1d1gkxckw648m2n2d5gx0yx5` (`coupon_id`),
+                          KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+                          CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                          CONSTRAINT `FKn1d1gkxckw648m2n2d5gx0yx5` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`coupon_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -698,14 +698,14 @@ DROP TABLE IF EXISTS `otp`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `otp` (
-  `otp_id` bigint NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `expired_at` datetime(6) DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`otp_id`),
-  UNIQUE KEY `UK4mkxc1wpojj1vymcvurokktwm` (`user_id`),
-  CONSTRAINT `FKs0hlsjury48cekfbfusk11lyr` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                       `otp_id` bigint NOT NULL AUTO_INCREMENT,
+                       `code` varchar(255) DEFAULT NULL,
+                       `created_at` datetime(6) DEFAULT NULL,
+                       `expired_at` datetime(6) DEFAULT NULL,
+                       `user_id` bigint DEFAULT NULL,
+                       PRIMARY KEY (`otp_id`),
+                       UNIQUE KEY `UK4mkxc1wpojj1vymcvurokktwm` (`user_id`),
+                       CONSTRAINT `FKs0hlsjury48cekfbfusk11lyr` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -726,10 +726,10 @@ DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
-  `permission_id` bigint NOT NULL AUTO_INCREMENT,
-  `api_method` enum('DELETE','GET','PATCH','POST','PUT') DEFAULT NULL,
-  `api_path` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`permission_id`)
+                               `permission_id` bigint NOT NULL AUTO_INCREMENT,
+                               `api_method` enum('DELETE','GET','PATCH','POST','PUT') DEFAULT NULL,
+                               `api_path` varchar(255) DEFAULT NULL,
+                               PRIMARY KEY (`permission_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -751,11 +751,11 @@ DROP TABLE IF EXISTS `questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `questions` (
-  `question_id` bigint NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`question_id`)
+                             `question_id` bigint NOT NULL AUTO_INCREMENT,
+                             `title` varchar(255) DEFAULT NULL,
+                             `created_at` datetime(6) DEFAULT NULL,
+                             `updated_at` datetime(6) DEFAULT NULL,
+                             PRIMARY KEY (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -777,18 +777,18 @@ DROP TABLE IF EXISTS `quiz_attempts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quiz_attempts` (
-  `quiz_attempt_id` bigint NOT NULL AUTO_INCREMENT,
-  `attempt_number` int DEFAULT NULL,
-  `end_time` datetime(6) DEFAULT NULL,
-  `number_of_corrects` int DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
-  `quiz_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`quiz_attempt_id`),
-  KEY `FKfwipvfipnnwsoacoyv5k7fbxc` (`quiz_id`),
-  KEY `FKpj4a9hw0iv1mo1ut6rppg594u` (`user_id`),
-  CONSTRAINT `FKfwipvfipnnwsoacoyv5k7fbxc` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
-  CONSTRAINT `FKpj4a9hw0iv1mo1ut6rppg594u` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                 `quiz_attempt_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `attempt_number` int DEFAULT NULL,
+                                 `end_time` datetime(6) DEFAULT NULL,
+                                 `number_of_corrects` int DEFAULT NULL,
+                                 `start_time` datetime(6) DEFAULT NULL,
+                                 `quiz_id` bigint DEFAULT NULL,
+                                 `user_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`quiz_attempt_id`),
+                                 KEY `FKfwipvfipnnwsoacoyv5k7fbxc` (`quiz_id`),
+                                 KEY `FKpj4a9hw0iv1mo1ut6rppg594u` (`user_id`),
+                                 CONSTRAINT `FKfwipvfipnnwsoacoyv5k7fbxc` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
+                                 CONSTRAINT `FKpj4a9hw0iv1mo1ut6rppg594u` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -809,12 +809,12 @@ DROP TABLE IF EXISTS `quiz_question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quiz_question` (
-  `quiz_id` bigint NOT NULL,
-  `question_id` bigint NOT NULL,
-  PRIMARY KEY (`quiz_id`,`question_id`),
-  KEY `FKqeltu3y1r2onimmphk1s8eirs` (`question_id`),
-  CONSTRAINT `FKkf4iskp1r4oogyx3cikwdj0i0` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
-  CONSTRAINT `FKqeltu3y1r2onimmphk1s8eirs` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+                                 `quiz_id` bigint NOT NULL,
+                                 `question_id` bigint NOT NULL,
+                                 PRIMARY KEY (`quiz_id`,`question_id`),
+                                 KEY `FKqeltu3y1r2onimmphk1s8eirs` (`question_id`),
+                                 CONSTRAINT `FKkf4iskp1r4oogyx3cikwdj0i0` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`),
+                                 CONSTRAINT `FKqeltu3y1r2onimmphk1s8eirs` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -835,21 +835,21 @@ DROP TABLE IF EXISTS `quizzes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quizzes` (
-  `quiz_id` bigint NOT NULL AUTO_INCREMENT,
-  `allow_see_answers` bit(1) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `description` mediumtext,
-  `duration` int DEFAULT NULL,
-  `published` bit(1) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `chapter_id` bigint DEFAULT NULL,
-  `expert_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`quiz_id`),
-  UNIQUE KEY `UK8t7yvf83h97wti5y48pouog65` (`chapter_id`),
-  KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
-  CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
-  CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
+                           `quiz_id` bigint NOT NULL AUTO_INCREMENT,
+                           `allow_see_answers` bit(1) DEFAULT NULL,
+                           `created_at` datetime(6) DEFAULT NULL,
+                           `description` mediumtext,
+                           `duration` int DEFAULT NULL,
+                           `published` bit(1) DEFAULT NULL,
+                           `title` varchar(255) DEFAULT NULL,
+                           `updated_at` datetime(6) DEFAULT NULL,
+                           `chapter_id` bigint DEFAULT NULL,
+                           `expert_id` bigint DEFAULT NULL,
+                           PRIMARY KEY (`quiz_id`),
+                           UNIQUE KEY `UK8t7yvf83h97wti5y48pouog65` (`chapter_id`),
+                           KEY `FKjn5yj81ek8yx2s07hkje2wd98` (`expert_id`),
+                           CONSTRAINT `FKbfcxv33pl1gl32wie5nobns7r` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
+                           CONSTRAINT `FKjn5yj81ek8yx2s07hkje2wd98` FOREIGN KEY (`expert_id`) REFERENCES `experts` (`expert_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -870,18 +870,18 @@ DROP TABLE IF EXISTS `rates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rates` (
-  `rate_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `stars` int DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`rate_id`),
-  KEY `FKt5wuc6askynohbdaqeaj5wjeq` (`course_id`),
-  KEY `FKanlgavwqngljux10mtly8qr6f` (`user_id`),
-  CONSTRAINT `FKanlgavwqngljux10mtly8qr6f` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKt5wuc6askynohbdaqeaj5wjeq` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+                         `rate_id` bigint NOT NULL AUTO_INCREMENT,
+                         `content` varchar(255) DEFAULT NULL,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `stars` int DEFAULT NULL,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `course_id` bigint DEFAULT NULL,
+                         `user_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`rate_id`),
+                         KEY `FKt5wuc6askynohbdaqeaj5wjeq` (`course_id`),
+                         KEY `FKanlgavwqngljux10mtly8qr6f` (`user_id`),
+                         CONSTRAINT `FKanlgavwqngljux10mtly8qr6f` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                         CONSTRAINT `FKt5wuc6askynohbdaqeaj5wjeq` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -903,12 +903,12 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_permission` (
-  `role_id` bigint NOT NULL,
-  `permission_id` bigint NOT NULL,
-  KEY `FK2xn8qv4vw30i04xdxrpvn3bdi` (`permission_id`),
-  KEY `FKtfgq8q9blrp0pt1pvggyli3v9` (`role_id`),
-  CONSTRAINT `FK2xn8qv4vw30i04xdxrpvn3bdi` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`),
-  CONSTRAINT `FKtfgq8q9blrp0pt1pvggyli3v9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
+                                   `role_id` bigint NOT NULL,
+                                   `permission_id` bigint NOT NULL,
+                                   KEY `FK2xn8qv4vw30i04xdxrpvn3bdi` (`permission_id`),
+                                   KEY `FKtfgq8q9blrp0pt1pvggyli3v9` (`role_id`),
+                                   CONSTRAINT `FK2xn8qv4vw30i04xdxrpvn3bdi` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`),
+                                   CONSTRAINT `FKtfgq8q9blrp0pt1pvggyli3v9` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -918,7 +918,7 @@ CREATE TABLE `role_permission` (
 
 LOCK TABLES `role_permission` WRITE;
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
-INSERT INTO `role_permission` VALUES (2,1),(2,2),(2,3),(2,4),(2,5),(2,25),(2,36),(2,39),(2,43),(2,51),(2,55),(2,56),(2,59),(2,60),(2,61),(2,72),(2,73),(2,74),(2,75),(2,76),(2,98),(2,99),(2,102),(2,101),(2,104),(2,105),(2,108),(2,111),(2,115),(2,116),(2,117),(2,118),(2,119),(2,120),(2,121),(2,124),(2,125),(2,127),(2,128),(2,129),(2,145),(2,146),(2,148),(2,147),(2,153),(1,6),(1,10),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(1,29),(1,31),(1,33),(1,35),(1,41),(1,46),(1,47),(1,48),(1,50),(1,52),(1,54),(1,57),(1,58),(1,64),(1,65),(1,67),(1,68),(1,71),(1,79),(1,83),(1,91),(1,92),(1,94),(1,95),(1,96),(1,109),(1,110),(1,112),(1,113),(1,114),(1,130),(1,140),(1,141),(1,144),(1,149),(3,6),(3,10),(3,16),(3,21),(3,22),(3,23),(3,24),(3,27),(3,28),(3,31),(3,33),(3,34),(3,35),(3,40),(3,54),(3,58),(3,67),(3,68),(3,71),(3,78),(3,79),(3,80),(3,82),(3,84),(3,83),(3,86),(3,91),(3,92),(3,94),(3,95),(3,96),(3,106),(3,107),(3,109),(3,110),(3,112),(3,113),(3,114),(3,130),(3,140),(3,141),(3,144),(3,149),(3,150),(3,151),(3,152),(4,6),(4,17),(4,18),(4,19),(4,20),(4,33),(4,50),(4,57),(4,58),(4,67),(4,68),(4,71),(4,79),(4,83),(4,91),(4,92),(4,94),(4,95),(4,96),(4,109),(4,110),(4,112),(4,113),(4,114),(4,130),(4,140),(4,141),(4,144),(2,85),(2,14),(1,84),(1,82),(1,1),(3,1),(4,1),(1,69),(3,69),(4,69);
+INSERT INTO `role_permission` VALUES (2,1),(2,2),(2,3),(2,4),(2,5),(2,25),(2,36),(2,39),(2,43),(2,51),(2,55),(2,56),(2,59),(2,60),(2,61),(2,72),(2,73),(2,74),(2,75),(2,76),(2,98),(2,99),(2,102),(2,101),(2,104),(2,105),(2,108),(2,111),(2,115),(2,116),(2,117),(2,118),(2,119),(2,120),(2,121),(2,124),(2,125),(2,127),(2,128),(2,129),(2,145),(2,146),(2,148),(2,147),(2,153),(1,6),(1,10),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(1,29),(1,31),(1,33),(1,35),(1,41),(1,46),(1,47),(1,48),(1,50),(1,52),(1,54),(1,57),(1,58),(1,64),(1,65),(1,67),(1,68),(1,71),(1,79),(1,83),(1,91),(1,92),(1,94),(1,95),(1,96),(1,109),(1,110),(1,112),(1,113),(1,114),(1,130),(1,140),(1,141),(1,144),(1,149),(3,6),(3,10),(3,16),(3,21),(3,22),(3,23),(3,24),(3,27),(3,28),(3,31),(3,33),(3,34),(3,35),(3,40),(3,54),(3,58),(3,67),(3,68),(3,71),(3,78),(3,79),(3,82),(3,84),(3,83),(3,86),(3,91),(3,92),(3,94),(3,95),(3,96),(3,106),(3,107),(3,109),(3,110),(3,112),(3,113),(3,114),(3,130),(3,140),(3,141),(3,144),(3,149),(3,150),(3,151),(3,152),(4,6),(4,17),(4,18),(4,19),(4,20),(4,33),(4,50),(4,57),(4,58),(4,67),(4,68),(4,71),(4,79),(4,83),(4,91),(4,92),(4,94),(4,95),(4,96),(4,109),(4,110),(4,112),(4,113),(4,114),(4,130),(4,140),(4,141),(4,144),(2,85),(2,14),(1,84),(1,82),(1,1),(3,1),(4,1),(1,69),(3,69),(4,69),(3,32),(1,32),(4,32),(1,9),(2,9),(3,9),(4,9);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -930,9 +930,9 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-  `role_id` bigint NOT NULL AUTO_INCREMENT,
-  `role_name` enum('ADMIN','EXPERT','MARKETING','USER') DEFAULT NULL,
-  PRIMARY KEY (`role_id`)
+                         `role_id` bigint NOT NULL AUTO_INCREMENT,
+                         `role_name` enum('ADMIN','EXPERT','MARKETING','USER') DEFAULT NULL,
+                         PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -954,13 +954,13 @@ DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subjects` (
-  `subject_id` bigint NOT NULL AUTO_INCREMENT,
-  `description` mediumtext,
-  `subject_name` varchar(255) DEFAULT NULL,
-  `thumbnail` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`subject_id`)
+                            `subject_id` bigint NOT NULL AUTO_INCREMENT,
+                            `description` mediumtext,
+                            `subject_name` varchar(255) DEFAULT NULL,
+                            `thumbnail` varchar(255) DEFAULT NULL,
+                            `created_at` datetime(6) DEFAULT NULL,
+                            `updated_at` datetime(6) DEFAULT NULL,
+                            PRIMARY KEY (`subject_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -982,14 +982,14 @@ DROP TABLE IF EXISTS `user_answers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_answers` (
-  `user_answer_id` bigint NOT NULL AUTO_INCREMENT,
-  `question_id` bigint DEFAULT NULL,
-  `quiz_attempt_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_answer_id`),
-  KEY `FK6b46l4bb7a6wfxvmn6l7ig8vo` (`question_id`),
-  KEY `FKqy4lhxwoi677jc3u95au6qmxw` (`quiz_attempt_id`),
-  CONSTRAINT `FK6b46l4bb7a6wfxvmn6l7ig8vo` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `FKqy4lhxwoi677jc3u95au6qmxw` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`quiz_attempt_id`)
+                                `user_answer_id` bigint NOT NULL AUTO_INCREMENT,
+                                `question_id` bigint DEFAULT NULL,
+                                `quiz_attempt_id` bigint DEFAULT NULL,
+                                PRIMARY KEY (`user_answer_id`),
+                                KEY `FK6b46l4bb7a6wfxvmn6l7ig8vo` (`question_id`),
+                                KEY `FKqy4lhxwoi677jc3u95au6qmxw` (`quiz_attempt_id`),
+                                CONSTRAINT `FK6b46l4bb7a6wfxvmn6l7ig8vo` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
+                                CONSTRAINT `FKqy4lhxwoi677jc3u95au6qmxw` FOREIGN KEY (`quiz_attempt_id`) REFERENCES `quiz_attempts` (`quiz_attempt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1010,12 +1010,12 @@ DROP TABLE IF EXISTS `user_answers_answer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_answers_answer` (
-  `user_answer_id` bigint NOT NULL,
-  `answer_id` bigint NOT NULL,
-  PRIMARY KEY (`user_answer_id`,`answer_id`),
-  KEY `FKtn33w5vhip5arxeo92e2uag8p` (`answer_id`),
-  CONSTRAINT `FK1udyf788y6qi8qy7yj4ht8p1i` FOREIGN KEY (`user_answer_id`) REFERENCES `user_answers` (`user_answer_id`) ON DELETE CASCADE,
-  CONSTRAINT `FKtn33w5vhip5arxeo92e2uag8p` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`)
+                                       `user_answer_id` bigint NOT NULL,
+                                       `answer_id` bigint NOT NULL,
+                                       PRIMARY KEY (`user_answer_id`,`answer_id`),
+                                       KEY `FKtn33w5vhip5arxeo92e2uag8p` (`answer_id`),
+                                       CONSTRAINT `FK1udyf788y6qi8qy7yj4ht8p1i` FOREIGN KEY (`user_answer_id`) REFERENCES `user_answers` (`user_answer_id`) ON DELETE CASCADE,
+                                       CONSTRAINT `FKtn33w5vhip5arxeo92e2uag8p` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1036,15 +1036,15 @@ DROP TABLE IF EXISTS `user_notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_notifications` (
-  `user_notification_id` bigint NOT NULL AUTO_INCREMENT,
-  `is_read` bit(1) DEFAULT NULL,
-  `notification_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_notification_id`),
-  KEY `FKovvx0ab3h8s9lrm6fppuadn7d` (`notification_id`),
-  KEY `FK9f86wonnl11hos1cuf5fibutl` (`user_id`),
-  CONSTRAINT `FK9f86wonnl11hos1cuf5fibutl` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `FKovvx0ab3h8s9lrm6fppuadn7d` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`notification_id`)
+                                      `user_notification_id` bigint NOT NULL AUTO_INCREMENT,
+                                      `is_read` bit(1) DEFAULT NULL,
+                                      `notification_id` bigint DEFAULT NULL,
+                                      `user_id` bigint DEFAULT NULL,
+                                      PRIMARY KEY (`user_notification_id`),
+                                      KEY `FKovvx0ab3h8s9lrm6fppuadn7d` (`notification_id`),
+                                      KEY `FK9f86wonnl11hos1cuf5fibutl` (`user_id`),
+                                      CONSTRAINT `FK9f86wonnl11hos1cuf5fibutl` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+                                      CONSTRAINT `FKovvx0ab3h8s9lrm6fppuadn7d` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`notification_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1065,15 +1065,15 @@ DROP TABLE IF EXISTS `user_progress`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_progress` (
-  `progress_id` bigint NOT NULL AUTO_INCREMENT,
-  `lesson_id` bigint DEFAULT NULL,
-  `quiz_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  `chapter_id` bigint DEFAULT NULL,
-  `course_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`progress_id`),
-  KEY `FKrt37sneeps21829cuqetjm5ye` (`user_id`),
-  CONSTRAINT `FKrt37sneeps21829cuqetjm5ye` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+                                 `progress_id` bigint NOT NULL AUTO_INCREMENT,
+                                 `lesson_id` bigint DEFAULT NULL,
+                                 `quiz_id` bigint DEFAULT NULL,
+                                 `user_id` bigint DEFAULT NULL,
+                                 `chapter_id` bigint DEFAULT NULL,
+                                 `course_id` bigint DEFAULT NULL,
+                                 PRIMARY KEY (`progress_id`),
+                                 KEY `FKrt37sneeps21829cuqetjm5ye` (`user_id`),
+                                 CONSTRAINT `FKrt37sneeps21829cuqetjm5ye` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1095,23 +1095,23 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `user_id` bigint NOT NULL AUTO_INCREMENT,
-  `account_type` enum('CREDENTIALS','GITHUB','GOOGLE') DEFAULT NULL,
-  `active` bit(1) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `created_at` datetime(6) DEFAULT NULL,
-  `dob` datetime(6) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `fullname` varchar(255) DEFAULT NULL,
-  `gender` enum('FEMALE','MALE') DEFAULT NULL,
-  `locked` bit(1) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `refresh_token` mediumtext,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `role_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  KEY `FKp56c1712k691lhsyewcssf40f` (`role_id`),
-  CONSTRAINT `FKp56c1712k691lhsyewcssf40f` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
+                         `user_id` bigint NOT NULL AUTO_INCREMENT,
+                         `account_type` enum('CREDENTIALS','GITHUB','GOOGLE') DEFAULT NULL,
+                         `active` bit(1) DEFAULT NULL,
+                         `avatar` varchar(255) DEFAULT NULL,
+                         `created_at` datetime(6) DEFAULT NULL,
+                         `dob` datetime(6) DEFAULT NULL,
+                         `email` varchar(255) DEFAULT NULL,
+                         `fullname` varchar(255) DEFAULT NULL,
+                         `gender` enum('FEMALE','MALE') DEFAULT NULL,
+                         `locked` bit(1) DEFAULT NULL,
+                         `password` varchar(255) DEFAULT NULL,
+                         `refresh_token` mediumtext,
+                         `updated_at` datetime(6) DEFAULT NULL,
+                         `role_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`user_id`),
+                         KEY `FKp56c1712k691lhsyewcssf40f` (`role_id`),
+                         CONSTRAINT `FKp56c1712k691lhsyewcssf40f` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1121,7 +1121,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.769286',NULL,'trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc Admin','MALE',_binary '\0','$2a$10$tC4IhQM1AjJdsnCS4Lgu5uRY6.ZNNuPi.9dUrLBgrhetOag3/X7o6','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cnVjbnZoZTE4MDI0OEBmcHQuZWR1LnZuIiwiZXhwIjoxNzUxNTY3NzQ3LCJpYXQiOjE3NDI5Mjc3NDcsImFjY291bnRUeXBlIjoiQ1JFREVOVElBTFMifQ.o9rHTz09sFZWTapc4sEiW8M5LoeuP1PRRrJVruv62-0IlPbVwnnE-vdUFvewT6SWB8HGzl521z3Ewj9ZgRPAmg','2025-03-25 18:35:47.199800',4),(2,'CREDENTIALS',_binary '','cuong.jpg','2025-02-14 10:56:50.772279',NULL,'cuongdo13042004@gmail.com','Do Xuan Cuong Admin','MALE',_binary '\0','$2a$10$vZJfI4a59Wah2IqC/CTxlOLCZnRRa9d2rjgmhkyFJT08es44SE8dK',NULL,'2025-03-25 18:27:23.400663',1),(3,'CREDENTIALS',_binary '','dung.jpg','2025-02-14 10:56:50.773282',NULL,'dung06032004@gmail.com','Tran Nam Dung Admin','MALE',_binary '\0','$2a$10$O0AjuLpnr0fAgWcR3jYrJeYgpvU8p5FBNA5Z2usBYuXrl/XOof/wC',NULL,NULL,1),(4,'CREDENTIALS',_binary '','duc.jpg','2025-02-14 10:56:50.775282',NULL,'ducnhhe186325@fpt.edu.vn','Nong Hoang Duc Admin','MALE',_binary '\0','$2a$10$D7tO60G8ZchfhgkNHpebpOBWiG/znZzUcp7ozUc5jYkn7Z/VG1XFi',NULL,NULL,1),(5,'CREDENTIALS',_binary '','truong.jpg','2025-02-14 10:56:50.775282',NULL,'luongtruong15122004@gmail.com','Luong Hoang Truong Admin','MALE',_binary '\0','$2a$10$/PEz3lZpTCTEP54fe1dBVeC6bRUyAbumTTT3JW81VMq3NrYP68h1G',NULL,NULL,1),(6,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.776283',NULL,'vuongtruc2004@gmail.com','Nguyen Vuong Truc Expert','MALE',_binary '\0','$2a$10$7bK28BYj16lVHFznZf9hX.AKqcnjv4xwaw2tlVhQyu/1rnVUaD7BS',NULL,'2025-03-25 18:28:48.690564',3),(7,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.777283',NULL,'vuongtruc20042@gmail.com','Vuong Truc Expert','MALE',_binary '\0','$2a$10$iGVslfwYEIBb1mhzwY9InujO.eJNWkBvZGps4aopLQeimga3yLyJ6',NULL,NULL,3),(8,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.778283',NULL,'vuongtruc20043@gmail.com','Anh Truc Expert','MALE',_binary '\0','$2a$10$W6/.UBd5AxOfx7Ld.n0N1empgiphyOapAQfNQ5Ra1Shd5lGVLvw.m',NULL,NULL,3),(9,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.779282',NULL,'vuongtruc2008@gmail.com','Nguyen Vuong Truc Marketing','MALE',_binary '\0','$2a$10$juJQTIE2Pz9KCqqq6MdJWeKrH8Q.FXnS0cd2sLm1ZmqATGQQdnyU6','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dW9uZ3RydWMyMDA4QGdtYWlsLmNvbSIsImV4cCI6MTc0OTU3MjQwNywiaWF0IjoxNzQwOTMyNDA3LCJhY2NvdW50VHlwZSI6IkNSRURFTlRJQUxTIn0.mGnWfudDc-Fbd7jsXqX-2j8LAD9rBxYctIV81YxoFV6BMZPnnM9-gr9k8PhW9Eg6N7kpR5-YvNeamo32lPcUfA','2025-03-02 16:20:07.525988',4),(10,'CREDENTIALS',_binary '','1742923483476-dog-9413394_1920.jpg','2025-02-14 10:56:50.780282',NULL,'1@gmail.com','Nguyen Vuong Truc Tron lupwong','MALE',_binary '\0','$2a$10$ZlDuG4L9DbhAD1AtLqS5vO8/I2ZTO8s8jb/8rXgB6shlMm7d.N3b2','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTc1MTU2NjYwMSwiaWF0IjoxNzQyOTI2NjAxLCJhY2NvdW50VHlwZSI6IkNSRURFTlRJQUxTIn0.bAOewH_--uSRZLPFhCYEKfia7_DNxVrRrBQgPM6qjpVfcttaJUxTFEN2H2Ijxpyt9D4e8tzltpYGx5-PDO6GqQ','2025-03-25 18:16:41.203573',2),(11,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.781283','2016-02-18 00:00:00.000000','2@gmail.com','Nguyen Vuong Truc 2','FEMALE',_binary '\0','$2a$10$ZJwsYFeXLvWTfAlItg/tRuQGBYb0cFICVYWvj8Ovr0ngXXPYqjQW6',NULL,'2025-02-25 02:35:02.343307',2),(12,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'3@gmail.com','Nguyen Vuong Truc 3','FEMALE',_binary '\0','$2a$10$ddgj0a/Ku6W2lIrswaYVJegGwh2NRitrTle.OVSX.BwEt.9OWvhRO',NULL,NULL,2),(13,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'4@gmail.com','Nguyen Vuong Truc 4','MALE',_binary '\0','$2a$10$TuasB4q/WxQAhhg6xsMobuDGyVB3Abfzk7lTzG9icBQQLQUoY4OrG',NULL,NULL,2),(14,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.785282',NULL,'5@gmail.com','Nguyen Vuong Truc 5','FEMALE',_binary '\0','$2a$10$OBhosIl/a7g9yFqf86g0I.Wp6HgVc/qicPPksdBk26LfrUhKF2VWG',NULL,NULL,2),(15,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.786282',NULL,'6@gmail.com','Nguyen Vuong Truc 6','MALE',_binary '\0','$2a$10$Iw.fn.7bEWck29yTAxD9ieTHLJeIWRNEaqsBv0l4906uedUcMTtwK',NULL,NULL,2),(16,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.787283',NULL,'7@gmail.com','Nguyen Vuong Truc 7','FEMALE',_binary '\0','$2a$10$IeyD85BhXGFP8ewqgE0vvOhByHBRzkgNBCYfvvbkRBaB/SvkCIJrm',NULL,NULL,2),(17,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.788282',NULL,'8@gmail.com','Nguyen Vuong Truc 8','MALE',_binary '\0','$2a$10$uJo2XAARVs3zB/7o5Z3xA.deaMtByis.v46uZ1Z.aY/4BhCskKlNy',NULL,NULL,2),(18,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.788282',NULL,'9@gmail.com','Nguyen Vuong Truc 9','FEMALE',_binary '\0','$2a$10$7OLvM.fezw/n.UnR9dfyRek0NWCyphhPstuls0S6GKRUkoEMwnYQe',NULL,NULL,2),(19,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.790362',NULL,'10@gmail.com','Nguyen Vuong Truc 10','MALE',_binary '\0','$2a$10$qXua6F2XD/AjEaNgtCim8.8he0iXsjYqelwbMcHerLI6pAcCF7W8e',NULL,NULL,2),(20,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.791363',NULL,'11@gmail.com','Nguyen Vuong Truc 11','FEMALE',_binary '\0','$2a$10$.jNRupXxR.8U73lToXuKTu4/s1tnwTNi55zWq2FZL7i0U9nRMqMwC',NULL,NULL,2),(21,'GOOGLE',_binary '','https://lh3.googleusercontent.com/a/ACg8ocINA6x0fKz0WIb9x7RyQST-hxYZjvUicoCpLVKlUE_w-zfg1zw=s96-c','2025-02-25 02:27:51.580424','2004-02-20 00:00:00.000000','trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc (K18 HL)','MALE',_binary '\0',NULL,NULL,'2025-03-25 18:16:35.816474',2),(22,'GITHUB',_binary '','https://avatars.githubusercontent.com/u/153248550?v=4','2025-02-25 02:28:58.692734',NULL,'trucnvhe180248@fpt.edu.vn','Vuong Truc (mail truong)',NULL,_binary '\0',NULL,NULL,'2025-02-25 02:30:34.535081',2),(24,'CREDENTIALS',_binary '',NULL,'2025-03-25 17:27:01.437117',NULL,'cuongne12344321@gmail.com','Dit me truong',NULL,_binary '\0','$2a$10$FTiXC1uowOS4u43rur/ng.OfwvRhFx3ka37Qr/shbzGbMktI3UGFy',NULL,'2025-03-25 17:28:35.153311',2),(25,'GOOGLE',_binary '','https://lh3.googleusercontent.com/a/ACg8ocK6Zhqua3v_y4esKqioPj3SkJSV449s0ObVJ3X7r63MwV9YRdU=s96-c','2025-03-25 17:29:35.780145',NULL,'ducducduc1111abcd@gmail.com','Hoàng Đức Nông',NULL,_binary '\0',NULL,'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkdWNkdWNkdWMxMTExYWJjZEBnbWFpbC5jb20iLCJleHAiOjE3NTE1NjM3NzUsImlhdCI6MTc0MjkyMzc3NSwiYWNjb3VudFR5cGUiOiJHT09HTEUifQ.VwbwDZIaCB0Pg7Uh8rJxs2WcdqGm8tcqiMkB-q9zzc1PbdSjLc0dxArxjt0Xd-L0ShD039J-f0nWalNp0nXmSg','2025-03-25 17:29:35.780145',2),(26,NULL,_binary '','1742924251136-11.jpg','2025-03-25 17:37:31.137985',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:37:31.137985',NULL),(27,NULL,_binary '','1742924258463-11.jpg','2025-03-25 17:37:38.464957',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:37:38.464957',NULL),(28,NULL,_binary '','1742924399636-11.jpg','2025-03-25 17:39:59.637871',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:39:59.637871',NULL),(29,NULL,_binary '','1742924400492-11.jpg','2025-03-25 17:40:00.493083',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:40:00.493083',NULL),(30,'CREDENTIALS',_binary '','1742924399636-11.jpg','2025-03-25 17:40:00.587816','2004-03-01 00:00:00.000000','123@gmail.com','Nguyen Vuong','FEMALE',_binary '\0','$2a$10$JsCrPCJNiWWe1uUp6mrQiuhGg2H2BkpR442IQUc3EUNw6qHdH8O36',NULL,'2025-03-25 17:47:24.153313',4),(31,NULL,_binary '','1742926179718-18.jpg','2025-03-25 18:09:39.719312',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 18:09:39.719312',NULL),(32,NULL,_binary '','1742926189644-18.jpg','2025-03-25 18:09:49.645834',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 18:09:49.645834',NULL);
+INSERT INTO `users` VALUES (1,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.769286',NULL,'trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc Admin','MALE',_binary '\0','$2a$10$tC4IhQM1AjJdsnCS4Lgu5uRY6.ZNNuPi.9dUrLBgrhetOag3/X7o6','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cnVjbnZoZTE4MDI0OEBmcHQuZWR1LnZuIiwiZXhwIjoxNzUxNTY3NzQ3LCJpYXQiOjE3NDI5Mjc3NDcsImFjY291bnRUeXBlIjoiQ1JFREVOVElBTFMifQ.o9rHTz09sFZWTapc4sEiW8M5LoeuP1PRRrJVruv62-0IlPbVwnnE-vdUFvewT6SWB8HGzl521z3Ewj9ZgRPAmg','2025-03-25 18:35:47.199800',4),(2,'CREDENTIALS',_binary '','cuong.jpg','2025-02-14 10:56:50.772279',NULL,'cuongdo13042004@gmail.com','Do Xuan Cuong Admin','MALE',_binary '\0','$2a$10$vZJfI4a59Wah2IqC/CTxlOLCZnRRa9d2rjgmhkyFJT08es44SE8dK',NULL,'2025-03-25 18:27:23.400663',1),(3,'CREDENTIALS',_binary '','dung.jpg','2025-02-14 10:56:50.773282',NULL,'dung06032004@gmail.com','Tran Nam Dung Admin','MALE',_binary '\0','$2a$10$O0AjuLpnr0fAgWcR3jYrJeYgpvU8p5FBNA5Z2usBYuXrl/XOof/wC',NULL,NULL,1),(4,'CREDENTIALS',_binary '','duc.jpg','2025-02-14 10:56:50.775282',NULL,'ducnhhe186325@fpt.edu.vn','Nong Hoang Duc Admin','MALE',_binary '\0','$2a$10$D7tO60G8ZchfhgkNHpebpOBWiG/znZzUcp7ozUc5jYkn7Z/VG1XFi',NULL,NULL,1),(5,'CREDENTIALS',_binary '','truong.jpg','2025-02-14 10:56:50.775282',NULL,'luongtruong15122004@gmail.com','Luong Hoang Truong Admin','MALE',_binary '\0','$2a$10$/PEz3lZpTCTEP54fe1dBVeC6bRUyAbumTTT3JW81VMq3NrYP68h1G',NULL,NULL,1),(6,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.776283',NULL,'vuongtruc2004@gmail.com','Nguyen Vuong Truc Expert','MALE',_binary '\0','$2a$10$7bK28BYj16lVHFznZf9hX.AKqcnjv4xwaw2tlVhQyu/1rnVUaD7BS',NULL,'2025-03-25 19:27:51.082892',3),(7,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.777283',NULL,'vuongtruc20042@gmail.com','Vuong Truc Expert','MALE',_binary '\0','$2a$10$iGVslfwYEIBb1mhzwY9InujO.eJNWkBvZGps4aopLQeimga3yLyJ6','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2dW9uZ3RydWMyMDA0MkBnbWFpbC5jb20iLCJleHAiOjE3NTE1NzA4NzgsImlhdCI6MTc0MjkzMDg3OCwiYWNjb3VudFR5cGUiOiJDUkVERU5USUFMUyJ9.GucCVrD1YOY-BsX4GdB2l4r4aZQahbcWPDshUMNFPPxUgr8zC4RPIBBuQFI7vbyiKNmh7WIyxDoUKcbgvpFFhA','2025-03-25 19:27:58.267141',3),(8,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.778283',NULL,'vuongtruc20043@gmail.com','Anh Truc Expert','MALE',_binary '\0','$2a$10$W6/.UBd5AxOfx7Ld.n0N1empgiphyOapAQfNQ5Ra1Shd5lGVLvw.m',NULL,NULL,3),(9,'CREDENTIALS',_binary '','truc.jpg','2025-02-14 10:56:50.779282',NULL,'vuongtruc2008@gmail.com','Nguyen Vuong Truc Marketing','MALE',_binary '\0','$2a$10$juJQTIE2Pz9KCqqq6MdJWeKrH8Q.FXnS0cd2sLm1ZmqATGQQdnyU6',NULL,'2025-03-25 18:49:14.172652',4),(10,'CREDENTIALS',_binary '','1742923483476-dog-9413394_1920.jpg','2025-02-14 10:56:50.780282',NULL,'1@gmail.com','Nguyen Vuong Truc Tron lupwong','MALE',_binary '\0','$2a$10$ZlDuG4L9DbhAD1AtLqS5vO8/I2ZTO8s8jb/8rXgB6shlMm7d.N3b2','eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTc1MTU2NjYwMSwiaWF0IjoxNzQyOTI2NjAxLCJhY2NvdW50VHlwZSI6IkNSRURFTlRJQUxTIn0.bAOewH_--uSRZLPFhCYEKfia7_DNxVrRrBQgPM6qjpVfcttaJUxTFEN2H2Ijxpyt9D4e8tzltpYGx5-PDO6GqQ','2025-03-25 18:16:41.203573',2),(11,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.781283','2016-02-18 00:00:00.000000','2@gmail.com','Nguyen Vuong Truc 2','FEMALE',_binary '\0','$2a$10$ZJwsYFeXLvWTfAlItg/tRuQGBYb0cFICVYWvj8Ovr0ngXXPYqjQW6',NULL,'2025-02-25 02:35:02.343307',2),(12,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'3@gmail.com','Nguyen Vuong Truc 3','FEMALE',_binary '\0','$2a$10$ddgj0a/Ku6W2lIrswaYVJegGwh2NRitrTle.OVSX.BwEt.9OWvhRO',NULL,NULL,2),(13,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.784283',NULL,'4@gmail.com','Nguyen Vuong Truc 4','MALE',_binary '\0','$2a$10$TuasB4q/WxQAhhg6xsMobuDGyVB3Abfzk7lTzG9icBQQLQUoY4OrG',NULL,NULL,2),(14,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.785282',NULL,'5@gmail.com','Nguyen Vuong Truc 5','FEMALE',_binary '\0','$2a$10$OBhosIl/a7g9yFqf86g0I.Wp6HgVc/qicPPksdBk26LfrUhKF2VWG',NULL,NULL,2),(15,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.786282',NULL,'6@gmail.com','Nguyen Vuong Truc 6','MALE',_binary '\0','$2a$10$Iw.fn.7bEWck29yTAxD9ieTHLJeIWRNEaqsBv0l4906uedUcMTtwK',NULL,NULL,2),(16,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.787283',NULL,'7@gmail.com','Nguyen Vuong Truc 7','FEMALE',_binary '\0','$2a$10$IeyD85BhXGFP8ewqgE0vvOhByHBRzkgNBCYfvvbkRBaB/SvkCIJrm',NULL,NULL,2),(17,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.788282',NULL,'8@gmail.com','Nguyen Vuong Truc 8','MALE',_binary '\0','$2a$10$uJo2XAARVs3zB/7o5Z3xA.deaMtByis.v46uZ1Z.aY/4BhCskKlNy',NULL,NULL,2),(18,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.788282',NULL,'9@gmail.com','Nguyen Vuong Truc 9','FEMALE',_binary '\0','$2a$10$7OLvM.fezw/n.UnR9dfyRek0NWCyphhPstuls0S6GKRUkoEMwnYQe',NULL,NULL,2),(19,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.790362',NULL,'10@gmail.com','Nguyen Vuong Truc 10','MALE',_binary '\0','$2a$10$qXua6F2XD/AjEaNgtCim8.8he0iXsjYqelwbMcHerLI6pAcCF7W8e',NULL,NULL,2),(20,'CREDENTIALS',_binary '',NULL,'2025-02-14 10:56:50.791363',NULL,'11@gmail.com','Nguyen Vuong Truc 11','FEMALE',_binary '\0','$2a$10$.jNRupXxR.8U73lToXuKTu4/s1tnwTNi55zWq2FZL7i0U9nRMqMwC',NULL,NULL,2),(21,'GOOGLE',_binary '','https://lh3.googleusercontent.com/a/ACg8ocINA6x0fKz0WIb9x7RyQST-hxYZjvUicoCpLVKlUE_w-zfg1zw=s96-c','2025-02-25 02:27:51.580424','2004-02-20 00:00:00.000000','trucnvhe180248@fpt.edu.vn','Nguyen Vuong Truc (K18 HL)','MALE',_binary '\0',NULL,NULL,'2025-03-25 18:16:35.816474',2),(22,'GITHUB',_binary '','https://avatars.githubusercontent.com/u/153248550?v=4','2025-02-25 02:28:58.692734',NULL,'trucnvhe180248@fpt.edu.vn','Vuong Truc (mail truong)',NULL,_binary '\0',NULL,NULL,'2025-02-25 02:30:34.535081',2),(24,'CREDENTIALS',_binary '',NULL,'2025-03-25 17:27:01.437117',NULL,'cuongne12344321@gmail.com','Dit me truong',NULL,_binary '\0','$2a$10$FTiXC1uowOS4u43rur/ng.OfwvRhFx3ka37Qr/shbzGbMktI3UGFy',NULL,'2025-03-25 17:28:35.153311',2),(25,'GOOGLE',_binary '','https://lh3.googleusercontent.com/a/ACg8ocK6Zhqua3v_y4esKqioPj3SkJSV449s0ObVJ3X7r63MwV9YRdU=s96-c','2025-03-25 17:29:35.780145',NULL,'ducducduc1111abcd@gmail.com','Hoàng Đức Nông',NULL,_binary '\0',NULL,'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkdWNkdWNkdWMxMTExYWJjZEBnbWFpbC5jb20iLCJleHAiOjE3NTE1NjM3NzUsImlhdCI6MTc0MjkyMzc3NSwiYWNjb3VudFR5cGUiOiJHT09HTEUifQ.VwbwDZIaCB0Pg7Uh8rJxs2WcdqGm8tcqiMkB-q9zzc1PbdSjLc0dxArxjt0Xd-L0ShD039J-f0nWalNp0nXmSg','2025-03-25 17:29:35.780145',2),(26,NULL,_binary '','1742924251136-11.jpg','2025-03-25 17:37:31.137985',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:37:31.137985',NULL),(27,NULL,_binary '','1742924258463-11.jpg','2025-03-25 17:37:38.464957',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:37:38.464957',NULL),(28,NULL,_binary '','1742924399636-11.jpg','2025-03-25 17:39:59.637871',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:39:59.637871',NULL),(29,NULL,_binary '','1742924400492-11.jpg','2025-03-25 17:40:00.493083',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 17:40:00.493083',NULL),(30,'CREDENTIALS',_binary '','1742924399636-11.jpg','2025-03-25 17:40:00.587816','2004-03-01 00:00:00.000000','123@gmail.com','Nguyen Vuong','FEMALE',_binary '\0','$2a$10$JsCrPCJNiWWe1uUp6mrQiuhGg2H2BkpR442IQUc3EUNw6qHdH8O36',NULL,'2025-03-25 17:47:24.153313',4),(31,NULL,_binary '','1742926179718-18.jpg','2025-03-25 18:09:39.719312',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 18:09:39.719312',NULL),(32,NULL,_binary '','1742926189644-18.jpg','2025-03-25 18:09:49.645834',NULL,NULL,NULL,NULL,_binary '\0',NULL,NULL,'2025-03-25 18:09:49.645834',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1134,4 +1134,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-26  1:37:04
+-- Dump completed on 2025-03-26  2:43:58
