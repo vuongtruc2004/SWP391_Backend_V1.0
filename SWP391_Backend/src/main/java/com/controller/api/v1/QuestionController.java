@@ -20,8 +20,8 @@ import java.util.List;
 @RequestMapping("/api/v1/questions")
 @RequiredArgsConstructor
 public class QuestionController {
+    
     private final QuestionService questionService;
-
 
     @ApiMessage("Lấy tất cả câu hỏi thành công!")
     @GetMapping

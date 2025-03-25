@@ -5,7 +5,6 @@ import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.OrderResponse;
 import com.dto.response.PageDetailsResponse;
 import com.entity.OrderEntity;
-import com.service.OrderDetailService;
 import com.service.OrderService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
@@ -25,15 +24,10 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderDetailService orderDetailService;
 
     @ApiMessage("Lấy tất cả hóa đơn thành công")
     @GetMapping
-    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getOrdersWithFilter(
-            Pageable pageable,
-            @Filter Specification<OrderEntity> specification
-    ) {
-
+    public ResponseEntity<PageDetailsResponse<List<OrderResponse>>> getOrdersWithFilter(Pageable pageable, @Filter Specification<OrderEntity> specification) {
         PageDetailsResponse<List<OrderResponse>> response = orderService.getOrdersWithFilters(pageable, specification);
         return ResponseEntity.ok(response);
     }

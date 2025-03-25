@@ -9,7 +9,7 @@ import com.entity.BlogEntity;
 import com.service.BlogService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/blogs")
+@RequiredArgsConstructor
 public class BlogController {
 
     private final BlogService blogService;
-
-    @Autowired
-    public BlogController(BlogService blogService) {
-        this.blogService = blogService;
-    }
 
     @ApiMessage("Lấy các bài viết thành công!")
     @GetMapping
@@ -66,7 +62,7 @@ public class BlogController {
 
     @GetMapping("/all")
     public ResponseEntity<PageDetailsResponse<List<BlogDetailsResponse>>> getAllBlogsPageAdmin(@Filter Specification<BlogEntity> specification, Pageable pageable) {
-        return  ResponseEntity.ok(blogService.getBlogWithFilterPageAdmin(specification, pageable));
+        return ResponseEntity.ok(blogService.getBlogWithFilterPageAdmin(specification, pageable));
     }
 
     @PatchMapping("/update/{blogId}")

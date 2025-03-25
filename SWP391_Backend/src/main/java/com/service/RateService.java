@@ -63,7 +63,7 @@ public class RateService {
         UserEntity user = userServiceHelper.extractUserFromToken();
         Optional<RateEntity> rateOptional = rateRepository.findByCourse_CourseIdAndUser_UserId(courseId, user.getUserId());
         RateEntity rateEntity = null;
-        if(rateOptional.isPresent()) {
+        if (rateOptional.isPresent()) {
             rateEntity = rateOptional.get();
         } else {
             return BuildResponse.buildApiResponse(
@@ -101,15 +101,13 @@ public class RateService {
     }
 
     public ApiResponse<String> deleteRating(Long rateId) {
-        if (rateRepository.existsById(rateId)) {
-            RateEntity rateEntity = rateRepository.findById(rateId).get();
-            rateEntity.setCourse(null);
-            rateEntity.setUser(null);
-            rateRepository.save(rateEntity);
-            rateRepository.delete(rateEntity);
-        } else {
-            throw new NotFoundException("Không tìm thấy Id môn học!");
-        }
+        RateEntity rateEntity = rateRepository.findById(rateId).
+                orElseThrow(() -> new NotFoundException("Không tìm thấy Id môn học!"));
+        
+        rateEntity.setCourse(null);
+        rateEntity.setUser(null);
+        rateRepository.save(rateEntity);
+        rateRepository.delete(rateEntity);
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
                 "Thành công!",

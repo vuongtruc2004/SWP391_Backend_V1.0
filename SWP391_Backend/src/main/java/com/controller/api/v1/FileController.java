@@ -3,6 +3,7 @@ package com.controller.api.v1;
 import com.dto.response.ApiResponse;
 import com.exception.custom.StorageException;
 import com.service.FileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,17 +19,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/files")
+@RequiredArgsConstructor
 public class FileController {
 
     @Value("${assets.uri}")
     private String assetURI;
 
     private final FileService fileService;
-
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
-    }
-
+    
     @PostMapping("/image")
     public ResponseEntity<ApiResponse<String>> uploadImage(
             @RequestParam(name = "file", required = false) MultipartFile file,
@@ -49,6 +47,7 @@ public class FileController {
         fileService.createDirectory(assetURI + "/" + folder);
         return ResponseEntity.ok().body(fileService.uploadImage(file, folder));
     }
+
     @PostMapping("/document")
     public ResponseEntity<ApiResponse<String>> uploadDocument(
             @RequestParam(name = "file", required = false) MultipartFile file,

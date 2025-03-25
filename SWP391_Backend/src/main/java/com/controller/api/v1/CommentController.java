@@ -18,19 +18,14 @@ import java.util.List;
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
+    
     private final CommentService commentService;
-
-//    //get all comment
-//    @GetMapping
-//    public ResponseEntity<PageDetailsResponse<List<CommentResponse>>> getAllComments(@Filter Specification<CommentEntity> specification, Pageable pageable) {
-//        return ResponseEntity.ok(commentService.getAllComments(specification, pageable));
-//    }
 
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<CommentResponse>>> getAllCommentsOfBlogWithFilter(
             @Filter Specification<CommentEntity> specification,
             Pageable pageable
-    ){
+    ) {
         return ResponseEntity.ok(commentService.getAllCommentsOfBlogWithFilter(specification, pageable));
     }
 

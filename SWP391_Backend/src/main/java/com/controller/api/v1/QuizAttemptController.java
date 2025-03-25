@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/quiz-attempts")
 @RequiredArgsConstructor
 public class QuizAttemptController {
+    
     private final QuizAttemptService quizAttemptService;
 
     @ApiMessage("Tạo quizAttempt thành công")

@@ -4,6 +4,7 @@ import com.configuration.custom.AuthenticationEntryPointCustom;
 import com.exception.custom.InvalidTokenException;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -21,38 +22,47 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {
-            "/storage/**",
+    public static final String[] PUBLIC_ENDPOINTS = {
+            "/ws/**",
             "/api/v1/auth/**",
-            "api/v1/blogs/**",
-            "api/v1/courses/**",
-            "api/v1/subjects/**",
-            "/api/v1/users/**",
-            "/api/v1/otp/**",
-            "/api/v1/orders/**",
-            "/api/v1/orderDetails/**",
-            "/api/v1/rates/**",
-            "/api/v1/experts/**",
-            "/api/v1/questions/**",
-            "/api/v1/notifications/**",
-            "/api/v1/quizzes/**",
-            "/api/v1/answers/**",
-            "/api/v1/files/**",
-            "/api/v1/purchase/**",
-            "/api/v1/hashtags/**",
-            "/api/v1/coupons/**",
-            "/api/v1/likes/**",
-            "/api/v1/comments/**",
-            "/api/v1/campaigns/**"
+            "/storage/**",
+            "/api/v1/files",
+            "/api/v1/experts",
+            "/api/v1/experts/course",
+            "/api/v1/courses",
+            "/api/v1/courses/accepted/{courseId}",
+            "/api/v1/courses/purchased",
+            "/api/v1/courses/suggestion",
+            "/api/v1/courses/{courseId}",
+            "/api/v1/otp",
+            "/api/v1/users/active/{code}",
+            "/api/v1/users/change_password",
+            "/api/v1/users/request_change_password",
+            "/api/v1/users/request_register",
+            "/api/v1/hashtags/all",
+            "/api/v1/coupons/available",
+            "/api/v1/subjects",
+            "/api/v1/subjects/courses",
+            "/api/v1/files/image",
+            "/api/v1/blogs",
+            "/api/v1/blogs/all",
+            "/api/v1/blogs/author",
+            "/api/v1/blogs/pinned",
+            "/api/v1/blogs/{id}",
+            "/api/v1/rates",
+            "/api/v1/rates/levels",
+            "/api/v1/comments",
+            "/api/v1/comments/child-comment/{parentCommentId}",
+            "/api/v1/comments/get-comment/{commentId}",
+            "/api/v1/campaigns/all",
+            "/api/v1/campaigns/price-range",
+            "/api/v1/purchase/vnpay-ipn"
     };
 
     private final SecurityUtil securityUtil;
-
-    public SecurityConfig(SecurityUtil securityUtil) {
-        this.securityUtil = securityUtil;
-    }
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, AuthenticationEntryPointCustom authenticationEntryPointCustom) throws Exception {

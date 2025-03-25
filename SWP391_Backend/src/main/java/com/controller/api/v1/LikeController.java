@@ -1,20 +1,17 @@
 package com.controller.api.v1;
 
 import com.dto.request.LikeRequest;
-import com.dto.response.LikeResponse;
 import com.service.LikeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/likes")
+@RequiredArgsConstructor
 public class LikeController {
 
     private final LikeService likeService;
-
-    public LikeController(LikeService likeService) {
-        this.likeService = likeService;
-    }
 
     @PostMapping
     public ResponseEntity<Void> addLike(@RequestBody LikeRequest likeRequest) {

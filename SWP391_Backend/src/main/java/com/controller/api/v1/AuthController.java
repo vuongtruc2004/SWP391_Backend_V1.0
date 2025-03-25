@@ -5,19 +5,16 @@ import com.dto.request.SocialsLoginRequest;
 import com.dto.response.LoginResponse;
 import com.service.auth.AuthService;
 import com.service.auth.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-
-    public AuthController(AuthService authService, JwtService jwtService) {
-        this.authService = authService;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/login/credentials")
     public LoginResponse credentialLogin(@RequestBody CredentialsLoginRequest credentialsLoginRequest) {

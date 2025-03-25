@@ -39,7 +39,6 @@ public class RateController {
         return ResponseEntity.ok(rateService.getNumberOfCoursesOfEachRate(courseId));
     }
 
-
     @ApiMessage("Lấy đánh giá của bản thân về khóa học thành công!")
     @GetMapping("/my-rate/{courseId}")
     public ResponseEntity<ApiResponse<RateResponse>> getMyRate(@PathVariable Long courseId) {
@@ -48,7 +47,7 @@ public class RateController {
 
     @ApiMessage("Đánh giá khóa học thành công!")
     @PostMapping
-    public ResponseEntity<ApiResponse<RateResponse>> rateCourse(@RequestBody RateRequest rateRequest ) {
+    public ResponseEntity<ApiResponse<RateResponse>> rateCourse(@RequestBody RateRequest rateRequest) {
         return ResponseEntity.ok(rateService.rateCourse(rateRequest));
     }
 
@@ -63,6 +62,4 @@ public class RateController {
     public ResponseEntity<ApiResponse<RateResponse>> updateRating(@PathVariable Long rateId, @RequestBody RateRequest rateRequest) {
         return ResponseEntity.ok(rateService.updateRating(rateId, rateRequest));
     }
-
-
 }

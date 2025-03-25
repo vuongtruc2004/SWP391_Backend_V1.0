@@ -34,6 +34,7 @@ public class ExpertController {
     public ResponseEntity<ExpertDetailsResponse> getExpertById(@PathVariable Long userId) {
         return ResponseEntity.ok(expertService.getExpertById(userId));
     }
+
     @ApiMessage("Theo dõi chuyên gia thành công!")
     @PostMapping("/follow/{expertId}")
     public ResponseEntity<ExpertDetailsResponse> followExpert(@PathVariable Long expertId) {
@@ -45,7 +46,6 @@ public class ExpertController {
     public ResponseEntity<List<CourseDetailsResponse>> getAllCoursesByExpert() {
         return ResponseEntity.ok(expertService.getAllCoursesByExpert());
     }
-
 
     @ApiMessage("Lấy tất cả chuyên gia thành công!")
     @GetMapping

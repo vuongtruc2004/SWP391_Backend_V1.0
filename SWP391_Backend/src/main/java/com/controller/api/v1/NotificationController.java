@@ -6,9 +6,9 @@ import com.dto.response.NotificationResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.UserNotificationResponse;
 import com.entity.NotificationEntity;
-import com.repository.UserNotificationRepository;
 import com.service.NotificationService;
 import com.turkraft.springfilter.boot.Filter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/notifications")
+@RequiredArgsConstructor
 public class NotificationController {
-    private final NotificationService notificationService;
-    private final UserNotificationRepository userNotificationRepository;
 
-    public NotificationController(NotificationService notificationService, UserNotificationRepository userNotificationRepository) {
-        this.notificationService = notificationService;
-        this.userNotificationRepository = userNotificationRepository;
-    }
+    private final NotificationService notificationService;
 
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<UserNotificationResponse>>> getNotifications(@RequestParam(name = "status", required = false) String status, Pageable pageable) {
@@ -69,7 +65,7 @@ public class NotificationController {
     public ResponseEntity<PageDetailsResponse<List<UserNotificationResponse>>> getUserNotifications(
             @PathVariable("notificationId") Long notificationId,
             Pageable pageable
-            ) {
+    ) {
         return ResponseEntity.ok(notificationService.getUserNotificationBYNotificationId(notificationId, pageable));
     }
 

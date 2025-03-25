@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HashtagController {
     private final HashtagService hashtagService;
+    
     @GetMapping("/all")
     public ResponseEntity<List<HashtagResponse>> getAllHashtags() {
         return ResponseEntity.ok(hashtagService.getAllHashtags());

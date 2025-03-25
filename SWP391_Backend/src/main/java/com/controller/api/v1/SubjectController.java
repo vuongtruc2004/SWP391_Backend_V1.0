@@ -8,6 +8,7 @@ import com.entity.SubjectEntity;
 import com.service.SubjectService;
 import com.turkraft.springfilter.boot.Filter;
 import com.util.annotation.ApiMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/subjects")
+@RequiredArgsConstructor
 public class SubjectController {
 
     private final SubjectService subjectService;
-
-    public SubjectController(SubjectService subjectService) {
-        this.subjectService = subjectService;
-    }
 
     @ApiMessage("Lấy các lĩnh vực thành công!")
     @GetMapping
