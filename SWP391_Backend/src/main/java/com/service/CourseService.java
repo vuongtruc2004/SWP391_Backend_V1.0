@@ -320,4 +320,15 @@ public class CourseService {
         Set<CourseEntity> courseEntities = courseRepository.findAllByCampaignIsNull();
         return this.courseServiceHelper.convertToCourseResponseList(courseEntities);
     }
+    public void approvedCourse(Long courseId){
+        CourseEntity courseEntity=this.courseRepository.findById(courseId).orElse(null);
+        courseEntity.setCourseStatus(CourseStatusEnum.APPROVED);
+        courseRepository.save(courseEntity);
+    }
+
+    public void rejectedCourse(Long courseId){
+        CourseEntity courseEntity=this.courseRepository.findById(courseId).orElse(null);
+        courseEntity.setCourseStatus(CourseStatusEnum.REJECTED);
+        courseRepository.save(courseEntity);
+    }
 }

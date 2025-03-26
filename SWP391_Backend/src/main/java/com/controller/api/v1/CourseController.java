@@ -137,4 +137,18 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> getAllCoursesNotInCampaign() {
         return ResponseEntity.ok(courseService.getAllCoursesNotInCampaign());
     }
+
+    @ApiMessage("Duyệt khoá học thành công !")
+    @PostMapping("/approved/{courseId}")
+    public ResponseEntity<ApiResponse<Void>> approveCourse(@PathVariable Long courseId) {
+        this.courseService.approvedCourse(courseId);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiMessage("Từ chối duyệt khoá học thành công !")
+    @PostMapping("/rejected/{courseId}")
+    public ResponseEntity<ApiResponse<Void>> rejectedCourse(@PathVariable Long courseId) {
+        this.courseService.rejectedCourse(courseId);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -39,7 +39,7 @@ public class PurchaseService {
     private final CourseRepository courseRepository;
     private final CouponRepository couponRepository;
     private final CartCourseRepository cartCourseRepository;
-    private final RedisService redisService;
+    //private final RedisService redisService;
 
     @Value("${vnpay.tmn.code}")
     private String tmnCode;
@@ -126,7 +126,7 @@ public class PurchaseService {
                 }
             }
         }
-        redisService.removeOrderInRedis(order);
+        //redisService.removeOrderInRedis(order);
     }
 
     public void processIpn(Map<String, String> params) {
@@ -161,7 +161,7 @@ public class PurchaseService {
         }
         OrderEntity orderEntity = orderRepository.findByOrderIdAndPaidAtIsNull(orderId)
                 .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại hoặc đã được thanh toán!"));
-        redisService.removeOrderInRedis(orderEntity);
+        //redisService.removeOrderInRedis(orderEntity);
         orderServiceHelper.returnCouponThenDeleteOrder(orderEntity);
     }
 
@@ -219,7 +219,7 @@ public class PurchaseService {
             orderEntity.setCoupon(coupon);
         }
         OrderEntity newOrder = orderRepository.save(orderEntity);
-        redisService.saveOrderToRedis(newOrder);
+        //redisService.saveOrderToRedis(newOrder);
         return newOrder;
     }
 }

@@ -34,7 +34,7 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final ModelMapper modelMapper;
     private final CourseRepository courseRepository;
-    private final RedisService redisService;
+//    private final RedisService redisService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public PageDetailsResponse<List<CampaignResponse>> getAllCampaignsWithFilter(Pageable pageable, Specification<CampaignEntity> specification) {
@@ -73,7 +73,7 @@ public class CampaignService {
         CampaignEntity savedCampaignEntity = campaignRepository.save(campaignEntity);
 
         setCampaignToCourses(savedCampaignEntity, request);
-        redisService.saveCampaignToRedis(savedCampaignEntity);
+        //redisService.saveCampaignToRedis(savedCampaignEntity);
         simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
         return modelMapper.map(campaignEntity, CampaignResponse.class);
     }
@@ -87,7 +87,7 @@ public class CampaignService {
         }
         campaignRepository.delete(campaign);
         simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
-        redisService.removeCampaignFromRedis(campaign);
+        //redisService.removeCampaignFromRedis(campaign);
     }
 
     @Transactional
@@ -124,7 +124,7 @@ public class CampaignService {
         }
 
         setCampaignToCourses(savedCampaignEntity, request);
-        redisService.saveCampaignToRedis(savedCampaignEntity);
+       // redisService.saveCampaignToRedis(savedCampaignEntity);
         simpMessagingTemplate.convertAndSend("/topic/purchased", MessageStatusNotificationEnum.CAMPAIGN.toString());
         return modelMapper.map(savedCampaignEntity, CampaignResponse.class);
     }
