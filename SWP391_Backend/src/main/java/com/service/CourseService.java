@@ -196,7 +196,7 @@ public class CourseService {
 
         if (!userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    root.get("courseStatusEnum").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.APPROVED)
+                    root.get("courseStatus").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.APPROVED)
             );
         }
 
