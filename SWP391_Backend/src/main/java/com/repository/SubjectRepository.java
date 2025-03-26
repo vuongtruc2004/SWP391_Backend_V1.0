@@ -4,10 +4,10 @@ import com.entity.SubjectEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.Instant;
+import java.util.Collection;
+import java.util.Set;
 
 public interface SubjectRepository extends JpaSpecificationRepository<SubjectEntity, Long> {
     @Query("SELECT s FROM SubjectEntity s " +
@@ -16,8 +16,7 @@ public interface SubjectRepository extends JpaSpecificationRepository<SubjectEnt
 
     boolean existsBySubjectName(String subjectName);
 
-    SubjectEntity findBySubjectName(String subjectName);
-
     boolean existsBySubjectNameAndSubjectIdNot(String subjectName, Long subjectId);
 
+    Set<SubjectEntity> findAllBySubjectNameIn(Collection<String> subjectNames);
 }

@@ -42,11 +42,9 @@ public class CourseEntity implements Serializable {
 
     @Column(name = "course_status")
     @Enumerated(EnumType.STRING)
-    CourseStatusEnum courseStatusEnum;
+    CourseStatusEnum courseStatus;
 
     Double price;
-
-    Boolean accepted;
 
     @Column(name = "created_at")
     Instant createdAt;
@@ -83,20 +81,10 @@ public class CourseEntity implements Serializable {
     @JoinColumn(name = "campaign_id")
     CampaignEntity campaign;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    CartEntity cart;
-
     @PrePersist
     public void handlePrePersist() {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
-        if (this.introduction == null) {
-            introduction = "https://youtu.be/TJV6VC83rwo?si=5Q5oR5G7GREnngxv";
-        }
-        if (accepted == null) {
-            accepted = false;
-        }
     }
 
     @PreUpdate

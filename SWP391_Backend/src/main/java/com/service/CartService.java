@@ -15,6 +15,7 @@ import com.repository.CartRepository;
 import com.repository.CourseRepository;
 import com.repository.UserRepository;
 import com.util.enums.CartCourseStatus;
+import com.util.enums.CourseStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class CartService {
         Set<CourseEntity> purchasedCourses = user.getCourses() == null ? new HashSet<>() : new HashSet<>(user.getCourses());
 
         for (StorageCourseRequest storageCourseRequest : storageCourses) {
-            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(storageCourseRequest.getCourseId())
+            CourseEntity course = courseRepository.findByCourseIdAndCourseStatus(storageCourseRequest.getCourseId(), CourseStatusEnum.APPROVED)
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
             if (!cartServiceHelper.isExistedCourseInCart(course.getCourseId(), currentCoursesInCart) && !purchasedCourses.contains(course)) {
@@ -77,7 +78,7 @@ public class CartService {
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(storageCourseRequest.getCourseId())
+        CourseEntity course = courseRepository.findByCourseIdAndCourseStatus(storageCourseRequest.getCourseId(), CourseStatusEnum.APPROVED)
                 .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
         CartEntity cart = user.getCart();
@@ -106,7 +107,7 @@ public class CartService {
         CartEntity cart = user.getCart();
         if (cart != null && cart.getCartCourses() != null) {
             for (Long courseId : courseIds) {
-                CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+                CourseEntity course = courseRepository.findByCourseIdAndCourseStatus(courseId, CourseStatusEnum.APPROVED)
                         .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
                 CartCourseEntity cartCourseEntity = cartCourseRepository.findByCartAndCourse(cart, course)
@@ -124,7 +125,7 @@ public class CartService {
         }
         CartEntity cart = user.getCart();
         if (cart != null && cart.getCartCourses() != null) {
-            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+            CourseEntity course = courseRepository.findByCourseIdAndCourseStatus(courseId, CourseStatusEnum.APPROVED)
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
             CartCourseEntity cartCourseEntity = cartCourseRepository.findByCartAndCourse(cart, course)

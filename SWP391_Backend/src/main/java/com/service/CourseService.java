@@ -9,7 +9,6 @@ import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
-import com.entity.SubjectEntity;
 import com.entity.UserEntity;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
@@ -20,6 +19,7 @@ import com.helper.UserServiceHelper;
 import com.repository.ChapterRepository;
 import com.repository.CourseRepository;
 import com.repository.ExpertRepository;
+import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
 import com.util.enums.CourseStatusEnum;
@@ -48,6 +48,7 @@ public class CourseService {
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
     private final SubjectService subjectService;
+    private final SubjectRepository subjectRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -105,10 +106,10 @@ public class CourseService {
         );
     }
 
-    public CourseDetailsResponse getCourseByIdAndAccepted(Long courseId) {
+    public CourseDetailsResponse getCourseByIdAndApproved(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
-        if (Boolean.FALSE.equals(courseEntity.getAccepted())) {
+        if (!courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED)) {
             throw new CourseException("Khóa học không tồn tại!");
         }
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
@@ -183,7 +184,7 @@ public class CourseService {
             Boolean accepted
     ) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        if(userEntity==null){
+        if (userEntity == null) {
             throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
         }
 
@@ -193,13 +194,11 @@ public class CourseService {
             );
         }
 
-
         if (!userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    root.get("courseStatusEnum").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.SUCCESS)
+                    root.get("courseStatusEnum").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.APPROVED)
             );
         }
-
 
         if (accepted != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
@@ -227,7 +226,7 @@ public class CourseService {
     public ApiResponse<String> deleteByCourseId(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
-        if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getAccepted())) {
+        if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED))) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity);
                 expertRepository.save(expert);
@@ -247,104 +246,56 @@ public class CourseService {
         );
     }
 
-    public ApiResponse<String> changeAcceptStatusOfCourse(Long courseId) {
-        CourseEntity courseEntity = courseRepository.findById(courseId)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
-
-        if (courseEntity.getChapters() == null || courseEntity.getChapters().isEmpty()) {
-            throw new InvalidRequestInput("Khóa học này chưa có bài giảng, không thể kích hoạt");
-        }
-
-        String message = "ẩn";
-        if (Boolean.TRUE.equals(courseEntity.getAccepted())) {
-            courseEntity.setCourseStatusEnum(CourseStatusEnum.REJECT);
-            courseEntity.setAccepted(false);
-        } else {
-            message = "chấp nhận";
-            courseEntity.setCourseStatusEnum(CourseStatusEnum.SUCCESS);
-            courseEntity.setAccepted(true);
-        }
-
-        courseRepository.save(courseEntity);
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thành công!",
-                "Khóa học " + courseEntity.getCourseName() + " đã được " + message,
-                null
-        );
-    }
-
-    public ApiResponse<String> rejectCourse(Long courseId) {
-        CourseEntity courseEntity = courseRepository.findById(courseId)
-                .orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
-        String message = "từ chối duyệt!";
-        courseEntity.setCourseStatusEnum(CourseStatusEnum.REJECT);
-        courseRepository.save(courseEntity);
-        return BuildResponse.buildApiResponse(
-                HttpStatus.OK.value(),
-                "Thành công!",
-                "Khóa học " + courseEntity.getCourseName() + " đã được " + message,
-                null
-        );
-    }
-
-    public CourseResponse createCourse(CourseRequest courseRequest) throws Exception {
+    public CourseResponse createCourse(CourseRequest courseRequest) {
         UserEntity user = userServiceHelper.extractUserFromToken();
-        if (user == null) {
-            throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
+        if (user == null || user.getExpert() == null) {
+            throw new UserException("Bạn phải đăng nhập bằng tài khoản EXPERT để thực hiện chức năng này!");
         }
         CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(), courseRequest.getDescription());
         String[] courseName = courseRequest.getCourseName().trim().split("\\s+");
         String courseNameReplace = String.join(" ", courseName);
-        CourseEntity currentCourse = this.courseRepository.findByCourseNameAndExpert(courseNameReplace, user.getExpert());
+        CourseEntity currentCourse = courseRepository.findByCourseNameAndExpert(courseNameReplace, user.getExpert());
         if (currentCourse != null) {
             throw new NotFoundException("Khoá học đã tồn tại!");
         }
 
-        CourseEntity newCourse = new CourseEntity();
-        newCourse.setExpert(user.getExpert());
-        newCourse.setCourseStatusEnum(CourseStatusEnum.DRAFT);
-        newCourse.setCourseName(courseNameReplace);
-        newCourse.setDescription(courseRequest.getDescription());
-        newCourse.setObjectiveList(courseRequest.getObjectives());
-        newCourse.setIntroduction(courseRequest.getIntroduction());
-        newCourse.setPrice(courseRequest.getPrice());
-        newCourse.setThumbnail(courseRequest.getThumbnail());
-        newCourse = courseRepository.save(newCourse);
-        Set<SubjectEntity> subjectEntitySet = subjectService.saveSubjectWithCourse(courseRequest);
-        newCourse.setSubjects(subjectEntitySet);
-        newCourse = courseRepository.save(newCourse);
-        CourseResponse courseResponse = new CourseResponse();
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.map(newCourse, courseResponse);
-        return courseResponse;
+        CourseEntity courseEntity = modelMapper.map(courseRequest, CourseEntity.class);
+        courseEntity.setObjectiveList(courseRequest.getObjectives());
+        courseEntity.setExpert(user.getExpert());
+        courseEntity.setCourseStatus(CourseStatusEnum.DRAFT);
+        courseEntity.setSubjects(subjectRepository.findAllBySubjectNameIn(courseRequest.getSubjects().stream().map(String::trim).toList()));
+        return courseServiceHelper.convertToCourseResponse(courseRepository.save(courseEntity));
     }
 
     @Transactional
-    public CourseResponse updateCourse(CourseRequest courseRequest) throws Exception {
+    public CourseResponse updateCourse(CourseRequest courseRequest) {
         UserEntity user = userServiceHelper.extractUserFromToken();
-        if (user == null) {
-            throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
+        if (user == null || user.getExpert() == null) {
+            throw new UserException("Bạn phải đăng nhập bằng tài khoản EXPERT để thực hiện chức năng này!");
         }
         CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(), courseRequest.getDescription());
-        CourseEntity newCourse = courseRepository.findById(courseRequest.getCourseId()).orElse(null);
-        newCourse.setExpert(user.getExpert());
-        newCourse.setCourseName(courseRequest.getCourseName());
-        newCourse.setDescription(courseRequest.getDescription());
-        newCourse.setObjectiveList(courseRequest.getObjectives());
-        newCourse.setIntroduction(courseRequest.getIntroduction());
-        newCourse.setPrice(courseRequest.getPrice());
-        newCourse.setThumbnail(courseRequest.getThumbnail());
-        newCourse = courseRepository.save(newCourse);
-        Set<SubjectEntity> subjectEntitySet = subjectService.saveSubjectWithCourse(courseRequest);
-        newCourse.setSubjects(subjectEntitySet);
-        newCourse.setAccepted(false);
-        newCourse.setCourseStatusEnum(CourseStatusEnum.DRAFT);
-        courseRepository.save(newCourse);
-        CourseResponse courseResponse = new CourseResponse();
-        modelMapper.getConfiguration().setSkipNullEnabled(true);
-        modelMapper.map(newCourse, courseResponse);
-        return courseResponse;
+        CourseEntity currentCourse = courseRepository.findByCourseIdAndExpert(courseRequest.getCourseId(), user.getExpert())
+                .orElseThrow(() -> new CourseException("Khóa học không tồn tại hoặc không thuộc sở hữu của bạn!"));
+
+        currentCourse.setCourseName(courseRequest.getCourseName());
+        currentCourse.setDescription(courseRequest.getDescription());
+        currentCourse.setObjectiveList(courseRequest.getObjectives());
+        currentCourse.setThumbnail(courseRequest.getThumbnail());
+        currentCourse.setIntroduction(courseRequest.getIntroduction());
+        currentCourse.setCourseStatus(CourseStatusEnum.DRAFT);
+        currentCourse.setPrice(courseRequest.getPrice());
+        currentCourse.setSubjects(subjectRepository.findAllBySubjectNameIn(courseRequest.getSubjects().stream().map(String::trim).toList()));
+        return courseServiceHelper.convertToCourseResponse(courseRepository.save(currentCourse));
+    }
+
+    public void sendCourseToAdminForApprove(Long courseId) {
+        UserEntity user = userServiceHelper.extractUserFromToken();
+        if (user == null || user.getExpert() == null) {
+            throw new UserException("Bạn phải đăng nhập bằng tài khoản EXPERT để thực hiện chức năng này!");
+        }
+        CourseEntity course = courseRepository.findByCourseIdAndExpertAndCourseStatus(courseId, user.getExpert(), CourseStatusEnum.DRAFT);
+        course.setCourseStatus(CourseStatusEnum.PROCESSING);
+        courseRepository.save(course);
     }
 
     public CourseDetailsResponse getCourseDetailsAdmin(Long courseId) {
@@ -357,7 +308,7 @@ public class CourseService {
         if (user == null) {
             throw new UserException("Vui lòng đăng nhập để thực hiện chức năng này!");
         }
-        return courseServiceHelper.convertToCourseResponseList(courseRepository.findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(user.getExperts()));
+        return courseServiceHelper.convertToCourseResponseList(courseRepository.findTop12ByExpertInAndCourseStatusOrderByCreatedAtDesc(user.getExperts(), CourseStatusEnum.APPROVED));
     }
 
     public List<CourseResponse> getAllCourse() {
@@ -368,11 +319,5 @@ public class CourseService {
     public List<CourseResponse> getAllCoursesNotInCampaign() {
         Set<CourseEntity> courseEntities = courseRepository.findAllByCampaignIsNull();
         return this.courseServiceHelper.convertToCourseResponseList(courseEntities);
-    }
-
-    public void changeDraftToProcessingCourse(Long id) {
-        CourseEntity courseEntity = this.courseRepository.findById(id).get();
-        courseEntity.setCourseStatusEnum(CourseStatusEnum.PROCESSING);
-        this.courseRepository.save(courseEntity);
     }
 }

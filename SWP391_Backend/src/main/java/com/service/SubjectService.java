@@ -1,6 +1,5 @@
 package com.service;
 
-import com.dto.request.CourseRequest;
 import com.dto.request.SubjectRequest;
 import com.dto.response.ApiResponse;
 import com.dto.response.PageDetailsResponse;
@@ -14,9 +13,7 @@ import com.repository.SubjectRepository;
 import com.util.BuildResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,9 +23,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -187,24 +182,9 @@ public class SubjectService {
         );
     }
 
-    public Set<SubjectEntity> saveSubjectWithCourse(CourseRequest courseRequest) throws Exception {
-        Set<SubjectEntity> subjectEntitySet = new HashSet<>();
-        for (String subjectName : courseRequest.getSubjects()) {
-            Boolean checkExistsSubject = this.subjectRepository.existsBySubjectName(subjectName.trim());
-            if (checkExistsSubject) {
-                SubjectEntity currentSubject = this.subjectRepository.findBySubjectName(subjectName.trim());
-                subjectEntitySet.add(currentSubject);
-            } else {
-                throw new Exception("Lĩnh vực công nghệ chưa tồn tại");
-            }
-        }
-        return subjectEntitySet;
-    }
-
     public List<SubjectResponse> getAllSubjectInPagination() {
         List<SubjectEntity> subjectEntities = this.subjectRepository.findAll();
-        List<SubjectResponse> subjectResponses = subjectEntities
-                .stream().map(subjectEntity -> {
+        return subjectEntities.stream().map(subjectEntity -> {
                     SubjectResponse subjectResponse = modelMapper.map(subjectEntity, SubjectResponse.class);
                     subjectResponse.setSubjectId(subjectEntity.getSubjectId());
                     subjectResponse.setSubjectName(subjectEntity.getSubjectName());
@@ -218,6 +198,5 @@ public class SubjectService {
                     return subjectResponse;
                 })
                 .toList();
-        return subjectResponses;
     }
 }

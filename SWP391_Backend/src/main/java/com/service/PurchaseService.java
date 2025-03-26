@@ -13,6 +13,7 @@ import com.repository.CourseRepository;
 import com.repository.OrderRepository;
 import com.util.BuildResponse;
 import com.util.VnPayUtil;
+import com.util.enums.CourseStatusEnum;
 import com.util.enums.CurrencyCodeEnum;
 import com.util.enums.LocaleCodeEnum;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class PurchaseService {
     private final CourseRepository courseRepository;
     private final CouponRepository couponRepository;
     private final CartCourseRepository cartCourseRepository;
-    //private final RedisService redisService;
+    private final RedisService redisService;
 
     @Value("${vnpay.tmn.code}")
     private String tmnCode;
@@ -101,7 +102,7 @@ public class PurchaseService {
 
         Set<CourseEntity> purchaseCourses = new HashSet<>();
         for (OrderDetailsEntity orderDetailsEntity : order.getOrderDetails()) {
-            CourseEntity courseEntity = courseRepository.findByCourseIdAndAcceptedTrue(orderDetailsEntity.getCourse().getCourseId())
+            CourseEntity courseEntity = courseRepository.findByCourseIdAndCourseStatus(orderDetailsEntity.getCourse().getCourseId(), CourseStatusEnum.APPROVED)
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
             purchaseCourses.add(courseEntity);
@@ -125,7 +126,7 @@ public class PurchaseService {
                 }
             }
         }
-        //redisService.removeOrderInRedis(order);
+        redisService.removeOrderInRedis(order);
     }
 
     public void processIpn(Map<String, String> params) {
@@ -160,7 +161,7 @@ public class PurchaseService {
         }
         OrderEntity orderEntity = orderRepository.findByOrderIdAndPaidAtIsNull(orderId)
                 .orElseThrow(() -> new NotFoundException("Hóa đơn không tồn tại hoặc đã được thanh toán!"));
-        //redisService.removeOrderInRedis(orderEntity);
+        redisService.removeOrderInRedis(orderEntity);
         orderServiceHelper.returnCouponThenDeleteOrder(orderEntity);
     }
 
@@ -185,7 +186,7 @@ public class PurchaseService {
         double totalPrice = 0.0;
 
         for (Long courseId : orderRequest.getCourseIds()) {
-            CourseEntity course = courseRepository.findByCourseIdAndAcceptedTrue(courseId)
+            CourseEntity course = courseRepository.findByCourseIdAndCourseStatus(courseId, CourseStatusEnum.APPROVED)
                     .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
 
             if (purchasedCourses != null && purchasedCourses.contains(course)) {
@@ -218,7 +219,7 @@ public class PurchaseService {
             orderEntity.setCoupon(coupon);
         }
         OrderEntity newOrder = orderRepository.save(orderEntity);
-        //npredisService.saveOrderToRedis(newOrder);
+        redisService.saveOrderToRedis(newOrder);
         return newOrder;
     }
 }

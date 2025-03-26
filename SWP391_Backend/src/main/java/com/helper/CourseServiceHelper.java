@@ -34,18 +34,22 @@ public class CourseServiceHelper {
 
     public CourseResponse convertToCourseResponse(CourseEntity courseEntity) {
         CourseResponse courseResponse = modelMapper.map(courseEntity, CourseResponse.class);
-        courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+        if (courseEntity.getUsers() != null) {
+            courseResponse.setTotalPurchased(courseEntity.getUsers().size());
+        }
         courseResponse.setObjectives(courseEntity.getObjectiveList());
-        courseResponse.setTotalLessons(
-                courseEntity.getChapters().stream()
-                        .mapToInt(chapter -> chapter.getLessons().size())
-                        .sum()
-        );
-        courseResponse.setTotalQuizzes(
-                courseEntity.getChapters().stream()
-                        .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
-                        .sum()
-        );
+        if (courseEntity.getChapters() != null) {
+            courseResponse.setTotalLessons(
+                    courseEntity.getChapters().stream()
+                            .mapToInt(chapter -> chapter.getLessons().size())
+                            .sum()
+            );
+            courseResponse.setTotalQuizzes(
+                    courseEntity.getChapters().stream()
+                            .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
+                            .sum()
+            );
+        }
         return courseResponse;
     }
 

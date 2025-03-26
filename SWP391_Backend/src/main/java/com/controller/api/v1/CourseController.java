@@ -46,8 +46,8 @@ public class CourseController {
 
     @ApiMessage("Lấy khóa học đã được kích hoạt thành công!")
     @GetMapping("/accepted/{courseId}")
-    public ResponseEntity<CourseDetailsResponse> getCourseByIdAndAccepted(@PathVariable(name = "courseId") Long courseId) {
-        return ResponseEntity.ok(courseService.getCourseByIdAndAccepted(courseId));
+    public ResponseEntity<CourseDetailsResponse> getCourseByIdAndApproved(@PathVariable(name = "courseId") Long courseId) {
+        return ResponseEntity.ok(courseService.getCourseByIdAndApproved(courseId));
     }
 
     @ApiMessage("Lấy khóa học thành công!")
@@ -95,33 +95,22 @@ public class CourseController {
         return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 
-    @PutMapping("/accept-status/{courseId}")
-    public ResponseEntity<ApiResponse<String>> changeAcceptStatusOfCourse(@PathVariable Long courseId) {
-        return ResponseEntity.ok(courseService.changeAcceptStatusOfCourse(courseId));
-    }
-
     @ApiMessage("Tạo mới một khoá học")
     @PostMapping
-    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest courseRequest) throws Exception {
+    public ResponseEntity<CourseResponse> createCourse(@RequestBody CourseRequest courseRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.courseService.createCourse(courseRequest));
     }
 
     @ApiMessage("Cập nhật một khoá học")
     @PutMapping
-    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) throws Exception {
+    public ResponseEntity<CourseResponse> updateCourse(@RequestBody CourseRequest courseRequest) {
         return ResponseEntity.ok().body(this.courseService.updateCourse(courseRequest));
     }
-    @ApiMessage("Yêu cầu duyệt khoá học thành công!")
-    @PostMapping("/request-processing/{id}")
-    public ResponseEntity<Void> requestCourseProcessing(@PathVariable Long id){
-        this.courseService.changeDraftToProcessingCourse(id);
-        return ResponseEntity.ok().build();
-    }
 
-    @ApiMessage("Từ chối duyệt khoá học thành công!")
-    @PostMapping("/request-reject/{id}")
-    public ResponseEntity<Void> requestCourseReject(@PathVariable Long id){
-        this.courseService.rejectCourse(id);
+    @ApiMessage("Gửi yêu cầu chấp nhận khóa học thành công!")
+    @PatchMapping("/processing/{courseId}")
+    public ResponseEntity<Void> sendCourseToAdminForApprove(@PathVariable Long courseId) {
+        courseService.sendCourseToAdminForApprove(courseId);
         return ResponseEntity.ok().build();
     }
 
@@ -148,5 +137,4 @@ public class CourseController {
     public ResponseEntity<List<CourseResponse>> getAllCoursesNotInCampaign() {
         return ResponseEntity.ok(courseService.getAllCoursesNotInCampaign());
     }
-
 }

@@ -3,6 +3,7 @@ package com.repository;
 import com.entity.CourseEntity;
 import com.entity.ExpertEntity;
 import com.repository.custom.JpaSpecificationRepository;
+import com.util.enums.CourseStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -18,16 +19,16 @@ import java.util.Set;
 public interface CourseRepository extends JpaSpecificationRepository<CourseEntity, Long> {
 
     @Query("select c from CourseEntity c " +
-            "where c.accepted = true and c.courseId not in (:courseIds) " +
+            "where c.courseStatus = 'APPROVED' and c.courseId not in (:courseIds) " +
             "order by size(c.users) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable, @Param("courseIds") Set<Long> courseIds);
 
     @Query("select c from CourseEntity c " +
-            "where c.accepted = true " +
+            "where c.courseStatus = 'APPROVED'  " +
             "order by size(c.users) desc")
     Page<CourseEntity> findCoursesAndOrderByPurchasersDesc(Pageable pageable);
 
-    Optional<CourseEntity> findByCourseIdAndAcceptedTrue(Long courseId);
+    Optional<CourseEntity> findByCourseIdAndCourseStatus(Long courseId, CourseStatusEnum courseStatus);
 
     @Query(value = """
                 select c.course_id
@@ -54,14 +55,18 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
 
     CourseEntity findByCourseNameAndExpert(String courseName, ExpertEntity expert);
 
+    Optional<CourseEntity> findByCourseIdAndExpert(Long courseId, ExpertEntity expert);
+
     @Query("select c from UserEntity u " +
             "join u.courses c " +
-            "where c.courseId = :courseId and u.userId = :userId and c.accepted = true")
+            "where c.courseId = :courseId and u.userId = :userId and c.courseStatus = 'APPROVED'")
     Optional<CourseEntity> findPurchasedCourseByCourseId(@Param("courseId") Long courseId, @Param("userId") Long userId);
 
-    List<CourseEntity> findTop12ByExpertInAndAcceptedTrueOrderByCreatedAtDesc(Collection<ExpertEntity> experts);
+    List<CourseEntity> findTop12ByExpertInAndCourseStatusOrderByCreatedAtDesc(Collection<ExpertEntity> experts, CourseStatusEnum courseStatus);
 
     Set<CourseEntity> findAllByCampaignIsNull();
 
     Set<CourseEntity> findAllByCampaignIsNullAndCourseIdIn(Set<Long> courseIds);
+
+    CourseEntity findByCourseIdAndExpertAndCourseStatus(Long courseId, ExpertEntity expert, CourseStatusEnum courseStatus);
 }

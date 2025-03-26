@@ -3,6 +3,9 @@ package com.dto.response.details;
 import com.dto.response.ChapterResponse;
 import com.dto.response.CourseResponse;
 import com.dto.response.SubjectResponse;
+import com.util.enums.CourseStatusEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,8 +20,9 @@ import java.util.Set;
 public class CourseDetailsResponse extends CourseResponse {
 
     String introduction;
-    
-    Boolean accepted;
+
+    @Enumerated(EnumType.STRING)
+    CourseStatusEnum courseStatus;
 
     Set<SubjectResponse> subjects;
 
