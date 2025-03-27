@@ -67,6 +67,4 @@ public interface CourseRepository extends JpaSpecificationRepository<CourseEntit
     Set<CourseEntity> findAllByCampaignIsNull();
 
     Set<CourseEntity> findAllByCampaignIsNullAndCourseIdIn(Set<Long> courseIds);
-
-    CourseEntity findByCourseIdAndExpertAndCourseStatus(Long courseId, ExpertEntity expert, CourseStatusEnum courseStatus);
 }

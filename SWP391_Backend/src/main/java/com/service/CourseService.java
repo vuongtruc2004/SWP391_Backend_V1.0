@@ -291,7 +291,8 @@ public class CourseService {
         if (user == null || user.getExpert() == null) {
             throw new UserException("Bạn phải đăng nhập bằng tài khoản EXPERT để thực hiện chức năng này!");
         }
-        CourseEntity course = courseRepository.findByCourseIdAndExpertAndCourseStatus(courseId, user.getExpert(), CourseStatusEnum.DRAFT);
+        CourseEntity course = courseRepository.findByCourseIdAndExpert(courseId, user.getExpert())
+                .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
         course.setCourseStatus(CourseStatusEnum.PROCESSING);
         courseRepository.save(course);
     }
@@ -325,8 +326,8 @@ public class CourseService {
 
     public void approvedCourse(Long courseId) {
         CourseEntity courseEntity = this.courseRepository.findById(courseId)
-                .orElseThrow(()->new NotFoundException("Khóa học không tồn tại !"));
-        if(courseEntity.getChapters() == null || courseEntity.getChapters().isEmpty()) {
+                .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại !"));
+        if (courseEntity.getChapters() == null || courseEntity.getChapters().isEmpty()) {
             throw new NotFoundException("Khóa học chưa có bài giảng !");
         }
         courseEntity.setCourseStatus(CourseStatusEnum.APPROVED);
