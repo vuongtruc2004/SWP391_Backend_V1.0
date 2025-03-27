@@ -84,9 +84,14 @@ public class CommentService {
     //delete a comment
     @Transactional
     public void deleteComment(Long commentId) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if(userEntity == null) {
+            throw new NotFoundException("Không tìm thấy người dùng!");
+        }
         CommentEntity commentEntity = commentRepository.findByCommentId(commentId);
         likeRepository.deleteByComment_CommentId(commentId);
         commentRepository.delete(commentEntity);
+        simpMessagingTemplate.convertAndSend("/topic/comments/delete", "deleteSuccess");
     }
 
     public CommentResponse getComment(Long commentId) {
