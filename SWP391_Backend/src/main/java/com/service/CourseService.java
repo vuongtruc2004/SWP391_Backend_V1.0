@@ -33,10 +33,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +68,7 @@ public class CourseService {
         specification = specification.and(courseServiceHelper.filterByAttribute(expertIds, "expert", "expertId"));
         specification = specification.and(courseServiceHelper.filterByAttribute(subjectIds, "subjects", "subjectId"));
         specification = specification.and(((root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("accepted"), true)));
+                criteriaBuilder.equal(root.get("courseStatus"), CourseStatusEnum.APPROVED)));
 
         if (event != null) {
             if (event.equalsIgnoreCase("sale")) {
@@ -110,7 +107,7 @@ public class CourseService {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
         if (!courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED)) {
-            throw new CourseException("Khóa học không tồn tại!");
+            throw new CourseException("Khóa học không tồn tại hoặc đang được cập nhật lại!");
         }
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
@@ -128,6 +125,9 @@ public class CourseService {
         }
         CourseEntity courseEntity = courseRepository.findPurchasedCourseByCourseId(courseId, userEntity.getUserId())
                 .orElseThrow(() -> new NotFoundException("Bạn chưa mua khóa học này!"));
+        if (!courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED)) {
+            throw new NotFoundException("Khóa học không tồn tại hoặc đang được cập nhật lại!");
+        }
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
@@ -139,13 +139,11 @@ public class CourseService {
         }
 
         Set<Long> resultIds = courseRepository.findSuggestedCourseIds(courseIds, notCourseIds);
-        return resultIds.stream().map(id -> {
-            CourseEntity courseEntity = courseRepository.findById(id).orElse(null);
-            if (courseEntity == null) {
-                return null;
-            }
-            return courseServiceHelper.convertToCourseResponse(courseEntity);
-        }).toList();
+        return resultIds.stream()
+                .map(id -> courseRepository.findByCourseIdAndCourseStatus(id, CourseStatusEnum.APPROVED).orElse(null))
+                .filter(Objects::nonNull)
+                .map(courseServiceHelper::convertToCourseResponse)
+                .toList();
     }
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesAndSortByPurchased(Pageable pageable) {
@@ -320,14 +318,15 @@ public class CourseService {
         Set<CourseEntity> courseEntities = courseRepository.findAllByCampaignIsNull();
         return this.courseServiceHelper.convertToCourseResponseList(courseEntities);
     }
-    public void approvedCourse(Long courseId){
-        CourseEntity courseEntity=this.courseRepository.findById(courseId).orElse(null);
+
+    public void approvedCourse(Long courseId) {
+        CourseEntity courseEntity = this.courseRepository.findById(courseId).orElse(null);
         courseEntity.setCourseStatus(CourseStatusEnum.APPROVED);
         courseRepository.save(courseEntity);
     }
 
-    public void rejectedCourse(Long courseId){
-        CourseEntity courseEntity=this.courseRepository.findById(courseId).orElse(null);
+    public void rejectedCourse(Long courseId) {
+        CourseEntity courseEntity = this.courseRepository.findById(courseId).orElse(null);
         courseEntity.setCourseStatus(CourseStatusEnum.REJECTED);
         courseRepository.save(courseEntity);
     }
