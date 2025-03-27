@@ -195,6 +195,7 @@ public class BlogService {
         UserEntity author = userServiceHelper.extractUserFromToken();
         BlogEntity blogEntity = modelMapper.map(blogRequest, BlogEntity.class);
         blogEntity.setUser(author);
+        blogEntity.setBlogStatus(BlogStatusEnum.PUBLISH);
         blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(
@@ -242,7 +243,11 @@ public class BlogService {
 
     public ApiResponse<BlogResponse> changePublishedOfBlog(Long blogId) {
         BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
-        blogEntity.setBlogStatus(BlogStatusEnum.PRIVATE);
+        if(blogEntity.getBlogStatus().equals(BlogStatusEnum.PUBLISH)) {
+            blogEntity.setBlogStatus(BlogStatusEnum.PRIVATE);
+        } else {
+            blogEntity.setBlogStatus(BlogStatusEnum.PUBLISH);
+        }
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(
                 HttpStatus.OK.value(),
