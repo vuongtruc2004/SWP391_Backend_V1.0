@@ -2,6 +2,8 @@ package com.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.util.enums.BlogStatusEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -30,12 +32,11 @@ public class BlogResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")
     Instant updatedAt;
 
-    Boolean published;
-
-    BlogStatusEnum status;
+    @Enumerated(EnumType.STRING)
+    BlogStatusEnum blogStatus;
 
     Boolean pinned;
-    
+
     Integer totalLikes;
 
     Integer totalComments;

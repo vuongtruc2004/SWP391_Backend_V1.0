@@ -2,9 +2,9 @@ package com.repository;
 
 import com.entity.BlogEntity;
 import com.repository.custom.JpaSpecificationRepository;
+import com.util.enums.BlogStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, Long> {
-    Optional<BlogEntity> findByPinnedTrueAndPublishedTrue();
+    Optional<BlogEntity> findByPinnedTrueAndBlogStatus(BlogStatusEnum blogStatus);
 
     @Query("SELECT b.blogId FROM BlogEntity b " +
             "JOIN LikeEntity l ON b = l.blog " +
@@ -28,7 +28,7 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
 
     Set<BlogEntity> findAllByUser_UserId(Long userId);
 
-    Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndPublishedTrue(Long userId, Long blogId, Pageable pageable);
+    Page<BlogEntity> findAllByUser_UserIdAndBlogIdAndBlogStatus(Long userId, Long blogId, Pageable pageable, BlogStatusEnum blogStatus);
 
-    Optional<BlogEntity> findByBlogIdAndPublishedTrue(Long blogId);
+    Optional<BlogEntity> findByBlogIdAndBlogStatus(Long blogId, BlogStatusEnum blogStatus);
 }

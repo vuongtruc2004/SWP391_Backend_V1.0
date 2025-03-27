@@ -42,9 +42,8 @@ public class BlogEntity {
     Boolean pinned;
 
     @Enumerated(EnumType.STRING)
-    BlogStatusEnum status;
-
-    Boolean published;
+    @Column(name = "blog_status")
+    BlogStatusEnum blogStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -67,9 +66,6 @@ public class BlogEntity {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
         if (pinned == null) pinned = false;
-        if (published == null) {
-            this.published = false;
-        }
     }
 
     @PreUpdate
