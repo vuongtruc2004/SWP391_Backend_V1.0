@@ -1,6 +1,7 @@
 package com.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.util.enums.BlogStatusEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -30,6 +31,8 @@ public class BlogResponse {
     Instant updatedAt;
 
     Boolean published;
+
+    BlogStatusEnum status;
 
     Boolean pinned;
     

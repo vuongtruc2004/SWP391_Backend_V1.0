@@ -70,9 +70,19 @@ public class BlogController {
         return ResponseEntity.ok(blogService.updateBlog(blogId, blogRequest));
     }
 
+    @PatchMapping("/update-draft/{blogId}")
+    public ResponseEntity<ApiResponse<BlogResponse>> updateDraftBlog(@PathVariable("blogId") Long blogId, @RequestBody BlogRequest blogRequest) {
+        return ResponseEntity.ok(blogService.updateSaveDraft(blogId, blogRequest));
+    }
+
     @PostMapping("/create-blog")
     public ResponseEntity<ApiResponse<BlogResponse>> createBlog(@RequestBody BlogRequest blogRequest) {
         return ResponseEntity.ok(blogService.createBlog(blogRequest));
+    }
+
+    @PostMapping("/save-draft")
+    public ResponseEntity<ApiResponse<BlogResponse>> saveDraft(@RequestBody BlogRequest blogRequest) {
+        return ResponseEntity.ok(blogService.saveDraft(blogRequest));
     }
 
     @PostMapping("/up-thumbnail")

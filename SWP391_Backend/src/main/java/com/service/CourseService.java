@@ -297,6 +297,10 @@ public class CourseService {
     }
 
     public CourseDetailsResponse getCourseDetailsAdmin(Long courseId) {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null) {
+            throw new NotFoundException("Không thể tìm thấy người dùng!");
+        }
         CourseEntity courseEntity = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Không tìm thấy khóa học!"));
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }

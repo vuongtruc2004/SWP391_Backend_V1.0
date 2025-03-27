@@ -17,7 +17,9 @@ import com.repository.UserRepository;
 import com.service.auth.JwtService;
 import com.util.BuildResponse;
 import com.util.enums.AccountTypeEnum;
+import com.util.enums.BlogStatusEnum;
 import com.util.enums.RoleNameEnum;
+import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -160,6 +162,19 @@ public class BlogService {
         if(userEntity==null){
             throw new UserException("Bạn cần đăng nhập để thực hiện chức năng này!");
         }
+
+        if(userEntity.getRole().getRoleName().equals(RoleNameEnum.ADMIN)){
+            specification= specification.and((root, query, criteriaBuilder) ->{
+                Predicate predicate = criteriaBuilder.and(
+                        criteriaBuilder.notEqual(root.get("user").get("userId"), userEntity.getUserId()),
+                        criteriaBuilder.notEqual(root.get("status"), BlogStatusEnum.DRAFT)
+                );
+
+                Predicate ownBlog = criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId());
+                return criteriaBuilder.or(predicate, ownBlog);
+            });
+        }
+
         if(userEntity.getRole().getRoleName().equals(RoleNameEnum.MARKETING) || userEntity.getRole().getRoleName().equals(RoleNameEnum.EXPERT)){
             specification=specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("user").get("userId"), userEntity.getUserId()));
@@ -186,6 +201,21 @@ public class BlogService {
     public ApiResponse<BlogResponse> updateBlog(Long blogId, BlogRequest blogRequest){
         BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
         modelMapper.map(blogRequest, blogEntity);
+        blogEntity.setStatus(BlogStatusEnum.PUBLISH);
+        blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
+        blogRepository.save(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.OK.value(),
+                "Thành Công!",
+                "Bài viết đã được cập nhật!",
+                modelMapper.map(blogEntity, BlogResponse.class)
+        );
+    }
+
+    public ApiResponse<BlogResponse> updateSaveDraft(Long blogId, BlogRequest blogRequest){
+        BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
+        modelMapper.map(blogRequest, blogEntity);
+        blogEntity.setStatus(BlogStatusEnum.DRAFT);
         blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(
@@ -206,6 +236,21 @@ public class BlogService {
                 HttpStatus.CREATED.value(),
                 "Thành Công!",
                 "Bài viết đã được tạo!",
+                modelMapper.map(blogEntity, BlogResponse.class)
+        );
+    }
+
+    public ApiResponse<BlogResponse> saveDraft(BlogRequest blogRequest){
+        UserEntity author = userServiceHelper.extractUserFromToken();
+        BlogEntity blogEntity = modelMapper.map(blogRequest, BlogEntity.class);
+        blogEntity.setUser(author);
+        blogEntity.setStatus(BlogStatusEnum.DRAFT);
+        blogEntity.setHashtags(hashtagService.saveAllHashtagsOfBlog(blogRequest));
+        blogRepository.save(blogEntity);
+        return BuildResponse.buildApiResponse(
+                HttpStatus.CREATED.value(),
+                "Thành Công!",
+                "Bài viết đã được lưu dưới dạng bản nháp!",
                 modelMapper.map(blogEntity, BlogResponse.class)
         );
     }
@@ -232,6 +277,7 @@ public class BlogService {
 
     public ApiResponse<BlogResponse> changePublishedOfBlog(Long blogId){
         BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
+        blogEntity.setStatus(BlogStatusEnum.PUBLISH);
         blogEntity.setPublished(!blogEntity.getPublished());
         blogRepository.save(blogEntity);
         return BuildResponse.buildApiResponse(

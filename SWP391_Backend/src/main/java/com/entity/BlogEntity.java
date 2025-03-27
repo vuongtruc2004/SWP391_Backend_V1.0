@@ -1,5 +1,6 @@
 package com.entity;
 
+import com.util.enums.BlogStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -39,6 +40,9 @@ public class BlogEntity {
     String thumbnail;
 
     Boolean pinned;
+
+    @Enumerated(EnumType.STRING)
+    BlogStatusEnum status;
 
     Boolean published;
 
