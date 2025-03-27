@@ -23,6 +23,7 @@ public class QuestionEntity {
     @Column(name = "question_id")
     Long questionId;
 
+    @Column(columnDefinition = "LONGTEXT")
     String title;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
