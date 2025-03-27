@@ -324,7 +324,11 @@ public class CourseService {
     }
 
     public void approvedCourse(Long courseId) {
-        CourseEntity courseEntity = this.courseRepository.findById(courseId).orElse(null);
+        CourseEntity courseEntity = this.courseRepository.findById(courseId)
+                .orElseThrow(()->new NotFoundException("Khóa học không tồn tại !"));
+        if(courseEntity.getChapters() == null || courseEntity.getChapters().isEmpty()) {
+            throw new NotFoundException("Khóa học chưa có bài giảng !");
+        }
         courseEntity.setCourseStatus(CourseStatusEnum.APPROVED);
         courseRepository.save(courseEntity);
     }

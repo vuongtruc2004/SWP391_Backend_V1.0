@@ -103,7 +103,7 @@ public class BlogService {
         BlogEntity blogEntity = blogRepository.findByBlogIdAndBlogStatus(blogId, BlogStatusEnum.PUBLISH)
                 .orElseThrow(() -> new NotFoundException("Không có bài viết nào với ID = " + blogId));
         UserEntity userEntity = blogEntity.getUser();
-        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdAndBlogStatus(userEntity.getUserId(), blogId, pageable, BlogStatusEnum.PUBLISH);
+        Page<BlogEntity> page = blogRepository.findAllByUser_UserIdAndBlogIdNotAndBlogStatus(userEntity.getUserId(), blogId, pageable, BlogStatusEnum.PUBLISH);
         return blogServiceHelper.getListPageDetailsResponse(page, blogEntity);
     }
 

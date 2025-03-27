@@ -28,7 +28,7 @@ public interface BlogRepository extends JpaSpecificationRepository<BlogEntity, L
 
     Set<BlogEntity> findAllByUser_UserId(Long userId);
 
-    Page<BlogEntity> findAllByUser_UserIdAndBlogIdAndBlogStatus(Long userId, Long blogId, Pageable pageable, BlogStatusEnum blogStatus);
+    Page<BlogEntity> findAllByUser_UserIdAndBlogIdNotAndBlogStatus(Long userId, Long blogId, Pageable pageable, BlogStatusEnum blogStatus);
 
     Optional<BlogEntity> findByBlogIdAndBlogStatus(Long blogId, BlogStatusEnum blogStatus);
 }

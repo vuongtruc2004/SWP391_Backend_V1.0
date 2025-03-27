@@ -23,6 +23,7 @@ public class BlogEntity {
     @Column(name = "blog_id")
     Long blogId;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     String title;
 
     @Column(name = "created_at")
