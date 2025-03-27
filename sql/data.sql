@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `online-learning-uat` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `online-learning-uat`;
--- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
--- Host: localhost    Database: online-learning-uat
+-- Host: 127.0.0.1    Database: online-learning-uat
 -- ------------------------------------------------------
--- Server version	9.1.0
+-- Server version	8.0.40
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -117,8 +117,8 @@ DROP TABLE IF EXISTS `campaigns`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `campaigns` (
   `campaign_id` bigint NOT NULL AUTO_INCREMENT,
-  `campaign_description` varchar(255) DEFAULT NULL,
-  `campaign_name` varchar(255) DEFAULT NULL,
+  `campaign_description` longtext,
+  `campaign_name` mediumtext,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `discount_percentage` double DEFAULT NULL,
@@ -869,7 +869,7 @@ DROP TABLE IF EXISTS `rates`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rates` (
   `rate_id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(255) DEFAULT NULL,
+  `content` mediumtext,
   `created_at` datetime(6) DEFAULT NULL,
   `stars` int DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
@@ -954,7 +954,7 @@ DROP TABLE IF EXISTS `subjects`;
 CREATE TABLE `subjects` (
   `subject_id` bigint NOT NULL AUTO_INCREMENT,
   `description` longtext,
-  `subject_name` varchar(255) DEFAULT NULL,
+  `subject_name` mediumtext,
   `thumbnail` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
@@ -1132,4 +1132,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 19:28:37
+-- Dump completed on 2025-03-27 19:56:39

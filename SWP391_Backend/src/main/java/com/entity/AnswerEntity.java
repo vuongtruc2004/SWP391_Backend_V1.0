@@ -21,6 +21,7 @@ public class AnswerEntity {
     @Column(name = "answer_id")
     Long answerId;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     String content;
 
     Boolean correct;

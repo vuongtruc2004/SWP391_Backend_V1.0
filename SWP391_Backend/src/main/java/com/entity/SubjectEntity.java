@@ -22,10 +22,10 @@ public class SubjectEntity {
     @Column(name = "subject_id")
     Long subjectId;
 
-    @Column(name = "subject_name")
+    @Column(name = "subject_name", columnDefinition = "MEDIUMTEXT")
     String subjectName;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     String description;
 
     String thumbnail;

@@ -24,10 +24,10 @@ public class CampaignEntity {
     @Column(name = "campaign_id")
     Long campaignId;
 
-    @Column(name = "campaign_name")
+    @Column(name = "campaign_name", columnDefinition = "MEDIUMTEXT")
     String campaignName;
 
-    @Column(name = "campaign_description", columnDefinition = "MEDIUMTEXT")
+    @Column(name = "campaign_description", columnDefinition = "LONGTEXT")
     String campaignDescription;
 
     @Column(name = "discount_percentage")

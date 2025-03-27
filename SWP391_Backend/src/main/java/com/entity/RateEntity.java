@@ -21,6 +21,7 @@ public class RateEntity {
     @Column(name = "rate_id")
     Long rateId;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     String content;
 
     Integer stars;
