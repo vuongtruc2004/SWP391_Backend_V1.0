@@ -2,12 +2,12 @@ package com.service;
 
 import com.dto.request.QuestionRequest;
 import com.dto.request.QuizRequest;
+import com.dto.response.ChapterResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuizResponse;
 import com.entity.*;
 import com.exception.custom.*;
 import com.helper.UserServiceHelper;
-import com.repository.AnswerRepository;
 import com.repository.ChapterRepository;
 import com.repository.QuestionRepository;
 import com.repository.QuizRepository;
@@ -22,25 +22,21 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
     private final ModelMapper modelMapper;
-    private final QuestionService questionService;
     private final ChapterRepository chapterRepository;
     private final QuestionRepository questionRepository;
     private final UserServiceHelper userServiceHelper;
-    private final AnswerRepository answerRepository;
 
     public boolean published(Long id) {
         QuizEntity quizEntity = quizRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Không tìm thấy bài kiểm tra"));
-        if (quizEntity.getPublished()) {
+        if (Boolean.TRUE.equals(quizEntity.getPublished())) {
             quizEntity.setPublished(false);
         } else {
             quizEntity.setPublished(true);
@@ -77,9 +73,6 @@ public class QuizService {
         }
 
         for (QuestionRequest questionRequest : quizRequest.getNewQuestions()) {
-//            if (questionRepository.existsByTitle(questionRequest.getTitle())) {
-//                throw new TitleQuestionException("Câu hỏi đã tồn tại");
-//            }
             QuestionEntity questionEntity = new QuestionEntity();
             List<AnswerEntity> set = new ArrayList<>();
             for (QuestionRequest.AnswerRequest answerRequest : questionRequest.getAnswers()) {
@@ -106,7 +99,7 @@ public class QuizService {
 
     public QuizResponse updateQuiz(QuizRequest quizRequest) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
-        if (userEntity == null || userEntity.getExpert() == null || userEntity.getRole().getRoleName() != RoleNameEnum.EXPERT ) {
+        if (userEntity == null || userEntity.getExpert() == null || userEntity.getRole().getRoleName() != RoleNameEnum.EXPERT) {
             throw new NotFoundException("Người dùng không hợp lệ");
 
         }
@@ -179,9 +172,9 @@ public class QuizService {
 
             specification = specification.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("expert"), userEntity.getExpert())));
             page = quizRepository.findAll(specification, pageable);
-        }else if(userEntity.getRole().getRoleName() == RoleNameEnum.ADMIN) {
+        } else if (userEntity.getRole().getRoleName() == RoleNameEnum.ADMIN) {
             page = quizRepository.findAll(specification, pageable);
-        }else{
+        } else {
             throw new UserException("Tài khoản không được truy cập");
         }
         List<QuizResponse> quizResponseList = page.getContent().stream()
@@ -195,6 +188,17 @@ public class QuizService {
                 page.getTotalElements(),
                 quizResponseList
         );
+    }
+
+    public List<ChapterResponse.QuizInfoResponse> getAllQuizzesByExpert() {
+        UserEntity userEntity = userServiceHelper.extractUserFromToken();
+        if (userEntity == null || userEntity.getRole().getRoleName() != RoleNameEnum.EXPERT || userEntity.getExpert() == null) {
+            throw new UserException("Vui lòng đăng nhập bằng tài khoản EXPERT để thực hiện chức năng này!");
+        }
+        return userEntity.getExpert().getQuizzes().stream()
+                .map(quizEntity -> modelMapper.map(quizEntity, ChapterResponse.QuizInfoResponse.class))
+                .sorted((q1, q2) -> q2.getUpdatedAt().compareTo(q1.getUpdatedAt()))
+                .toList();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.controller.api.v1;
 
 import com.dto.request.QuizRequest;
+import com.dto.response.ChapterResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuizResponse;
 import com.entity.QuizEntity;
@@ -50,6 +51,12 @@ public class QuizController {
     @ApiMessage("Lấy tất cả bài kiểm tra thành công")
     @GetMapping
     public ResponseEntity<PageDetailsResponse<List<QuizResponse>>> getQuizzesWithFilter(Pageable pageable, @Filter Specification<QuizEntity> specification) {
-        return ResponseEntity.ok(quizService.getQuizzesWithFilter(pageable,specification ));
+        return ResponseEntity.ok(quizService.getQuizzesWithFilter(pageable, specification));
+    }
+
+    @ApiMessage("Lấy tất cả bài kiểm tra của 1 expert thành công!")
+    @GetMapping("/expert")
+    public ResponseEntity<List<ChapterResponse.QuizInfoResponse>> getAllQuizzesByExpert() {
+        return ResponseEntity.ok(quizService.getAllQuizzesByExpert());
     }
 }
