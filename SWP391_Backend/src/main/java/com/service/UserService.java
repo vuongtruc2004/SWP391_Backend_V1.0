@@ -290,7 +290,7 @@ public class UserService {
         if (!isValid) {
             throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
         }
-        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        ApiResponse<String> fileResponse = fileService.uploadFile(file, folder);
         if (fileResponse.getStatus() == 200) {
             UserEntity userEntity = userServiceHelper.extractUserFromToken();
             if (userEntity == null) {
@@ -316,7 +316,7 @@ public class UserService {
         if (!isValid) {
             throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
         }
-        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
+        ApiResponse<String> fileResponse = fileService.uploadFile(file, folder);
         if (fileResponse.getStatus() == 200) {
             UserEntity userEntity = new UserEntity();
             userEntity.setAvatar(fileResponse.getData());

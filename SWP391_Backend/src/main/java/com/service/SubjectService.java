@@ -161,8 +161,7 @@ public class SubjectService {
         if (!isValid) {
             throw new StorageException("Bạn phải truyền file có định dạng:  " + allowedExtensions.toString());
         }
-        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
-        return fileResponse;
+        return fileService.uploadFile(file, folder);
     }
 
     public ApiResponse<SubjectResponse> createSubject(SubjectRequest request) {

@@ -237,13 +237,12 @@ public class BlogService {
         if (!isValid) {
             throw new StorageException("Bạn phải truyền file có định dạng: " + allowedFile.toString());
         }
-        ApiResponse<String> fileResponse = fileService.uploadImage(file, folder);
-        return fileResponse;
+        return fileService.uploadFile(file, folder);
     }
 
     public ApiResponse<BlogResponse> changePublishedOfBlog(Long blogId) {
         BlogEntity blogEntity = blogRepository.findById(blogId).orElseThrow(() -> new NotFoundException("Không tìm thấy bài viết!"));
-        if(blogEntity.getBlogStatus().equals(BlogStatusEnum.PUBLISH)) {
+        if (blogEntity.getBlogStatus().equals(BlogStatusEnum.PUBLISH)) {
             blogEntity.setBlogStatus(BlogStatusEnum.PRIVATE);
         } else {
             blogEntity.setBlogStatus(BlogStatusEnum.PUBLISH);

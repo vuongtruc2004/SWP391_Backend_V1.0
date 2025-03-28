@@ -18,7 +18,7 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileService {
-    
+
     @Value("${assets.uri}")
     private String assetURI;
 
@@ -38,10 +38,8 @@ public class FileService {
         }
     }
 
-    public ApiResponse<String> uploadImage(MultipartFile file, String folder) throws URISyntaxException,
-            IOException {
-        // create unique filename
-        String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+    public ApiResponse<String> uploadFile(MultipartFile file, String folder) throws URISyntaxException, IOException {
+        String finalName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         URI uri = new URI(assetURI + "/" + folder + "/" + finalName);
         Path path = Paths.get(uri);
         try (InputStream inputStream = file.getInputStream()) {
@@ -55,22 +53,4 @@ public class FileService {
                 finalName
         );
     }
-    public ApiResponse<String> uploadDocument(MultipartFile file, String folder) throws URISyntaxException,
-            IOException {
-        // create unique filename
-        String finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-        URI uri = new URI(assetURI + "/" + folder + "/" + finalName);
-        Path path = Paths.get(uri);
-        try (InputStream inputStream = file.getInputStream()) {
-            Files.copy(inputStream, path,
-                    StandardCopyOption.REPLACE_EXISTING);
-        }
-        return BuildResponse.buildApiResponse(
-                200,
-                "Upload tài liệu thành công",
-                null,
-                finalName
-        );
-    }
-
 }

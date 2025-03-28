@@ -47,7 +47,7 @@ public class SecurityConfig {
             "/api/v1/subjects",
             "/api/v1/subjects/courses",
             "/api/v1/subjects/all-inpagination",
-            "/api/v1/files/image",
+            "/api/v1/files/**",
             "/api/v1/blogs",
             "/api/v1/blogs/all",
             "/api/v1/blogs/author",
