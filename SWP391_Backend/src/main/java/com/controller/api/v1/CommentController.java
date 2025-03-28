@@ -6,6 +6,7 @@ import com.dto.response.PageDetailsResponse;
 import com.entity.CommentEntity;
 import com.service.CommentService;
 import com.turkraft.springfilter.boot.Filter;
+import com.util.annotation.ApiMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,6 +44,12 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable("commentId") Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiMessage("Cập nhật bình luận thành công")
+    @PatchMapping("/update/{commentId}")
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable("commentId") Long commentId, @RequestBody CommentRequest commentRequest) {
+        return ResponseEntity.ok(commentService.updateComment(commentId, commentRequest));
     }
 
     @GetMapping("/get-comment/{commentId}")

@@ -94,6 +94,20 @@ public class CommentService {
         simpMessagingTemplate.convertAndSend("/topic/comments/delete", "deleteSuccess");
     }
 
+    @Transactional
+    public CommentResponse updateComment(Long commentId, CommentRequest commentRequest) {
+        if (commentRepository.existsById(commentId)) {
+            CommentEntity commentEntity = commentRepository.findById(commentId).get();
+            modelMapper.map(commentRequest, commentEntity);
+            commentRepository.save(commentEntity);
+            CommentResponse commentResponse = modelMapper.map(commentEntity, CommentResponse.class);
+            simpMessagingTemplate.convertAndSend("/topic/comments/update", commentResponse);
+            return commentResponse;
+        } else {
+            throw new NotFoundException("Không tìm thấy bình luận trong dữ liệu hệ thống!");
+        }
+    }
+
     public CommentResponse getComment(Long commentId) {
         CommentEntity commentEntity = commentRepository.findByCommentId(commentId);
         return modelMapper.map(commentEntity, CommentResponse.class);
