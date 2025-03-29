@@ -7,19 +7,14 @@ import com.dto.response.CourseResponse;
 import com.dto.response.MinMaxPriceResponse;
 import com.dto.response.PageDetailsResponse;
 import com.dto.response.details.CourseDetailsResponse;
-import com.entity.CourseEntity;
-import com.entity.ExpertEntity;
-import com.entity.UserEntity;
+import com.entity.*;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidRequestInput;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.UserException;
 import com.helper.CourseServiceHelper;
 import com.helper.UserServiceHelper;
-import com.repository.ChapterRepository;
-import com.repository.CourseRepository;
-import com.repository.ExpertRepository;
-import com.repository.SubjectRepository;
+import com.repository.*;
 import com.util.BuildResponse;
 import com.util.CourseValidUtil;
 import com.util.enums.CourseStatusEnum;
@@ -45,6 +40,8 @@ public class CourseService {
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
     private final SubjectRepository subjectRepository;
+    private final CartCourseRepository cartCourseRepository;
+    private final OrderDetailsRepository orderDetailsRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
             Specification<CourseEntity> specification,
@@ -123,7 +120,7 @@ public class CourseService {
             throw new UserException("Bạn phải đăng nhập để thực hiện chức năng này!");
         }
         CourseEntity courseEntity = courseRepository.findPurchasedCourseByCourseId(courseId, userEntity.getUserId())
-                .orElseThrow(() -> new NotFoundException("Bạn chưa mua khóa học này!"));
+                .orElseThrow(() -> new NotFoundException("Bạn chưa mua khóa học này hoặc khóa học đang được cập nhật!"));
         if (!courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED)) {
             throw new NotFoundException("Khóa học không tồn tại hoặc đang được cập nhật lại!");
         }
@@ -223,6 +220,14 @@ public class CourseService {
     public ApiResponse<String> deleteByCourseId(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId).orElse(null);
         ExpertEntity expert = expertRepository.findByCourses(courseEntity);
+
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findAllByCourse(courseEntity);
+        if (!orderDetailsEntityList.isEmpty()) {
+            throw new CourseException("Đang có hóa đơn chứa khóa học này, vui lòng thử lại sau!");
+        }
+        List<CartCourseEntity> cartCourseEntities = cartCourseRepository.findAllByCourse(courseEntity);
+        cartCourseRepository.deleteAll(cartCourseEntities);
+
         if (courseEntity != null && (courseEntity.getUsers().isEmpty() || !courseEntity.getCourseStatus().equals(CourseStatusEnum.APPROVED))) {
             if (expert != null) {
                 expert.getCourses().remove(courseEntity);

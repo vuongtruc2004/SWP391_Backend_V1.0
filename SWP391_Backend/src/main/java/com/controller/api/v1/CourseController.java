@@ -91,7 +91,7 @@ public class CourseController {
 
     @ApiMessage("Xóa khóa học thành công!")
     @DeleteMapping("/delete/{courseId}")
-    public ResponseEntity<ApiResponse<String>> deleteCourse(@PathVariable Long courseId) {
+    public ResponseEntity<ApiResponse<String>> deleteByCourseId(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseService.deleteByCourseId(courseId));
     }
 

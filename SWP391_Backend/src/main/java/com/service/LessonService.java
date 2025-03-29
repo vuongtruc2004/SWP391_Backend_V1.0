@@ -4,16 +4,20 @@ import com.dto.request.LessonRequest;
 import com.entity.ChapterEntity;
 import com.entity.CourseEntity;
 import com.entity.LessonEntity;
+import com.entity.UserProgressEntity;
 import com.exception.custom.CourseException;
 import com.exception.custom.InvalidTokenException;
 import com.exception.custom.NotFoundException;
 import com.repository.ChapterRepository;
 import com.repository.CourseRepository;
 import com.repository.LessonRepository;
+import com.repository.UserProgressRepository;
 import com.util.enums.CourseStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class LessonService {
     private final ModelMapper modelMapper;
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
+    private final UserProgressRepository userProgressRepository;
 
     public void createUpdateLesson(LessonRequest lessonRequest) {
         ChapterEntity chapter = chapterRepository.findById(lessonRequest.getChapterId())
@@ -43,7 +48,14 @@ public class LessonService {
             currentLesson.setVideoUrl(lessonRequest.getVideoUrl());
             currentLesson.setDuration(lessonRequest.getDuration());
             lessonRepository.save(currentLesson);
+
+            List<UserProgressEntity> userProgresses = userProgressRepository.findAllByLessonId(currentLesson.getLessonId());
+            userProgressRepository.deleteAll(userProgresses);
         }
+        
+        CourseEntity course = chapter.getCourse();
+        course.setCourseStatus(CourseStatusEnum.DRAFT);
+        courseRepository.save(course);
     }
 
     public void deleteLesson(Long lessonId) {
@@ -52,9 +64,13 @@ public class LessonService {
         }
         LessonEntity lessonEntity = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new NotFoundException("Bài giảng không tồn tại!"));
+
         CourseEntity course = lessonEntity.getChapter().getCourse();
         course.setCourseStatus(CourseStatusEnum.DRAFT);
         courseRepository.save(course);
         lessonRepository.deleteById(lessonId);
+
+        List<UserProgressEntity> userProgresses = userProgressRepository.findAllByLessonId(lessonId);
+        userProgressRepository.deleteAll(userProgresses);
     }
 }

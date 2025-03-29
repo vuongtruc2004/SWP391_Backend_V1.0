@@ -135,9 +135,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByAge());
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    @GetMapping("/get-all-users")
+    public ResponseEntity<List<UserResponse>> getAllUsersAccount() {
+        return ResponseEntity.ok(userService.getAllUsersAccount());
     }
 
     @ApiMessage("Lấy tất cả lịch sử mua hàng thành công!")

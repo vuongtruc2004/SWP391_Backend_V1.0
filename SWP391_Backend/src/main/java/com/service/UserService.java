@@ -52,10 +52,6 @@ public class UserService {
     private final OrderServiceHelper orderServiceHelper;
     private final ExpertServiceHelper expertServiceHelper;
     private final CourseServiceHelper courseServiceHelper;
-    private final UserProgressRepository userProgressRepository;
-    private final ChapterRepository chapterRepository;
-    private final QuizRepository quizRepository;
-    private final LessonRepository lessonRepository;
 
     public ApiResponse<Void> sendRegisterRequest(RegisterRequest registerRequest) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByEmailAndAccountType(registerRequest.getEmail(), AccountTypeEnum.CREDENTIALS);
@@ -218,17 +214,7 @@ public class UserService {
                 savedUser.setExpert(expert);
             }
 
-// Map dữ liệu sang UserResponse
             UserResponse userResponse = modelMapper.map(savedUser, UserResponse.class);
-
-
-            // Nếu là EXPERT, gán thêm thông tin
-//            if (savedUser.getExpert() != null) {
-//                userResponse.setJob(savedUser.getExpert().getJob());
-//                userResponse.setAchievement(savedUser.getExpert().getAchievement());
-//                userResponse.setDescription(savedUser.getExpert().getDescription());
-//                userResponse.setYearOfExperience(savedUser.getExpert().getYearOfExperience());
-//            }
 
             return userResponse;
         } catch (Exception e) {
@@ -364,8 +350,8 @@ public class UserService {
         return allAge;
     }
 
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
+    public List<UserResponse> getAllUsersAccount() {
+        return userRepository.findAllByRole_RoleName(RoleNameEnum.USER).stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
     }
 
     public List<OrderResponse> getUserPurchaseHistory(String orderStatus) {

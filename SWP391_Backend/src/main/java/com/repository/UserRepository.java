@@ -4,9 +4,11 @@ import com.entity.UserEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.GenderEnum;
+import com.util.enums.RoleNameEnum;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +30,5 @@ public interface UserRepository extends JpaSpecificationRepository<UserEntity, L
 
     List<UserEntity> findAllByExpertsIsNotEmptyAndUserId(Long userId);
 
+    Collection<Object> findAllByRole_RoleName(RoleNameEnum roleRoleName);
 }

@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.entity.CourseEntity;
 import com.entity.OrderDetailsEntity;
 import com.repository.custom.JpaSpecificationRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface OrderDetailsRepository extends JpaSpecificationRepository<Order
             "GROUP BY c.courseName " +
             "ORDER BY COUNT(o) DESC")
     List<Object[]> getCourseSalesCount();
+
+    List<OrderDetailsEntity> findAllByCourse(CourseEntity course);
 }
