@@ -21,6 +21,7 @@ public class ChapterEntity {
     @Column(name = "chapter_id")
     Long chapterId;
 
+    @Column(columnDefinition = "TEXT")
     String title;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -30,9 +31,9 @@ public class ChapterEntity {
     @JoinColumn(name = "course_id")
     CourseEntity course;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     List<LessonEntity> lessons;
 
-    @OneToOne(mappedBy = "chapter", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "chapter", cascade = {CascadeType.ALL})
     QuizEntity quizz;
 }

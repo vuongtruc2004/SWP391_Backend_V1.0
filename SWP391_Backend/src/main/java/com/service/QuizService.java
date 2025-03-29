@@ -9,9 +9,11 @@ import com.entity.*;
 import com.exception.custom.*;
 import com.helper.UserServiceHelper;
 import com.repository.ChapterRepository;
+import com.repository.CourseRepository;
 import com.repository.QuestionRepository;
 import com.repository.QuizRepository;
 import com.util.BuildResponse;
+import com.util.enums.CourseStatusEnum;
 import com.util.enums.RoleNameEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -32,6 +34,7 @@ public class QuizService {
     private final ChapterRepository chapterRepository;
     private final QuestionRepository questionRepository;
     private final UserServiceHelper userServiceHelper;
+    private final CourseRepository courseRepository;
 
     public boolean published(Long id) {
         QuizEntity quizEntity = quizRepository.findById(id).
@@ -63,6 +66,9 @@ public class QuizService {
         if (chapterEntity.getQuizz() != null) {
             throw new ChapterException("Chương này đã có bài kiểm tra");
         }
+        CourseEntity courseEntity = chapterEntity.getCourse();
+        courseEntity.setCourseStatus(CourseStatusEnum.DRAFT);
+        courseRepository.save(courseEntity);
 
         List<QuestionEntity> questionEntityList = new ArrayList<>();
 
@@ -86,7 +92,6 @@ public class QuizService {
             questionEntity.setTitle(questionRequest.getTitle());
             questionEntity.setAnswers(set);
             questionEntityList.add(questionRepository.save(questionEntity));
-
         }
 
         QuizEntity quizEntity = modelMapper.map(quizRequest, QuizEntity.class);
@@ -116,6 +121,10 @@ public class QuizService {
         }
         ChapterEntity chapterEntity = chapterRepository.findById(quizRequest.getChapterId())
                 .orElseThrow(() -> new NotFoundException("ChapterId không tồn tại"));
+
+        CourseEntity courseEntity = chapterEntity.getCourse();
+        courseEntity.setCourseStatus(CourseStatusEnum.DRAFT);
+        courseRepository.save(courseEntity);
 
         List<QuestionEntity> questionEntityList = new ArrayList<>();
 
@@ -201,4 +210,15 @@ public class QuizService {
                 .toList();
     }
 
+    public void deleteQuiz(Long quizId) {
+        if (quizId == null) {
+            throw new InvalidRequestInput("QuizId không được null!");
+        }
+        QuizEntity quizEntity = quizRepository.findById(quizId)
+                .orElseThrow(() -> new NotFoundException("Bài kiểm tra không tồn tại!"));
+        CourseEntity courseEntity = quizEntity.getChapter().getCourse();
+        courseEntity.setCourseStatus(CourseStatusEnum.DRAFT);
+        courseRepository.save(courseEntity);
+        quizRepository.delete(quizEntity);
+    }
 }

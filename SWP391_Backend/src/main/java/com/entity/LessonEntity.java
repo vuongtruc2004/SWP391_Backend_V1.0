@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @Builder
@@ -22,18 +20,13 @@ public class LessonEntity {
     @Column(name = "lesson_id")
     Long lessonId;
 
+    @Column(columnDefinition = "TEXT")
     String title;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     String description;
 
     Long duration;
-
-    @Column(name = "created_at")
-    Instant createdAt;
-
-    @Column(name = "updated_at")
-    Instant updatedAt;
 
     @Column(name = "lesson_type")
     @Enumerated(EnumType.STRING)
@@ -48,14 +41,4 @@ public class LessonEntity {
     @ManyToOne
     @JoinColumn(name = "chapter_id")
     ChapterEntity chapter;
-
-    @PrePersist
-    public void handlePrePersist() {
-        this.createdAt = Instant.now();
-    }
-
-    @PreUpdate
-    public void handlePreUpdate() {
-        this.updatedAt = Instant.now();
-    }
 }

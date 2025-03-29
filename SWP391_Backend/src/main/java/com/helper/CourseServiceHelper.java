@@ -95,6 +95,48 @@ public class CourseServiceHelper {
         return courseDetailsResponse;
     }
 
+    public CourseDetailsResponse convertToCourseDetailsResponseAdmin(CourseEntity courseEntity) {
+        List<ChapterResponse> chapterResponseList = courseEntity.getChapters().stream()
+                .map(chapterEntity -> {
+                    ChapterResponse chapterResponse = modelMapper.map(chapterEntity, ChapterResponse.class);
+                    if (chapterEntity.getQuizz() != null) {
+                        chapterResponse.setQuizInfo(ChapterResponse.QuizInfoResponse.builder()
+                                .quizId(chapterEntity.getQuizz().getQuizId())
+                                .title(chapterEntity.getQuizz().getTitle())
+                                .duration(chapterEntity.getQuizz().getDuration())
+                                .allowSeeAnswers(chapterEntity.getQuizz().getAllowSeeAnswers())
+                                .description(chapterEntity.getQuizz().getDescription())
+                                .updatedAt(chapterEntity.getQuizz().getUpdatedAt())
+                                .questions(chapterEntity.getQuizz().getQuestions().stream().map(questionEntity -> modelMapper.map(questionEntity, QuestionResponse.class)).toList())
+                                .chapterId(chapterEntity.getChapterId())
+                                .build());
+                    }
+                    return chapterResponse;
+                }).toList();
+
+        Set<RateEntity> rates = courseEntity.getRates();
+        double averageRating = rates.stream().mapToInt(RateEntity::getStars).average().orElse(0.0);
+
+        CourseDetailsResponse courseDetailsResponse = modelMapper.map(courseEntity, CourseDetailsResponse.class);
+        courseDetailsResponse.setTotalPurchased(courseEntity.getUsers().size());
+        courseDetailsResponse.setAverageRating(averageRating);
+        courseDetailsResponse.setTotalLessons(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getLessons().size())
+                        .sum()
+        );
+        courseDetailsResponse.setTotalQuizzes(
+                courseEntity.getChapters().stream()
+                        .mapToInt(chapter -> chapter.getQuizz() != null ? 1 : 0)
+                        .sum()
+        );
+        courseDetailsResponse.setTotalRating(rates.size());
+        courseDetailsResponse.setExpert(expertServiceHelper.convertToExpertDetailsResponse(courseEntity.getExpert()));
+        courseDetailsResponse.setChapters(chapterResponseList);
+        courseDetailsResponse.setObjectives(courseEntity.getObjectiveList());
+        return courseDetailsResponse;
+    }
+
     public Specification<CourseEntity> sortBySpecialFields(
             String sortOption,
             String direction

@@ -60,7 +60,9 @@ public class SecurityConfig {
             "/api/v1/comments/get-comment/{commentId}",
             "/api/v1/campaigns/all",
             "/api/v1/campaigns/price-range",
-            "/api/v1/purchase/vnpay-ipn"
+            "/api/v1/purchase/vnpay-ipn",
+            "/api/v1/chapters/**",
+            "/api/v1/lessons/**",
     };
 
     private final SecurityUtil securityUtil;

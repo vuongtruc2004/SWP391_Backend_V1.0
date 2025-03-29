@@ -44,7 +44,6 @@ public class CourseService {
     private final ExpertRepository expertRepository;
     private final UserServiceHelper userServiceHelper;
     private final ModelMapper modelMapper;
-    private final SubjectService subjectService;
     private final SubjectRepository subjectRepository;
 
     public PageDetailsResponse<List<CourseResponse>> getCoursesWithFilter(
@@ -112,10 +111,10 @@ public class CourseService {
         return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
     }
 
-    public CourseDetailsResponse getCourseById(Long courseId) {
+    public CourseDetailsResponse getCourseByIdAdmin(Long courseId) {
         CourseEntity courseEntity = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại!"));
-        return courseServiceHelper.convertToCourseDetailsResponse(courseEntity);
+        return courseServiceHelper.convertToCourseDetailsResponseAdmin(courseEntity);
     }
 
     public CourseDetailsResponse getCoursePurchasedByCourseId(Long courseId) {
@@ -293,6 +292,10 @@ public class CourseService {
         }
         CourseEntity course = courseRepository.findByCourseIdAndExpert(courseId, user.getExpert())
                 .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại!"));
+        if (course.getChapters() == null || course.getChapters().isEmpty() ||
+                course.getChapters().stream().anyMatch(chapter -> chapter.getLessons() == null || chapter.getLessons().isEmpty())) {
+            throw new InvalidRequestInput("Khóa học này đang có chương chưa có bài giảng!");
+        }
         course.setCourseStatus(CourseStatusEnum.PROCESSING);
         courseRepository.save(course);
     }
@@ -335,7 +338,8 @@ public class CourseService {
     }
 
     public void rejectedCourse(Long courseId) {
-        CourseEntity courseEntity = this.courseRepository.findById(courseId).orElse(null);
+        CourseEntity courseEntity = this.courseRepository.findById(courseId)
+                .orElseThrow(() -> new NotFoundException("Khóa học không tồn tại !"));
         courseEntity.setCourseStatus(CourseStatusEnum.REJECTED);
         courseRepository.save(courseEntity);
     }

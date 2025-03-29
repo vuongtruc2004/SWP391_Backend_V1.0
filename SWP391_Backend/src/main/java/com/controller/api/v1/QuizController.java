@@ -25,7 +25,7 @@ public class QuizController {
     private final QuizService quizService;
 
     @ApiMessage("Mở bài quiz thành công!")
-    @DeleteMapping("{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<Boolean> publishedQuiz(@PathVariable Long id) {
         return ResponseEntity.ok(quizService.published(id));
     }
@@ -58,5 +58,12 @@ public class QuizController {
     @GetMapping("/expert")
     public ResponseEntity<List<ChapterResponse.QuizInfoResponse>> getAllQuizzesByExpert() {
         return ResponseEntity.ok(quizService.getAllQuizzesByExpert());
+    }
+
+    @ApiMessage("Xóa bài kiểm tra thành công!")
+    @DeleteMapping("/{quizId}")
+    public ResponseEntity<Void> deleteQuiz(@PathVariable Long quizId) {
+        quizService.deleteQuiz(quizId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -52,8 +52,8 @@ public class CourseController {
 
     @ApiMessage("Lấy khóa học thành công!")
     @GetMapping("/{courseId}")
-    public ResponseEntity<CourseDetailsResponse> getCourseById(@PathVariable(name = "courseId") Long courseId) {
-        return ResponseEntity.ok(courseService.getCourseById(courseId));
+    public ResponseEntity<CourseDetailsResponse> getCourseByIdAdmin(@PathVariable(name = "courseId") Long courseId) {
+        return ResponseEntity.ok(courseService.getCourseByIdAdmin(courseId));
     }
 
     @ApiMessage("Lấy khóa học đã mua với courseId thành công!")

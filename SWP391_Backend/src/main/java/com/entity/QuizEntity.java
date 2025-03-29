@@ -23,6 +23,7 @@ public class QuizEntity {
     @Column(name = "quiz_id")
     Long quizId;
 
+    @Column(columnDefinition = "TEXT")
     String title;
 
     Boolean published;
