@@ -7,9 +7,9 @@ import com.dto.response.PageDetailsResponse;
 import com.dto.response.QuestionResponse;
 import com.entity.AnswerEntity;
 import com.entity.QuestionEntity;
+import com.entity.QuizEntity;
 import com.exception.custom.NotFoundException;
 import com.exception.custom.QuestionException;
-import com.helper.QuestionServiceHelper;
 import com.repository.AnswerRepository;
 import com.repository.QuestionRepository;
 import com.repository.QuizRepository;
@@ -31,10 +31,8 @@ import java.util.List;
 public class QuestionService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
-    private final QuestionServiceHelper questionServiceHelper;
-    private final QuizRepository quizRepository;
     private final ModelMapper modelMapper;
-
+    private final QuizRepository quizRepository;
 
     public PageDetailsResponse<List<QuestionResponse>> getAllQuestionWithFilter(Pageable pageable, Specification<QuestionEntity> specification) {
         Page<QuestionEntity> page = questionRepository.findAll(specification, pageable);
@@ -51,7 +49,6 @@ public class QuestionService {
                 listQuestionResponse
         );
     }
-
 
     @Transactional
     public ApiResponse<QuestionResponse> createQuestion(QuestionRequest request) {
@@ -106,13 +103,14 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Long questionId) {
-        if (!questionRepository.existsById(questionId)) {
-            throw new NotFoundException("Không tìm thấy câu hỏi để xóa!");
+        QuestionEntity question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new NotFoundException("Câu hỏi không tồn tại!"));
+        List<QuizEntity> quizzes = quizRepository.findAllByQuestionsContaining(List.of(question));
+        if (!quizzes.isEmpty()) {
+            throw new QuestionException("Câu hỏi đã được sử dụng trong bài kiểm tra!");
         }
-        questionRepository.deleteById(questionId);
+        questionRepository.delete(question);
     }
-
-
 
     public PageDetailsResponse<List<QuestionResponse>> getAllQuestions(Specification<QuestionEntity> specification, Pageable pageable) {
         Page<QuestionEntity> page = questionRepository.findAll(specification, pageable);
@@ -125,7 +123,6 @@ public class QuestionService {
                 page.getTotalElements(),
                 questionResponses
         );
-
     }
 
 }

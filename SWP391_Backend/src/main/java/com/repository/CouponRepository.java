@@ -20,4 +20,6 @@ public interface CouponRepository extends JpaSpecificationRepository<CouponEntit
     List<CouponEntity> getAllCouponsAvailable(@Param("now") Instant now, @Param("searchCode") String searchCode);
 
     List<CouponEntity> findByEndTimeBefore(Instant instant);
+
+    Object existsByCouponCodeAndCouponIdNot(String couponCode, Long couponId);
 }

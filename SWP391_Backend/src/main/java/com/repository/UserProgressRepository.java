@@ -16,4 +16,6 @@ public interface UserProgressRepository extends JpaSpecificationRepository<UserP
     List<UserProgressEntity> findAllByChapterId(Long chapterId);
 
     List<UserProgressEntity> findAllByLessonId(Long lessonId);
+
+    List<UserProgressEntity> findAllByQuizId(Long quizId);
 }

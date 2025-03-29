@@ -201,7 +201,7 @@ public class PurchaseService {
             double priceOfCourseAtThisTime = course.getPrice();
 
             if (campaign != null && !campaign.getStartTime().isAfter(Instant.now()) && campaign.getEndTime().isAfter(Instant.now())) {
-                priceOfCourseAtThisTime -= course.getPrice() * campaign.getDiscountPercentage() / 100;
+                priceOfCourseAtThisTime -= course.getPrice() * 1.0 * campaign.getDiscountPercentage() / 100;
             }
             totalPrice += priceOfCourseAtThisTime;
 

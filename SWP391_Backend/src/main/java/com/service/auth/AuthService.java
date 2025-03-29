@@ -16,6 +16,7 @@ import com.util.BuildResponse;
 import com.util.SecurityUtil;
 import com.util.enums.AccountTypeEnum;
 import com.util.enums.RoleNameEnum;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -25,6 +26,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -33,15 +35,6 @@ public class AuthService {
     private final SecurityUtil securityUtil;
     private final RoleRepository roleRepository;
     private final AuthServiceHelper authServiceHelper;
-
-    public AuthService(UserRepository userRepository, ModelMapper modelMapper, JwtService jwtService, SecurityUtil securityUtil, RoleRepository roleRepository, AuthServiceHelper authServiceHelper) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.jwtService = jwtService;
-        this.securityUtil = securityUtil;
-        this.roleRepository = roleRepository;
-        this.authServiceHelper = authServiceHelper;
-    }
 
     public LoginResponse credentialsLogin(CredentialsLoginRequest loginRequest) {
         String email = authServiceHelper.authenticatedCredentialsLogin(loginRequest);

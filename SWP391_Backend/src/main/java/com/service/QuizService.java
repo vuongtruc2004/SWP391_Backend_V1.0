@@ -8,10 +8,7 @@ import com.dto.response.QuizResponse;
 import com.entity.*;
 import com.exception.custom.*;
 import com.helper.UserServiceHelper;
-import com.repository.ChapterRepository;
-import com.repository.CourseRepository;
-import com.repository.QuestionRepository;
-import com.repository.QuizRepository;
+import com.repository.*;
 import com.util.BuildResponse;
 import com.util.enums.CourseStatusEnum;
 import com.util.enums.RoleNameEnum;
@@ -35,6 +32,7 @@ public class QuizService {
     private final QuestionRepository questionRepository;
     private final UserServiceHelper userServiceHelper;
     private final CourseRepository courseRepository;
+    private final UserProgressRepository userProgressRepository;
 
     public boolean published(Long id) {
         QuizEntity quizEntity = quizRepository.findById(id).
@@ -216,6 +214,10 @@ public class QuizService {
         }
         QuizEntity quizEntity = quizRepository.findById(quizId)
                 .orElseThrow(() -> new NotFoundException("Bài kiểm tra không tồn tại!"));
+
+        List<UserProgressEntity> userProgresses = userProgressRepository.findAllByQuizId(quizId);
+        userProgressRepository.deleteAll(userProgresses);
+
         CourseEntity courseEntity = quizEntity.getChapter().getCourse();
         courseEntity.setCourseStatus(CourseStatusEnum.DRAFT);
         courseRepository.save(courseEntity);

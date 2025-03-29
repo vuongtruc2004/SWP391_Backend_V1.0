@@ -45,6 +45,9 @@ public class CouponService {
 
     @Transactional
     public CouponResponse updateCoupon(CouponRequest couponRequest) {
+        if (Boolean.TRUE.equals(this.couponRepository.existsByCouponCodeAndCouponIdNot(couponRequest.getCouponCode().trim(), couponRequest.getCouponId()))) {
+            throw new UserException("Coupon này đã tồn tại!");
+        }
         CouponEntity couponEntity = this.couponRepository.findById(couponRequest.getCouponId())
                 .orElseThrow(() -> new NotFoundException("Coupon không tồn tại!"));
 

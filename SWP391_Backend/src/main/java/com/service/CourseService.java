@@ -174,8 +174,7 @@ public class CourseService {
 
     public PageDetailsResponse<List<CourseDetailsResponse>> getCoursesWithFilterByAdmin(
             Pageable pageable,
-            Specification<CourseEntity> specification,
-            Boolean accepted
+            Specification<CourseEntity> specification
     ) {
         UserEntity userEntity = userServiceHelper.extractUserFromToken();
         if (userEntity == null) {
@@ -193,12 +192,7 @@ public class CourseService {
                     root.get("courseStatus").in(CourseStatusEnum.PROCESSING, CourseStatusEnum.APPROVED)
             );
         }
-
-        if (accepted != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("accepted"), accepted)
-            );
-        }
+        
         Page<CourseEntity> page = courseRepository.findAll(specification, pageable);
         List<CourseDetailsResponse> listCourseResponses = page.getContent().stream().map(courseServiceHelper::convertToCourseDetailsResponse).toList();
         return BuildResponse.buildPageDetailsResponse(
@@ -278,6 +272,13 @@ public class CourseService {
         CourseValidUtil.validCourseTitleAndDescription(courseRequest.getCourseName(), courseRequest.getDescription());
         CourseEntity currentCourse = courseRepository.findByCourseIdAndExpert(courseRequest.getCourseId(), user.getExpert())
                 .orElseThrow(() -> new CourseException("Khóa học không tồn tại hoặc không thuộc sở hữu của bạn!"));
+
+        String[] courseName = courseRequest.getCourseName().trim().split("\\s+");
+        String courseNameReplace = String.join(" ", courseName);
+        CourseEntity existedCourse = courseRepository.findByCourseNameAndExpertAndCourseIdNot(courseNameReplace, user.getExpert(), currentCourse.getCourseId());
+        if (existedCourse != null) {
+            throw new NotFoundException("Khoá học đã tồn tại!");
+        }
 
         currentCourse.setCourseName(courseRequest.getCourseName());
         currentCourse.setDescription(courseRequest.getDescription());

@@ -78,10 +78,9 @@ public class CourseController {
     @GetMapping("/all")
     public ResponseEntity<PageDetailsResponse<List<CourseDetailsResponse>>> getCoursesWithFilterRoleAdmin(
             Pageable pageable,
-            @Filter Specification<CourseEntity> specification,
-            @RequestParam(name = "accepted", required = false) Boolean accepted
+            @Filter Specification<CourseEntity> specification
     ) {
-        return ResponseEntity.ok(courseService.getCoursesWithFilterByAdmin(pageable, specification, accepted));
+        return ResponseEntity.ok(courseService.getCoursesWithFilterByAdmin(pageable, specification));
     }
 
     @GetMapping("/price-range")
